@@ -1,0 +1,27 @@
+#!/bin/bash
+###########################
+# include dependancies
+##########################
+SCRIPTPATH=`readlink -f $0`;DIR=`dirname $SCRIPTPATH`;
+. "$DIR/../lib/admin.sh.inc"
+CHA_BASEDIR=`cha_basedir $0`
+
+BASE_OPTIONS="--ignore-dir=cache --ignore-dir=log --ignore-dir=vendor -g";
+
+if [ -z $1 ]; then
+ echo "Recherche vide!";
+ exit;
+fi
+if [ ! -z $2 ]; then
+ if [ $2 == "--sf" ]; then
+    TRESA_HOME="$TRESA_HOME/lib/vendor"
+  else
+    OPTIONS=$2;
+  fi
+fi
+  OPTIONS="$OPTIONS $BASE_OPTIONS";
+  SEARCHED=$1;
+  echo "Search in t-resa";
+  echo "-options: $OPTIONS";
+  echo "-criter: \"$1\"";
+  ack-grep $OPTIONS "$SEARCHED" $TRESA_HOME;
