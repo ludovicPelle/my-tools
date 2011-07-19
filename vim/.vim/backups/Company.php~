@@ -1,0 +1,529 @@
+<?php
+/**
+ * @package    T-resa-lib
+ * @subpackage  default
+ * @author     Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright  (c) Carpe Hora SARL 2011
+ */
+
+class Company extends BaseCompany
+{
+  protected $categories;
+
+  public function getLogoPath()
+  {
+    return '/uploads/companies/logo/';
+  }
+
+  public function getThumbnailPath()
+  {
+    return '/uploads/companies/logo/thumbnails/';
+  }
+
+  /**
+   * is the company visible by public
+   * checks the contract ands the configuration
+   */
+  public function isPublic()
+  {
+    return $this->getContract()->getIsPublic() && $this->getPreference('is_public') && !$this->needTicket();
+  }
+
+  /**
+   * does the company need ticket ?
+   */
+  public function needTicket()
+  {
+    return $this->getPreference('need_ticket');
+  }
+
+  public function isVisibleForUser(myUser $myUser)
+  {
+    return  $this->isPublic() ||
+            ( $this->needTicket() && $myUser->isAuthenticated() && $this->getClientFile($myUser->getGuardUser()) );
+  }
+
+  protected function doSave(PropelPDO $con)
+  {
+    if (
+        $this->isModified()
+        && (
+          $this->isNew() 
+          || !$this->getLatitude()
+          || !$this->getLongitude()
+          || in_array(CompanyPeer::ADDRESS_1, $this-> modifiedColumns)
+          || in_array(CompanyPeer::ADDRESS_2, $this-> modifiedColumns)
+          || in_array(CompanyPeer::ADDRESS_3, $this-> modifiedColumns)
+          || in_array(CompanyPeer::ZIP_CODE, $this-> modifiedColumns)
+          || in_array(CompanyPeer::TOWN, $this-> modifiedColumns)
+        )
+    ){
+      Geocoder::update($this);
+    }
+    parent::doSave($con);
+  }
+
+  /**
+   * return the compiled location with the 3 lines address field, zip code and town
+   * 
+   * @param string $delimiter the string delimiter between fields.
+   * @return string
+   **/
+  public function getLocation($delimiter = '\n')
+  {
+    return join($delimiter, array(
+      $this->getAddress($delimiter),
+      sprintf('%s %s', $this->getZipCode(), $this->getTown())));
+  }
+
+  /**
+   * return the compiled 3 address fields.
+   *
+   * @param string $delimiter the string delimiter between fields.
+   * @return string
+   **/
+  public function getAddress($delimiter = '\n')
+  {
+    $location = array(
+      $this->getAddress1(),
+      $this->getAddress2(),
+      $this->getAddress3());
+
+    // now remove null values
+    array_filter($location);
+
+    return join($delimiter, $location);
+  }
+
+  public function generateLogoFileName(sfValidatedFile $file)
+  {
+    if (!$this->isNew())
+    {
+      return $this->getSlug().$file->getExtension($file->getOriginalExtension());
+    }
+    return 'uploaded_'.sha1($file->getOriginalName()).$file->getExtension($file->getOriginalExtension());
+  }
+
+  public function getClientFile($clientId)
+  {
+    $clientId = is_numeric($clientId) ? $clientId : $clientId->getId();
+    return CompanyFileQuery::create()
+              ->filterByClientId($clientId)
+              ->joinWithOwner()
+              ->useOwnerQuery()
+                ->filterByCompany($this)
+              ->endUse()
+              ->findOne();
+  }
+
+  public function getPreference($preferenceName)
+  {
+    $preferences = $this->getPreferences();
+    $method = sprintf('get%s', chTools::camelize($preferenceName));
+    return call_user_func(array($preferences, $method));
+  }
+
+  /**
+   * a shorthand to getCompanyPreferences
+   * this is here for historical reasons
+   *
+   * @deprecated
+   * @return CompanyPreferences
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function getPreferences()
+  {
+    return $this->getCompanyPreferences();
+  }
+
+  public function getCompanyPreferences(PropelPDO $con = null)
+  {
+    $preferences = parent::getCompanyPreferences($con);
+    if (!$preferences)
+    {
+      $preferences = new CompanyPreferences();
+      $this->setCompanyPreferences($preferences);
+    }
+    return $preferences;
+  }
+
+  public function getVocabulary($key, $nb = 1)
+  {
+    static $vocab;
+    if (!isset($vocab))
+    {
+      chTools::loadHelpers(array('I18N'));
+      $vocab = $this->getCompanyVocabulary();
+    }
+    $m = sprintf('get%s', ucfirst(Tresa::camelize($key)));
+    $s = call_user_func(array($vocab, $m));
+    return format_number_choice($s, array(), $nb);
+  }
+
+  public function getCompanyVocabulary(PropelPDO $con = null)
+  {
+    $vocabulary = parent::getCompanyVocabulary($con);
+    if (!$vocabulary)
+    {
+      $vocabulary = new CompanyVocabulary();
+      $this->setCompanyVocabulary($vocabulary);
+    }
+    return $vocabulary;
+  }
+
+  /**
+   * return the company contractors
+   *
+   * @return PropelCollection|array CompanyEntity[] List of CompanyEntity objects
+   **/
+  public function getContractors()
+  {
+    return $this->getCompanyEntitys(ContractorQuery::create());
+  }
+
+  /**
+   * return the company ressources
+   *
+   * @return PropelCollection|array CompanyEntity[] List of CompanyEntity objects
+   **/
+  public function getRessources()
+  {
+    return $this->getCompanyEntitys(RessourceQuery::create());
+  }
+
+  /**
+   * return the company contractor corresponding to given id
+   *
+   * @param Integer $id the contractor to retrive id
+   * @return Contractor|false
+   **/
+  public function getContractor($id)
+  {
+    $contractors = $this->getContractors();
+    foreach ($contractors as $c)
+    {
+      if ($c->getId() == $id)
+      {
+        return $c;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * return the company ressource corresponding to given id
+   *
+   * @param Integer $id the ressource to retrive id
+   * @return Contractor|false
+   */
+  public function getRessource($id)
+  {
+    $ressources = $this->getRessources();
+    foreach ($ressources as $r)
+    {
+      if ($r->getId() == $id)
+      {
+        return $r;
+      }
+    }
+    return false;
+  }
+
+  public function getEntity($id)
+  {
+    $contractor = $this->getContractor($id);
+    if ($contractor)
+    {
+      return $contractor;
+    }
+    return $this->getRessource($id);
+  }
+
+  public function getContract(PropelPDO $con = null)
+  {
+    $contract = parent::getContract($con);
+    if (!$contract)
+    {
+      $contract = new Contract();
+      $this->setContract($contract);
+    }
+    return $contract;
+  }
+
+  public function getAvailableContractorSlot()
+  {
+    return $this->getContract()->getNbMaxContractors() - count($this->getContractors());
+  }
+
+  public function canAddContractor()
+  {
+    return $this->getAvailableContractorSlot() > 0;
+  }
+
+  public function getAvailableServiceSlot()
+  {
+    return $this->getContract()->getNbMaxServices() - count($this->getServices());
+  }
+
+  public function canAddService()
+  {
+    return $this->getAvailableServiceSlot() > 0;
+  }
+
+  public function getService($id)
+  {
+    static $servicesArray;
+    if (!isset($servicesArray))
+    {
+      $ls = $this->getServices();
+      if (count($ls))
+      {
+        $ls = array_combine(
+            chTools::extractField($ls, 'id'),
+            $ls
+          );
+      }
+      $servicesArray = $ls;
+    }
+    return array_key_exists($id, $servicesArray) ? $servicesArray[$id] : false;
+  }
+
+  public function countPublicServices()
+  {
+    return count($this->getPublicServices());
+  }
+
+  public function getPublicServices()
+  {
+    $services = $this->getServices();
+    $pServices = array();
+    foreach ($services as $s)
+    {
+      if ($s->getIsPublic())
+      {
+        $pServices[] = $s;
+      }
+    }
+    return $pServices;
+  }
+
+  public function getCategories()
+  {
+    if (!is_array($this->categories))
+    {
+      $this->categories = array();
+      $c = new Criteria();
+      $c->addJoin(CategoryPeer::ID, LinkCompanyCategoryPeer::CATEGORY_ID);
+      $c->add(LinkCompanyCategoryPeer::COMPANY_ID, $this->getId());
+      $cats = CategoryPeer::doSelect($c);
+      foreach ($cats as $cat)
+      {
+        $this->categories[] = $cat;
+      }
+    }
+    return $this->categories;
+  }
+
+  public function countCategories()
+  {
+    return count($this->getCategories());
+  }
+
+  public function getNbCategories()
+  {
+    return $this->countCategories();
+  }
+
+  public function addCategory($category)
+  {
+    if (!is_array($this->categories))
+    {
+      $this->getCategories();
+    }
+    if (is_numeric($category))
+    {
+      $category = LinkCompanyCategoryPeer::retrieveByPK($this->getId(), $category);
+    }
+    if ($category)
+    {
+      foreach ($this->categories as $cat)
+      {
+        if ($cat === $category)
+        {
+          return $this;
+        }
+      }
+      $this->categories[] = $category;
+    }
+    return $this;
+  }
+
+  public function removeAllCategories()
+  {
+    $this->categories = array();
+  }
+
+  public function __toString()
+  {
+    return $this->getName();
+  }
+
+  public function getContractorsWithPublicAgenda()
+  {
+    return ContractorQuery::create()
+              ->leftJoinWithCompanyRights()
+              ->filterByCompanyId($this->getId())
+              ->useCompanyRightsQuery()
+                ->filterByHasPublicAgenda(true)
+              ->endUse()
+              ->find();
+  }
+
+  public function getContractorWithPublicAgenda($contractorId)
+  {
+    $contractors = $this->getContractorsWithPublicAgenda();
+    if (!$contractorId)
+    {
+      //random select
+      $c = $contractors[rand(0, count($contractors) - 1)];
+      return $c;
+    }
+
+    foreach ($contractors as $c)
+    {
+      if ($c->getId() == $contractorId)
+      {
+        return $c;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * checks wether or not given module (by name ) is active or not.
+   *
+   * @param string $moduleName the name of module to check if it is active or not.
+   *
+   * @return boolean
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function isCompanyModuleActive($moduleName)
+  {
+    foreach ($this->getCompanyModules() as $module)
+    {
+      if ($module->getName() == $moduleName)
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * TODO: cache the credentials
+   * return the default credentials for company as an array of strings
+   *
+   * @return array<string>
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function getDefaultCredentials()
+  {
+    $credentials = $this->getDefaultCredentialObjects();
+    $c = array();
+    foreach ($credentials as $credential) 
+    {
+      $c[] = $credential->getCredential();
+    }
+
+    return $c;
+  }
+
+  /**
+   * undocumented function
+   *
+   * @param string $credential Credential name
+   * @return CompanyEntity
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function addDefaultCredential($credential)
+  {
+    if (!$this->hasCredential($credential))
+    {
+      $c = new CompanyDefaultCredential();
+      $c->setCredential($credential);
+      $this->addDefaultCredentialObject($c);
+    }
+    return $this;
+  }
+  
+  /**
+   * is the given credential active for whole company
+   *
+   * @param String $credentials the credential to check
+   * @return Boolean
+   **/
+  public function hasDefaultCredential($credentials)
+  {
+    if (!is_array($credentials))
+    {
+      return in_array($credentials, $this->getDefaultCredentials());
+    }
+
+    foreach ($credentials as $credential) 
+    {
+      if ($this->hasDefaultCredential($crendential))
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * index Company
+   *
+   * @return void
+   * @author Camille NERON <camille_neron@carpe-hora.com>
+   **/
+  public function updateLuceneIndex()
+  {
+    $solr = CompanyQuery::getSolrService();
+
+    $document = new Apache_Solr_Document();
+
+    $document->addField( 'id',            $this->getId() );
+    $document->addField( 'name',          $this->getName(), 1.2 );
+    $document->addField( 'address',       $this->getAddress(', ') );
+    $document->addField( 'zip',           $this->getZipCode() );
+    $document->addField( 'town',          $this->getTown() );
+    $document->addField( 'description',   $this->getPresentation() );
+
+    foreach ($this->getContractors() as $contractor) 
+    {
+      $document->addField( 'employee', $contractor->getPublicname() );
+    }
+    foreach ($this->getCategorys() as $category) 
+    {
+      $document->addField( 'category', $category->getName() );
+    }
+
+    $document->addField( 'position',   sprintf('%s,%s', $this->getLatitude(), $this->getLongitude()) );
+
+    $solr->addDocument($document);
+    $solr->commit();
+  }
+
+  // Réindexation après une création / modification
+  public function postSave(PropelPDO $con = null)
+  {
+      $this->updateLuceneIndex();
+  }
+
+  // Désindexation après une suppression
+  public function postDelete(PropelPDO $con = null)
+  {
+      $solr = CompanyQuery::getSolrService();
+
+      $solr->deleteById($this->getId());
+  }
+}

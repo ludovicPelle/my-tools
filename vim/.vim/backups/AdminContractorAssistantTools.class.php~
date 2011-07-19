@@ -1,0 +1,69 @@
+<?php
+/**
+ * This file declare the AdminContractorAssistantTools class.
+ *
+ * @package chCmsAdminContractorPlugin
+ * @subpackage AdminContractorAssistants
+ * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-05-10
+ */
+
+/**
+ * a set of tools for contractor assistants handling
+ */
+class AdminContractorAssistantTools 
+{
+  /**
+   * Retrive contrator 
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public static function getContractor($actions, sfWebRequest $request)
+  {
+    $actions->forward404Unless($request->hasAttribute('contractor_id'), 'No user to look for.');
+    $company = $actions->getUser()->getSelectedCompany();
+    $contractor = $company->getEntity($request->getAttribute('contractor_id'));
+    $actions->forward404Unless($contractor, 'No contractor found.');
+    $actions->contractor = $contractor;
+    $actions->company = $company;
+  }
+
+  public static function retrieveAssistanceLink($actions, sfWebRequest $request)
+  {
+    $actions->forward404Unless(
+          $request->hasAttribute('contractor_id') &&
+          $request->hasAttribute('assistant_id'),
+          'Please provide both contractor id and assistant_id');
+
+    self::getContractor($actions, $request);
+    $actions->collegues = $actions->contractor->getCollegues();
+
+    $actions->assistant = $actions->contractor->getCollegue($request->getAttribute('assistant_id'));
+
+    $actions->forward404Unless($actions->assistant, 'Unable to find the related collegue');
+
+    $actions->assistantLink = $actions->assistant->getAssistanceLinkFor($actions->contractor);
+
+    if($request->hasParameter('current') && $current = $actions->company->getContractor($request->getParameter('current')))
+    {
+    echo "tata";
+      $actions->current = $current;
+    }
+    else
+    {
+    echo "toto";
+      $actions->current = $actions->contractor;
+    }
+    
+    if($actions->current->getId() == $actions->contractor->getId())
+    {
+      $actions->assistantName = $actions->assistant->getCompanyName();
+    }
+    else
+    {
+      $actions->assistantName = $actions->contractor->getCompanyName();
+    }
+  }
+} // END OF AdminContractorAssistantTools

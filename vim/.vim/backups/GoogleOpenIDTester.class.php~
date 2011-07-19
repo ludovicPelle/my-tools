@@ -1,0 +1,80 @@
+<?php
+
+/**
+ * This file declare the GoogleOpenIdConsumerTester class.
+ *
+ * @package chCmsGuardExtraPlugin
+ * @subpackage test
+ * @author Kevin Gomez <contact@kevingomez.fr>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-04-13
+ */
+
+/**
+ * Used to test protected methods of the GoogleOpenIdConsumer class
+ */
+class GoogleOpenIdConsumerTester extends GoogleOpenIdConsumer
+{
+  protected $valid_params = array(
+          'openid_ns' =>'http://specs.openid.net/auth/2.0',
+          'openid_mode' =>'id_res',
+          'openid_op_endpoint' =>'https://www.google.com/accounts/o8/ud',
+          'openid_response_nonce' =>'2011-06-20T12:41:00ZFjq3cXVAJMZWhQ',
+          'openid_return_to' =>'http://www.t-resa.loc/users_dev.php/register/google/verify',
+          'openid_signed' =>'op_endpoint,claimed_id,identity,return_to,response_nonce,assoc_handle,ns.ext1,ext1.mode,ext1.type.firstname,ext1.value.firstname,ext1.type.email,ext1.value.email,ext1.type.lastname,ext1.value.lastname',
+          'openid_identity' =>'https://www.google.com/accounts/o8/id?id=AItOawkzKwmMTcpRPixWEC59CvVe5ed2SAM8ai4',
+          'openid_claimed_id' =>'https://www.google.com/accounts/o8/id?id=AItOawkzKwmMTcpRPixWEC59CvVe5ed2SAM8ai4',
+          'openid_ns_ext1' =>'http://openid.net/srv/ax/1.0',
+          'openid_ext1_mode' =>'fetch_response',
+          'openid_ext1_type_firstname' =>'http://axschema.org/namePerson/first',
+          'openid_ext1_value_firstname' =>'Carpe',
+          'openid_ext1_type_email' =>'http://axschema.org/contact/email',
+          'openid_ext1_value_email' =>'carpehoratest@gmail.com',
+          'openid_ext1_type_lastname' =>'http://axschema.org/namePerson/last',
+          'openid_ext1_value_lastname' =>'Hora',
+  );
+
+
+  public function __construct($realm, sfRequest $request)
+  {
+    parent::__construct($realm, $request);
+
+    $this->valid_params['openid_assoc_handle'] = $this->publicGethandle();
+  }
+
+  public function prepareValidRequest(sfRequest $request, $params=null)
+  {
+
+    if ($params!==null)
+    {
+      $this->valid_params = array_merge($this->valid_params, $params);
+    }
+    $request->getParameterHolder()->add($this->valid_params);
+    $request->getParameterHolder()->set('openid_sig', $this->publicComputeSignature($this->valid_params));
+  }
+
+  public function getValidParam($key)
+  {
+    return $this->valid_params[$key];
+  }
+
+  public function getValidParams()
+  {
+    return $this->valid_params;
+  }
+
+  public function publicCheckHandle()
+  {
+    return $this->checkHandle();
+  }
+
+  public function publicGetHandle()
+  {
+    return $this->getHandle();
+  }
+
+  public function publicComputeSignature(array $params)
+  {
+    return $this->computeSignature($params);
+  }
+} // END OF UnitTestTools

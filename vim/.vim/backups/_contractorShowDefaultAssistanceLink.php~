@@ -1,0 +1,104 @@
+<?php
+use_helper('chCmsContacts');
+/*
+  $contractor
+  $company
+
+*/
+?>
+<table>
+  <tbody>
+    <tr>
+      <th>
+          <?php echo __('%c_icon% %contractor% accorde à tous les %employee% les droits suivants par défaut', array(
+                            '%employee%' => $company->getVocabulary('contractor',2),
+                            '%contractor%' => $contractor,
+                            '%c_icon%' => jui_icon('silk-user_star')
+                            )) ?>
+      </th>
+      <th class="actions-cell">
+          <?php echo jui_link_to_function('Modifier',
+                                      'Tresa.Contractors.rightsModify(this)',
+                                      array(
+                                        'href' => admin_url_for(
+                                                    $group,
+                                                    "assistant_default_edit",
+                                                    array('contractor_id' => $contractor->getId())
+                                                    ),
+                                        'icon' => "silk-bullet_edit")); ?>
+      </th>
+    </tr>
+    <tr>
+      <th><?php echo __("Accès aux agendas d'entrprise") ?></th>
+      <td>
+        <ul class="inline_list">
+          <li><?php echo include_boolean_value($contractor->enableViewCalendarCompanyByDefault()); ?> peut voir</li>
+          <li><?php echo include_boolean_value($contractor->enableUpdateCalendarCompanyByDefault()); ?> peut mettre à jour</li>
+          <li><?php echo include_boolean_value($contractor->enableCreateCalendarCompanyByDefault()); ?> peut créer</li>
+          <li><?php echo include_boolean_value($contractor->enableDeleteCalendarCompanyByDefault()); ?> peut supprimer</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <th><?php echo __("Accès aux agendas protégés") ?></th>
+      <td>
+        <ul class="inline_list">
+          <li><?php echo include_boolean_value($contractor->enableViewCalendarProtectedByDefault()); ?> peut voir</li>
+          <li><?php echo include_boolean_value($contractor->enableUpdateCalendarProtectedByDefault()); ?> peut mettre à jour</li>
+          <li><?php echo include_boolean_value($contractor->enableCreateCalendarProtectedByDefault()); ?> peut créer</li>
+          <li><?php echo include_boolean_value($contractor->enableDeleteCalendarProtectedByDefault()); ?> peut supprimer</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <th>Accès aux <?php echo $company->getVocabulary('client', 2) ?> publics</th>
+      <td>
+        <ul class="inline_list">
+          <li><?php echo include_boolean_value($contractor->enableViewPublicContactByDefault()); ?> peut voir</li>
+          <li><?php echo include_boolean_value($contractor->enableUpdatePublicContactByDefault()); ?> peut mettre à jour</li>
+          <li><?php echo include_boolean_value($contractor->enableCreatePublicContactByDefault()); ?> peut créer</li>
+          <li><?php echo include_boolean_value($contractor->enableDeletePublicContactByDefault()); ?> peut supprimer</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <th>Accès aux <?php echo $company->getVocabulary('client', 2) ?> protégés</th>
+      <td>
+        <ul class="inline_list">
+          <li><?php echo include_boolean_value($contractor->enableViewProtectedContactByDefault()); ?> peut voir</li>
+          <li><?php echo include_boolean_value($contractor->enableUpdateProtectedContactByDefault()); ?> peut mettre à jour</li>
+          <li><?php echo include_boolean_value($contractor->enableCreateProtectedContactByDefault()); ?> peut créer</li>
+          <li><?php echo include_boolean_value($contractor->enableDeleteProtectedContactByDefault()); ?> peut supprimer</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <th>Visibilité par défaut des <?php echo $company->getVocabulary('client', 2) ?></th>
+      <td>
+        <ul class="inline_list">
+          <li><?php echo get_text_for_visibility($contractor->getContactsDefaultVisibility(), $sf_data->getRaw('company')); ?></li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <th>Visibilité par défaut de mon agenda</th>
+      <td>
+        <ul class="inline_list">
+          <li><?php echo get_text_for_visibility($contractor->getCalendarsDefaultVisibility()); ?></li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <th>Publication par défaut de mon agenda</th>
+      <td>
+        <ul class="inline_list">
+          <li><?php echo get_text_for_publication($contractor->getCalendarsDefaultPublication()); ?></li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<?php
+// vim:ft=php.html.sftemplatt
+?>

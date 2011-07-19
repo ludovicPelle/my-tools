@@ -1,0 +1,19 @@
+<?php
+set_left_menu(
+  $sf_request->getParameter('module'),
+  'leftMenu',
+  array('collapsible' => true)
+);
+?>
+
+<div id="dashboard_content">
+
+  Bienvenue sur l'interface de gestion des <?php echo $company->getVocabulary('client', 2) ?>.
+  <br />
+  <?php
+  echo jui_button_link(
+    sprintf('Ajouter un %s', $company->getVocabulary('client', 1)),
+    '@contacts_display_new',
+    array('rel' => 'ajax', 'icon' => 'silk-add', 'id ' => 'dashboard_add_link')
+  ) ?>
+</p>

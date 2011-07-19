@@ -1,0 +1,60 @@
+snippet tresaMigrateTask
+	/**
+	 * this file declares the $2 class.
+	 * this is the class behind symfony t-resa:$1
+	 *
+	 * @package Tresa
+	 * @subpackage Migrations
+	 * @author `g:snips_author`
+	 * @copyright (c) `g:snips_company` `strftime("%Y")`
+	 * @since `strftime("%Y-%m-%d")`
+	 */
+
+	/**
+	 * The t-resa:$1 task ${3:description}
+	 */
+	class ${2:`Snippet_PHPClassNameFromFilename()`} extends BaseTresaMigrationTask
+	{
+		protected function configure()
+		{
+			// // add your own arguments here
+			// $this->addArguments(array(
+			//   new sfCommandArgument('my_arg', sfCommandArgument::REQUIRED, 'My argument'),
+			// ));
+			
+			parent::configure();
+			
+			$this->name             = '${1:task-name}';
+			$this->briefDescription = '$3';
+			$this->detailedDescription = <<<EOF
+	The [t-resa:$1|INFO] task $3
+	call it with:
+																																																																								 
+		[php symfony t-resa:$1|INFO]
+	EOF;
+		}
+			
+		/**
+		 * actually migrate the database.
+		 *
+	   * @param PropelPDO $con the db connection to use
+		 * @throw sfPropelException
+		 */
+		protected function doUpdateDb($con)
+		{
+			${4:// your code comes here}
+		}
+	} //end of class $2
+	// vim:ft=php.tresatask
+snippet sql
+	$this->logSection($this->name, '${1:description}');
+	
+	$sql=${2:sql};
+	$stmt = $con->prepare($sql);
+	$stmt->execute(array());
+	$this->logSection($this->name, '$1 OK');
+snippet table_exists
+	$sql = "";
+snippet log
+	$this->logSection(${2:$this->name}, '${1:message}');
+	${3}

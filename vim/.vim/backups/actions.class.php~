@@ -1,0 +1,73 @@
+<?php
+/**
+ * This file declare the chCmsFrontendAccountAction class.
+ *
+ * @package chCmsFrontendAccount
+ * @subpackage actions
+ * @author Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-05-31
+ */
+
+require_once sfConfig::get('sf_plugins_dir').'/chCmsGuardExtraPlugin/modules/chCmsFrontendAccount/lib/BasechCmsFrontendAccountActions.class.php';
+
+/**
+ * the final class for pro applicatio loggin
+ */
+class chCmsFrontendAccountActions extends BasechCmsFrontendAccountActions
+{
+
+  /**
+   * ask for a new password
+   *
+   * @return sfView::SUCCESS
+   **/
+  public function executeLostPassword(sfWebRequest $request)
+  {
+    $this->form = new chCmsUserResendPasswordForm();
+    $this->setLayout('layout960Secure');
+  }
+  /**
+   * changes the template to an api template
+   *
+   * @return void
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  protected function setApiTemplate($request)
+  {
+    if ($request->isOAuthRequest())
+    {
+      $this->setTemplate(sprintf('%sApi', $this->getTemplate()));
+    }
+  }
+
+  /**
+   * entry point for Signin action
+   *
+   * @param sfWebRequest $request the user request
+   * @return
+   */
+  public function executeSignin($request)
+  {
+    $ret = parent::executeSignin($request);
+
+    $this->setApiTemplate($request);
+
+    return $ret;
+  }
+
+  /**
+   * entry point for DoSignin action
+   *
+   * @param sfWebRequest $request the user request
+   * @return
+   */
+  public function executeDoSignin(sfWebRequest $request)
+  {
+    $ret = parent::executeDoSignin($request);
+
+    $this->setApiTemplate($request);
+
+    return $ret;
+  }
+} // END OF chCmsFrontendAccountAction

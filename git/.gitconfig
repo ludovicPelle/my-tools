@@ -1,0 +1,31 @@
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	ui = auto
+	interactive = auto
+[user]
+	name = ludovic
+	email = git@carpe-hora.com
+[alias]
+	ci = commit
+	ce = checkout
+	st = status
+	l = log
+[merge]
+	tool = vimdiff
+[core]
+	editor = vim
+[color "branch"]
+	current = yellow
+	local = yellow
+	remote = green
+[color "diff"]
+	meta = yellow
+	frag = magenta
+	old = red
+	new = green
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = cyan

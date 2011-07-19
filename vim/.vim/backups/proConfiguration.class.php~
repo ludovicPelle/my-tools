@@ -1,0 +1,11 @@
+<?php
+
+class proConfiguration extends sfApplicationConfiguration
+{
+  public function configure()
+  {
+    // registers the main menu intialization
+    $this->dispatcher->connect(
+           'tresa.menu.main' , array('MainMenuPro', 'listenToMainMenuEvent'));
+  }
+}

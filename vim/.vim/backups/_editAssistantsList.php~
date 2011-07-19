@@ -1,0 +1,143 @@
+<?php use_javascript('pro/contractors.js') ?>
+
+<?php if (!$sf_request->isXmlHttpRequest()): ?>
+
+  <?php include_admin_panel_title('Editer les %assistants% de %contractor_name%',array('%assistants%' => vocabulary('assistant', 2),
+                                                                                       '%contractor_name%' => $contractor)); ?>
+
+  <?php jui_include_info_box('Réglez ici les droits des %assistants% de %contractor_name%.', array('%assistants%' => vocabulary('assistant', 2),
+                                                                                                 '%contractor_name%' => $contractor))?>
+
+<?php endif; ?>
+<div class="ui-tabs">
+  <ul>
+    <li>
+      <a href="#tab-rights">
+        <?php echo __('Droits par défaut des autres %contractors%', array(
+                  '%contractors%'  => vocabulary('contractor', 2))) ?>
+      </a>
+    </li>
+    <li>
+      <a href="#tab-assistants">
+        <?php echo __('Droits de %name% sur les %contractors%', array(
+                  '%contractors%'  => vocabulary('contractor', 2), 
+                  '%name%'        => $contractor->getCompanyName())) ?>
+      </a>
+    </li>
+    <li>
+      <a href="#tab-collegues">
+        <?php echo __('Droits des %contractors% sur %name%', array(
+                  '%contractors%'  => vocabulary('contractor', 2), 
+                  '%name%'        => $contractor->getCompanyName())) ?>
+      </a>
+    </li>
+  </ul>
+
+  <div id="tab-rights">
+    <p>
+      <?php echo __('Paramétrez ici ce à quoi les autres %contractors% ont accès par défaut', array(
+                    '%contractors%' => vocabulary('contractor', 2))) ?><br />
+      <?php echo __('Ces droits peuvent être surchargés par %contractor% via les autres onglets', array(
+                    '%assistants%' => vocabulary('assistant', 2),
+                    '%contractor%' => vocabulary('contractor'))) ?>
+    </p>
+    
+       <div class="assistant-rights">
+
+          <?php include_partial('adminContractorAssistants/contractorShowDefaultAssistanceLink', array(
+                                'group' => $group,
+                                'contractor' => $contractor, 
+                                'company' => $company,
+                                'defaultRightsForm'=> $defaultRightsForm)); ?>
+       </div>
+  </div>
+
+  <div id="tab-assistants">
+
+    <?php if (count($collegues)): ?>
+      <?php foreach ($collegues as $collegue): ?>
+
+       <div class="assistant-rights">
+
+         <?php if ( !isset($assistantLink) || 
+                  !(    $assistantLink->getAssistedById() == $collegue->getId() && 
+                        $assistantLink->getAssistantOfId() == $contractor->getId())): ?>
+
+          <?php include_partial('adminContractorAssistants/contractorShowAssistanceLink', array(
+                                'group' => $group,
+                                'contractor' => $contractor, 
+                                'assistant' => $collegue, 
+                                'assistantName' => $collegue->getCompanyName(),
+                                'current' => $contractor)); ?>
+        
+        <?php else: ?>
+  
+          <?php include_partial('adminContractorAssistants/contractorEditAssistanceLink', array(
+                                'group' => $group,
+                                'contractor' => $contractor,
+                                'assistant' =>  $collegue, 
+                                'assistantName' => $collegue->getCompanyName(),
+                                'current' => $contractor,
+                                'form' => $form)); ?>
+
+        <?php endif; ?>
+       </div>
+      <?php endforeach; ?>
+    <?php else: ?>
+      <?php echo jui_get_info_box(__('Aucun autre %contractor% pour le moment.', array('%contractor%' => vocabulary('contractor')))) ?>    
+    <?php endif; ?>
+
+  </div>
+  
+
+  <div id="tab-collegues">
+
+    <?php if (count($collegues)): ?>
+      <?php foreach ($collegues as $collegue): ?>
+
+        <div class="assistant-rights">
+
+        <?php if ( !isset($assistantLink) || 
+                  !(    $assistantLink->getAssistedById() == $contractor->getId() && 
+                        $assistantLink->getAssistantOfId() == $collegue->getId())): ?>
+
+          <?php include_partial('adminContractorAssistants/contractorShowAssistanceLink', array(
+                                'group' => $group,
+                                'contractor' => $collegue, 
+                                'assistant' => $contractor, 
+                                'assistantName' => $collegue->getCompanyName(),
+                                'current' => $contractor
+                                )); ?>
+
+        
+        <?php else: ?>
+  
+          <?php include_partial('adminContractorAssistants/contractorEditAssistanceLink', array(
+                                'group' => $group,
+                                'contractor' => $collegue, 
+                                'assistant' => $contractor, 
+                                'assistantName' => $collegue->getCompanyName(),
+                                'current' => $contractor,
+                                'form' => $form,
+                                )); ?>
+
+        <?php endif; ?>
+
+      </div>
+
+      <?php endforeach; ?>
+<?php else: ?>
+  <?php echo jui_get_info_box(__('Aucun autre %contractor% pour le moment.', array('%contractor%' => vocabulary('contractor')))) ?>    
+<?php endif; ?>
+
+  <?php open_admin_action_panel_footer(); ?>
+
+    <?php echo jui_button_link(
+                    'Retourner à la liste', 
+                    admin_url_for($group, 'contractor'),
+                    'icon=silk-application_view_list') ?>
+
+  <?php close_admin_action_panel_footer(); ?>
+  </div>
+
+</div>

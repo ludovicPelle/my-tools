@@ -1,0 +1,24 @@
+<?php
+require_once(dirname(__FILE__).'/../vendors/HTMLPurifier/HTMLPurifier.standalone.php');
+
+class chCmsValidatorHTML extends sfValidatorString
+{
+  public function configure($options = array(), $messages = array())
+  {
+    parent::configure($options, $messages);
+  }
+
+  public function doClean($value)
+  {
+    $config = HTMLPurifier_Config::createDefault();
+    $cache = sfConfig::get('sf_app_cache_dir', dirname(dirname(__FILE__).'/../../../../../').'/cache/');
+    if(!file_exists($cache.'/DefinitionCache/Serializer/'))
+    {
+      mkdir($cache.'/DefinitionCache/Serializer/', 0777, true);
+    }
+    $config->set('Cache.SerializerPath', $cache.'/DefinitionCache/Serializer/');
+    $purifier = new HTMLPurifier($config);
+
+    return $purifier->purify(parent::doClean($value));
+  }
+}

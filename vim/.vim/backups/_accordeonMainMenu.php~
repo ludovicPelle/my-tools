@@ -1,0 +1,22 @@
+<?php use_helper('chCmsApplication'); ?>
+<ul class="chcms-menulist chcms-menu-accordion">
+<?php foreach (AdminMenu::getInstance()->getAccessibleGroupsForUser() as $key => $groupMenu): ?>
+  <li class="chcms-group-accordion<?php echo get_text_if_current_menu($groupMenu, " selected") ?>">
+  <h3 class="chcms-group-accordion-header">
+    <?php echo get_admin_menu_group_link($groupMenu); ?>
+  </h3 >
+      <?php if (count($entries = $groupMenu->getAccessibleMenuEntriesForUser()) > 1) : ?>
+      <ul class=chcms-group-accordion-panel">
+        <?php foreach ($groupMenu->getAccessibleMenuEntriesForUser() as $panel_id => $title): ?>
+          <li class="chcms-group-accordion-item">
+          <?php echo get_admin_menu_entry_link($groupMenu, $panel_id) ?>
+          </li>
+        <?php endforeach; ?>
+      </ul>
+      <?php endif; ?>
+  </li>
+<?php endforeach; ?>
+</ul>
+<?php
+// vim:ft=php.html.sftemplate
+?>

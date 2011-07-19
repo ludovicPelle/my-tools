@@ -1,0 +1,345 @@
+<?php
+/**
+ * This file declare the BaseConsumer class.
+ *
+ * @package chCmsGuardExtraPlugin
+ * @subpackage provider
+ * @author Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-06-18
+ */
+
+/**
+ * the base consumer interface
+ */
+abstract class BaseConsumer
+{
+  abstract protected function getProviderName();
+
+  /**
+   * Constructs the login URL for the user.
+   *
+   * @param String $returnTo URL to return to after login.
+   * @return String URL
+   */
+  abstract public function getLoginUrl($returnTo);
+
+  /**
+   * Checks GET and POST data for a valid OpenID response.
+   *
+   * @return boolean True, if a valid user identifier was found.
+   */
+  abstract public function verifyLogin();
+
+  /**
+   * Enable or disable debug output.
+   *
+   * @var boolean
+   */
+  protected $debug = false;
+
+  /* Attributes management */
+
+  protected $axAttributes;
+
+  /**
+   * read a returned openid attribute
+   *
+   * @return string
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function getAttribute($name, $default = null)
+  {
+    if (!is_array($this->axAttributes))
+    {
+      throw new LogicException('You cannot access attributes as provider was not validated.');
+    }
+
+    if ($this->hasAttribute($name))
+    {
+      return $this->axAttributes[$name];
+    }
+
+    return $default;
+  }
+
+  /**
+   * set an openid returned attribute
+   *
+   * @param String $key   the attribute key
+   * @param mixed  $value the attribute value
+   * @return BaseOpenIdConsumer
+   **/
+  public function setAttribute($key, $value)
+  {
+    if (!is_array($this->axAttributes))
+    {
+      $this->axAttributes = array();
+    }
+
+    $this->axAttributes[$key] = $value;
+    return $this;
+  }
+
+  /**
+   * check wether or not the user attribute was provided by server
+   *
+   * @return boolean
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function hasAttribute($key)
+  {
+    return is_array($this->axAttributes) && isset($this->axAttributes[$key]);
+  }
+
+  /**
+   * called when the auth is complete in order to
+   * fill the user information.
+   *
+   * @param array $params Request parameters.
+   *
+   * @return void
+   * @author Kevin Gomez <contact@kevingomez.fr>
+   **/
+  protected function initUserAttributes($params)
+  {
+    foreach ($params as $key => $value)
+    {
+      $key = $this->sanitizeAttributeKey($key);
+
+      $this->setAttribute($key, $value);
+    }
+
+    return $this;
+  }
+
+  /**
+   * sanitize the returned openid key
+   *
+   * @return String
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  protected function sanitizeAttributeKey($key)
+  {
+    if (0 === strpos($key, 'openid_ax_value_'))
+    {
+      return substr($key, 16);
+    }
+
+    if (0 === strpos($key, 'openid_ext1_value_'))
+    {
+      return substr($key, 18);
+    }
+
+    return $key;
+  }
+
+  // following functions are generic parsers for openId attributes.
+
+  /**
+   * return the openid mail attribute
+   *
+   * @return string
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function getEmail()
+  {
+    return $this->getAttribute('email');
+  }
+
+  /**
+   * return the user claimed id
+   *
+   * @return string
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   */
+  public function getUser()
+  {
+    return $this->getAttribute('openid_claimed_id', $this->getProviderUrl());
+  }
+
+  /**
+   * return openid username attribute
+   *
+   * @return string
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function getUsername()
+  {
+    $username = $this->getAttribute('nickname', $this->getEmail());
+
+    // if this is a mail
+    if (1 < strpos($username, '@'))
+    {
+      $parts = explode('@', $username, 2);
+      $username = $parts[0];
+    }
+
+    return $username;
+  }
+
+  /**
+   * return openid fullname
+   *
+   * @return string
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function getFullname()
+  {
+    $fullname = $this->getAttribute('namePerson',$this->getAttribute('fullname'));
+
+    if (!$fullname)
+    {
+      $fullname = sprintf('%s %s', $this->getFirstname(), $this->getLastname());
+    }
+
+    return $fullname;
+  }
+
+  /**
+   * return openid firstname
+   *
+   * @return string
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function getFirstname()
+  {
+    $firstname = $this->getAttribute('firstname');
+
+    if ($firstname || !($this->hasAttribute('namePerson') || $this->hasAttribute('fullname')))
+    {
+      return $firstname;
+    }
+
+    // well, try to parse fullname
+    $fullname = explode(' ', $this->getFullname());
+    return $fullname[0];
+  }
+
+  /**
+   * return openid lastname
+   *
+   * @return string
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function getLastname()
+  {
+    $lastname = $this->getAttribute('lastname');
+
+    if ($lastname || !($this->hasAttribute('namePerson') || $this->hasAttribute('fullname')))
+    {
+      return $lastname;
+    }
+
+    // well, try to parse fullname
+    $fullname = explode(' ', $this->getFullname(), 2);
+    return $fullname[1];
+  }
+
+  /**
+   * Returns the account identifier (username, mail or sth like that
+   * depending on the provider)
+   *
+   * @return string The identifier.
+   * @author Kevin Gomez <contact@kevingomez.fr>
+   **/
+  public function getAccountIdentifier()
+  {
+    return $this->getEmail();
+  }
+
+  /* Cache management */
+
+  /**
+   * variable sfUser : $user sessionUser
+   * @access protected static
+   * @var sf_user
+   */
+  protected static $user;
+
+  const USER_NAMESPACE = "plugin.chCmsGuardExtra.BaseConsumer";
+  /**
+   * getter for user
+   * @access public
+   *
+   * @return sf_user the user value
+   */
+  public function getSfUser()
+  {
+    return self::$user;
+  }
+
+  /**
+   * setter for user
+   * @access public
+   *
+   * @return sf_user the user value
+   */
+  public static function setSfUser($user)
+  {
+    return self::$user = $user;
+  }
+
+
+  /**
+   * Returns a value from the cache.
+   *
+   * @param String $key
+   * @return String
+   */
+  public function cacheGet($key)
+  {
+    $sf_user = $this->getSfUser();
+
+    $provider_key = sprintf('%s-%s', $this->getProviderName(), $key);
+
+    return $sf_user->getAttribute($provider_key, null, self::USER_NAMESPACE);
+  }
+
+  /**
+   * Stores a value in the cache.
+   *
+   * @param String $key
+   * @param String $value
+   */
+  protected function cachePut($key, $value)
+  {
+    if ($this->debug)
+    {
+      echo "cache write $key => $value<br>";
+    }
+    $sf_user = $this->getSfUser();
+
+    $provider_key = sprintf('%s-%s', $this->getProviderName(), $key);
+
+    $sf_user->setAttribute($provider_key, $value, self::USER_NAMESPACE);
+  }
+
+  /**
+   * clear cache data
+   *
+   * @param String $key
+   * @return void
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  protected function cacheClear($key)
+  {
+    $sf_user = $this->getSfUser();
+
+    $provider_key = sprintf('%s-%s', $this->getProviderName(), $key);
+
+    $sf_user->getAttributeHolder()->remove($provider_key, null, self::USER_NAMESPACE);
+  }
+
+  /**
+   * undocumented function
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function authenticationProcessFinished()
+  {
+    $this->getAttributeHolder()->removeNamespace(self::USER_NAMESPACE);
+  }
+
+}

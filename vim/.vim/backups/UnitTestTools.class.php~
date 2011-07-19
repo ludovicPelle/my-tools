@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * This file declare the UnitTestTools class.
+ *
+ * @package chCmsGuardExtraPlugin
+ * @subpackage test
+ * @author Kevin Gomez <contact@kevingomez.fr>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-04-13
+ */
+
+/**
+ * Some tools for unit testing
+ */
+class UnitTestTools
+{
+  protected static $form_default_val = array(
+    'mail'  => 'foo@bar.baz',
+    'toto'  => 'tutu',
+  );
+
+  public static function getAuthObject()
+  {
+    static $auth = null;
+
+    if ($auth == null)
+    {
+      $auth = new GoogleAuthentication();
+    }
+
+    return $auth->toArray(BasePeer::TYPE_NUM);
+  }
+
+  public static function getFormDefaultValues()
+  {
+    return self::$form_default_val;
+  }
+
+  public static function bindAuth($user)
+  {
+    // auth object
+    $user->setAttribute(chCmsGuardExtraUser::SESS_AUTH_OBJECT, self::getAuthObject());
+    // auth form name
+    $user->setAttribute(chCmsGuardExtraUser::SESS_FORM_CLASS, 'GoogleRegistrationForm');
+    // form default values
+    $user->setAttribute(chCmsGuardExtraUser::SESS_FORM_DEFAULT_VAL, self::$form_default_val);
+  }
+} // END OF UnitTestTools

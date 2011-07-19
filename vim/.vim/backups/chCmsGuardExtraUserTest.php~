@@ -1,0 +1,96 @@
+<?php
+
+require(dirname(__FILE__).'/../../../../test/bootstrap/unit.php');
+
+$t = new lime_test(17, new lime_output_color());
+
+// creation of the test user instance
+$dispatcher = new sfEventDispatcher();
+$sessionPath = sfToolkit::getTmpDir().'/sessions_'.rand(11111, 99999);
+$storage = new sfSessionTestStorage(array('session_path' => $sessionPath));
+
+$dispatcher->connect(
+    'user.method_not_found',
+    array('chCmsGuardExtraUser', 'methodNotFound'));
+
+$user = new sfUser($dispatcher, $storage);
+
+
+// begin: tests
+
+$t->comment('::haschCmsGuardExtraProvider()');
+$t->ok(!$user->haschCmsGuardExtraProvider(), '::haschCmsGuardExtraProvider() returns false if the user has no extra provider');
+// add an auth object to the current session
+UnitTestTools::bindAuth($user);
+$t->ok($user->haschCmsGuardExtraProvider(), '::haschCmsGuardExtraProvider() returns true if the user has an extra provider');
+$user->setAttribute(chCmsGuardExtraUser::SESS_AUTH_OBJECT, null);
+
+
+$t->comment('::getchCmsGuardExtraProvider()');
+$t->is($user->getchCmsGuardExtraProvider(), null, '::getchCmsGuardExtraProvider() returns the content of the right session var (when null)');
+UnitTestTools::bindAuth($user);
+$t->is_deeply(UnitTestTools::getAuthObject()->toArray(BasePeer::TYPE_NUM), $user->getchCmsGuardExtraProvider()->toArray(BasePeer::TYPE_NUM), '::getchCmsGuardExtraProvider() returns the content of the right session var (when not null)');
+$user->setAttribute(chCmsGuardExtraUser::SESS_AUTH_OBJECT, null);
+
+
+$t->comment('::setchCmsGuardExtraProvider()');
+$user->setchCmsGuardExtraProvider(null);
+$t->is($user->getAttribute(chCmsGuardExtraUser::SESS_AUTH_OBJECT), null, '::setchCmsGuardExtraProvider() sets the authentication object (when null)');
+UnitTestTools::bindAuth($user);
+$t->is($user->getAttribute(chCmsGuardExtraUser::SESS_AUTH_OBJECT), UnitTestTools::getAuthObject(), '::setchCmsGuardExtraProvider() sets the authentication object (when not null)');
+
+
+$t->comment('::cancelchCmsGuardExtraProviderAuth()');
+$user->cancelchCmsGuardExtraProviderAuth();
+$t->ok(!$user->haschCmsGuardExtraProvider(), '::cancelchCmsGuardExtraProviderAuth() correctly cancels the auth when the auth exists');
+$t->ok(!$user->haschCmsGuardExtraProviderFormValues(), '::cancelchCmsGuardExtraProviderAuth() correctly cleans the default form values');
+
+$user->cancelchCmsGuardExtraProviderAuth();
+$t->ok(!$user->haschCmsGuardExtraProvider(), '::cancelchCmsGuardExtraProviderAuth() correctly cancels the auth when the auth does not exist');
+
+
+$t->comment('::setchCmsGuardExtraProviderForm()');
+try {
+  $user->setchCmsGuardExtraProviderForm('foo');
+  $t->fail('::setchCmsGuardExtraProviderForm() should throw an exception when specifying a provider register form when no provider is used');
+} catch (LogicException $e) {
+  $t->pass('::setchCmsGuardExtraProviderForm() throws an exception if we specify a form when no provider is used');
+}
+
+UnitTestTools::bindAuth($user);
+try {
+  $user->setchCmsGuardExtraProviderForm('foo');
+  $t->pass('::setchCmsGuardExtraProviderForm() can be used when the user has a provider');
+} catch (LogicException $e) {
+  $t->fail('::setchCmsGuardExtraProviderForm() should be able to define the form when using a provider');
+}
+
+
+
+$t->comment('::getchCmsGuardExtraProviderFormValues()');
+$t->is_deeply($user->getchCmsGuardExtraProviderFormValues(), UnitTestTools::getFormDefaultValues(), '::getchCmsGuardExtraProviderFormValues() returns the right array when a provider is used');
+
+$user->cancelchCmsGuardExtraProviderAuth();
+$t->is_deeply($user->getchCmsGuardExtraProviderFormValues(), array(), '::getchCmsGuardExtraProviderFormValues() returns an empty array no provider is used');
+
+
+$t->comment('::haschCmsGuardExtraProviderFormValues()');
+$t->ok(!$user->haschCmsGuardExtraProviderFormValues(), '::haschCmsGuardExtraProviderFormValues() returns false when no provider is used');
+
+UnitTestTools::bindAuth($user);
+$t->ok($user->haschCmsGuardExtraProviderFormValues(), '::haschCmsGuardExtraProviderFormValues() returns true when a provider is used (and form default values are specified');
+
+
+
+$t->comment('::getMail()');
+$values = UnitTestTools::getFormDefaultValues();
+$t->is(chCmsGuardExtraUser::getMail($user), $values['mail'], '::getMail() returns the right mail when form default values are provided');
+
+$user->cancelchCmsGuardExtraProviderAuth();
+$t->is(chCmsGuardExtraUser::getMail($user), '', '::getMail() returns an empty string when no form default values are provided');
+
+
+
+
+//$t->comment('::getchCmsGuardExtraRegistrationForm()');
+//$t->ok($user->getchCmsGuardExtraRegistrationForm() instanceof RegistrationForm, '::getchCmsGuardExtraRegistrationForm() returns the default registration form when no provider is used');

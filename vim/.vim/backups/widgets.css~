@@ -1,0 +1,28 @@
+
+  /* widget elements */
+   .event-list{padding:0;overflow:auto;}
+     .event-list ul.event{line-height:24px;padding:4px;border-bottom:1px solid #BBCCFF;}
+       .event-list ul.event li{display:block;overflow:hidden;}
+       .event-list ul.event li.event-summary{width:50%;}
+       .event-list ul.event li.event-action{float:right;}
+       .event-list ul.event .event-action-decline{background-image:url("/chCmsBasePlugin/css/themes/smoothness/images/ui-icons_cd0a0a_256x240.png");}
+       .event-list ul.event .event-action-accept{background-image:url("/chCmsBasePlugin/css/themes/smoothness/images/ui-icons_8DC262_256x240.png");}
+       .event-list ul.event .event-action-info{background-image:url("/chCmsBasePlugin/css/themes/smoothness/images/ui-icons_2e83ff_256x240.png");}
+     .event-action-clickable{cursor:pointer;}
+     .event-list .no-event,
+     .event-list .loading{padding-top:60px;text-align:center;}
+		 #event-todo-summary{font-size:14px;padding:3px 0;border-width:1px; border-style:solid;display:inline-block;width:260px;}
+		 #event-todo-add.ui-button {font-weight:normal;margin:0;border-left-width:0;}
+				#event-todo-add.ui-button span {-moz-border-radius: 0px; -webkit-border-radius: 0px; border-radius: 0px;}
+				#event-todo-add.ui-button span.ui-button-text {padding: 1px 5px;}
+		.event-pager{background-color:#BBCCFF;}
+     .widget-homepage h2.widget-header .ui-icon-refresh{float:right;}
+     #accordion-container .ui-icon-refresh{right:0.5em; top: 50%;left:auto;}
+     #accordion-container .ui-state-default .ui-icon-refresh{display:none;}
+     #accordion-container .ui-state-active .ui-icon-refresh{display:block;}
+		 #accordion-container .ui-accordion-content{padding:0;}
+		 #accordion-container #left-widgets > .ui-corner-all,
+     #accordion-container #left-widgets > .ui-corner-top,
+     #accordion-container #left-widgets > .ui-corner-bottom,
+     #calendar > .ui-corner-all{border-radius: 0;-moz-border-radius: 0; -webkit-border-radius: 0;}
+		 #sidebar .ui-datepicker {padding: 0; width:auto;}

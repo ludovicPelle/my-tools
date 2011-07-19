@@ -1,0 +1,77 @@
+<?php
+
+/**
+ * Base components for the chCmsAdminContractorPlugin adminContractorAssistants module.
+ * 
+ * @package     chCmsAdminContractorPlugin
+ * @subpackage  adminContractorAssistants
+ * @author      Your name here
+ * @version     SVN: $Id$
+ */
+abstract class BaseadminContractorAssistantsComponents extends chCmsAdminPanelComponents
+{
+  protected function retrieveAssistanceLink(sfWebRequest $request)
+  {
+    AdminContractorAssistantTools::retrieveAssistanceLink($this, $request);
+  }
+
+  protected function getContractor(sfWebRequest $request)
+  {
+    AdminContractorAssistantTools::getContractor($this, $request);
+  }
+
+  /**
+   * show the edition panel for assistants list of 
+   * company entity with contractor_id: parameter('contractor_id')
+   *
+   * @param sfWebRequest $request the user request
+   * @return 
+   */
+  public function executeEditAssistantsList(sfWebRequest $request)
+  {
+    $this->getContractor($request);
+    $this->collegues = $this->contractor->getCollegues();
+    $this->defaultRightsForm = new ContractorDefaultAssistantRightsForm($this->contractor);
+
+    if ($request->isXmlHttpRequest() && $request->hasParameter('collegue_id'))
+    {
+        $this->retrieveAssistanceLink($request);
+        $data = $this->processAjaxResult(array('html' => $this->getPartial('adminContractoriAssistants/contractorShowAssistanceLink', array(
+              'form' => $this->form,
+              'assistantLink' => $this->assistantLink,
+              'contractor' => $this->contractor,
+              'assistantName' => $this->assistantName,
+              'assistant' => $this->assistant,
+              'current' => $this->current
+            ))));
+
+      return $this->renderText( json_encode( $data ) );
+    }
+  }
+
+  /**
+   * entry point for EditAssistant action
+   *
+   * @param sfWebRequest $request the user request
+   * @return 
+   */
+  public function executeEditAssistant(sfWebRequest $request)
+  {
+    $this->retrieveAssistanceLink($request);
+
+    $this->form = new AssistantLinkForm($this->assistantLink);
+  }
+
+  /**
+   * entry point for EditDefaultAssistant action
+   *
+   * @param sfWebRequest $request the user request
+   * @return 
+   */
+  public function executeEditAssistantDefault(sfWebRequest $request)
+  {
+    $this->getContractor($request);
+
+    $this->defaultRightsForm = new ContractorDefaultAssistantRightsForm($this->contractor);
+  }
+}

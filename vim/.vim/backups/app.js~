@@ -1,0 +1,110 @@
+(function($, undefined) {
+  $(function() {
+    $('body').addClass('with-js').removeClass('no-js');
+	//	$("select, input:checkbox, input:radio, input:file, input:text, input:password").uniform();
+		$('input:checkbox, input:radio, input:file, input:text, input:password').uniform();
+    // init buttons rollover
+    $('.button-link, .button-skinned')
+			.live('mouseover mouseout', function(event) {
+        if (event.type == 'mouseover') {
+          $(this).addClass('ui-state-hover');
+					}
+        else {
+          $(this).removeClass('ui-state-hover');
+					}
+				});
+    //init the hover for admin table row
+    $('table.backend-list tbody tr')
+			.live('mouseover mouseout', function(event) {
+        if (event.type == 'mouseover') {
+          $(this).addClass('ui-state-highlight');
+					}
+        else {
+          $(this).removeClass('ui-state-highlight');
+					}
+				});
+    // init tabs
+    $('.ui-tabs').tabs();
+    //init qtips
+    $('a[title], button[title]')
+			.live('mouseover', function(event) {
+        $(this).qtip($.extend(true, {}, $.ch.config.qtip, {
+            overwrite: false,
+            show: {
+              event: event.type,
+              ready: true
+              },
+            position: {
+              adjust: {
+                screen: true
+                },
+              my: 'right center',
+              at: 'left center',
+              target: $(this)
+              }
+            }));
+        });
+		//init form tips
+		var inputSelector = 'input[type="text"], input[type=checkbox], input[type="password"], textarea, select';
+    $(inputSelector).livequery(function() {
+			$(this).each(function(position, element) {
+				var td = $(this).parent();
+        var help = $('.form-input-help', td);
+        if (help && help.length) {
+
+					td.css('position', 'relative');
+          $(this).qtip($.extend(true, {}, $.ch.config.qtip, {
+            overwrite: false,
+            content: {
+              text: help.html()
+              },
+            position: {
+              adjust: {
+                container: false
+                },
+              my: 'left center',
+              at: 'right center',
+              target: false
+              },
+						show: {
+							event: $(this).is('select, input[type=checkbox]') ? 'mouseenter' : 'focus'
+							},
+						hide: {
+							event: $(this).is('select, input[type=checkbox]') ? 'mouseleave' : 'blur'
+							}
+          }));
+          help.remove();
+        }
+      });
+    }); // end of form help init
+
+  // init label tips
+  $('.definition-label').live('mouseover', function(event) {
+      var _tip = $(this).parent().find('.definition-text').remove().html();
+      $(this).qtip($.extend(true, {}, $.ch.config.qtip, {
+          overwrite: false,
+          content: {
+            text: _tip
+            },
+          show: {
+            event: event.type,
+            ready: true
+            }
+        }));
+    });
+
+  //reroute messages to open**Dialog fonction
+
+    $('#messages .error-box').each(function(error){
+      var _content =  $(this).find('.ch-error-msg').html();
+      Tresa.openErrorDialog(_content, {});
+    });
+
+    $('#messages .info-box').each(function(info){
+      var _content =  $(this).find('.ch-info-msg').html();
+      Tresa.openInfoDialog(_content, {});
+    });
+  $('#notify-container').notify();
+
+  });
+})(jQuery);

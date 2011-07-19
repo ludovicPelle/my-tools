@@ -1,0 +1,23 @@
+<?php
+
+class chCmsFrontendAccountComponents extends sfComponents
+{
+  public function executeShowForm($request)
+  {
+    $class = sfConfig::get('app_sf_guard_plugin_signin_form', 'chCmsFormSignin');
+    $this->form = new $class();
+
+    if ($request->isMethod('POST') && $request->hasParameter('signin'))
+    {
+      $this->form->bind($request->getParameter('signin'));
+      if ($this->form->isValid())
+      {
+        $values = $this->form->getValues();
+        $this->getUser()->signin($values['user'], array_key_exists('remember', $values) ? $values['remember'] : false);
+
+        $signinUrl = sfConfig::get('app_sf_guard_plugin_success_signin_url', $this->getUser()->getReferer('@homepage'));
+        return $this->getController()->redirect($signinUrl, 0, 302);
+      }
+    }
+  }
+}

@@ -1,0 +1,406 @@
+<?php
+/**
+ * testfile for the adminContractorAssistants module.
+ *Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright carpe-hora.com 2011
+ * @package chCmsAdminMyAccountPlugin
+ * @subpackage test
+ *
+ * @todo when request params are uniformed, check parameters
+ **/
+
+$app = "pro";
+
+include(dirname(__FILE__).'/../../../../test/bootstrap/functional.php');
+
+$browser = TresaTestFunctional::initialize(/* load to be able to authenticate */ true);
+
+
+$browser
+  ->info("Test not Logged")
+  ->get('/admin/prestataires/employer_profile')
+
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+    
+    // check the response
+    ->with('response')->begin()
+      ->isStatusCode(401)
+      ->isValid()
+      ->checkForm(new chCmsFormSignin())
+  ->end()
+    // end of get /admin/prestataires/1/assistants
+    // end of block check when not logged in
+    
+  ->signin('demo', 'demo')
+;
+/**
+ * Variables de test
+ */
+$company = $browser->getUser()->getSelectedCompany();
+$browser->info(sprintf('vocabulaire utilisé pour assistants: "%s"', $company->getVocabulary('assistant', 2)));
+$browser->info(sprintf('vocabulaire utilisé pour contractors: "%s"', $company->getVocabulary('contractor', 2)));
+$contractor   = $company->getVocabulary('contractor', 1);
+$contractors  = $company->getVocabulary('contractor', 2);
+$assistant    = $company->getVocabulary('assistant', 1);
+$assistants   = $company->getVocabulary('assistant', 2);
+$demo = sfGuardUserQuery::create()->findOneByUsername('demo');
+$company_entities = $demo->getCompanyEntitys();
+$company = $company_entities[0]->getCompany();
+
+/**
+ * get values for a contractor post query
+ *
+ * @return array
+ **/
+function test_get_contractor($params = array())
+{
+  return array_merge(array(
+        'company_name' => 'User1 UTILISATEUR',
+        'agenda_header' => 'User1 UTILISATEUR',
+        'public_name' => 'User1 UTILISATEUR',
+        'mail' => 'user1@t-resa.fr',
+      ), $params);
+}
+$browser
+
+  ->info("display admin panel and follow related MenuEntry")
+  ->click('administration')
+    
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+    
+    // check the response
+    ->with('response')->begin()
+      ->isStatusCode(200)
+      ->isValid()
+      ->contains(ucfirst(sprintf('%s', $company->getVocabulary('contractor',2))))
+    ->end()
+
+  ->click("".ucfirst($company->getVocabulary('contractor',2))."")
+    
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+    
+    // check the response
+    ->with('response')->begin()
+      ->isStatusCode(200)
+      ->isValid()
+      ->contains(sprintf('ses %s', $company->getVocabulary('assistant',2)))
+    ->end()
+  
+  ->info("Try to click on profil")
+    ->info("menu access")
+      ->info("company id = ". $company->getId())
+      ->click('Profil complémentaire', array('debug' => true))
+      
+      //check routing is OK
+      ->with('request')->begin()
+        ->isMethod('get')
+        ->isParameter('module', 'admin')
+        ->isParameter('action', 'index')
+        ->isForwardedTo('admin', 'component')
+      ->end()
+      
+      // check the response
+      ->with('response')->begin()
+        ->isStatusCode(200)
+        ->isValid()
+        ->contains('Ajouter un champ')
+      ->end()
+      // end of click ProfilComplémentaire
+
+      ->click('Ajouter un champ')
+      
+      //check routing is OK
+      ->with('request')->begin()
+        ->isMethod('get')
+        ->isParameter('module', 'admin')
+        ->isParameter('action', 'index')
+        ->isForwardedTo('admin', 'component')
+      ->end()
+      
+      // check the response
+      ->with('response')->begin()
+        ->isStatusCode(200)
+        ->isValid()
+        ->checkForm(new CompanyEntityExtraFormFieldForm())
+        ->contains('Créer')
+      ->end()
+      // end of click Ajouter un champ
+
+      ->info("click with errors")
+        ->click('Créer')
+        
+        //check routing is OK
+        ->with('request')->begin()
+          ->isMethod('post')
+          ->isParameter('module', 'admin')
+          ->isParameter('action', 'index')
+          ->isForwardedTo('admin', 'setTemplate')
+        ->end()
+        
+        // check the response
+        ->with('response')->begin()
+          ->isStatusCode(200)
+          ->isValid()
+          ->checkForm(new CompanyEntityExtraFormFieldForm())
+          ->contains('Une erreur s\'est glissée dans le formulaire, merci de la corriger.')
+        ->end()
+        // end of click Créer
+
+      // end of block click with errors
+
+      ->click('Créer', array('company_entity_extra_form_field' => array(
+                                    'field_label' => 'extra téléphone',
+                                    'field_help'  => 'un téléphone supplémentaire juste comme ca :)',
+                                    'is_public'   => true)))
+      
+      //check routing is OK
+      ->with('request')->begin()
+        ->isMethod('post')
+        ->isParameter('module', 'admin')
+        ->isParameter('action', 'index')
+        ->isForwardedTo('adminContractorCustomProfile', 'create')
+      ->end()
+
+      ->with('propel')->begin()
+        ->check('CompanyEntityExtraFormField', array(
+                          'company_id'  => $company->getId(),
+                          'field_label' => 'extra téléphone',
+                          'field_help'  => 'un téléphone supplémentaire juste comme ca :)',
+                          'is_public'   => true), 1)
+      ->end() // end on propel block
+
+      ->with('response')->begin()
+        ->isRedirected()
+      ->end() // end on response block
+
+      ->followRedirect()
+
+      ->with('request')->begin()
+        ->isParameter('module', 'admin')
+        ->isParameter('action', 'index')
+        ->isForwardedTo('admin', 'component')
+      ->end() // end on request block
+      
+      // check the response
+      ->with('response')->begin()
+        ->isStatusCode(200)
+        ->isValid()
+        ->contains('Les modifications ont été prises en compte.')
+      ->end()
+      ->info("click Edit")
+        ->click('Editer')
+        
+        //check routing is OK
+        ->with('request')->begin()
+          ->isMethod('get')
+          ->isParameter('module', 'admin')
+          ->isParameter('action', 'index')
+          ->isForwardedTo('admin', 'component')
+        ->end()
+        
+        // check the response
+        ->with('response')->begin()
+          ->isStatusCode(200)
+          ->isValid()
+          ->checkForm(new CompanyEntityExtraFormFieldForm())
+          ->contains('supprimer')
+          ->contains('Enregistrer')
+        ->end()
+        // end of click Editer
+
+        ->info("save it")
+          ->click('Enregistrer')
+          
+          //check routing is OK
+          ->with('request')->begin()
+            ->isMethod('put')
+            ->isParameter('module', 'admin')
+            ->isParameter('action', 'index')
+            ->isForwardedTo('adminContractorCustomProfile', 'update')
+          ->end()
+
+          ->with('response')->begin()
+            ->isRedirected()
+          ->end() // end on response block
+
+          ->followRedirect()
+          
+          // check the response
+          ->with('response')->begin()
+            ->isStatusCode(200)
+            ->isValid()
+            ->contains('Les modifications ont été prises en compte.')
+          ->end()
+          // end of click Enregistrer
+        // end of block save it
+      // end of block click Edit
+
+      ->info("click delete")
+        ->click('supprimer', array(), array('method' => 'delete', '_with_csrf' => true))
+        
+        //check routing is OK
+        ->with('request')->begin()
+          ->isMethod('delete')
+          ->isParameter('module', 'admin')
+          ->isParameter('action', 'index')
+          ->isForwardedTo('adminContractorCustomProfile', 'delete')
+        ->end()
+
+        ->with('response')->begin()
+          ->isRedirected()
+        ->end() // end on reponse block
+
+        ->followRedirect()
+        
+        // check the response
+        ->with('response')->begin()
+          ->isStatusCode(200)
+          ->isValid()
+          ->contains('Le champ extra téléphone a bien été supprimé')
+        ->end()
+
+  ->info("Now we try to add 2 field (private an public) and go to myaccount to check both")
+      ->click('Ajouter un champ')
+      
+      //check routing is OK
+      ->with('request')->begin()
+        ->isMethod('get')
+        ->isParameter('module', 'admin')
+        ->isParameter('action', 'index')
+        ->isForwardedTo('admin', 'component')
+      ->end()
+      
+      // check the response
+      ->with('response')->begin()
+        ->isStatusCode(200)
+        ->isValid()
+        ->checkForm(new CompanyEntityExtraFormFieldForm())
+        ->contains('Créer')
+      ->end()
+      ->click('Créer', array('company_entity_extra_form_field' => array(
+                                    'field_label' => 'extra téléphone',
+                                    'field_help'  => 'un téléphone supplémentaire juste comme ca :)',
+                                    'is_public'   => true)))
+      
+      //check routing is OK
+      ->with('request')->begin()
+        ->isMethod('post')
+        ->isParameter('module', 'admin')
+        ->isParameter('action', 'index')
+        ->isForwardedTo('adminContractorCustomProfile', 'create')
+      ->end()
+
+      ->with('propel')->begin()
+        ->check('CompanyEntityExtraFormField', array(
+                          'company_id'  => $company->getId(),
+                          'field_label' => 'extra téléphone',
+                          'field_help'  => 'un téléphone supplémentaire juste comme ca :)',
+                          'is_public'   => true), 1)
+      ->end() // end on propel block
+
+      ->with('response')->begin()
+        ->isRedirected()
+      ->end() // end on response block
+
+      ->followRedirect()
+
+      ->with('request')->begin()
+        ->isParameter('module', 'admin')
+        ->isParameter('action', 'index')
+        ->isForwardedTo('admin', 'component')
+      ->end() // end on request block
+      
+      // check the response
+      ->with('response')->begin()
+        ->isStatusCode(200)
+        ->isValid()
+        ->contains('Les modifications ont été prises en compte.')
+      ->end()
+      ->click('Ajouter un champ')
+      
+      //check routing is OK
+      ->with('request')->begin()
+        ->isMethod('get')
+        ->isParameter('module', 'admin')
+        ->isParameter('action', 'index')
+        ->isForwardedTo('admin', 'component')
+      ->end()
+      
+      // check the response
+      ->with('response')->begin()
+        ->isStatusCode(200)
+        ->isValid()
+        ->checkForm(new CompanyEntityExtraFormFieldForm())
+        ->contains('Créer')
+      ->end()
+      ->click('Créer', array('company_entity_extra_form_field' => array(
+                                    'field_label' => 'notation',
+                                    'field_help'  => 'un truc bien vicelard kil faut a tout prix garder secret :)',
+                                    'is_public'   => false)))
+      
+      //check routing is OK
+      ->with('request')->begin()
+        ->isMethod('post')
+        ->isParameter('module', 'admin')
+        ->isParameter('action', 'index')
+        ->isForwardedTo('adminContractorCustomProfile', 'create')
+      ->end()
+
+      ->with('propel')->begin()
+        ->check('CompanyEntityExtraFormField', array(
+                          'company_id'  => $company->getId(),
+                          'field_label' => 'notation',
+                          'field_help'  => 'un truc bien vicelard kil faut a tout prix garder secret :)',
+                          'is_public'   => false), 1)
+      ->end() // end on propel block
+
+      ->with('response')->begin()
+        ->isRedirected()
+      ->end() // end on response block
+
+      ->followRedirect()
+
+      ->with('request')->begin()
+        ->isParameter('module', 'admin')
+        ->isParameter('action', 'index')
+        ->isForwardedTo('admin', 'component')
+      ->end() // end on request block
+      
+      // check the response
+      ->with('response')->begin()
+        ->isStatusCode(200)
+        ->isValid()
+        ->contains('Les modifications ont été prises en compte.')
+      ->end()
+  ->info("Now go to myaccount to check both one appear not the other")
+      ->Click('Mon compte')
+     
+      ->with('request')->begin()
+        ->isParameter('module', 'admin')
+        ->isParameter('action', 'index')
+        ->isForwardedTo('admin', 'component')
+      ->end() // end on request block
+      
+      // check the response
+      ->with('response')->begin()
+        ->isStatusCode(200)
+        ->isValid()
+        ->contains('notation',false)
+        ->contains('extra téléphone',true)
+      ->end()
+    ;

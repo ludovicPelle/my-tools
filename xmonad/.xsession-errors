@@ -1,0 +1,295 @@
+/etc/gdm3/Xsession: Beginning session setup...
+GNOME_KEYRING_CONTROL=/tmp/keyring-imrrL8
+GNOME_KEYRING_CONTROL=/tmp/keyring-imrrL8
+GNOME_KEYRING_CONTROL=/tmp/keyring-imrrL8
+SSH_AUTH_SOCK=/tmp/keyring-imrrL8/ssh
+   /org/gnome/SessionManager/Client3
+(polkit-gnome-authentication-agent-1:2307): GLib-GObject-WARNING **: cannot register existing type `_PolkitError'
+
+(polkit-gnome-authentication-agent-1:2307): GLib-CRITICAL **: g_once_init_leave: assertion `initialization_value != 0' failed
+option --sm-config-prefix not recognized
+for help use --help
+Initializing nautilus-gdu extension
+
+** (nautilus:2279): WARNING **: Can not determine workarea, guessing at layout
+[2537:2560:209687500:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2658:676555397:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2659:687442157:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2656:687645375:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2653:687645705:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2660:687648365:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2661:687650475:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2667:687651965:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2669:687659792:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2671:690674436:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2644:690679381:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2664:690684206:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2537:693512731:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:693629538:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:693629809:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:693668712:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:693668961:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:694279558:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:694279663:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:694887930:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:696431652:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:696591178:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:696591265:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:696623574:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:696623652:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:696735742:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:696735890:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:696735913:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:696767194:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:696767337:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:696839204:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:696839328:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:696935212:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:696935326:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:697343523:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:697343607:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:697551947:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:697551988:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:697679475:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:697679526:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:697871601:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:697871637:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:698655801:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:698655847:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:698742036:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:698742085:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:699543875:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:699543917:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:699597290:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:699597338:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:699764666:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:699764744:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:699764754:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:699839761:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:699839809:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:700656036:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:700656087:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:700703910:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:700703960:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:700903458:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:700903505:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:701391943:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:701568017:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:703551728:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:703871994:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:703984208:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2665:710720087:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2537:714952797:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:715024360:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:715024411:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:715032927:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:715032964:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:715112803:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:715112852:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:715112861:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:715126983:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:715127042:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:715584576:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:716680521:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:716680603:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:716784782:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:716784965:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:717032327:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:717032420:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2657:717100137:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2663:717101616:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2652:717103673:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2622:717104028:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2559:717105206:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2555:748354325:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2642:748666985:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2651:749107715:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2658:749110682:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2656:749113335:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2658:749114150:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2653:749114495:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:2537:752122597:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:752122783:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:752170381:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:752170524:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:755702423:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:756166546:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:756348308:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:983463370:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:983526165:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:983934542:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:983934723:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:983934734:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:983950614:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:983950721:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:1098485583:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+
+(exe:3646): Gdk-WARNING **: XID collision, trouble ahead
+[2537:2537:1311152566:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:1312870709:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:1313235367:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:1313311199:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:1313461503:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:1648491352:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:1648536790:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:1649379851:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:1651270128:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:1651320980:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:1652608741:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:1653162454:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:1653201035:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:1653721305:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:2537:1653721353:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+[2537:2537:2241736237:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2537:4185:2243964790:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:4179:2269800047:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:4184:2269829438:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:4183:2269969892:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+/usr/share/gajim/src/common/passwords.py:108: UserWarning: multiple gnome keyring items found for account ch-regent; trying to use the first one...
+  % account_name)
+10:02:04 (E) gajim.c.resolver: Invalid host: _xmpp-client._tcp.ch-regent
+[2537:4200:2458225000:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:4195:2513662776:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:4196:2514115272:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:4188:2514505233:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:4191:2514505566:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:4207:2514548791:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:4182:2514621105:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:4184:2514654038:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:4193:2514688194:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:4180:2514720446:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:4177:2551477215:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:4181:2554471401:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:4190:2577986235:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:4195:2578169190:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:4196:2578438122:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:4176:2578439932:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:4188:2578441497:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:4191:2578455472:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:4207:2578455789:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+
+(gnome-terminal:2300): Gdk-CRITICAL **: gdk_window_get_events: assertion `GDK_IS_WINDOW (window)' failed
+
+(gnome-terminal:2300): GLib-GObject-CRITICAL **: g_object_ref: assertion `G_IS_OBJECT (object)' failed
+
+(gnome-terminal:2300): GLib-GObject-CRITICAL **: g_object_unref: assertion `G_IS_OBJECT (object)' failed
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+[2537:9939:21459258933:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:7953:21540684427:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:9078:21541069772:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:9540:21541430672:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:9940:21541431030:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:9939:21541432697:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:9939:21541435061:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2537:7953:21541435392:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+
+(gnome-terminal:2300): Gdk-CRITICAL **: gdk_window_get_events: assertion `GDK_IS_WINDOW (window)' failed
+
+(gnome-terminal:2300): GLib-GObject-CRITICAL **: g_object_ref: assertion `G_IS_OBJECT (object)' failed
+
+(gnome-terminal:2300): GLib-GObject-CRITICAL **: g_object_unref: assertion `G_IS_OBJECT (object)' failed
+/home/ludovic/Images/OpenId3.dia --> /tmp/.gnome_desktop_thumbnail.LFQ1YV
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: full-authentication!!!
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: full-authentication!!!
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: full-authentication!!!
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: full-authentication!!!
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: full-authentication!!!
+connection_message_func(): Callback
+CALLBACK: save-authentication!!!
+connection_message_func(): Callback
+CALLBACK: save-authentication!!!
+
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+
+(pgadmin3:14641): Gdk-CRITICAL **: gdk_window_get_events: assertion `GDK_IS_WINDOW (window)' failed
+
+(pgadmin3:14641): GLib-GObject-CRITICAL **: g_object_ref: assertion `G_IS_OBJECT (object)' failed
+
+(pgadmin3:14641): GLib-GObject-CRITICAL **: g_object_unref: assertion `G_IS_OBJECT (object)' failed
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:3973): Gdk-WARNING **: XID collision, trouble ahead
+
+(evolution-alarm-notify:2302): evolution-alarm-notify-WARNING **: alarm.c:252: Requested removal of nonexistent alarm!
+09:07:42 (W) gajim.c.x.dispatcher_nb: Unknown stanza: error
+[2537:2551:85453737429:ERROR:net/spdy/spdy_session.cc(780)] ABANDONED (stream_id=2733): /spreadsheet/fm/bind?fmcmd=80&id=tONWirQNkuzqr8lnyY43hZw.14681026611557538225.260752782956485663&VER=8&lsq=1311043816691000&gsessionid=Ltxe_RLBlyw&RID=rpc&SID=162FE388FDB4B2DB&CI=0&AID=887&tfe=yo_289&TYPE=xmlhttp&zx=svladvvwcyv6&t=2
+09:11:30 (W) gajim.c.x.dispatcher_nb: Unknown stanza: error
+09:15:05 (W) gajim.c.x.dispatcher_nb: Unknown stanza: error
+09:18:01 (W) gajim.c.x.dispatcher_nb: Unknown stanza: error
+[2537:2551:86495953347:ERROR:net/spdy/spdy_session.cc(780)] ABANDONED (stream_id=47): /spreadsheet/fm/bind?fmcmd=80&id=tONWirQNkuzqr8lnyY43hZw.14681026611557538225.260752782956485663&VER=8&lsq=1311059879444005&gsessionid=Ltxe_RLBlyw&RID=rpc&SID=63DBC6E4D4FDD42D&CI=0&AID=53&tfe=yo_289&TYPE=xmlhttp&zx=ruufcz57nfbq&t=1
+
+(nautilus:2279): Nautilus-GDU-WARNING **: unable to query info: L'emplacement indiqué n'est pas pris en charge
+
+
+(nautilus:2279): Nautilus-GDU-WARNING **: unable to query info: L'emplacement indiqué n'est pas pris en charge
+

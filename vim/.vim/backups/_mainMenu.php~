@@ -1,0 +1,12 @@
+<?php use_helper('chCmsApplication'); ?>
+<ul class="chcms-menulist group-list">
+<?php foreach (AdminMenu::getInstance()->getAccessibleGroupsForUser() as $key => $groupMenu): ?>
+  <li>
+    <?php echo get_admin_menu_group_link($groupMenu); ?>
+      <?php if (count($entries = $groupMenu->getAccessibleMenuEntriesForUser()) > 1) ): ?>
+        <?php include_component('admin', 'menuBar', array()); ?>
+      <?php endif; ?>
+  </li>
+<?php endforeach; ?>
+</ul>
+

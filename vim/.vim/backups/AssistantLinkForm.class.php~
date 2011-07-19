@@ -1,0 +1,58 @@
+<?php
+/**
+ * @package    T-resa-lib
+ * @subpackage  default
+ * @author     Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright  (c) Carpe Hora SARL 2011
+ */
+
+/**
+ * AssistantLink form.
+ *
+ * @package    T-resa-lib
+ * @subpackage form
+ * @author     Julien Muetton <julien_muetton@carpe-hora.com>
+ * @version    SVN: $Id: sfPropelFormTemplate.php 10377 2008-07-21 07:10:32Z dwhittle $
+ */
+class AssistantLinkForm extends BaseAssistantLinkForm
+{
+  public function configure()
+  {
+    unset($this['assistant_of_id'], $this['assisted_by_id'], $this['id']);
+
+    $rightsChoices = array(
+            0                           => 'Aucun Accès',
+
+            CompanyEntity::RIGHT_VIEW   => 'Visualisation',
+
+            (CompanyEntity::RIGHT_VIEW  +
+            CompanyEntity::RIGHT_UPDATE +
+            CompanyEntity::RIGHT_CREATE) => 'Modification',
+
+            (CompanyEntity::RIGHT_VIEW  +
+            CompanyEntity::RIGHT_UPDATE +
+            CompanyEntity::RIGHT_CREATE +
+            CompanyEntity::RIGHT_DELETE) => 'Accès Complet',
+          );
+    $rightValid = array_keys($rightsChoices);
+
+    //the bitfields widgets
+    $this->setWidget('access_calendar_company', new sfWidgetFormChoice(array('choices'  => $rightsChoices)));
+    $this->setWidget('access_calendar_protected',    new sfWidgetFormChoice(array('choices'  => $rightsChoices)));
+    $this->setWidget('access_contact_company',     new sfWidgetFormChoice(array('choices'  => $rightsChoices)));
+    $this->setWidget('access_contact_protected',     new sfWidgetFormChoice(array('choices'  => $rightsChoices)));
+
+    //the bitfield validators
+    $this->setValidator('access_calendar_company',  new chCmsValidatorBitOperator(array('choices' => $rightValid)));
+    $this->setValidator('access_calendar_protected',     new chCmsValidatorBitOperator(array('choices' => $rightValid)));
+    $this->setValidator('access_contact_company',      new chCmsValidatorBitOperator(array('choices' => $rightValid)));
+    $this->setValidator('access_contact_protected',      new chCmsValidatorBitOperator(array('choices' => $rightValid)));
+
+    $this->widgetSchema->setLabels(array(
+        'access_calendar_company' => 'Accès aux horaires d\'ouverture',
+        'access_calendar_protected'  => 'Accès aux évènements',
+        'access_contact_company'   => sprintf('Accès aux %s publics', $this->getUser()->getSelectedCompany()->getVocabulary('client', 2)),
+        'access_contact_protected'   => sprintf('Accès aux %s protégés', $this->getUser()->getSelectedCompany()->getVocabulary('client', 2)),
+      ));
+  }
+}

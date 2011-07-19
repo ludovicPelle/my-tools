@@ -1,0 +1,336 @@
+<?php
+
+/**
+ * Realizes a login for Google accounts via OpenID 2.0.
+ * Uses the user session to store data. Session has to be startet before use.
+ *
+ * @author Sebastian Herbermann <sebastian.herbermann@googlemail.com>
+ * @copyright Sebastian Herbermann, 2009
+ * @license http://creativecommons.org/licenses/by-sa/3.0/de/
+ *
+ */
+abstract class BaseOpenIdConsumer extends BaseConsumer
+{
+
+  // Config
+
+  /**
+   * variable $provider
+   * @access protected
+   * @var string
+   */
+  protected $provider;
+
+  // Private values
+  /**
+   * Given realm.
+   *
+   * @var String
+   */
+  protected $realm;
+
+  /**
+   * Defaults openid params
+   *
+   * @var array
+   **/
+  protected $default_params = array(
+    // Login
+    'openid.ns' => 'http://specs.openid.net/auth/2.0',
+    'openid.mode' => 'checkid_setup',
+    'openid.claimed_id' => 'http://specs.openid.net/auth/2.0/identifier_select',
+    'openid.identity' => 'http://specs.openid.net/auth/2.0/identifier_select',
+    'openid.ns.ext1' => 'http://openid.net/srv/ax/1.0',
+    'openid.ext1.mode' => 'fetch_request',
+    'openid.ext1.type.email' => 'http://axschema.org/contact/email',
+    'openid.ns.ax' => 'http://openid.net/srv/ax/1.0',
+    'openid.ax.mode' => 'fetch_request',
+    'openid.ax.type.email' => 'http://axschema.org/contact/email',
+  );
+
+  protected $request;
+
+  /**
+   * Constructs the BaseOpenIdConsumer Object and checks the association handle.
+   * Requests a new handle if not valid.
+   *
+   * @param String $realm Realm for the OpenID login.
+   * @param String $provider Name of the provider to use. Available : google
+   */
+  public function __construct($realm, $sfRequest)
+  {
+      $this->request = $sfRequest;
+      $this->realm = $realm;
+      $this->checkHandle();
+  }
+
+  /**
+   * prepare the openid params
+   *
+   * @return array
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  protected function prepareRequestParams($params)
+  {
+    return $params;
+  }
+
+  /**
+   * Constructs the login URL for the user.
+   *
+   * @param String $returnTo URL to return to after login.
+   * @return String URL
+   */
+  public function getLoginUrl($returnTo)
+  {
+    $params = $this->prepareRequestParams(array_merge($this->default_params, array(
+        // Login
+        'openid.return_to' => $returnTo,
+        'openid.realm' => $this->realm,
+        'openid.trust_root' => $this->realm,
+        'openid.assoc_handle' => $this->getHandle(),
+        'openid.ax.required' => 'email',
+        'openid.ax.if_available' => 'namePerson,nickname,firstname,lastname',
+        'openid.ax.type.firstname' => 'http://axschema.org/namePerson/first',
+        'openid.ax.type.lastname' => 'http://axschema.org/namePerson/last',
+        'openid.ax.type.namePerson' => 'http://axschema.org/namePerson',
+        'openid.ax.type.nickname' => 'http://axschema.org/namePerson/friendly',
+    )));
+
+    return $this->buildRequestUrl($params);
+  }
+
+  /**
+   * return the provider url
+   *
+   * @return String
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function getProviderUrl()
+  {
+    return $this->provider;
+  }
+
+  /**
+   * get the provider url
+   *
+   * @return string
+   * @author Camille NERON <camille_neron@carpe-hora.com>
+   **/
+  protected function getEndpoint()
+  {
+    return $this->getProviderUrl();
+  }
+
+  /**
+   * Checks GET and POST data for a valid OpenID response.
+   *
+   * @return boolean True, if a valid user identifier was found.
+   */
+  public function verifyLogin()
+  {
+    // read response
+    $params = $this->readLoginResponse();
+
+    // verify assoc_handle
+    if (!$this->checkForValidHandle($params))
+    {
+      if ($this->debug) echo 'openid_assoc_handle did not match<br>';
+      return false;
+    }
+
+    if ($this->debug) echo 'handle verified<br>';
+
+    // signature check
+    if (!$this->checkSignature($params))
+    {
+      if ($this->debug) echo 'signatures did not match<br>';
+      return false;
+    }
+
+    if ($this->debug) echo 'mac-key verified<br>';
+
+    // auth OK !
+    $this->initUserAttributes($params);
+
+    return true;
+  }
+
+  /**
+   * Checks if the association handle present and valid.
+   *
+   */
+  protected function checkHandle()
+  {
+      if ( false == ($handle = $this->cacheGet('handle')) )
+      {
+          $this->renewHandle();
+      }
+      if ( false == ($handleExpires = $this->cacheGet('handle-expires')) )
+      {
+          $this->renewHandle();
+      }
+      if ( $handleExpires < time() )
+      {
+          $this->renewHandle();
+      }
+  }
+
+  /**
+   * Obtains a new association handle and mac-key from the provider.
+   *
+   */
+  protected function renewHandle()
+  {
+    $params = array(
+      'openid.ns' => 'http://specs.openid.net/auth/2.0',
+      'openid.mode' => 'associate',
+      'openid.assoc_type' => 'HMAC-SHA1',
+      'openid.session_type' => 'no-encryption'
+    );
+
+    $response = $this->getResponse($params);
+    if (!$response)
+    {
+      if ($this->debug) echo 'no response received';
+      return;
+    }
+
+    $params = array();
+    preg_match_all( '$([a-z0-9\_]+):(.+)$i', $response, $matches, PREG_SET_ORDER);
+    foreach ($matches as $match)
+    {
+      $params[$match[1]] = $match[2];
+    }
+
+    $this->cachePut('handle', $params['assoc_handle']);
+    $this->cachePut('handle-expires', time() + $params['expires_in']);
+    $this->cachePut('mac', base64_decode($params['mac_key']));
+  }
+
+  /**
+   * Reads the response var in $_REQUEST
+   *
+   * @return array Params successfully read
+   * @author Kevin Gomez <contact@kevingomez.fr>
+   **/
+  protected function readLoginResponse()
+  {
+    $params = array();
+    foreach ($this->request->getParameterHolder()->getAll() as $key => $value)
+    {
+      if (substr($key, 0, 6) == 'openid')
+      {
+        $params[$key] = $value;
+      }
+    }
+
+    return $params;
+  }
+
+  protected function computeSignature(array $params)
+  {
+    // compute signed string
+    $signed = '';
+    foreach (explode(',', $params['openid_signed']) as $field)
+    {
+      if (!isset($params['openid_'.str_replace('.','_',$field)]))
+      {
+        continue;
+      }
+
+      $signed .= ''. $field .':'. $params['openid_'.str_replace('.','_',$field)] . "\n";
+    }
+
+    // calculate signature and verify
+    return base64_encode(hash_hmac('sha1', $signed, $this->getMac(), true));
+  }
+
+  /**
+   * Check the signature we received with the one we expected.
+   *
+   * @param array Params received.
+   *
+   * @return bool
+   * @author Kevin Gomez <contact@kevingomez.fr>
+   **/
+  protected function checkSignature(array $params)
+  {
+    if (!isset($params['openid_sig']) OR !isset($params['openid_signed']))
+    {
+      return false;
+    }
+
+    // calculate signature and verify
+    $signature = $this->computeSignature($params);
+
+    return $params['openid_sig'] == $signature;
+  }
+
+  /**
+   * Check the transaction handle.
+   *
+   * @param string $received_handle The received handle.
+   *
+   * @return bool
+   * @author Kevin Gomez <contact@kevingomez.fr>
+   **/
+  protected function checkForValidHandle($params)
+  {
+    if (!array_key_exists('openid_assoc_handle', $params))
+    {
+      return false;
+    }
+
+    return $params['openid_assoc_handle'] == $this->getHandle();
+  }
+
+  /**
+   * Returns the association handle
+   *
+   * @return String Handle
+   */
+  protected function getHandle()
+  {
+    return $this->cacheGet('handle');
+  }
+
+  /**
+   * Returns the mac-key.
+   *
+   * @return String Mac
+   */
+  protected function getMac()
+  {
+    return $this->cacheGet('mac');
+  }
+
+  /**
+   * Fetchs the response from the server giving through the OpenID endpoint
+   * while passing the given parameters.
+   *
+   * @param array $params Associative array for parameters to pass
+   * @return String Response from the OpenID provider
+   */
+  protected function getResponse(array $params)
+  {
+    return file_get_contents($this->buildRequestUrl($params));
+  }
+
+  /**
+   * Build the request arguments for an GET request.
+   *
+   * @param array $params Associative array for parameters to pass
+   * @return String Arguments for an GET request
+   */
+  protected function buildRequestUrl(array $params)
+  {
+    $paramsDefault = array(
+      'openid.realm' => $this->realm
+    );
+
+    $params = array_merge($paramsDefault, $params);
+
+    return $this->getEndpoint().'?'.http_build_query($params);
+  }
+}

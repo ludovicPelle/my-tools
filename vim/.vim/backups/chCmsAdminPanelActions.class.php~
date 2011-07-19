@@ -1,0 +1,98 @@
+<?php
+/**
+ * This file declare the chCmsAdminPanel actions.
+ *
+ * @package chCmsApplicationPlugin
+ * @subpackage Actions
+ * @author Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2010
+ * @since 2010-12-23
+ */
+
+/**
+ * the base class for admin panel actions.
+ * this redifines the routing manipulation classes to make
+ * sure you can use it quite transparently
+ */
+class chCmsAdminPanelActions extends chCmsActions
+{
+  /**
+   * redefines the redirect function
+   * 3 URL formats are accepted :
+   *  - a panel within the group
+   *  - a full URL: http://www.google.com/
+   *  - an internal URL (url_for() format): module/action
+   *
+   * @param  string $url         Url
+   * @param  string $statusCode  Status code (default to 302)
+   *
+   * @throws sfStopException
+   */
+  public function redirect($item_id, $statusCode = 302)
+  {
+    $group = $this->getRoute()->getGroup();
+    if($group->hasItem($item_id))
+    {
+      parent::redirect($group->generateUrl($item_id), $statusCode);
+    }
+    //compatibility with url_for2
+    else if (is_object($statusCode) || is_array($statusCode))
+    {
+      parent::redirect($item_id, $statusCode, (func_num_args() >= 3 ? func_get_arg(2) : 302));
+    }
+    parent::redirect($item_id, $statusCode);
+  }
+
+  /**
+   * uses a component template to render the action as an admin panel component.
+   * it transparently forward to the admin/setTemplate action
+   *
+   * @return void
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function setTemplate($item_id, $group = null)
+  {
+    $module = $group;
+    if(is_null($group))
+    {
+      $group = $this->getRoute()->getGroup();
+    }
+
+    if($group instanceof AdminGroupMenu && is_string($item_id) && $group->hasPanel($item_id))
+    {
+      //ask the chCmsApplicationAdminRoute to dispatch
+      if( ($route = $group->getMenuRoute($item_id)) && 
+          ($prameters = $route->getDefaultParameters()) )
+      {
+        if($route->hasCredential($this->getUser()))
+        {
+          $this->getRequest()->setAttribute('ch_cms_admin_panel_arguments', $this->getVarHolder()->getAll());
+          $this->getRequest()->setAttribute('ch_cms_admin_panel_route', $route);
+          parent::forward('admin', 'setTemplate');
+        }
+        // not supposed to happend
+        else
+        {
+          $this->forward404('you do not have credentials');
+        }
+      }
+    }
+    parent::setTemplate($item_id, $module);
+  }
+
+  /**
+   * override the default getPartial to add $group
+   *
+   * @param string  $templateName
+   * @param array   $vars 
+   * 
+   * @return string the partian content
+   **/
+  public function getPartial($templateName, $vars = null)
+  {
+    $vars = null !== $vars ? $vars : $this->varHolder->getAll();
+    $vars = array_merge($vars, array('group' => $this->getRoute()->getGroup()));
+
+    return parent::getpartial($templateName, $vars);
+  }
+} // end of chCmsAdminPanelActions

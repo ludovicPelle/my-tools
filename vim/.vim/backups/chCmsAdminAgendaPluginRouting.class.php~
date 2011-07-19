@@ -1,0 +1,75 @@
+<?php
+/**
+ * This file declare the chCmsAdminAgendaPluginRouting class.
+ *
+ * @package package
+ * @subpackage subpackage
+ * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-05-27
+ */
+
+/**
+ * Class with no description
+ */
+class chCmsAdminAgendaPluginRouting
+{
+
+  /**
+   * listen to the admin panel init event
+   *
+   * @return void
+   **/
+  public static function listenToAdminMenuInitEvent(sfEvent $event)
+  {
+    foreach (sfConfig::get('sf_enabled_modules') as $module)
+    {
+      if (    0 === strpos($module, 'adminAgenda') 
+          &&  is_callable(array(
+                        'chCmsAdminAgendaPluginRouting', 
+                        ($prependRouteMethod = sprintf('prepend%sRoutes', ucfirst($module))))))
+      {
+        call_user_func(array('chCmsAdminAgendaPluginRouting', $prependRouteMethod), /* menu */ $event->getSubject(), $event['user']);
+      }
+    }
+  }
+
+  /**
+   * get the default menu group unless on is given.
+   *
+   * @param AdminMenu         $menu   the admin menu
+   * @param [AdminMenuGroup|String] $group the given admin group or it's name
+   * @return AdminMenuGroup
+   **/
+  public static function getAgendaGroup($menu, $user, $group=null)
+  {
+    if(!is_null($group))
+    {
+      return AdminMenu::getInstance()->getGroup($group);
+    }
+    $company = $user->getSelectedCompany();
+
+    return $menu
+              ->addGroup('agenda', 'Agenda', '/agenda', 'icon=icojoy-agenda-32');
+  }
+
+  /**
+   * register adminAgendaService module admin routes
+   *
+   * @param AdminMenu               $menu   the admin menu
+   * @param [AdminGroupMenu|string] $group  the group
+   * @return void
+   **/
+  public static function prependAdminAgendaServiceRoutes($menu, $user, $group = null)
+  {
+    $group = self::getAgendaGroup($menu, $user, $group);
+
+    $group
+              ->addRouteCollection('service', array(
+                    'model' => 'Service',
+                    'column' => 'id',
+                    'module' => 'adminAgendaService',
+                    'credentials' => 'admin_edit_service'))
+              ->addMenuEntry('service', ucfirst($company->getVocabulary('service')));
+  }
+} // END OF chCmsAdminAgendaPluginRouting

@@ -1,0 +1,259 @@
+<?php
+/**
+ * This file defines chCmsGuardExtraRouting class
+ *
+ * @package    chCmsGuardExtraPlugin
+ * @subpackage routing
+ * @author     Camille Neron <camille_neron@carpe-hora.com>
+ * @since      2010-12-06
+ * @copyright  Carpe-Hora SARL
+ */
+
+/**
+* Defines routing method
+*
+* @see chCmsGuardExtraPluginConfiguration::initialize
+*/
+class chCmsGuardExtraRouting
+{
+  /**
+   * Listens to the routing.load_configuration event.
+   *
+   * @param sfEvent An sfEvent instance
+   */
+  static public function listenToRoutingLoadConfigurationEvent(sfEvent $event)
+  {
+    // register routes for enabled modules
+    foreach (array('chCmsFrontendSignup', 'chCmsFrontendAccount', 'Associate', 'userApi') as $module)
+    {
+      if (in_array($module, sfConfig::get('sf_enabled_modules')))
+      {
+        call_user_func(array('chCmsGuardExtraRouting', sprintf('prepend%sRoutes', ucfirst($module))), $event->getSubject());
+      }
+    }
+    // register routes for profiles (external providers)
+    self::registerProfileImplementationsRoutes($event->getSubject());
+  }
+
+  /**
+   * prepend routes for chCmsFrontendSignup module
+   *
+   * @parameter sfRouting $routing the routing object.
+   * @return void
+   **/
+  static public function prependChCmsFrontendSignupRoutes($routing)
+  {
+    $routing->prependRoute(
+      'username_search',
+      new sfRequestRoute(
+        '/searchuser.:sf_format',
+        array('module' => 'chCmsFrontendSignup', 'action' => 'userExistSearch', 'sf_format' => 'json'),
+        array('sf_format' => chCmsApiTools::getFormatRequirementForRoute()),
+        array('app_expose' => true)
+      ));
+
+    $routing->prependRoute(
+      'mail_search',
+      new sfRequestRoute(
+        '/searchmail.:sf_format',
+        array('module' => 'chCmsFrontendSignup', 'action' => 'mailExistSearch', 'sf_format' => 'json'),
+        array('sf_format' => chCmsApiTools::getFormatRequirementForRoute()),
+        array('app_expose' => true)
+      ));
+
+    // activation
+    $routing->prependRoute(
+        'sf_guard_activate',
+        new sfRequestRoute(
+          '/compte/activation/:hash/:username',
+          array('module' => 'chCmsFrontendSignup', 'action' => 'activate'),
+          array('sf_method' => 'get', 'hash' => '\w{5,8}', 'username' => '[\w-.]{4,128}'),
+          array()));
+
+    $routing->prependRoute(
+        'sf_guard_resend_activation',
+        new sfRequestRoute(
+          '/compte/renvoyer-activation',
+          array('module' => 'chCmsFrontendSignup', 'action' => 'requestNewActivation'),
+          array('sf_method' => 'get'),
+          array()));
+
+    $routing->prependRoute(
+        'sf_guard_request_new_activation',
+        new sfRequestRoute(
+          '/compte/renvoyer-activation',
+          array('module' => 'chCmsFrontendSignup', 'action' => 'resendActivation'),
+          array('sf_method' => 'post'),
+          array()));
+
+    // now signup routes
+    $routing->prependRoute(
+      'sf_guard_signup',
+        new sfRequestRoute(
+          '/register',
+          array('module' => 'chCmsFrontendSignup', 'action' => 'register'),
+          array('sf_method' => array('get'))));
+
+    $routing->prependRoute(
+            'sf_guard_signup_create',
+            new sfRequestRoute(
+              '/register',
+              array('module' => 'chCmsFrontendSignup', 'action' => 'create'),
+              array('sf_method' => array('post', 'put'))));
+
+    $routing->prependRoute(
+              'signup_cancel',
+              new sfRoute(
+                '/register/cancel',
+                array('module' => 'chCmsFrontendSignup', 'action' => 'cancelAuthentication')));
+  }
+
+  /**
+   * prepend routes for chCmsFrontendSignup module
+   *
+   * @parameter sfRouting $routing the routing object.
+   * @return void
+   **/
+  static public function prependChCmsFrontendAccountRoutes($routing)
+  {
+    $routing->prependRoute(
+      'sf_guard_signin',
+      new sfRequestRoute(
+        '/login.:sf_format',
+        array('module' => 'chCmsFrontendAccount', 'action' => 'signin', 'sf_format' => 'html'),
+        array('sf_method' => array('GET')),
+        array()));
+
+    $routing->prependRoute(
+      'sf_guard_do_signin_provider',
+      new sfRequestRoute(
+        '/login.:sf_format',
+        array('module' => 'chCmsFrontendAccount', 'action' => 'doSigninProvider', 'sf_format' => 'html'),
+        array('sf_method' => array('GET')),
+        array()));
+
+    $routing->prependRoute(
+      'sf_guard_do_signin',
+      new sfRequestRoute(
+        '/login.:sf_format',
+        array('module' => 'chCmsFrontendAccount', 'action' => 'doSignin', 'sf_format' => 'html'),
+        array('sf_method' => array('POST')),
+        array()));
+
+    $routing->prependRoute(
+      'sf_guard_signout',
+      new sfRoute(
+        '/logout.:sf_format',
+        array('module' => 'chCmsFrontendAccount', 'action' => 'signout', 'sf_format' => 'html'),
+        array(),
+        array()));
+
+    $routing->prependRoute(
+      'sf_guard_associate_provider',
+        new sfRequestRoute(
+          '/compte/associer-fournisseur',
+          array('module' => 'chCmsFrontendAccount', 'action' => 'associateProvider'),
+          array('sf_method' => array('get'))));
+
+    $routing->prependRoute(
+      'account_password',
+        new sfRequestRoute(
+          '/compte/myPassword',
+          array('module' => 'chCmsFrontendAccount', 'action' => 'myPassword'),
+          array('sf_method' => array('get'))));
+
+    // password retrieval
+    $routing->prependRoute(
+        'sf_guard_request_password',
+        new sfRequestRoute(
+          '/mot-de-passe-perdu',
+          array('module' => 'chCmsFrontendAccount', 'action' => 'lostPassword'),
+          array('sf_method' => 'get'),
+          array()));
+
+    $routing->prependRoute(
+        'sf_guard_check_password_request',
+        new sfRequestRoute(
+          '/mot-de-passe-perdu',
+          array('module' => 'chCmsFrontendAccount', 'action' => 'requestNewPassword'),
+          array('sf_method' => 'post'),
+          array()));
+
+    $routing->prependRoute(
+        'sf_guard_regenerate_password',
+        new sfRequestRoute(
+          '/regenerer-mon-mot-de-passe/:token/:id/:username',
+          array('module' => 'chCmsFrontendAccount', 'action' => 'regeneratePassword'),
+          array('token' => '\w{5,8}', 'id' => '\d+', 'username' => '.+', 'sf_method' => 'get'),
+          array()));
+  }
+
+  /**
+   * prepend Associate module routes
+   *
+   * @parameter sfRouting $routing the routing object.
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public static function prependAssociateRoutes($routing)
+  {
+    $routing->prependRoute(
+              'signup_associate_create',
+              new sfRoute(
+                '/register/associate/create',
+                array('module' => 'Associate', 'action' => 'create')));
+
+    $routing->prependRoute(
+              'associate_delete',
+              new sfPropelRoute(
+                '/compte/associate/delete/:id',
+                array('module' => 'Associate', 'action' => 'delete'), // defaults
+                array('id' => '\d+'), // requirements
+                array('model' => 'Authentication', 'type' => 'object'))); // options
+  }
+
+  /**
+   * prepend api routes for userApi module
+   *
+   * @parameter sfRouting $routing the routing object.
+   * @return void
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public static function prependUserApiRoutes($routing)
+  {
+    $routing->prependRoute(
+      'user_api_get_infos',
+      new sfRequestRoute(
+        '/api/user/infos.:sf_format',
+        array('module' => 'userApi', 'action' => 'infos', 'sf_format' => chCmsApiTools::getDefaultFormat()),
+        array('sf_method' => array('GET'), 'sf_format' => chCmsApiTools::getFormatRequirementForRoute()),
+        array('app_expose' => true)
+      ));
+  }
+
+  /**
+   * Register routes for available profiles implementation
+   *
+   * @return void
+   * @author Camille NERON <camille_neron@carpe-hora.com>
+   **/
+  static protected function registerProfileImplementationsRoutes($routing)
+  {
+    foreach (chCmsGuardExtraPluginConfiguration::getAvailableProfileImplementations() as $module)
+    {
+      if (in_array($module, sfConfig::get('sf_enabled_modules')))
+      {
+        $class_name = sprintf('%sRouting', ucfirst($module));
+
+        if (is_callable(array($class_name,'prependRoutes')) == true)
+        {
+          call_user_func(array($class_name,'prependRoutes'), $routing);
+        }
+        else
+        {
+          throw new sfException(sprintf('The method %s::prependRoutes doesn\'t exist.', $class_name));
+        }
+      }
+    }
+  }
+}

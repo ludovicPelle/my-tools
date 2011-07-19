@@ -1,0 +1,400 @@
+<?php
+/**
+ * @package    T-resa-lib
+ * @subpackage  default
+ * @author     Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright  (c) Carpe Hora SARL 2011
+ */
+require_once(sfConfig::get('sf_plugins_dir').'/sfGuardPlugin/lib/model/plugin/PluginsfGuardUser.php');
+
+class sfGuardUser extends PluginsfGuardUser
+{
+  protected $companyEntities = array(),
+            $userProfile = null,
+            $mailValidated = false;
+
+  /**
+   * is the current user mail validated ?
+   * if user is saved, then check for activation.
+   * otherwise, return the $mailValidated property.
+   * give a value to use it as setter, otherwise this is a getter.
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function isMailValidated($set = null)
+  {
+    if ($this->isNew() && is_null($set))
+    {
+      return $this->mailValidated;
+    }
+    elseif ($this->isNew())
+    {
+      $this->mailValidated = $set;
+    }
+    elseif (is_null($set))
+    {
+      return $this->getIsActive();
+    }
+    else
+    {
+      throw new sfException('please generate a way to validate changed mail !');
+    }
+
+    return $this;
+  }
+
+  /**
+   * undocumented function
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function getActivation(PropelPDO $con = null)
+  {
+    if (is_null(parent::getActivation($con)))
+    {
+      $this->generateActivation();
+    }
+
+    return parent::getActivation($con);
+  }
+
+  /**
+   * undocumented function
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function generateActivation()
+  {
+    $hash = md5(uniqid($this->getUsername(), true));
+    $newActivation = new GuardActivation();
+    $newActivation->setHash($hash);
+    $this->setActivation($newActivation);
+    $newActivation->save();
+  }
+
+  /**
+   * is the user a T-resa Admin ?
+   *
+   * @return void
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function isTresaAdmin()
+  {
+    return in_array('admin_tresa', $this->getAllPermissions());
+  }
+  /**
+   * parses a company argument as an id
+   *
+   * @return integer
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  protected function parseCompanyId($company = null)
+  {
+    if (is_numeric($company))
+    {
+      return $company;
+    }
+    elseif ($company instanceof Company)
+    {
+      return $company->getId();
+    }
+    elseif (is_null($company))
+    {
+      //supposedly never happens, kept for backward companitbility risk
+      return sfContext::getInstance()->getUser()->getSelectedCompany();
+    }
+  }
+
+  public function setProfile($profile)
+  {
+    $this->profile = $profile;
+    if ($profile->getUserId() != $this->getId())
+    {
+      $profile->setUserid($this->getId());
+    }
+  }
+
+  public function getCollegues($company = null, $criteria = null)
+  {
+    $company_id = $this->parseCompanyId($company);
+
+    static $collegues;
+    if (!$collegues || !$collegues[$company_id]);
+    {
+      $collegues = $collegues ? $collegues : array();
+
+      $c = $criteria ? $criteria : new Criteria();
+      $c->add(sfGuardUserPeer::ID, array($this->getId()), Criteria::NOT_IN);
+      $c->addJoin(sfGuardUserPeer::ID, CompanyProRightsPeer::USER_ID);
+      $c->add(CompanyProRightsPeer::COMPANY_ID, $company_id);
+      $collegues[$company_id] = sfGuardUserPeer::doSelect($c);
+    }
+
+    return $collegues[$company_id];
+  }
+
+  public function getAssistants($company = null, $criteria = null)
+  {
+    $company_id = $this->parseCompanyId($company);
+
+    static $assistants;
+    if (!$assistants || !$assistants[$company_id]);
+    {
+      $assistants = $assistants ? $assistants : array();
+
+      $users = sfGuardUserQuery::create()
+          ->filterByAssistantOfUser($this->getId(), $company_id)
+          ->find();
+      $assistants[$company_id] = array();
+      foreach ($users as $u)
+      {
+        $assistants[$company_id][] = $u;
+      }
+    }
+
+    return $assistants[$company_id];
+  }
+
+  public function getAssistedByMe($company = null, $criteria = null)
+  {
+    throw new sfException('sfGuardUser::getAssistedByMe this function is deprecated, please use CompanyEntity functions.');
+    $company_id = $this->parseCompanyId($company);
+
+    static $assistedByMe;
+    if (!$assistedByMe || !(is_array($assistedByMe) && array_key_exists($company_id, $assistedByMe)) );
+    {
+      $assistedByMe = $assistedByMe ? $assistedByMe : array();
+
+      $users = sfGuardUserQuery::create()
+          ->filterByAssistedByUser($this->getId(), $company_id)
+          ->find();
+      $assistedByMe[$company_id] = array();
+      foreach ($users as $u)
+      {
+        $assistedByMe[$company_id][] = $u;
+      }
+    }
+
+    return $assistedByMe[$company_id];
+  }
+
+  /**
+   * returns all assistance links related to this user and company,
+   wether the user is assistant or assisted.
+   */
+  public function getAllAssistanceLinks($company = null, $criteria = null)
+  {
+    $company_id = $this->parseCompanyId($company);
+    $criteria = is_null($criteria) ? new Criteria() : clone $criteria;
+
+    $criteria->add(AssistantLinkPeer::COMPANY_ID, $company_id);
+    $c1 = $criteria->getNewCriterion(AssistantLinkPeer::ASSISTED_BY_USER_ID, $this->getId());
+    $c2 = $criteria->getNewCriterion(AssistantLinkPeer::ASSISTANT_OF_USER_ID, $this->getId());
+    $c1->addOr($c2);
+    $criteria->add($c1);
+
+    return AssistantLinkPeer::doSelect($criteria);
+  }
+
+  /**
+   * extract a field of an array of objects.
+   * returns an array with the extracted value of each object
+   */
+  public static function extractField($array, $field)
+  {
+    $method = sprintf('get%s', ucfirst(Tresa::camelize($field)));
+    $ret = array();
+    foreach ($array as $key => $obj)
+    {
+      $ret[$key] = call_user_func(array($obj, $method));
+    }
+    return $ret;
+  }
+
+  /**
+   * @todo remove the getUserProfile function.
+   * this function is no more used since everything moved to sfGuardUserProfile
+   **/
+  public function setUserProfile($profile)
+  {
+  throw new sfException('the sfGuardUserProfile is no more used. everything is migrated to sfGuardProfile');
+    $this->userProfile = $profile;
+    if ($this->getId() && $profile->getUserId() != $this->getId())
+    {
+      $this->userProfile->setUserId($this->getId());
+    }
+  }
+
+  public function setProProfile($profile)
+  {
+    $this->proProfile = $profile;
+    if ($this->getId() && $profile->getUserId() != $this->getId())
+    {
+      $this->proProfile->setUserId($this->getId());
+    }
+  }
+
+  /**
+   * @todo remove the getUserProfile function.
+   * this function is no more used since everything moved to sfGuardUserProfile
+   **/
+  public function getUserProfile()
+  {
+  throw new sfException('the sfGuardUserProfile is no more used. everything is migrated to sfGuardProfile');
+    if (is_null($this->userProfile))
+    {
+      if ($this->getId())
+      {
+        $c = new Criteria();
+        $c->add(sfGuardUserProfilePeer::USER_ID, $this->getId());
+        $profile = sfGuardUserProfilePeer::doSelectOne($c);
+        if ($profile)
+        {
+          $this->setUserProfile($profile);
+        }
+        else
+        {
+          $this->setUserProfile(new sfGuardUserProfile());
+        }
+      }
+      else
+      {
+        $this->setUserProfile(new sfGuardUserProfile());
+      }
+    }
+    return $this->userProfile;
+  }
+
+  /**
+   * a shortcut to getCompanyEntitys until migration under
+   * propel pluralize
+   *
+   * @param PropelPDO $con the propel connection to use (default null)
+   * @return PropelCollection
+   * @see getCompanyEntitys
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function getCompanyEntities(PropelPDO $con = null)
+  {
+    return $this->getCompanyEntitys($con);
+  }
+
+  public function getCompanyEntity($company)
+  {
+    $company_id = $this->parseCompanyId($company);
+
+    $companyEntities = $this->getCompanyEntities();
+
+    foreach ($companyEntities as $entity)
+    {
+      if ($entity->getCompanyId() == $company_id)
+      {
+        return $entity;
+      }
+    }
+
+    throw new TresaExceptionNoAssociatedCompanyEntity('user has no associated company entity');
+  }
+
+  /**
+   * due to historical reasons, this is a wrapper
+   * to getCompanyEntity
+   * @deprecated
+   */
+  public function getProProfile($company = null)
+  {
+    return $this->getCompanyEntity($company);
+  }
+
+
+  public function getsfGuardUserPinCode()
+  {
+    $pin = $this->getsfGuardUserPinCodes();
+    if (count($pin))
+    {
+      return $pin[0];
+    }
+    else
+    {
+      $pin = new sfGuardUserPinCode();
+      $this->addsfGuardUserPinCode($pin);
+      return $pin;
+    }
+  }
+
+  public function checkPinCode($pincode)
+  {
+    $pin = $this->getsfGuardUserPinCode();
+    return (!$pin || !$pin->getActivated() || ($pin->getPassword() == $pincode));
+  }
+
+  public function getPincode()
+  {
+    return $this->getsfGuardUserPinCode()->getPassword();
+  }
+
+  public function getProPreferences($company)
+  {
+    $company = is_numeric($company) ? $company : $company->getId();
+    $preferencess = $this->getsfGuardProPreferencess();
+    foreach ($preferencess as $preference)
+    {
+      if ($preference->getCompanyId() == $company)
+      {
+        return $preference;
+      }
+    }
+    throw new sfException('no preferences for this company');
+  }
+
+  public function getName()
+  {
+    if ($this->hasVirtualColumn('firstname') && $this->hasVirtualColumn('lastname'))
+    {
+      $use = $this;
+    }
+    else
+    {
+      $use = $this->getprofile();
+    }
+
+    return strtr('%firstname% %lastname%',
+      array(
+        '%firstname%' => ucwords(strtolower($use->getFirstname())),
+        '%lastname%'  => strtoupper($use->getLastname())
+      )
+    );
+  }
+
+  /**
+   * get the default TresaProfile
+   *
+   * @return void
+   * @author Camille NERON <camille_neron@carpe-hora.com>
+   **/
+  public function getDefaultProfile()
+  {
+    if ($this->getId())
+    {
+      $defaultProfile = ProfileQuery::create()->getDefaultProfile($this->getId());
+    }
+
+    if (!isset($defaultProfile) || !$defaultProfile)
+    {
+      $defaultProfile = new TresaProfile();
+      $this->addProfile($defaultProfile);
+    }
+
+    return $defaultProfile;
+  }
+
+  public function isOneOfMyProfiles($id)
+  {
+    $profile = $this->getProfile();
+
+    return $id == $profile->getId();
+  }
+}

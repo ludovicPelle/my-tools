@@ -1,0 +1,502 @@
+<?php
+
+/**
+ * This file defines chCmsGuardExtraUser class
+ *
+ * @package    chCmsGuardExtraPlugin
+ * @subpackage lib/user
+ * @author     Camille Neron <camille_neron@carpe-hora.com>
+ * @since      2010-12-06
+ * @copyright  Carpe-Hora SARL
+ */
+
+/**
+* Defines profiles method
+*
+* @see chCmsGuardExtraPluginConfiguration::initialize
+*/
+class chCmsGuardExtraUser
+{
+  const SESS_AUTH_OBJECT      = 'chCmsGuardExtraPlugin.provider.authentication';
+  const SESS_FORM_CLASS       = 'chCmsGuardExtraPlugin.provider.formclass';
+  const SESS_FORM_DEFAULT_VAL = 'chCmsGuardExtraPlugin.provider.defaultvalues';
+
+  const NULL_PASSWORD         = 'null';
+
+  public static function autoSigninAfterRegister($event)
+  {
+    $sfUser = $event->getSubject();
+    $sfUser->extraSignIn($event['context'], $event['user']);
+  }
+
+  public static function autoSigninAfterRegisterOnlyIfProvider($event)
+  {
+    $sfUser = $event->getSubject();
+
+    // if the user used a provider, we sign him in
+    if ($sfUser()->haschCmsGuardExtraProvider())
+    {
+      $sfUser->extraSignIn($event['context'], $event['user']);
+    }
+  }
+
+
+  static public function methodNotFound(sfEvent $event)
+  {
+    if (method_exists('chCmsGuardExtraUser', $event['method']))
+    {
+      $event->setReturnValue(call_user_func_array(
+        array('chCmsGuardExtraUser', $event['method']),
+        array_merge(array($event->getSubject()), $event['arguments'])
+      ));
+
+      return true;
+    }
+  }
+
+  /**
+   * get the mail, or at least inform this should be developped
+   *
+   * @return String
+   **/
+  public static function getMail($sfUser)
+  {
+    if ($sfUser->haschCmsGuardExtraProviderFormValues())
+    {
+      $values = $sfUser->getchCmsGuardExtraProviderFormValues();
+      return empty($values['mail']) ? '' : $values['mail'];
+    }
+
+    return '';
+  }
+
+  /**
+   * Add a provider to an user.
+   *
+   * @param sfUser          $user The user to add the authentication.
+   * @param Authentication  $auth The auth instance to link with the user.
+   *
+   * @return void
+   * @author Kevin Gomez <contact@kevingomez.fr>
+   **/
+  public static function addProvider($user, Authentication $auth)
+  {
+    // update the authentication
+    $auth->setUserId($user->getId());
+    $auth->save();
+  }
+
+  /**
+   * Tells if the user has a dummy password
+   *
+   * @return bool
+   * @author Kevin Gomez <contact@kevingomez.fr>
+   **/
+  public static function hasDummyPassword($user)
+  {
+    return $user->getGuardUser()->getPassword() == self::NULL_PASSWORD;
+  }
+
+  /**
+   * Returns the registration form to use for the current user
+   *
+   * @return PluginRegisterForm The form.
+   * @author Kevin Gomez <contact@kevingomez.fr>
+   **/
+  static public function getchCmsGuardExtraRegistrationForm($user)
+  {
+    // classic registration form
+    if (!$user->haschCmsGuardExtraProvider())
+    {
+      return new RegistrationForm();
+    }
+
+    // provider specific registration form
+    if (!$user->haschCmsGuardExtraProviderForm())
+    {
+      throw new LogicException('No registration form defined');
+    }
+
+    $form_name = $user->getchCmsGuardExtraProviderForm();
+
+    $form = new $form_name();
+    $form->getObject()->addAuthentication($user->getchCmsGuardExtraProvider());
+
+    // bind the default values
+    if ($user->haschCmsGuardExtraProviderFormValues())
+    {
+      // fixes the mail
+      $form->fixMail(chCmsGuardExtraUser::getMail($user));
+
+      $form->setDefaults($user->getchCmsGuardExtraProviderFormValues());
+
+      // we display a message to inform the user
+      $user->addInfo('Votre profil a été pré-rempli.');
+    }
+
+    return $form;
+  }
+
+  static public function getchCmsGuardExtraProvider($user)
+  {
+    if (!$user->hasAttribute(self::SESS_AUTH_OBJECT)
+        || !is_array($providerValues = $user->getAttribute(self::SESS_AUTH_OBJECT)))
+    {
+      return null;
+    }
+
+    $id = $providerValues[AuthenticationPeer::translateFieldName('Id', BasePeer::TYPE_PHPNAME, BasePeer::TYPE_NUM)];
+
+    if ($id && is_numeric($id))
+    {
+      $auth = AuthenticationPeer::populateObject($providerValues);
+      return $auth[0];
+    }
+
+    $cls = AuthenticationPeer::getOMClass($providerValues, 0);
+    $cls = substr('.'.$cls, strrpos('.'.$cls, '.') + 1);
+    $obj = new $cls();
+    $obj->fromArray($providerValues, BasePeer::TYPE_NUM);
+    return $obj;
+  }
+
+  static public function haschCmsGuardExtraProvider($user)
+  {
+    return !is_null($user->getchCmsGuardExtraProvider());
+  }
+
+  static public function setchCmsGuardExtraProvider($user, $value = null)
+  {
+    if (!is_object($value))
+    {
+      return $user->setAttribute(self::SESS_AUTH_OBJECT, $value);
+    }
+
+    return $user->setAttribute(self::SESS_AUTH_OBJECT, $value->toArray(BasePeer::TYPE_NUM));
+  }
+
+  /**
+   * Cancels a provider authentication.
+   *
+   * @return void
+   * @author Kevin Gomez <contact@kevingomez.fr>
+   **/
+  static public function cancelchCmsGuardExtraProviderAuth($user)
+  {
+    $user->setchCmsGuardExtraProviderForm(null);
+    $user->getAttributeHolder()->remove(self::SESS_AUTH_OBJECT);
+  }
+
+  /**
+   * Returns the name class of the class to use to create the form.
+   *
+   * @return void
+   * @author Kevin Gomez <contact@kevingomez.fr>
+   **/
+  static protected function getchCmsGuardExtraProviderForm($user)
+  {
+    return $user->getAttribute(self::SESS_FORM_CLASS);
+  }
+
+  /**
+   * Tells if the form class name has been specified.
+   *
+   * @return void
+   * @author Kevin Gomez <contact@kevingomez.fr>
+   **/
+  static protected function haschCmsGuardExtraProviderForm($user)
+  {
+    return !is_null($user->getchCmsGuardExtraProviderForm());
+  }
+
+  /**
+   * Defines the register form to use with the current provider
+   *
+   * @param sfUser $user      The current user
+   * @param string $className The name of the registration form class.
+   *
+   * @return void
+   * @author Kevin Gomez <contact@kevingomez.fr>
+   **/
+  static public function setchCmsGuardExtraProviderForm($user, $className=null)
+  {
+    if (!$user->haschCmsGuardExtraProvider() && !is_null($className))
+    {
+      throw new LogicException('The user does not use a provider');
+    }
+
+    if (!is_string($className) AND !is_null($className))
+    {
+      throw new LogicException('the class name must be a string');
+    }
+
+    if (is_null($className))
+    {
+      $user->setchCmsGuardExtraProviderFormValues(array());
+    }
+
+    return $user->setAttribute(self::SESS_FORM_CLASS, $className);
+  }
+
+  /**
+   * Defines the default values for the registration form.
+   *
+   * @param sfUser $user    The current user
+   * @param array  $values  Default values for the form.
+   *
+   * @return void
+   * @author Kevin Gomez <contact@kevingomez.fr>
+   **/
+  static public function setchCmsGuardExtraProviderFormValues($user, array $values=array())
+  {
+    $user->setAttribute(self::SESS_FORM_DEFAULT_VAL, $values);
+  }
+
+  /**
+   * Gets the default values for the registration form.
+   *
+   * @param sfUser $user  The current user
+   *
+   * @return void
+   * @author Kevin Gomez <contact@kevingomez.fr>
+   **/
+  static public function getchCmsGuardExtraProviderFormValues($user)
+  {
+    return $user->getAttribute(self::SESS_FORM_DEFAULT_VAL);
+  }
+
+  /**
+   * Tells if the form as default values.
+   *
+   * @param sfUser $user  The current user
+   *
+   * @return boolean
+   * @author Kevin Gomez <contact@kevingomez.fr>
+   **/
+  static public function haschCmsGuardExtraProviderFormValues($user)
+  {
+    $values = $user->getchCmsGuardExtraProviderFormValues();
+
+    return !empty($values);
+  }
+
+  /**
+   * parse extra parameters for signin actions.
+   * this basic implementation just parses return_url param to force redirect.
+   * extra parameters are set in $action->extra_signin_params
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public static function parseSigninExtraParameters($sf_user, $request)
+  {
+    $extra_signin_params = array();
+
+    //set Return Url
+    if ($request->hasParameter('return_url'))
+    {
+      $extra_signin_params['return_url'] = $request->getParameter('return_url');
+    }
+
+    return $extra_signin_params;
+  }
+
+  /**
+   * Function to prepare actions on signup/signin/openid
+   * -set Referer
+   * -set ReturnUrl
+   *
+   * @param sfContext $context the action to preparse
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  static public function prepareAccountAction($sf_user, $sf_context)
+  {
+    $sf_user->parseRefererForSigninAction($sf_context);
+  }
+
+  /**
+   * parse referer for signin actions
+   * if module is not one for authentication, then referer url or
+   * action is used to prepare post signin redirection
+   *
+   * @see getReferer
+   * @see setReferer
+   *
+   * @return sfBasicSecurityUser
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public static function parseRefererForSigninAction($sf_user, $sf_context)
+  {
+    //setReferer
+    $request      = $sf_context->getRequest();
+    $actionStack  = $sf_context->getActionStack();
+
+    if (array_key_exists('return_url', $params = $sf_user->parseSigninExtraParameters($sf_context->getRequest())))
+    {
+      $sf_user->setReferer($params['return_url']);
+    }
+    // set referer if not an identication action
+    // nor an external provider
+    else if (
+        !(
+          $request->getParameter('module') === sfConfig::get('sf_login_module') &&
+          in_array($request->getParameter('action'), array('doSignin', sfConfig::get('sf_login_action')))
+        )
+      ||
+        ! in_array(
+          $sf_context->getModuleName(),
+          chCmsGuardExtraPluginConfiguration::getAvailableProfileImplementations()
+        )
+      )
+    {
+      $sf_user->setReferer($actionStack->getSize() > 1 ? $request->getUri() : $request->getReferer());
+    }
+  }
+
+  /**
+   * parse the return url after signin process.
+   * * return_url parameter
+   * * or referer
+   * * or @homepage
+   * * or app_sf_guard_plugin_success_signin_url
+   *
+   * @param  sfRequest $request the request object
+   * @return String
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public static function getSigninSuccessRedirectUrl($sf_user, $sf_request, $sf_context)
+  {
+      return $sf_request->getParameter('return_url',
+                            chCmsGuardExtraUser::generateRouteOrUrl(
+                                $sf_context,
+                                sfConfig::get('app_sf_guard_plugin_success_signin_url',
+                                $sf_user->getReferer('@homepage'))
+                              )
+                            );
+  }
+
+  /**
+   * computes the kick out url if user cannot register and signin is unsuccessfull
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public static function getSigninKickOutRedirectUrl($sf_user, $sf_request, $sf_context)
+  {
+    return chCmsGuardExtraUser::generateRouteOrUrl($sf_context,sfConfig::get('app_sf_guard_plugin_kickout_url', 'sf_guard_signin'));
+  }
+
+  /**
+   * return the signup url
+   *
+   * @return String
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public static function getSignupUrl($sf_user, $sf_request, $sf_context)
+  {
+    return chCmsGuardExtraUser::generateRouteOrUrl($sf_context,sfConfig::get('app_sf_guard_plugin_signup_url', 'sf_guard_signup'));
+  }
+
+  /**
+   * check if signup module is enabled.
+   *
+   * @return boolean
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public static function canSignup($sf_user)
+  {
+    return in_array('chCmsFrontendSignup', sfConfig::get('sf_enabled_modules'));
+  }
+
+  /**
+   * undocumented function
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public static function extraSignIn($sf_user, $context, $guardUser, $remember = false, $con = null)
+  {
+    $dispatcher = $context->getEventDispatcher();
+    $request    = $context->getRequest();
+
+    try
+    {
+      $dispatcher->notify(new sfEvent(
+            $sf_user, 'user.pre_signin', array('context' => $context, 'guard_user' => $guardUser)));
+
+      $sf_user->signIn($guardUser, $remember, $con);
+
+      $sf_user->cancelchCmsGuardExtraProviderAuth();
+
+      $dispatcher->notify(new sfEvent(
+            $sf_user, 'user.post_signin', array('context' => $context, 'remember' => $remember)));
+
+    }
+    catch(chCmsGuardExtraSigninErrorException $e)
+    {
+      $sf_user->cancelchCmsGuardExtraProviderAuth();
+
+      $event = $dispatcher->notifyUntil(new sfEvent($sf_user, 'user.signin_exception', array('context' => $context, 'exception' => $e )));
+      if (!$event->isProcessed())
+      {
+        // untracpped exception ? logout !
+        $sf_user->signout();
+        throw $e;
+      }
+    }
+    catch(Exception $e)
+    {
+      $sf_user->cancelchCmsGuardExtraProviderAuth();
+
+      throw $e;
+    }
+  }
+
+  /**
+   * This function parse $routeOrUrl to apply correct generation (if its a route, generatUrl will called ()
+   *
+   * $param sfContext $context
+   * $param String $routeOrUrl
+   * $param array $params
+   * @param Boolean Whether to generate an absolute URL or not
+   *
+   * @return Sting url
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  protected static function generateRouteOrUrl(sfContext $context, $routeOrUrl, $params = array(), $absolute = false)
+  {
+    if ( is_null( $routeOrUrl) || empty($routeOrUrl))
+    {
+      throw LogicException('no route given');
+    }
+    //if first char is a @ its a route
+    if (0 === strpos($routeOrUrl, '@'))
+    {
+      return $context->getRouting()->generate(substr($routeOrUrl, 1), $params, $absolute);
+    }
+    else
+    {
+      return $routeOrUrl;
+    }
+
+  }
+
+  /**
+   * notify a meesage to user
+   * @see BasechCmsMessageNotifier listener
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public static function sendMessage(sfContext $context, $messagePath, $params)
+  {
+
+    $event = $dispatcher->notifyUntil(new sfEvent('user.notify', array('messagePath' => $messagePath,
+                                                                       'params' => $params)));
+    if (!$event->isProcessed())
+    {
+      throw new LogicException('no one do something on this!');
+    }
+  }
+}

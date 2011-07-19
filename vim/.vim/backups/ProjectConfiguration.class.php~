@@ -1,0 +1,214 @@
+<?php
+
+require_once dirname(dirname(__FILE__)).'/lib/vendor/symfony/lib/autoload/sfCoreAutoload.class.php';
+#require_once '/usr/share/php/symfony/autoload/sfCoreAutoload.class.php';
+sfCoreAutoload::register();
+
+class ProjectConfiguration extends sfProjectConfiguration
+{
+  static protected $zendLoaded = false;
+  static protected $mailer = null;
+
+  public function setup()
+  {
+    // for compatibility / remove and enable only the plugins you want
+    $this->enablePlugins(array(
+      'sfPropel15Plugin',
+      'DbFinderPlugin',
+      'sfFormExtraPlugin',
+      'sfJqueryReloadedPlugin',
+      'sfJqueryFormValidationPlugin',
+      'sfCarpeHoraPlugin',
+      'sfGuardPlugin',
+      'chCmsBasePlugin',
+      'chCmsApplicationPlugin',
+      'chCmsGuardExtraPlugin',
+      'chCmsFormExtraPlugin',
+      'chCmsAgendaPlugin',
+      'chCmsFaqPlugin',
+      'chCmsBugTrackerPlugin',
+      'chCmsContactPlugin',
+      'sfFrTranslationPlugin',
+      'sfThumbnailPlugin',
+      'sfTaskExtraPlugin',
+      //'chCmsTresaFilePlugin',
+      'chCmsVisitorPlugin',
+      'chCmsTresaWidgetsPlugin',
+      'chCmsAssetsCompressorPlugin',
+      'sfEasyGMapPlugin',
+
+      'chCmsAdminMyAccountPlugin',
+      'chCmsAdminCompanyPlugin',
+      'chCmsAdminAgendaPlugin',
+      'chCmsAdminContractorPlugin',
+      'chCmsAdminTresaPlugin',
+      'chCmsContactsPlugin',
+
+//      'swFunctionalTestGenerationPlugin',
+      'chCmsExposeRoutingPlugin',
+      'chCmsApiPlugin',
+      'chCmsGuardOAuthPlugin',
+
+      'chCmsCompanyPlugin',
+      'chCmsFunambolApiPlugin',
+      'chCmsMessageNotifierPlugin',
+      ));
+    //$this->enableAllPluginsExcept(array('sfDoctrinePlugin', 'sfCompat10Plugin'));
+    $this->dispatcher->connect('context.load_factories', array($this, 'listenToLoadFactoriesEvent'));
+    $this->dispatcher->connect('context.load_factories', array('sfGuardMessageManager', 'listenToLoadFactoriesEvent'));
+    $this->dispatcher->connect('mailer.configure', array($this, 'listenToMailerConfigure'));
+
+    $this->dispatcher->connect(
+        'user.method_not_found',
+        array('TresaUser', 'methodNotFound'));
+    $this->dispatcher->connect('user.change_authentication', array($this, 'clearCreds'));
+  }
+
+  /**
+   * undocumented function
+   *
+   * @return void
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function clearCreds(sfEvent $event)
+  {
+    $sf_user = $event->getSubject();
+    $sf_user->clearCredentials();
+  }
+
+  /**
+   * Used to connect plugin's tests
+   *
+   * @return void
+   * @author Kevin Gomez <contact@kevingomez.fr>
+   **/
+  public function setupPlugins()
+  {
+    $this->pluginConfigurations['chCmsGuardExtraPlugin']->connectTests();
+    $this->pluginConfigurations['chCmsApplicationPlugin']->connectTests();
+    $this->pluginConfigurations['chCmsContactsPlugin']->connectTests();
+    $this->pluginConfigurations['chCmsAdminAgendaPlugin']->connectTests();
+    $this->pluginConfigurations['chCmsAdminCompanyPlugin']->connectTests();
+    $this->pluginConfigurations['chCmsAdminTresaPlugin']->connectTests();
+    $this->pluginConfigurations['chCmsAdminMyAccountPlugin']->connectTests();
+    $this->pluginConfigurations['chCmsAdminContractorPlugin']->connectTests();
+    $this->pluginConfigurations['chCmsGuardOAuthPlugin']->connectTests();
+    $this->pluginConfigurations['chCmsCompanyPlugin']->connectTests();
+    $this->pluginConfigurations['chCmsAgendaPlugin']->connectTests();
+    $this->pluginConfigurations['chCmsFunambolApiPlugin']->connectTests();
+    $this->pluginConfigurations['chCmsApiPlugin']->connectTests();
+
+    /*foreach ($this->plugins as $plugin)
+    {
+      // check for your project's prefix
+      if (0 === strpos($plugin, 'ch'))
+      {
+        $this->pluginConfigurations[$plugin]->connectTests();
+      }
+    }*/
+  }
+
+  public function listenToLoadFactoriesEvent(sfEvent $event)
+  {
+    $context = $event->getSubject();
+    $user = $context->getUser();
+    BaseForm::setUser($user);
+    CompanyEntityQuery::setUser($user);
+    CalendarQuery::setUser($user);
+    ServiceQuery::setUser($user);
+
+    // now some default config
+    sfConfig::add(array(
+      'app_oauth_layout' => sfConfig::get('sf_apps_dir') . '/api/templates/layout',
+      ));
+
+    $context = $event->getSubject();
+    $mailSender = new chCmsMessageNotifierMail($context);
+    $mailSender->registerEvents();
+
+//    $smsSender = new chCmsMessageNotifierMail($context);
+//    $smsSender->registerEvents($context->getDispatcher());
+  }
+
+  public function listenToMailerConfigure(sfEvent $event)
+  {
+    BaseForm::setMailer($event->getSubject());
+    self::$mailer = $event->getSubject();
+  }
+
+  /**
+   * Returns the project mailer
+   * http://snippets.symfony-project.org/snippet/377
+   */
+  static public function getMailer()
+  {
+    if (null !== self::$mailer)
+    {
+      return self::$mailer;
+    }
+
+    // If sfContext has instance, returns the classic mailer resource
+    if (sfContext::hasInstance() && sfContext::getInstance()->getMailer())
+    {
+      self::$mailer = sfContext::getInstance()->getMailer();
+    }
+    else
+    {
+      // Else, initialization
+      if (!self::hasActive())
+      {
+        throw new sfException('No sfApplicationConfiguration loaded');
+      }
+      require_once sfConfig::get('sf_symfony_lib_dir').'/vendor/swiftmailer/classes/Swift.php';
+      Swift::registerAutoload();
+      sfMailer::initialize();
+      $applicationConfiguration = self::getActive();
+
+      $config = sfFactoryConfigHandler::getConfiguration($applicationConfiguration->getConfigPaths('config/factories.yml'));
+
+      self::$mailer = new $config['mailer']['class']($applicationConfiguration->getEventDispatcher(), $config['mailer']['param']);
+    }
+
+    return self::$mailer;
+  }
+
+  static public function registerZend()
+  {
+    if(self::$zendLoaded)
+    {
+      return ;
+    }
+
+    set_include_path(sfConfig::get('sf_plugins_dir').DIRECTORY_SEPARATOR.'sfCarpeHoraPlugin'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'vendor'.PATH_SEPARATOR.get_include_path());
+    require_once(sfConfig::get('sf_plugins_dir').DIRECTORY_SEPARATOR.'sfCarpeHoraPlugin'.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'vendor/Zend/Loader/Autoloader.php');
+#    Zend_Loader::registerAutoload();
+    $autoloader = Zend_Loader_Autoloader::getInstance();
+    $autoloader->setFallbackAutoloader(true);
+    self::$zendLoaded = true;
+  }
+
+  /**
+   * get a SolR client
+   *
+   * @return Apache_Solr_Service
+   **/
+  public static function getSolrService($server)
+  {
+    static $included;
+    if(!$included)
+    {
+      require_once sfConfig::get('sf_lib_dir').'/vendor/SolrPhpClient/Apache/Solr/Query.php';
+      //now plugins
+      require_once sfConfig::get('sf_lib_dir').'/vendor/SolrPhpClient/Apache/Solr/Plugin/Pager.php';
+      require_once sfConfig::get('sf_lib_dir').'/vendor/SolrPhpClient/Apache/Solr/Plugin/Facet.php';
+      $included = true;
+    }
+
+    $config = chTools::get(sprintf('index_%s', $server));
+
+    $solr = new Apache_Solr_Service($config['host'], $config['port'], $config['url']);
+
+    return $solr;
+  }
+
+}

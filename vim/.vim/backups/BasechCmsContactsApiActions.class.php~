@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * Base actions for the chCmsContactsPlugin chCmsContactsApi module.
+ * 
+ * @package     chCmsContactsPlugin
+ * @subpackage  chCmsContactsApi
+ * @author      Your name here
+ * @version     SVN: $Id$
+ */
+abstract class BasechCmsContactsApiActions extends sfActions
+{
+  /**
+   * entry point for Search action
+   *
+   * @param sfWebRequest $request the user request
+   * @return 
+   */
+  public function executeSearch(sfWebRequest $request)
+  {
+    $form = new ContactsSearchForm();
+    $form->bind($request->getParameter('search'));
+
+    if (!$form->isValid())
+    {
+      $this->forward404('no search keywords provided');
+    }
+
+    $contacts = ContactQuery::create()
+<<<<<<< HEAD
+      ->select(array('Id', 'Name', 'Birthday'))
+=======
+      //->select(array('Id', 'Name', 'Birthday'))
+      ->setIgnoreCase(true)
+>>>>>>> Case insensitive search
+      ->filterForContractor($this->getUser()->getCompanyEntity())
+      ->filterByName(sprintf('%s%%', $form->getValue('keywords')))
+      ->orderBy('Name');
+    /*
+    $contacts = ContactQuery::create()
+    //->select(array('Id', 'Name', 'Birthday'))
+    //->setIgnoreCase(true)
+    ->filterForContractor($this->getUser()->getCompanyEntity())
+    //->filterByName(sprintf('%s%%', $form->getValue('keywords')))
+    ->where('Contact.Name ILIKE ?', sprintf('%s%%', $form->getValue('keywords')))
+    ->orderBy('Name')
+    ->find();
+    */
+
+      $contacts = $contacts->find();
+
+    return $this->renderText($contacts->exportTo('JSON'));
+  }
+}

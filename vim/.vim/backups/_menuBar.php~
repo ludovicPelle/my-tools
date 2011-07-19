@@ -1,0 +1,9 @@
+<?php if (count($entries = $group->getAccessibleMenuEntriesForUser()) > 1): ?>
+<ul class="chcms-menulist group-list">
+<?php foreach ($entries as $panel_id => $title): ?>
+  <li>
+  <?php echo get_admin_menu_entry_link($group, $panel_id) ?>
+  </li>
+<?php endforeach; ?>
+</ul>
+<?php endif; ?>

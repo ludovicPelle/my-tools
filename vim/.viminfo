@@ -1,0 +1,2214 @@
+# Ce fichier viminfo a Ã©tÃ© gÃ©nÃ©rÃ© par Vim 7.2.
+# Vous pouvez l'Ã©diter, mais soyez prudent.
+
+# 'encoding' dans lequel ce fichier a Ã©tÃ© Ã©crit
+*encoding=utf-8
+
+
+# hlsearch on (H) or off (h):
+~h
+# Dernier motif de recherche  :
+~MSle0/sets the authentication object
+
+# Dernier motif de recherche Substitue  :
+~MSle0~&chCmsGuardExtraUser
+
+# DerniÃ¨res chaÃ®nes de substitution :
+$
+
+# Historique ligne de commande (chronologie dÃ©croissante) :
+:wq
+:q
+:!mv % plugins/chCmsGuardExtraPlugin/modules/chCmsGuardExtraMessage/templates/_activationMail.php
+:!mv % plugins/chCmsGuardExtraPlugin/modules/chCmsGuardExtraMessage/templates/_welcomeMail.php
+:mv % plugins/chCmsGuardExtraPlugin/modules/chCmsGuardExtraMessage/templates/_welcomeMail.php
+:w
+:e
+:%y
+:tabnew plugins/chCmsGuardExtraPlugin/modules/chCmsGuardExtraMessage/templates/_activation.php
+:tabnew /var/www/t-resa/plugins/chCmsAdminTresaPlugin/modules/adminCompany/templates/_index.php
+:qa
+:q:qa
+:.,+5s:chCmsGuardExtraUser:chCmsGuardExtraUserMessages:
+:.,56y
+:.,55y
+:%s:public:public static:g
+:66,79y
+:80,93y
+:81,93y
+:43,48y
+
+# Historique chaÃ®ne de recherche (chronologie dÃ©croissante) :
+? \V_e\%#
+? \Vphp\%#
+? chCmsGuardExtraUser
+? public
+? \Vdoc_f\%#
+? \Vif\%#
+? \Vclass\%#
+?/sets the authentication object
+?/haschCmsGuardExtraProvider
+? \Vwith\%#
+?/CASE existing provider: directly connect
+?/debug
+?/with good
+?/doSign
+?/associer
+?/second
+?/second$
+?/secon
+? ^
+?/sig
+
+# Historique expression (chronologie dÃ©croissante) :
+
+# Historique ligne de saisie (chronologie dÃ©croissante) :
+
+# Historique ligne de saisie (chronologie dÃ©croissante) :
+
+# Registres :
+"0	LINE	0
+	  <br/>
+""1	LINE	0
+	  <br/>
+"2	LINE	0
+	  echo  
+"3	LINE	0
+	  <?php
+"4	LINE	0
+	
+"5	LINE	0
+	
+"6	LINE	0
+	
+"7	LINE	0
+	
+"8	LINE	0
+	    $params = array('activation'  => $activation);
+"9	LINE	0
+	
+"a	CHAR	0
+	€kb	
+"q	CHAR	0
+	6317
+<:q:q:gtgTgtgti€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb"€kD:w:;€kbtabnew /var/www/t-resa/web/css/api/signin.css€ku€ku€ku€ku€ku€ku€kd€kd€kd€kd€kd€kd€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd:q:tabnew €kd€kd€kd€kd€kd€kd/var/www/t-resa/web/css/pro/layoutSecure.css€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€ku€ku€ku€ku€ku€ku€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€kugTgTgTgtgTgTgtgtgtgt€kd€kd€kd€kd€kdgT€@7€kl€kristtyle€kl€kl€kl€kl€kl€kD€kr€kr€kr€kl€kl€kl€kl €@7€kl="height:100%":w€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€klimin-€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kD0px:w€kl€kl€kl€kl€kl€kl€kr€kr€kl€kl€kr€kD€kD€kD€kD€kD€kD10i100%:w€kb€kri€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb:w€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kly$gtgtgtgt€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kdgtgTgT€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€kup€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kr€kr€kr€kr€kD€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kr€kri :w€ku€ku€ku€ku€ku€ku€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€ku€ku€ku€ku€ku€ku€@7€klgT€ku€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kli€kl€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kDgt€kb€kbugt€kr€kd€kd€kd€kdio€kbo<img src=€kb€kb€kb€kb€kb€kb€kb€kbdiv uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu€ku€kddd€kd€kdp€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kli-c€kbbottom:wgtgT:€ku€ku€ku€kd€ku€kd€kl€kl€kl€kl€kb€kb€kb€kb€kb€kb€kN€kN€kN€kN€kN€kN€kN€kN€kN€kN€kN€kN€kN€kN€kP€kN€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku:€ku€ku€kd€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb				€kN€kN€kN:q€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€kugT:qgTgtgtdd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kddd:wuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu;€kb:wgtgT:!git ce %:egt€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kN€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kdo.log€kb€kb€kb€kb:q€kbwgTgTgtgtgtgt€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kliclass€kD€kD:w€kl€kr€@7€kl€kl€kl€kl€kli<img src="euromastergTgTgt€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kli../images/euromaster-logo-text-500x145.png€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD"/>:w€kr€kr€kr€kr€kr:w€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD:wi/va€kb€kbwe/€kbb/retailer/ei€kburomaster/images/:wgT€kd€kd€kdo	dispal€kb€kblay:block;:woheight:200px;z-index:1;!€kb:w::€ku€kb€kb€kb€kbwdd:w€ku€ku€kd€@7€kl€kl€kl€kl€kli100%€kD€kD€kD€kD€kD:w€kd€kd€kd€@7€kl€kl€kl€kl€kD€kDi80€kD:w€kl€kl€ku€ku€ku€ku€ku€ku€@7€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kr€kr€kriop60-:w€ku€ku€khgtdd:wuu:w€kr€kr€@7€kl€kl€kl€kl€kli€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb<€kb>:wdd€ku€kup:wdd€kd€kup:wgT€kd€kd€kd€kd€kd€@7€kl€kl€kl€kli80€kD€kD€kD€kd€kd€kd€@7€kl€kl€kl€kl7€kD:w€ku€ku€ku€ku€kui	positio€kbi€kbon:relative;€kb:w€kl€kl€kb€kb€kb;€kd€kd€kd€ku€ku€ku€@7€kb€kD€kD€kd€kd€kl€kl€kl€kD€kD€kD145i€kr€ku€kl€kd145px:w€kb€kb€kb€kb€kd€kd€kddd:w€ku€ku€kdoz-index:2;:w€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kruuuu€@7€kl€kl€kl€kD:wi5:w€ku€ku€ku€kl€kl€kl€kl€kl€kr€kli100%€kD€kD€kD€kD€kD€kr€kb€kb:wgt
+"t	CHAR	0
+	4080
+<ip€kl€kDjquery.qtip.min€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kl€kl€kl€kl€kr€kr€kr€kr€kr€kr.qtip.css€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kd€ku€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€kd€kd€kd€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kD€kD€kD€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kli€kbjs/€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kl€kl€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kD€kD€kD€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kr"€@7/js/"yy€ku€kdp€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kridebug/€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kD€kD€kD€kD€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kldebug€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kD€kD€kD€kD€kD€kDp€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kD€kD€kD€kDic€kDc€kbs€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kD€kDcss€kd:q€kbwq€kb€ku€ku€ku€ku€kd€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kri -a €kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€%i€kl€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kl€kD€kD€kD€kD€kd€kd€kd€kd€kd€ku€kd€kd€kd€ku€kl€kl€kl€kl€kl€kl€kl€kr€kr€kr€kr€kl€kl€kl€kl€ku€kud6d€kb€kbd6d6€kD€kD€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kl€kl:wgtgtgt€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€ku€kl€kr€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kli€kr€kl€kD€kD€kD€kD€kD€kD€kD€kr€kr€kr€kr/t-resa:wgt€kd€kd€kr€kr€kr€kr€kri/...:w€kb€kb€kb:w€kl€kl€kl€kD€kD€kD €kli €kr..€kD€kD€kd€kd€ku€kui.:w€kl€kl€kl€kl€kl€kl€kr€kl€kl€kl€kr€kr€kr€kD€kD€kD€kD€kD€kD€kD~€kbi~/tools/ch-adamin-tol€kbold€kbs€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kD€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl:w€kd€kd€kd€ku€ku€ku€kr€kr€kr€kd€kd€ku€ku€ku€@7:w€kl€kd€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kr€kr€kd€ku€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kDi..€ku€kd€kr€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kD€kl€kl€kl$DIR :w€kd€ku€kl€kl€kl€kl€kr€kr€kr€kri/€kD:wgttgtggtgtgt€kdgtgtgtgtgt€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€krgtgtgt€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€kugtgt€kl€klggtgtgtgtgtgtgt€kd€kd€kd€kd€kd€kd€kd€kd€kl€kl€ku€ku€ku€kdecho€kb€kuecho $SRCPATH:w€kl€kl€ku€kly$€kd€kl€kl€klp€kD€kD€kD€kD€kD€kD€kD€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kD€kD:wgtgtgtgt:egtA $DESTPATH:w€kb€kb:w€kh€@7€kd€kugtgtgtgt:w€khgt€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€klgtgtgtgt€kd€kd€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€krrE:wgt€kd€kd€ku€ku€kugtgtgtgtgtgtgt€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kr€kl€kDiE€kr€krE€kD:wgtg:
+"u	CHAR	0
+	782
+<ire.paths.unshift(path.join(__dirname, '..', 'lib'));uirequire.paths.unshift(path.join(__dirname, '..', 'lib'));€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kr€kr€kr€kr€kr€kr€kr€kr€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb''€kl/usr/lib/a€kb€kb€kb€kb€kb€kb€kb€kb€kb/home/ludovic/.nave/node_modules/:w;:!€ku€kriless:w€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kl€kli€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb:wa€kb€kb€kb€kb€kb€kb€kb€kb€kb€kb€@7€kl€kl€kb:wa€kb€kb€kb€kb€kb':w:!€ku€kd€kddddddd:w€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kD€kD:w:!€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€ku€kuo€kd€kd€kd€@7€kl€kl€kri€kb€kb€kb€kb€kb€kb€kbinput€ku€kuo€kuvar input = path.join
+"-	CHAR	0
+	; your text
+
+# Marques dans le fichier :
+'0  1  28  ~/my-tools/.git/COMMIT_EDITMSG
+'1  1  0  ~/myTutor
+'2  1  0  ~/toto
+'3  1168  0  /var/mail/ludovic
+'4  97  0  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/model/om/BaseGuardActivation.php
+'5  1  0  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/model/GuardActivation.php
+'6  9  0  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/modules/chCmsGuardExtraMessage/templates/_activation.php
+'7  499  4  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/user/chCmsGuardExtraUser.class.php
+'8  1  15  /var/www/t-resa/.git/COMMIT_EDITMSG
+'9  13  0  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/.git/COMMIT_EDITMSG
+
+# Liste de sauts (le plus rÃ©cent en premier) :
+-'  1  28  ~/my-tools/.git/COMMIT_EDITMSG
+-'  1  0  ~/myTutor
+-'  1  0  ~/toto
+-'  1168  0  /var/mail/ludovic
+-'  1  0  /var/mail/ludovic
+-'  97  0  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/model/om/BaseGuardActivation.php
+-'  1  0  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/model/om/BaseGuardActivation.php
+-'  1  0  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/model/GuardActivation.php
+-'  9  0  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/modules/chCmsGuardExtraMessage/templates/_activation.php
+-'  6  4  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/modules/chCmsGuardExtraMessage/templates/_activation.php
+-'  8  4  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/modules/chCmsGuardExtraMessage/templates/_activation.php
+-'  1  4  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/modules/chCmsGuardExtraMessage/templates/_activation.php
+-'  10  5  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/modules/chCmsGuardExtraMessage/templates/_activation.php
+-'  4  13  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/modules/chCmsGuardExtraMessage/templates/_welcome.php
+-'  3  0  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/modules/chCmsGuardExtraMessage/templates/_welcome.php
+-'  1  3  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/modules/chCmsGuardExtraMessage/templates/_welcome.php
+-'  499  4  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/user/chCmsGuardExtraUser.class.php
+-'  496  6  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/user/chCmsGuardExtraUser.class.php
+-'  485  7  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/user/chCmsGuardExtraUser.class.php
+-'  30  0  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/user/chCmsGuardExtraUserMessages.class.php
+-'  2  5  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/user/chCmsGuardExtraUserMessages.class.php
+-'  1  3  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/user/chCmsGuardExtraUserMessages.class.php
+-'  1  15  /var/www/t-resa/.git/COMMIT_EDITMSG
+-'  13  0  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/.git/COMMIT_EDITMSG
+-'  2  0  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/.git/COMMIT_EDITMSG
+-'  40  12  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/test/unit/chCmsGuardExtraUserTest.php
+-'  38  105  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/test/unit/chCmsGuardExtraUserTest.php
+-'  96  0  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/test/unit/chCmsGuardExtraUserTest.php
+-'  97  4  /var/www/t-resa/config/ProjectConfiguration.class.php
+-'  96  4  /var/www/t-resa/config/ProjectConfiguration.class.php
+-'  1  0  /var/www/t-resa/config/ProjectConfiguration.class.php
+-'  8  167  ~/.bash_aliases
+-'  1  0  ~/.bash_aliases
+-'  1  0  /var/www/t-resa/plugins/chCmsGuardExtraPlugin/test/unit/chCmsGuardExtraUserTest.php
+-'  1  14  /var/www/t-resa/plugins/chCmsCompanyPlugin/.git/COMMIT_EDITMSG
+-'  26  0  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  307  8  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  69  8  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  167  6  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  87  8  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  22  0  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  373  8  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  3  27  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  766  16  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  767  14  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  756  4  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  757  4  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  758  4  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  759  4  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  760  32  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  761  32  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  762  0  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  763  4  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  764  4  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  765  6  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  768  6  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  769  6  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  770  6  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  771  4  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  772  0  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  773  4  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  774  2  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  775  2  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  776  6  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  777  6  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  778  8  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  779  8  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  780  8  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  781  6  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  782  0  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  783  6  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  784  8  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  785  6  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  786  0  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  787  6  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  788  8  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  789  6  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  790  0  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  791  6  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  792  8  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  793  6  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  794  0  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  795  6  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  796  8  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  797  6  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  798  0  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  799  2  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  800  0  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  801  4  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  802  4  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  803  6  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  804  6  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  805  4  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  806  4  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  807  0  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  808  0  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  829  0  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+-'  839  0  /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+
+# Historique des marques dans les fichiers (les plus rÃ©centes en premier) :
+
+> ~/my-tools/.git/COMMIT_EDITMSG
+	"	1	28
+	^	1	29
+	.	1	28
+	+	1	28
+
+> ~/myTutor
+	"	1	0
+
+> ~/toto
+	"	1	0
+
+> /var/mail/ludovic
+	"	1168	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/model/om/BaseGuardActivation.php
+	"	97	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/model/GuardActivation.php
+	"	1	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/modules/chCmsGuardExtraMessage/templates/_welcome.php
+	"	5	2
+	^	7	7
+	.	11	0
+	+	1	0
+	+	3	0
+	+	11	0
+	+	3	2
+	+	2	1
+	+	10	4
+	+	9	3
+	+	4	13
+	+	11	0
+	+	6	0
+	+	11	0
+	+	6	19
+	+	11	0
+	+	6	36
+	+	11	0
+	+	9	0
+	+	8	28
+	+	11	0
+	+	7	6
+	+	9	0
+	+	11	0
+	+	9	0
+	+	5	0
+	+	11	0
+
+> /var/www/t-resa/plugins/chCmsAdminTresaPlugin/modules/adminCompany/templates/_index.php
+	"	1	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/modules/chCmsGuardExtraMessage/templates/_activation.php
+	"	9	0
+	^	6	29
+	.	12	0
+	+	1	0
+	+	4	17
+	+	12	0
+	+	10	0
+	+	9	2
+	+	2	0
+	+	12	0
+	+	9	0
+	+	8	28
+	+	12	0
+	+	8	0
+	+	6	28
+	+	12	0
+	+	5	0
+	+	7	0
+	+	12	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/user/chCmsGuardExtraUserMessages.class.php
+	"	31	3
+	^	19	21
+	.	148	0
+	+	31	6
+	+	30	8
+	+	30	37
+	+	148	0
+	+	30	39
+	+	30	34
+	+	45	3
+	+	45	19
+	+	34	104
+	+	45	17
+	+	30	0
+	+	31	0
+	+	148	0
+	+	15	48
+	+	30	0
+	+	34	58
+	+	45	0
+	+	44	0
+	+	38	28
+	+	41	49
+	+	43	35
+	+	38	33
+	+	43	46
+	+	148	0
+	+	70	46
+	+	65	4
+	+	13	61
+	+	148	0
+	+	38	53
+	+	39	43
+	+	38	15
+	+	39	19
+	+	30	0
+	+	43	39
+	+	41	81
+	+	41	33
+	+	41	86
+	+	148	0
+	+	15	16
+	+	148	0
+	+	38	52
+	+	148	0
+	+	41	48
+	+	148	0
+	+	34	9
+	+	148	0
+	+	72	3
+	+	47	0
+	+	63	0
+	+	43	42
+	+	38	19
+	+	55	17
+	+	60	43
+	+	1	0
+	+	51	27
+	+	148	0
+	+	43	41
+	+	148	0
+	+	72	3
+	+	73	0
+	+	74	45
+	+	75	0
+	+	148	0
+	+	75	0
+	+	76	43
+	+	148	0
+	+	85	61
+	+	87	0
+	+	88	52
+	+	89	13
+	+	148	0
+	+	90	45
+	+	148	0
+	+	113	61
+	+	115	0
+	+	116	49
+	+	117	43
+	+	148	0
+	+	120	0
+	+	127	30
+	+	130	46
+	+	148	0
+	+	134	0
+	+	141	58
+	+	144	42
+	+	145	35
+	+	148	0
+	+	93	0
+	+	100	27
+	+	103	43
+	+	148	0
+	+	15	28
+	+	148	0
+	+	34	0
+	+	148	0
+	+	17	0
+	+	29	0
+	+	15	20
+	+	19	0
+	+	148	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/user/chCmsGuardExtraUser.class.php
+	"	499	4
+	^	498	54
+	.	501	0
+	+	452	0
+	+	429	0
+	+	501	0
+	+	438	95
+	+	438	0
+	+	438	34
+	+	438	10
+	+	501	0
+	+	438	8
+	+	438	0
+	+	501	0
+	+	467	117
+	+	468	0
+	+	457	96
+	+	459	12
+	+	460	19
+	+	461	24
+	+	462	10
+	+	464	0
+	+	462	4
+	+	462	0
+	+	464	21
+	+	463	3
+	+	461	12
+	+	475	0
+	+	474	30
+	+	477	0
+	+	476	70
+	+	482	0
+	+	476	1
+	+	477	5
+	+	479	0
+	+	480	24
+	+	501	0
+	+	473	0
+	+	470	0
+	+	469	56
+	+	473	0
+	+	472	0
+	+	469	52
+	+	472	0
+	+	471	44
+	+	501	0
+	+	374	89
+	+	501	0
+	+	371	17
+	+	371	98
+	+	374	51
+	+	373	30
+	+	374	63
+	+	377	0
+	+	374	65
+	+	376	28
+	+	373	29
+	+	374	31
+	+	371	27
+	+	501	0
+	+	387	104
+	+	501	0
+	+	398	103
+	+	501	0
+	+	368	76
+	+	371	54
+	+	372	31
+	+	501	0
+	+	387	37
+	+	398	37
+	+	396	72
+	+	385	76
+	+	501	0
+	+	371	0
+	+	387	0
+	+	398	0
+	+	501	0
+	+	474	13
+	+	501	0
+	+	476	67
+	+	501	0
+	+	171	0
+	+	170	17
+	+	172	0
+	+	172	63
+	+	501	0
+	+	174	0
+	+	501	0
+	+	492	15
+	+	486	17
+	+	487	42
+	+	492	57
+	+	494	89
+	+	501	0
+	+	494	101
+	+	495	94
+	+	497	0
+	+	496	8
+	+	499	0
+	+	498	50
+	+	501	0
+	+	498	53
+	+	501	0
+
+> /var/www/t-resa/lib/vendor/symfony/lib/mailer/sfMailer.class.php
+	"	59	4
+
+> /var/www/t-resa/lib/vendor/symfony/test/unit/mailer/sfMailerTest.php
+	"	109	0
+
+> /var/www/t-resa/lib/vendor/symfony/lib/vendor/swiftmailer/classes/Swift/Mailer.php
+	"	43	0
+
+> /var/www/t-resa/config/ProjectConfiguration.class.php
+	"	124	32
+	^	125	32
+	.	212	0
+	+	129	0
+	+	124	34
+	+	123	35
+	+	124	57
+	+	125	56
+	+	212	0
+	+	111	0
+	+	112	19
+	+	212	0
+	+	129	61
+	+	129	67
+	+	129	39
+	+	129	67
+	+	212	0
+	+	212	0
+	+	129	0
+	+	212	0
+	+	122	24
+	+	212	0
+	+	129	55
+	+	129	0
+	+	129	0
+	+	129	0
+	+	129	0
+	+	129	45
+	+	129	48
+	+	129	48
+	+	129	49
+	+	129	49
+	+	129	49
+	+	129	49
+	+	129	49
+	+	129	0
+	+	129	56
+	+	129	0
+	+	212	0
+	+	129	47
+	+	126	23
+	+	212	0
+	+	126	0
+	+	122	0
+	+	212	0
+	+	122	0
+	+	212	0
+	+	129	0
+	+	127	8
+	+	128	8
+	+	212	0
+	+	127	1
+	+	128	1
+	+	212	0
+	+	125	32
+	+	212	0
+
+> /var/www/t-resa/lib/email/EventTimeModifiedClientMessage.class.php
+	"	52	0
+
+> /var/www/t-resa/lib/notifier/BasechCmsMessageNotifier.class.php
+	"	39	45
+	^	36	8
+	.	74	0
+	+	74	26
+	+	74	32
+	+	74	37
+	+	36	62
+	+	74	0
+	+	74	0
+	+	74	0
+	+	74	0
+	+	74	0
+	+	74	0
+	+	74	0
+	+	74	0
+	+	74	0
+	+	74	0
+	+	74	0
+	+	74	3
+	+	25	18
+	+	74	0
+	+	74	2
+	+	74	0
+	+	74	3
+	+	74	3
+	+	74	3
+	+	74	0
+	+	74	44
+	+	74	0
+	+	74	44
+	+	74	0
+	+	74	0
+	+	74	0
+	+	74	0
+	+	74	37
+	+	74	11
+	+	74	30
+	+	74	0
+	+	74	0
+	+	74	25
+	+	74	22
+	+	74	49
+	+	74	3
+	+	74	43
+	+	74	0
+	+	28	0
+	+	36	46
+	+	18	0
+	+	74	0
+	+	74	0
+	+	74	0
+	+	74	0
+	+	74	15
+	+	74	0
+	+	74	0
+	+	74	0
+	+	27	17
+	+	38	54
+	+	36	36
+	+	74	0
+	+	74	29
+	+	42	61
+	+	74	0
+	+	74	8
+	+	39	46
+	+	74	0
+	+	74	0
+	+	74	0
+	+	74	0
+	+	74	11
+	+	74	30
+	+	74	0
+	+	74	47
+	+	74	3
+	+	74	28
+	+	74	0
+	+	74	31
+	+	74	30
+	+	74	16
+	+	74	0
+	+	45	0
+	+	51	0
+	+	59	0
+	+	66	0
+	+	73	0
+	+	73	0
+	+	73	0
+	+	72	60
+	+	65	54
+	+	58	54
+	+	52	0
+	+	51	51
+	+	74	0
+	+	50	0
+	+	57	0
+	+	64	0
+	+	71	0
+	+	49	0
+	+	74	0
+	+	36	8
+	+	74	0
+	+	39	45
+	+	74	0
+
+> /var/www/t-resa/lib/notifier/chCmsMessageNotifierMail.class.php
+	"	15	62
+	^	15	63
+	.	100	0
+	+	1	0
+	+	3	0
+	+	13	33
+	+	15	0
+	+	100	0
+	+	100	0
+	+	17	0
+	+	100	0
+	+	20	0
+	+	79	4
+	+	80	53
+	+	93	0
+	+	93	59
+	+	87	0
+	+	86	48
+	+	89	0
+	+	93	0
+	+	88	95
+	+	80	11
+	+	77	45
+	+	80	59
+	+	94	48
+	+	96	10
+	+	98	13
+	+	95	79
+	+	91	84
+	+	92	66
+	+	95	40
+	+	84	0
+	+	84	0
+	+	84	27
+	+	84	0
+	+	83	0
+	+	84	0
+	+	83	67
+	+	100	0
+	+	82	15
+	+	100	0
+	+	83	81
+	+	100	0
+	+	92	49
+	+	100	0
+	+	37	0
+	+	36	3
+	+	36	15
+	+	26	0
+	+	25	17
+	+	36	0
+	+	34	6
+	+	36	6
+	+	100	0
+	+	33	5
+	+	25	36
+	+	100	0
+	+	32	46
+	+	28	0
+	+	27	10
+	+	28	17
+	+	27	9
+	+	28	46
+	+	100	0
+	+	35	0
+	+	100	0
+	+	30	27
+	+	100	0
+	+	29	23
+	+	27	21
+	+	28	21
+	+	30	21
+	+	29	48
+	+	100	0
+	+	25	11
+	+	100	0
+	+	25	54
+	+	100	0
+	+	100	0
+	+	15	43
+	+	100	0
+
+> /var/www/t-resa/lib/notifier/chCmsMessageNotifierSms.class.php
+	"	15	61
+	^	15	62
+	.	61	0
+	+	1	0
+	+	3	0
+	+	61	0
+	+	15	38
+	+	61	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/modules/chCmsFrontendAccount/templates/_resendPasswordMail.php
+	"	1	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/modules/chCmsFrontendAccount/lib/BasechCmsFrontendAccountActions.class.php
+	"	362	6
+	^	203	33
+	.	368	0
+	+	17	0
+	+	368	0
+	+	105	0
+	+	104	0
+	+	105	6
+	+	107	0
+	+	106	0
+	+	368	0
+	+	109	0
+	+	108	0
+	+	368	0
+	+	138	1
+	+	118	0
+	+	118	53
+	+	126	27
+	+	125	31
+	+	126	35
+	+	129	43
+	+	131	80
+	+	132	0
+	+	133	71
+	+	368	0
+	+	134	0
+	+	135	0
+	+	368	0
+	+	131	33
+	+	368	0
+	+	135	0
+	+	368	0
+	+	368	0
+	+	33	26
+	+	368	0
+	+	33	12
+	+	368	0
+	+	33	0
+	+	368	0
+	+	33	24
+	+	368	0
+	+	33	31
+	+	368	0
+	+	33	0
+	+	368	0
+	+	18	0
+	+	223	29
+	+	18	0
+	+	368	0
+	+	350	67
+	+	351	0
+	+	349	14
+	+	349	31
+	+	349	0
+	+	349	13
+	+	349	0
+	+	368	0
+	+	291	0
+	+	290	0
+	+	292	63
+	+	368	0
+	+	292	31
+	+	368	0
+	+	292	32
+	+	368	0
+	+	293	0
+	+	368	0
+	+	292	40
+	+	368	0
+	+	213	6
+	+	213	14
+	+	213	0
+	+	213	36
+	+	213	20
+	+	213	6
+	+	212	0
+	+	213	86
+	+	368	0
+	+	167	0
+	+	166	0
+	+	168	41
+	+	368	0
+	+	168	72
+	+	213	57
+	+	368	0
+	+	213	0
+	+	211	0
+	+	368	0
+	+	211	0
+	+	200	0
+	+	201	0
+	+	200	10
+	+	204	7
+	+	210	0
+	+	202	7
+	+	203	7
+	+	368	0
+	+	206	0
+	+	207	7
+	+	208	7
+	+	209	0
+	+	203	33
+	+	368	0
+
+> /var/www/t-resa/plugins/chCmsBasePlugin/lib/chTools.class.php
+	"	134	0
+
+> /var/www/t-resa/apps/users/config/ch_cms.yml
+	"	68	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/modules/chCmsFrontendSignup/lib/BasechCmsFrontendSignupActions.class.php
+	"	87	0
+	^	163	58
+	.	282	0
+	+	282	0
+	+	148	37
+	+	282	0
+	+	148	0
+	+	145	0
+	+	136	46
+	+	282	0
+	+	136	6
+	+	282	0
+	+	145	21
+	+	282	0
+	+	145	0
+	+	173	0
+	+	173	16
+	+	150	29
+	+	173	23
+	+	282	0
+	+	150	0
+	+	173	0
+	+	170	20
+	+	282	0
+	+	151	17
+	+	282	0
+	+	151	0
+	+	170	0
+	+	282	0
+	+	153	92
+	+	282	0
+	+	153	0
+	+	282	0
+	+	170	96
+	+	282	0
+	+	282	0
+	+	201	32
+	+	282	0
+	+	168	0
+	+	169	0
+	+	201	23
+	+	282	0
+	+	169	38
+	+	282	0
+	+	169	99
+	+	282	0
+	+	227	4
+	+	228	65
+	+	282	0
+	+	169	103
+	+	282	0
+	+	169	0
+	+	157	0
+	+	154	0
+	+	165	0
+	+	154	6
+	+	156	6
+	+	157	7
+	+	158	7
+	+	165	0
+	+	161	0
+	+	165	0
+	+	162	7
+	+	163	7
+	+	164	0
+	+	158	122
+	+	158	45
+	+	282	0
+	+	262	0
+	+	262	0
+	+	260	0
+	+	256	9
+	+	258	23
+	+	261	35
+	+	282	0
+	+	261	81
+	+	282	0
+	+	261	91
+	+	282	0
+	+	163	48
+	+	282	0
+	+	261	54
+	+	282	0
+	+	260	6
+	+	261	6
+	+	282	0
+	+	262	0
+	+	282	0
+	+	256	12
+	+	258	29
+	+	282	0
+	+	150	18
+	+	152	95
+	+	163	49
+	+	155	38
+	+	163	57
+	+	282	0
+	+	155	22
+	+	282	0
+	+	155	52
+	+	158	63
+	+	163	58
+	+	282	0
+
+> /var/www/t-resa/lib/model/sfGuardUser.php
+	"	368	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/config/chCmsGuardExtraPluginConfiguration.class.php
+	"	27	0
+	^	26	42
+	.	102	0
+	+	36	0
+	+	36	0
+	+	48	0
+	+	103	0
+	+	20	0
+	+	26	41
+	+	102	0
+	+	26	41
+	+	102	0
+	+	102	0
+	+	26	41
+	+	102	0
+
+> /var/www/t-resa/lib/vendor/symfony/lib/view/sfView.class.php
+	"	499	1
+
+> /var/www/t-resa/.git/COMMIT_EDITMSG
+	"	1	15
+	^	1	16
+	.	1	15
+	+	9	28
+	+	17	0
+	+	6	0
+	+	1	0
+	+	13	0
+	+	5	21
+	+	8	0
+	+	9	1
+	+	9	0
+	+	10	0
+	+	11	0
+	+	12	0
+	+	1	34
+	+	8	0
+	+	15	0
+	+	14	0
+	+	13	0
+	+	12	0
+	+	11	0
+	+	10	0
+	+	1	7
+	+	8	0
+	+	10	0
+	+	11	0
+	+	12	0
+	+	1	7
+	+	8	0
+	+	9	0
+	+	10	0
+	+	11	0
+	+	1	27
+	+	11	0
+	+	10	0
+	+	11	0
+	+	12	0
+	+	13	0
+	+	14	0
+	+	15	0
+	+	16	0
+	+	17	0
+	+	1	42
+	+	10	0
+	+	11	0
+	+	12	0
+	+	13	0
+	+	14	0
+	+	1	46
+	+	10	0
+	+	1	25
+	+	10	0
+	+	11	0
+	+	12	0
+	+	13	0
+	+	14	0
+	+	15	0
+	+	1	7
+	+	10	0
+	+	11	0
+	+	12	0
+	+	1	15
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/.git/COMMIT_EDITMSG
+	"	13	0
+	^	13	0
+	.	13	0
+	+	2	37
+	+	9	0
+	+	10	0
+	+	2	42
+	+	9	0
+	+	10	0
+	+	11	0
+	+	12	0
+	+	13	0
+	+	14	0
+	+	15	0
+	+	16	0
+	+	17	0
+	+	18	0
+	+	19	0
+	+	2	48
+	+	11	0
+	+	2	35
+	+	11	0
+	+	2	36
+	+	11	0
+	+	2	4
+	+	11	0
+	+	2	35
+	+	11	0
+	+	12	0
+	+	11	0
+	+	2	34
+	+	11	0
+	+	12	0
+	+	13	0
+	+	2	44
+	+	11	0
+	+	12	0
+	+	2	7
+	+	11	0
+	+	12	0
+	+	13	0
+	+	14	0
+	+	15	0
+	+	16	0
+	+	17	0
+	+	2	37
+	+	11	0
+	+	12	0
+	+	13	0
+	+	2	45
+	+	1	27
+	+	11	0
+	+	12	0
+	+	13	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/test/unit/chCmsGuardExtraUserTest.php
+	"	40	12
+	^	40	13
+	.	96	0
+	+	32	81
+	+	96	0
+	+	32	46
+	+	96	0
+	+	32	111
+	+	96	0
+	+	40	97
+	+	40	12
+	+	96	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/tests/UnitTestTools.class.php
+	"	32	16
+	^	43	84
+	.	49	0
+	+	32	16
+	+	43	93
+	+	49	0
+	+	32	18
+	+	43	84
+	+	32	0
+	+	49	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/model/GoogleAuthentication.php
+	"	2	0
+
+> ~/.bash_aliases
+	"	8	167
+	^	8	168
+	.	8	167
+	+	8	157
+	+	8	32
+	+	9	23
+	+	9	157
+	+	8	167
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/test/unit/BaseOpenIdConsumer.php
+	"	2	0
+
+> /var/www/t-resa/plugins/chCmsCompanyPlugin/.git/COMMIT_EDITMSG
+	"	1	14
+	^	1	15
+	.	1	32
+	+	8	0
+	+	9	0
+	+	10	0
+	+	11	0
+	+	12	0
+	+	13	0
+	+	1	45
+	+	1	13
+	+	10	0
+	+	1	40
+	+	10	0
+	+	1	32
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/test/unit/GoogleOpenIDTest.php
+	"	10	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/test/unit/YahooOpenIDTest.php
+	"	2	0
+
+> /var/www/t-resa/test/functional/users/chCmsGuardExtraActionsTest.php
+	"	26	0
+	^	245	47
+	.	942	0
+	+	3	27
+	+	3	0
+	+	942	0
+	+	3	27
+	+	942	0
+	+	809	14
+	+	942	0
+	+	809	0
+	+	942	0
+	+	839	1
+	+	840	2
+	+	942	0
+	+	834	0
+	+	1	0
+	+	3	27
+	+	942	0
+	+	758	0
+	+	761	81
+	+	942	0
+	+	796	84
+	+	830	79
+	+	847	79
+	+	840	84
+	+	942	0
+	+	761	79
+	+	942	0
+	+	80	14
+	+	942	0
+	+	80	0
+	+	69	0
+	+	942	0
+	+	69	0
+	+	942	0
+	+	246	0
+	+	250	21
+	+	253	21
+	+	255	0
+	+	254	0
+	+	261	0
+	+	245	46
+	+	942	0
+	+	937	0
+	+	893	0
+	+	894	0
+	+	942	0
+
+> /var/www/t-resa/test/functional/pro/chCmsGuardExtraActionsTest.php
+	"	105	6
+	.	108	0
+	+	14	34
+	+	104	0
+	+	26	0
+	+	104	0
+	+	26	35
+	+	104	0
+	+	28	0
+	+	31	0
+	+	32	70
+	+	33	137
+	+	104	0
+	+	38	0
+	+	38	0
+	+	39	15
+	+	104	0
+	+	103	0
+	+	103	16
+	+	104	0
+	+	103	0
+	+	1	0
+	+	103	0
+	+	104	0
+	+	64	14
+	+	104	0
+	+	83	0
+	+	67	0
+	+	68	2
+	+	104	0
+	+	75	38
+	+	104	0
+	+	80	0
+	+	104	0
+	+	82	0
+	+	81	46
+	+	104	0
+	+	74	38
+	+	75	35
+	+	104	0
+	+	70	80
+	+	104	0
+	+	84	0
+	+	87	80
+	+	70	75
+	+	69	70
+	+	68	69
+	+	104	0
+	+	37	0
+	+	36	0
+	+	38	0
+	+	66	0
+	+	83	0
+	+	104	0
+	+	84	1
+	+	7	1
+	+	108	0
+	+	99	0
+	+	93	53
+	+	94	48
+	+	99	0
+	+	99	21
+	+	99	36
+	+	99	0
+	+	108	0
+	+	99	14
+	+	108	0
+	+	95	22
+	+	108	0
+	+	95	39
+	+	108	0
+	+	99	0
+	+	108	0
+	+	95	0
+	+	108	0
+	+	103	14
+	+	108	0
+	+	100	3
+	+	103	0
+	+	100	21
+	+	108	0
+	+	97	0
+	+	97	26
+	+	108	0
+	+	97	21
+	+	108	0
+	+	84	0
+	+	7	0
+	+	108	0
+	+	44	47
+	+	43	50
+	+	14	50
+	+	15	31
+	+	83	17
+	+	108	0
+	+	83	14
+	+	108	0
+	+	83	0
+	+	108	0
+	+	83	0
+	+	105	0
+	+	108	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/tests/ProviderBrowserTestFunctional.class.php
+	"	216	60
+	.	372	0
+	+	312	0
+	+	311	0
+	+	319	0
+	+	325	0
+	+	327	0
+	+	333	0
+	+	344	0
+	+	355	0
+	+	323	0
+	+	329	0
+	+	338	0
+	+	340	0
+	+	342	0
+	+	349	0
+	+	350	0
+	+	365	0
+	+	372	0
+	+	58	40
+	+	372	0
+	+	58	38
+	+	58	0
+	+	372	0
+	+	58	101
+	+	372	0
+	+	26	15
+	+	26	0
+	+	372	0
+	+	308	1
+	+	309	1
+	+	372	0
+	+	309	0
+	+	308	0
+	+	372	0
+	+	308	0
+	+	372	0
+	+	304	0
+	+	372	0
+	+	308	0
+	+	1	0
+	+	372	0
+	+	175	14
+	+	372	0
+	+	175	0
+	+	372	0
+	+	161	38
+	+	161	0
+	+	372	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/routing/chCmsGuardExtraRouting.class.php
+	"	131	73
+
+> /var/www/t-resa/lib/test/sfGuardTestFunctional.class.php
+	"	127	0
+
+> ../../apps/pro/config/proConfiguration.class.php/var/www/t-resa/lib/pro/myProUser.class.php
+	"	1	0
+
+> /var/www/t-resa/lib/pro/myProUser.class.php
+	"	232	4
+	.	237	0
+	+	119	0
+	+	237	0
+
+> /var/www/t-resa/plugins/chCmsCompanyPlugin/lib/user/chCmsCompanyPluginUser.class.php
+	"	111	95
+	^	111	96
+	.	303	0
+	+	53	65
+	+	303	0
+	+	53	27
+	+	303	0
+	+	53	28
+	+	303	0
+	+	53	26
+	+	303	0
+	+	53	25
+	+	303	0
+	+	53	44
+	+	303	0
+	+	53	5
+	+	303	0
+	+	53	0
+	+	303	0
+	+	53	0
+	+	303	0
+	+	53	36
+	+	303	0
+	+	53	48
+	+	303	0
+	+	53	82
+	+	303	0
+	+	53	1
+	+	53	3
+	+	303	0
+	+	53	0
+	+	53	1
+	+	53	2
+	+	303	0
+	+	53	0
+	+	62	0
+	+	303	0
+	+	303	0
+	+	62	0
+	+	303	0
+	+	47	0
+	+	47	0
+	+	52	0
+	+	52	5
+	+	52	0
+	+	52	0
+	+	47	5
+	+	52	0
+	+	48	0
+	+	47	54
+	+	43	37
+	+	47	68
+	+	303	0
+	+	50	9
+	+	51	0
+	+	303	0
+	+	47	62
+	+	303	0
+	+	47	68
+	+	303	0
+	+	52	0
+	+	47	0
+	+	43	0
+	+	50	61
+	+	303	0
+	+	111	0
+	+	303	0
+	+	111	0
+	+	303	0
+	+	49	28
+	+	49	28
+	+	49	27
+	+	49	27
+	+	49	27
+	+	303	0
+	+	44	35
+	+	46	0
+	+	46	0
+	+	45	15
+	+	44	15
+	+	43	15
+	+	45	37
+	+	303	0
+	+	49	12
+	+	303	0
+	+	50	0
+	+	50	116
+	+	303	0
+	+	50	0
+	+	303	0
+	+	49	7
+	+	303	0
+	+	111	90
+	+	111	0
+	+	303	0
+	+	111	95
+	+	303	0
+	+	111	0
+	+	111	106
+	+	303	0
+	+	303	0
+	+	111	95
+	+	303	0
+
+> /var/www/t-resa/plugins/chCmsBasePlugin/web/css/main.css
+	"	47	25
+	^	47	26
+	.	127	0
+	+	42	6
+	+	127	0
+	+	42	27
+	+	44	27
+	+	42	5
+	+	43	4
+	+	46	32
+	+	127	0
+	+	45	52
+	+	127	0
+	+	47	26
+	+	127	0
+
+> /var/www/t-resa/web/css/users/main.css
+	"	433	0
+	.	433	0
+	+	428	0
+	+	434	0
+	+	433	0
+
+> /var/www/t-resa/web/css/pro/layout.css
+	"	107	0
+
+> /var/www/t-resa/apps/pro/templates/layoutSecure960.php
+	"	22	19
+	^	22	20
+	.	109	0
+	+	22	19
+	+	109	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/provider/BaseConsumer.class.php
+	"	346	0
+	^	343	12
+	.	346	0
+	+	248	38
+	+	248	0
+	+	1	0
+	+	346	0
+	+	296	88
+	+	315	60
+	+	346	0
+	+	315	0
+	+	1	0
+	+	39	25
+	+	39	0
+	+	346	0
+	+	315	49
+	+	346	0
+	+	315	57
+	+	1	0
+	+	346	0
+	+	39	25
+	+	1	0
+	+	346	0
+	+	325	8
+	+	1	0
+	+	346	0
+	+	340	46
+	+	344	23
+	+	346	0
+	+	344	43
+	+	346	0
+	+	344	0
+	+	346	0
+	+	344	36
+	+	346	0
+	+	344	0
+	+	346	0
+	+	344	0
+	+	344	35
+	+	346	0
+	+	344	58
+	+	346	0
+	+	344	23
+	+	346	0
+	+	344	0
+	+	344	0
+	+	344	0
+	+	344	31
+	+	344	23
+	+	344	36
+	+	346	0
+	+	344	0
+	+	346	0
+	+	344	0
+	+	344	0
+	+	1	0
+	+	344	0
+	+	346	0
+	+	344	0
+	+	344	85
+	+	344	0
+	+	346	0
+	+	344	49
+	+	346	0
+	+	336	8
+	+	336	0
+	+	346	0
+	+	342	0
+	+	343	12
+	+	346	0
+
+> /var/www/t-resa/plugins/chCmsCompanyPlugin/config/chCmsCompanyPluginConfiguration.class.php
+	"	28	4
+	^	1	2
+	.	38	0
+	+	28	52
+	+	28	83
+	+	38	0
+	+	28	45
+	+	38	0
+	+	28	39
+	+	38	0
+	+	28	0
+	+	28	55
+	+	28	40
+	+	38	0
+	+	1	0
+	+	28	0
+	+	38	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/BaseExternalProviderActions.class.php
+	"	122	0
+	^	87	83
+	.	183	0
+	+	139	9
+	+	139	0
+	+	142	0
+	+	139	0
+	+	139	0
+	+	183	0
+	+	139	12
+	+	139	35
+	+	183	0
+	+	139	0
+	+	139	0
+	+	183	0
+	+	139	40
+	+	183	0
+	+	139	0
+	+	112	0
+	+	183	0
+	+	112	0
+	+	139	0
+	+	139	14
+	+	139	0
+	+	139	0
+	+	139	0
+	+	139	0
+	+	151	0
+	+	1	0
+	+	183	0
+	+	116	36
+	+	183	0
+	+	116	40
+	+	116	50
+	+	116	11
+	+	116	142
+	+	183	0
+	+	183	0
+	+	116	43
+	+	116	10
+	+	183	0
+	+	181	33
+	+	183	0
+	+	181	0
+	+	181	0
+	+	181	0
+	+	107	0
+	+	107	18
+	+	107	0
+	+	107	0
+	+	183	0
+	+	62	38
+	+	67	0
+	+	68	0
+	+	62	54
+	+	68	52
+	+	183	0
+	+	87	0
+	+	92	0
+	+	110	0
+	+	124	0
+	+	141	0
+	+	152	0
+	+	183	0
+	+	68	0
+	+	67	0
+	+	183	0
+	+	183	0
+	+	172	0
+	+	180	0
+	+	173	5
+	+	174	0
+	+	183	0
+	+	177	0
+	+	177	62
+	+	178	35
+	+	183	0
+	+	177	62
+	+	183	0
+	+	177	10
+	+	183	0
+	+	1	0
+	+	177	75
+	+	183	0
+	+	124	5
+	+	183	0
+	+	124	29
+	+	124	0
+	+	183	0
+	+	124	0
+	+	121	0
+	+	123	95
+	+	124	0
+	+	183	0
+	+	123	57
+	+	183	0
+	+	123	102
+	+	1	0
+	+	87	84
+	+	88	0
+	+	92	117
+	+	93	0
+	+	183	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/provider/BaseOpenIdConsumer.class.php
+	"	72	2
+	^	208	0
+	.	336	0
+	+	235	38
+	+	235	0
+	+	246	80
+	+	246	0
+	+	336	0
+	+	305	38
+	+	336	0
+	+	305	45
+	+	336	0
+	+	305	16
+	+	336	0
+	+	305	10
+	+	336	0
+	+	305	19
+	+	336	0
+	+	305	8
+	+	1	0
+	+	1	0
+	+	208	45
+	+	208	0
+	+	305	47
+	+	305	0
+	+	208	46
+	+	208	0
+	+	1	0
+	+	1	0
+	+	336	0
+
+> /var/www/t-resa/plugins/chCmsCompanyPlugin/lib/filter/plugins/PluginchCmsCompanyFilter.class.php
+	"	31	12
+	.	35	0
+	+	32	0
+	+	28	0
+	+	32	0
+	+	35	0
+	+	28	0
+	+	32	29
+	+	35	0
+	+	28	0
+	+	26	6
+	+	26	7
+	+	26	87
+	+	26	7
+	+	29	52
+	+	35	0
+	+	29	0
+	+	29	10
+	+	35	0
+	+	26	84
+	+	35	0
+	+	26	101
+	+	31	0
+	+	35	0
+
+> /var/www/t-resa/apps/pro/config/routing.yml
+	"	173	0
+
+> /var/www/t-resa/apps/users/config/routing.yml
+	"	1	0
+
+> /var/www/t-resa/apps/users/config/app.yml
+	"	1	0
+
+> /var/www/t-resa/apps/pro/config/app.yml
+	"	12	38
+	^	12	1
+	.	12	38
+	+	12	38
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/config/app.yml
+	"	182	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/modules/chCmsFrontendAccount/config/security.yml
+	"	9	15
+	^	9	16
+	.	9	15
+	+	9	15
+
+> /var/www/t-resa/lib/vendor/symfony/lib/event_dispatcher/sfEventDispatcher.php
+	"	56	5
+	.	159	0
+	+	96	23
+	+	159	0
+	+	96	0
+	+	94	31
+	+	159	0
+	+	94	0
+	+	96	0
+	+	159	0
+
+> /var/www/t-resa/apps/pro/config/proConfiguration.class.php
+	"	1	0
+	.	21	0
+	+	10	0
+	+	21	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/modules/Associate/lib/BaseAssociateActions.class.php
+	"	94	0
+	^	47	89
+	.	94	0
+	+	32	21
+	+	29	12
+	+	35	45
+	+	94	0
+	+	47	88
+	+	94	0
+
+> plugins/chCmsGuardExtraPlugin/modules/chCmsFrontendAccount/lib/BasechCmsFrontendAccountActions.class.php
+	"	1	0
+
+> /var/www/t-resa/lib/vendor/symfony/lib/user/sfUser.class.php
+	"	203	0
+
+> /var/www/t-resa/lib/email/TresaMessage.class.php
+	"	107	0
+
+> /var/www/t-resa/lib/vendor/symfony/lib/action/sfComponent.class.php
+	"	235	2
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/routing/GoogleAuthenticationRouting.class.php
+	"	1	0
+
+> /var/www/t-resa/lib/model/CompanyQuery.php
+	"	65	3
+	^	37	47
+	.	162	0
+	+	32	15
+	+	28	52
+	+	30	19
+	+	31	0
+	+	32	53
+	+	162	0
+	+	34	0
+	+	39	16
+	+	37	11
+	+	39	17
+	+	37	45
+	+	162	0
+
+> /var/www/t-resa/lib/model/om/CompanyQuery.php
+	"	1	0
+
+> /var/www/t-resa/lib/model/om/BaseCompanyQuery.php
+	"	217	0
+
+> /var/www/t-resa/apps/pro/config/filters.yml
+	"	3	0
+	^	4	1
+	.	3	0
+	+	10	11
+	+	10	0
+	+	7	0
+	+	17	10
+	+	18	9
+	+	20	0
+	+	22	0
+	+	3	0
+	+	4	0
+	+	3	0
+
+> /var/www/t-resa/apps/users/config/filters.yml
+	"	4	0
+	^	3	1
+	.	4	0
+	+	12	0
+	+	4	0
+	+	3	0
+	+	4	0
+
+> /var/www/t-resa/plugins/chCmsApplicationPlugin/lib/api/chCmsApiTools.class.php
+	"	109	0
+
+> /var/www/t-resa/plugins/chCmsApplicationPlugin/.git/COMMIT_EDITMSG
+	"	1	0
+
+> /var/www/t-resa/plugins/chCmsBasePlugin/.git/COMMIT_EDITMSG
+	"	1	21
+	^	1	22
+	.	1	21
+	+	10	0
+	+	1	48
+	+	10	0
+	+	11	0
+	+	12	0
+	+	1	37
+	+	10	0
+	+	1	21
+
+> ~/.xmonad/xmonad.hs
+	"	109	11
+	^	109	61
+	.	108	11
+	+	48	90
+	+	100	46
+	+	1	0
+	+	525	0
+	+	263	0
+	+	265	0
+	+	266	0
+	+	524	423
+	+	296	3
+	+	46	21
+	+	49	88
+	+	233	0
+	+	259	0
+	+	100	54
+	+	249	0
+	+	100	51
+	+	249	34
+	+	98	5
+	+	100	4
+	+	112	4
+	+	100	4
+	+	112	0
+	+	100	49
+	+	98	4
+	+	100	46
+	+	239	3
+	+	102	54
+	+	238	5
+	+	100	40
+	+	101	54
+	+	102	57
+	+	101	56
+	+	103	58
+	+	111	0
+	+	104	56
+	+	104	28
+	+	105	62
+	+	102	58
+	+	107	27
+	+	111	0
+	+	106	27
+	+	105	63
+	+	52	18
+	+	56	30
+	+	104	0
+	+	110	0
+	+	108	49
+	+	109	28
+	+	108	37
+	+	106	38
+	+	107	38
+	+	108	38
+	+	109	61
+	+	108	11
+
+> /var/www/t-resa/lib/vendor/symfony/lib/util/sfContext.class.php
+	"	301	14
+
+> /var/www/t-resa/lib/vendor/symfony/lib/controller/sfController.class.php
+	"	529	3
+
+> /var/www/t-resa/lib/vendor/symfony/lib/event_dispatcher/sfEvent.php
+	"	35	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/tests/GoogleOpenIDTester.class.php
+	"	1	0
+
+> /var/www/t-resa/plugins/chCmsCompanyPlugin/lib/exception/chCmsCompanyNotAMemberSigninErrorException.class.php
+	"	18	0
+	.	18	0
+	+	3	0
+	+	18	0
+
+> /var/www/t-resa/plugins/chCmsCompanyPlugin/lib/exception/chCmsCompanyNotAMemberException.class.php
+	"	17	0
+	^	17	2
+	.	18	0
+	+	36	0
+	+	36	0
+	+	20	0
+	+	22	18
+	+	23	23
+	+	30	29
+	+	35	0
+	+	31	23
+	+	34	0
+	+	33	65
+	+	35	0
+	+	33	66
+	+	35	0
+	+	3	0
+	+	5	23
+	+	6	15
+	+	13	24
+	+	15	64
+	+	17	2
+	+	18	0
+
+> /var/www/t-resa/plugins/chCmsCompanyPlugin/lib/filter/chCmsCompanyFilter.class.php
+	"	15	56
+	^	15	57
+	.	18	0
+	+	3	0
+	+	5	23
+	+	6	20
+	+	13	31
+	+	15	39
+	+	18	0
+
+> /var/www/t-resa/plugins/chCmsBasePlugin/config/chCmsBasePluginConfiguration.class.php
+	"	70	0
+	.	78	0
+	+	70	0
+	+	78	0
+
+> /var/www/t-resa/plugins/chCmsBasePlugin/lib/filter/plugin/PluginchCmsBaseFilter.class.php
+	"	1	0
+
+> /var/www/t-resa/plugins/chCmsBasePlugin/lib/filter/chCmsBaseFilter.class.php
+	"	1	0
+	.	1	0
+	+	1	0
+
+> /var/www/t-resa/plugins/chCmsBasePlugin/lib/filter/chCmsBasePluginFilter.class.php
+	"	15	62
+	^	15	63
+	.	18	0
+	+	2	0
+	+	3	0
+	+	5	12
+	+	6	20
+	+	13	17
+	+	15	43
+	+	18	0
+	+	15	42
+	+	18	0
+
+> /var/www/t-resa/plugins/chCmsBasePlugin/lib/filter/plugin/PluginchCmsBasePluginFilter.class.php
+	"	28	0
+	^	27	69
+	.	31	0
+	+	49	0
+	+	49	0
+	+	33	0
+	+	35	26
+	+	36	20
+	+	3	0
+	+	5	12
+	+	6	20
+	+	13	39
+	+	15	49
+	+	18	0
+	+	23	37
+	+	18	18
+	+	29	27
+	+	31	0
+	+	26	0
+	+	28	0
+	+	26	11
+	+	25	34
+	+	26	33
+	+	27	55
+	+	31	0
+	+	26	59
+	+	31	0
+	+	27	68
+	+	31	0
+
+> /var/www/t-resa/lib/model/CompanyEntityQuery.php
+	"	64	23
+	^	65	17
+	.	491	0
+	+	58	8
+	+	53	49
+	+	58	18
+	+	60	10
+	+	57	0
+	+	56	0
+	+	55	63
+	+	62	35
+	+	61	48
+	+	62	0
+	+	65	9
+	+	64	21
+	+	491	0
+	+	491	0
+	+	62	45
+	+	491	0
+	+	65	16
+	+	491	0
+	+	64	23
+	+	491	0
+
+> /var/www/t-resa/test/unit/CompanyQueryTest.php
+	"	4	19
+	^	12	24
+	.	13	0
+	+	2	53
+	+	3	0
+	+	4	0
+	+	4	20
+	+	6	61
+	+	8	56
+	+	12	54
+	+	10	63
+	+	9	92
+	+	11	5
+	+	11	109
+	+	13	59
+	+	13	0
+	+	8	23
+	+	10	23
+	+	12	23
+	+	13	0
+	+	4	19
+	+	13	0
+
+> /var/www/t-resa/test/bootstrap/propel.php
+	"	31	0
+
+> /var/www/t-resa/test/unit/EventTest.php
+	"	9	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/i18n/messages.fr.xml
+	"	295	8
+	^	276	44
+	.	301	0
+	+	277	88
+	+	301	0
+	+	276	43
+	+	301	0
+	+	276	30
+	+	301	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/modules/chCmsFrontendAccount/templates/verifySuccess.php
+	"	1	0
+
+> /var/www/t-resa/plugins/chCmsGuardExtraPlugin/lib/BasechCmsGuardExtraConfig.class.php
+	"	57	0
+
+> /var/www/t-resa/plugins/chCmsBasePlugin/lib/asset/chCmsBaseAssets.class.php
+	"	87	122
+	^	87	123
+	.	104	0
+	+	79	96
+	+	104	0
+	+	79	124
+	+	104	0
+	+	87	122
+	+	104	0
+
+> /var/www/t-resa/web/js/jquery.validate.pack.js
+	"	1	0
+
+> /var/www/t-resa/test/fixtures/20_user_profiles.yml
+	"	132	4
+	^	120	97
+	.	120	97
+	+	117	7
+	+	118	17
+	+	119	37
+	+	120	97
+	+	120	97
+
+> /var/www/t-resa/plugins/chCmsExposeRoutingPlugin/web/js/routing.js
+	"	263	0

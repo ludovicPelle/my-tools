@@ -1,0 +1,15 @@
+($, undefined) {
+
+  /*
+   * Function who check if username already exist
+   */
+  function checkUserNameExist(username){
+
+  }
+
+  $('#sf_guard_user_username').delayAction({
+    'action': function() { checkUserNameExist($(this).val()); },
+    'delay': 1000
+  })
+
+})(jQuery);

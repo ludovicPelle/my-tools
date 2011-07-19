@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * Base components for the chCmsAdminMyAccountPlugin adminMyAssistants module.
+ * 
+ * @package     chCmsAdminMyAccountPlugin
+ * @subpackage  adminMyAssistants
+ * @author      Your name here
+ * @version     SVN: $Id$
+ */
+abstract class BaseadminMyAssistantsComponents extends chCmsAdminPanelComponents
+{
+  /**
+   * entry point for Index action
+   *
+   * @param sfWebRequest $request the user request
+   * @return 
+   */
+  public function executeIndex(sfWebRequest $request)
+  {
+    $this->company = $this->getUser()->getSelectedCompany(); 
+    $this->contractor = $this->getUser()->getCompanyEntity();
+    $this->collegues = $this->contractor->getCollegues();
+    $this->defaultRightsForm = new ContractorDefaultAssistantRightsForm($this->contractor);
+
+  }
+}

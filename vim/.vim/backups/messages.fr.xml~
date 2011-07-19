@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xliff PUBLIC "-//XLIFF//DTD XLIFF//EN"
+  "http://www.oasis-open.org/committees/xliff/documents/xliff.dtd">
+<xliff version="1.0">
+  <file source-language="EN" target-language="fr" datatype="plaintext"
+      original="messages" date="2009-05-28T12:11:22Z"
+      product-name="messages">
+    <body>
+      <trans-unit id="1">
+        <source>Your account has been created, you will recieve a confirmation mail.</source>
+        <target>Votre compte a bien été enregistré, vous allez recevoir un mail de confirmation.</target>
+      </trans-unit>
+      <trans-unit id="2">
+        <source>why register ?</source>
+        <target>pourquoi s'inscrire ?</target>
+      </trans-unit>
+      <trans-unit id="3">
+        <source>Create my account</source>
+        <target>Créer mon compte</target>
+      </trans-unit>
+      <trans-unit id="4">
+        <source>Create an account</source>
+        <target>Créer un compte</target>
+      </trans-unit>
+      <trans-unit id="5">
+        <source>Identification</source>
+        <target>Identification</target>
+      </trans-unit>
+      <trans-unit id="6">
+        <source>Sign in</source>
+        <target>Se connecter</target>
+      </trans-unit>
+      <trans-unit id="7">
+        <source>The username and/or password is invalid.</source>
+        <target>Le nom d'utilisateur ou le mot de passe est invalide.</target>
+      </trans-unit>
+      <trans-unit id="8">
+        <source><![CDATA[Your account is not activated. See <a href="%s">how to activate your account</a>.]]></source>
+        <target><![CDATA[Votre compte n'est pas activé. Rendez vous sur <a href="%s">comment activer votre compte</a>.]]></target>
+      </trans-unit>
+      <trans-unit id="9">
+        <source>How to activate your account</source>
+        <target>Comment activer votre compte</target>
+      </trans-unit>
+      <trans-unit id="10">
+        <source>Why you need to activate your account</source>
+        <target>Pourquoi vous devez activer votre compte</target>
+      </trans-unit>
+      <trans-unit id="11">
+        <source><![CDATA[When you registered, you recieved an email to confirm your registration.<br />In this email, there where a link to activate your account.<br />To complete activation, just click on this link, or copy-paste the displayed url within your browser adress bar.]]></source>
+        <target><![CDATA[Lors de la création de votre compte, vous avez reçu un mail pour confirmer votre inscription.<br />
+Dans cet e-mail il y a un lien pour activer votre compte.<br />
+Afin d'activer votre compte, il vous suffit de cliquer sur ce lien ou de copier coller l'adresse dans la barre d'adresse de votre navigateur.]]></target>
+      </trans-unit>
+      <trans-unit id="12">
+        <source><![CDATA[Activation is necessary to make sure you will recieve emails and alerts from the service.]]></source>
+        <target><![CDATA[L'activation est indispensable pour être sûr de recevoir les informations et alertes du service.]]></target>
+      </trans-unit>
+      <trans-unit id="13">
+        <source>get a new activation link</source>
+        <target>obtenir un nouveau lien d'activation</target>
+      </trans-unit>
+      <trans-unit id="14">
+        <source>get a new password</source>
+        <target>obtenir un nouveau mot de passe</target>
+      </trans-unit>
+      <trans-unit id="15">
+        <source>connexion screen</source>
+        <target>écran de connexion</target>
+      </trans-unit>
+      <trans-unit id="16">
+        <source>Unknown user.</source>
+        <target>L'utilisateur n'a pas pu être trouvé.</target>
+      </trans-unit>
+      <trans-unit id="17">
+        <source>This user is already activated.</source>
+        <target>Cet utilisateur est déjà activé, vous n'avez plus qu'à vous connecter.</target>
+      </trans-unit>
+      <trans-unit id="18">
+        <source>Activation key is invalid. Ask a new activation key.</source>
+        <target>La clé d'activation fournie n'est pas valide. Vous avez du recevoir une clé d'activation par mail, dans le cas contraire, demandez en une nouvelle.</target>
+      </trans-unit>
+      <trans-unit id="19">
+        <source>Your account is now active.</source>
+        <target>Votre compte est maintenant activé.</target>
+      </trans-unit>
+      <trans-unit id="20">
+        <source>New password has been sent to %email%.</source>
+        <target>Votre nouveau mot de passe a été envoyé à l'adresse %email%.</target>
+      </trans-unit>
+      <trans-unit id="21">
+        <source>reset my password</source>
+        <target>Réinitialiser mon mot de passe</target>
+      </trans-unit>
+      <trans-unit id="22">
+        <source>Reset my account password</source>
+        <target>Réinitialiser mon mot de passe</target>
+      </trans-unit>
+      <trans-unit id="23">
+        <source>e-mail address</source>
+        <target>addresse mail</target>
+      </trans-unit>
+      <trans-unit id="24">
+        <source>No user with this email.</source>
+        <target>Aucun utilisateur avec cet e-mail.</target>
+      </trans-unit>
+      <trans-unit id="25">
+        <source>Resend an activation link</source>
+        <target>Renvoyer un lien d'activation</target>
+      </trans-unit>
+      <trans-unit id="26">
+        <source>send my activation link</source>
+        <target>envoyer mon lien d'activation</target>
+      </trans-unit>
+      <trans-unit id="27">
+        <source>password</source>
+        <target>mot de passe</target>
+      </trans-unit>
+      <trans-unit id="28">
+        <source>profile</source>
+        <target>profil</target>
+      </trans-unit>
+      <trans-unit id="29">
+        <source>settings</source>
+        <target>paramètres</target>
+      </trans-unit>
+      <trans-unit id="30">
+        <source>calendar</source>
+        <target>agenda</target>
+      </trans-unit>
+      <trans-unit id="31">
+        <source>Your password has been updated, you will recieve a confirmation email.</source>
+        <target>Votre mot de passe a été modifié. Vous allez recevoir un e-mail de confirmation.</target>
+      </trans-unit>
+      <trans-unit id="32">
+        <source>Change my password</source>
+        <target>Modifier mon mot de passe</target>
+      </trans-unit>
+      <trans-unit id="33">
+        <source>change my password</source>
+        <target>Modifier mon mot de passe</target>
+      </trans-unit>
+      <trans-unit id="34">
+        <source>old password</source>
+        <target>Ancien mot de passe</target>
+      </trans-unit>
+      <trans-unit id="35">
+        <source>new password</source>
+        <target>Nouveau mot de passe</target>
+      </trans-unit>
+      <trans-unit id="36">
+        <source>confirm new password</source>
+        <target>Confirmer le nouveau mot de passe</target>
+      </trans-unit>
+      <trans-unit id="37">
+        <source>signout</source>
+        <target>Se déconnecter</target>
+      </trans-unit>
+      <trans-unit id="38">
+        <source>new password is not the same as the confirmation</source>
+        <target>Le nouveau mot de passe ne correspond pas avec la confirmation</target>
+      </trans-unit>
+      <trans-unit id="39">
+        <source>You have to provide your current password</source>
+        <target>Vous devez fournir votre mot de passe actuel</target>
+      </trans-unit>
+      <trans-unit id="40">
+        <source>provide your current password</source>
+        <target>Entrez votre mot de passe actuel</target>
+      </trans-unit>
+      <trans-unit id="41">
+        <source>enter the password you want to use now</source>
+        <target>Entrez le mot de passe que vous voulez utiliser à partir de maintenant</target>
+      </trans-unit>
+      <trans-unit id="42">
+        <source>confirm your new password</source>
+        <target>Confirmez votre nouveau mot de passe</target>
+      </trans-unit>
+      <trans-unit id="43">
+        <source>password should contain more than %min_length% characters</source>
+        <target>le mot de passe doit comporter plus de %min_length% caractères</target>
+      </trans-unit>
+      <trans-unit id="44">
+        <source>password should contain less than %max_length% characters</source>
+        <target>le mot de passe doit comporter moins de %max_length% caractères</target>
+      </trans-unit>
+      <trans-unit id="45">
+        <source>The two passwords must be the same.</source>
+        <target>Les deux mots de passe doivent être identiques.</target>
+      </trans-unit>
+      <trans-unit id="46">
+        <source>send me a mail with my new password</source>
+        <target>M'envoyer un mail avec mon nouveau mot de passe</target>
+      </trans-unit>
+      <trans-unit id="47">
+        <source>create an account</source>
+        <target>créer un compte</target>
+      </trans-unit>
+      <trans-unit id="48">
+        <source>Back to my dashboard</source>
+        <target>Retour à mon tableau de bord</target>
+      </trans-unit>
+      <trans-unit id="49">
+        <source>Save</source>
+        <target>Enregistrer</target>
+      </trans-unit>
+      <trans-unit id="50">
+        <source>Your account information has been updated.</source>
+        <target>Vos informations de compte ont été mises à jour.</target>
+      </trans-unit>
+      <trans-unit id="51">
+        <source>The values you submitted contains errors.</source>
+        <target>Les informations transmises contiennent des erreurs.</target>
+      </trans-unit>
+      <trans-unit id="52">
+        <source>Next step</source>
+        <target>Etape suivante</target>
+      </trans-unit>
+      <trans-unit id="53">
+        <source>Previous step</source>
+        <target>Etape précédente</target>
+      </trans-unit>
+      <trans-unit id="54">
+        <source>[-Inf,0]You should never see this|[1]|(1,+Inf] - Step %step% of %total%</source>
+        <target>[-Inf,0]Ne devrait pas être affiché|[1]|(1,+Inf] - Etape %step% sur %total%</target>
+      </trans-unit>
+      <trans-unit id="55">
+        <source>To ensure you are a human, you have to copy this security code.</source>
+        <target>Afin de nous assurer que vous êtes bien humain, veuillez copier ce code de sécurité.</target>
+      </trans-unit>
+      <trans-unit id="56">
+        <source>security code</source>
+        <target>code de sécurité</target>
+      </trans-unit>
+      <trans-unit id="57">
+        <source>Dashboard</source>
+        <target>Tableau de bord</target>
+      </trans-unit>
+      <trans-unit id="58">
+        <source>choose what you want to edit.</source>
+        <target>Que voulez-vous faire ?</target>
+      </trans-unit>
+      <trans-unit id="59">
+        <source>A link to reset your password has been sent to %email%.</source>
+        <target>Un lien pour regénérer votre mot de passe vous a été envoyé à l'adresse %email%</target>
+      </trans-unit>
+      <trans-unit id="60">
+        <source>Hello %name%,</source>
+        <target>Bonjour %name%</target>
+      </trans-unit>
+      <trans-unit id="61">
+        <source><![CDATA[You asked to reset your password for your account <b>%username%</b>.]]></source>
+        <target><![CDATA[Vous avez demandé un nouveau mot de passe pour votre compte <b>%username%</b>.]]></target>
+      </trans-unit>
+      <trans-unit id="62">
+        <source><![CDATA[To change your password click following link <a href="%url%">%url%</a>]]></source>
+        <target><![CDATA[Pour changer votre mot de passe, cliquez sur le lien suivant : <a href="%url%">%url%</a>]]></target>
+      </trans-unit>
+      <trans-unit id="63">
+        <source>You requested a new password.</source>
+        <target>Vous avez demandé un nouveau mot de passe.</target>
+      </trans-unit>
+      <trans-unit id="64">
+        <source>See you soon !</source>
+        <target>A bientôt !</target>
+      </trans-unit>
+      <trans-unit id="65">
+        <source><![CDATA[Your new password is: <b>%new_password%</b>]]></source>
+        <target><![CDATA[Votre nouveau mot de passe est : <b>%new_password%</b>]]></target>
+      </trans-unit>
+      <trans-unit id="66">
+        <source>This account (%email%) has already been activated.</source>
+        <target>Ce compte (%email%) est déjà activé.</target>
+      </trans-unit>
+      <trans-unit id="67">
+        <source><![CDATA[This  professional account does not exist.<br />If you want to get an account please contact us.]]></source>
+        <target><![CDATA[Vous n'avez pas accès à l'application professionnelle.<br />Pour obtenir un compte pro, contactez nous !]]></target>
+      </trans-unit>
+      <trans-unit id="68">
+        <source>Unable to contact openid provider identity.</source>
+        <target>Impossible d'entrer en contact avec le fournisseur.</target>
+      </trans-unit>
+      <trans-unit id="69">
+        <source>You must enter a provider identity.</source>
+        <target>Vous devez entrer un fournisseur d'identité.</target>
+      </trans-unit>
+      <trans-unit id="70">
+        <source>Provider</source>
+        <target>Fournisseur</target>
+      </trans-unit>
+      <trans-unit id="71">
+        <source>Connect</source>
+        <target>Se connecter</target>
+      </trans-unit>
+      <trans-unit id="72">
+        <source>Enter your openId to log in.</source>
+        <target>Entrez votre openId pour vous connecter.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

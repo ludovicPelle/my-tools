@@ -1,0 +1,48 @@
+<?php
+/**
+ * Configuration file of GoogleAuthenticationConfig module's
+ *
+ * @packaged GoogleAuthenticationConfig
+ * @subpackaged config
+ * @author Camille NERON <camille_neron@carpe-hora.com>
+ **/
+class GoogleAuthenticationConfig
+{
+  /**
+   * registerImplementation
+   *
+   * @return void
+   * @author Camille NERON <camille_neron@carpe-hora.com>
+   **/
+  public function initialize(sfContext $sfContext)
+  {
+  }
+
+  /**
+   * configure routes
+   *
+   * @return void
+   * @author Camille NERON <camille_neron@carpe-hora.com>
+   **/
+  static public function prependRoutes($routing)
+  {
+    $routing->prependRoute(
+              'signup_google_verify',
+              new sfRoute(
+                '/GoogleAuthentication/verify',
+                array('module' => 'GoogleAuthentication', 'action' => 'verify')));
+
+    $routing->prependRoute(
+              'signup_google_show_result',
+              new sfRequestRoute(
+                '/register/google/show-result',
+                array('module' => 'chCmsFrontendSignup', 'action' => 'showResult'),
+                array('sf_method' => array('get'))));
+
+    $routing->prependRoute(
+              'signup_google_url',
+              new sfRoute(
+                '/register/with/google',
+                array('module' => 'GoogleAuthentication', 'action' => 'redirect')));
+  }
+} // END class GoogleAuthenticationConfig

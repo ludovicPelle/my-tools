@@ -1,0 +1,109 @@
+<?php
+/**
+ * This file declare the chCmsMessageNotifierMail class.
+ *
+ * @package lib
+ * @subpackage notifier
+ * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-07-13
+ */
+
+/**
+ * class whose define notifierMail
+ */
+class chCmsMessageNotifierMail extends BasechCmsMessageNotifier
+{
+  /**
+   * listener to sendMessage to GuardUser
+   *
+   * @return null|true
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function sendUser(sfEvent $event)
+  {
+    if (true /*TODO here need control what user want*/ )
+    {
+      $guardUser      = $event->getSubject();
+      $to             = $guardUser->getProfile()->getMail();
+      $partial        = $event['partial'];
+      $vars           = $event['params'];
+
+      $this->send($to, $partial, $vars);
+
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * listener to sendMessage to Contact
+   *
+   * @return null|true
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function sendContact(sfEvent $event)
+  {
+
+  }
+
+  /**
+   * listener to sendMessage to Company
+   *
+   * @return null|true
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function sendCompany(sfEvent $event)
+  {
+
+  }
+
+  /**
+   * listener to sendMessage to CompanyEntity
+   *
+   * @return null|true
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function sendCompanyEntity(sfEvent $event)
+  {
+
+  }
+
+  /**
+   * send mail for given config
+   *
+   * @return null|true
+   **/
+  protected function send($to, $messagePartial, $vars = array())
+  {
+    $this->context->getConfiguration()->loadHelpers('Partial');
+
+    $module = $messagePartial['module'];
+    $partialMail = sprintf('%sMail', $messagePartial['action']);
+
+    $partialPath = $module.'/'.$partialMail;
+
+    $message = get_partial($partialPath, $vars);
+
+    // set title
+    $title = get_slot('mail_title', 'Please define a mail_title slot in your mail.');
+
+    // decorate
+    if (sfConfig::get('app_mail_decorator', false))
+    {
+      $message = get_partial(sfConfig::get('app_mail_decorator'), array('content' => $message));
+    }
+
+    $from_address = sfConfig::get('app_mail_from_address', 'contact@carpe-hora.com');
+    $from_name = sfConfig::get('app_mail_from_name', 'Carpe Hora');
+
+    var_dump($to);
+    var_dump($title);
+    var_dump($message);exit;
+    $this->context->getMailer()->composeAndSend(
+      array($from_address => $from_name),
+      $to,
+      $title,
+      $message);
+  }
+} // END OF chCmsMessageNotifierMail

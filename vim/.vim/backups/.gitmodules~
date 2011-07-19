@@ -1,0 +1,85 @@
+[submodule "plugins/chCmsAgendaPlugin"]
+	path = plugins/chCmsAgendaPlugin
+	url = git@gitch:chCmsAgendaPlugin.git
+[submodule "plugins/chCmsAssetsCompressorPlugin"]
+	path = plugins/chCmsAssetsCompressorPlugin
+	url = git@gitch:chCmsAssetsCompressorPlugin.git
+[submodule "plugins/chCmsBasePlugin"]
+	path = plugins/chCmsBasePlugin
+	url = git@gitch:chCmsBasePlugin.git
+[submodule "plugins/chCmsBugTrackerPlugin"]
+	path = plugins/chCmsBugTrackerPlugin
+	url = git@gitch:chCmsBugTrackerPlugin.git
+[submodule "plugins/chCmsContactPlugin"]
+	path = plugins/chCmsContactPlugin
+	url = git@gitch:chCmsContactPlugin.git
+[submodule "plugins/chCmsFaqPlugin"]
+	path = plugins/chCmsFaqPlugin
+	url = git@gitch:chCmsFaqPlugin.git
+[submodule "plugins/chCmsFormExtraPlugin"]
+	path = plugins/chCmsFormExtraPlugin
+	url = git@gitch:chCmsFormExtraPlugin.git
+[submodule "plugins/chCmsGuardExtraPlugin"]
+	path = plugins/chCmsGuardExtraPlugin
+	url = git@gitch:chCmsGuardExtraPlugin.git
+[submodule "plugins/chCmsVisitorPlugin"]
+	path = plugins/chCmsVisitorPlugin
+	url = git@gitch:chCmsVisitorPlugin.git
+[submodule "plugins/DbFinderPlugin"]
+	path = plugins/DbFinderPlugin
+	url = https://github.com/kriswallsmith/DbFinderPlugin.git
+[submodule "plugins/sfEasyGMapPlugin"]
+	path = plugins/sfEasyGMapPlugin
+	url = git@github.com:themouette/sfEasyGMapPlugin.git
+[submodule "plugins/sfFormExtraPlugin"]
+	path = plugins/sfFormExtraPlugin
+	url = git@gitch:sfFormExtraPlugin.git
+[submodule "plugins/sfFrTranslationPlugin"]
+	path = plugins/sfFrTranslationPlugin
+	url = git@gitch:sfFrTranslationPlugin.git
+[submodule "plugins/sfGuardPlugin"]
+	path = plugins/sfGuardPlugin
+	url = git@gitch:sfGuardPlugin.git
+[submodule "plugins/sfJqueryReloadedPlugin"]
+	path = plugins/sfJqueryReloadedPlugin
+	url = https://github.com/davidsblom/sfJqueryReloadedPlugin.git
+[submodule "plugins/sfPropel15Plugin"]
+	path = plugins/sfPropel15Plugin
+	url = git://github.com/Carpe-Hora/sfPropel15Plugin.git
+[submodule "plugins/sfTaskExtraPlugin"]
+	path = plugins/sfTaskExtraPlugin
+	url = git://github.com/Carpe-Hora/sfTaskExtraPlugin.git
+[submodule "plugins/sfThumbnailPlugin"]
+	path = plugins/sfThumbnailPlugin
+	url = https://github.com/davidsblom/sfThumbnailPlugin.git
+[submodule "lib/vendor/cssmin"]
+	path = lib/vendor/cssmin
+	url = git@gitch:cssmin.git
+[submodule "plugins/chCmsApplicationPlugin"]
+	path = plugins/chCmsApplicationPlugin
+	url = git@gitch:chCmsApplicationPlugin.git
+[submodule "plugins/chCmsAdminTresaPlugin"]
+	path = plugins/chCmsAdminTresaPlugin
+	url = git@gitch:chCmsAdminTresaPlugin.git
+[submodule "plugins/chCmsAdminAgendaPlugin"]
+	path = plugins/chCmsAdminAgendaPlugin
+	url = git@gitch:chCmsAdminAgendaPlugin.git
+[submodule "plugins/chCmsAdminCompanyPlugin"]
+	path = plugins/chCmsAdminCompanyPlugin
+	url = git@gitch:chCmsAdminCompanyPlugin.git
+[submodule "plugins/chCmsAdminContractorPlugin"]
+	path = plugins/chCmsAdminContractorPlugin
+	url = git@gitch:chCmsAdminContractorPlugin.git
+[submodule "plugins/chCmsWebdavPlugin"]
+	path = plugins/chCmsWebdavPlugin
+	url = git@gitch:chCmsWebdavPlugin.git
+[submodule "plugins/chCmsAdminMyAccountPlugin"]
+	path = plugins/chCmsAdminMyAccountPlugin
+	url = git@gitch:chCmsAdminMyAccountPlugin
+[submodule "plugins/chCmsExposeRoutingPlugin"]
+	path = plugins/chCmsExposeRoutingPlugin
+<<<<<<< HEAD
+	url = git://github.com/Carpe-Hora/chCmsExposeRoutingPlugin.git
+=======
+	url = git@github.com:themouette/chCmsExposeRoutingPlugin.git
+>>>>>>> added plugins/chCmsExposeRoutingPlugin

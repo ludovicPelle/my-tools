@@ -1,0 +1,91 @@
+(function($, undefined) {
+  /*
+   * Get current value of username input
+   */
+  function getUser(){
+    return $('#sf_guard_user_username').val();
+  }
+
+  /*
+   * Get current value of username input
+   */
+  function getMail(){
+    return $('#sf_guard_user_mail').val();
+  }
+
+  /**
+   * Toggles the search loading indicator.
+   */
+  function toggleLoadingIndicatorUser() {
+    $('#sf_guard_user_username').toggleClass('ui-autocomplete-loading');
+  }
+
+  /**
+   * Toggles the search loading indicator.
+   */
+  function toggleLoadingIndicatorMail() {
+    $('#sf_guard_user_mail').toggleClass('ui-autocomplete-loading');
+  }
+
+
+  /* check username exist */
+  $(function(){
+    //Apply lodaing class on delayedActionsEvent
+
+    $('#sf_guard_user_username').bind('delayedActionTriggered', toggleLoadingIndicatorUser)
+    .delayAction({
+      'action': {
+        url: Routing.generate('username_search'),
+        data: function() { return 'username=' + getUser(); },
+        dataType: 'json',
+        error: function(data) {
+          Tresa.openErrorDialog("Erreur lors de l'appel AJAX.");
+        },
+        success: function(data) {
+          var $td = $('.username-check-field');
+          $td.empty();
+          $td.append(data.icon);
+          if(!data.ok){
+            Tresa.openErrorDialog(data.message);
+          }
+          toggleLoadingIndicatorUser();
+        }
+      },
+      'delay': 350
+    });
+  });
+
+
+
+function testMail(mail){
+    var rege = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+    return rege.test($('#sf_guard_user_mail').val());
+}
+  /* check mail exist */
+  $(function(){
+   $('#sf_guard_user_mail').delayAction({
+   });
+    //Apply lodaing class on delayedActionsEvent
+   $('#sf_guard_user_mail').bind('delayedActionTriggered', toggleLoadingIndicatorMail)
+    .delayAction({
+      'action': {
+        url: Routing.generate('mail_search'),
+        data: function() { return 'mail=' + getMail(); },
+        dataType: 'json',
+        error: function(data) {
+          Tresa.openErrorDialog("Erreur lors de l'appel AJAX.");
+        },
+        success: function(data) {
+          var $td = $('.mail-check-field');
+          $td.empty();
+          if(!testMail(getMail)){
+            data.icon=('<span class="ch-icon ch-icon-silk ch-icon-silk-cross"></span>');
+          }
+            $td.append(data.icon);
+          toggleLoadingIndicatorMail();
+        }
+      },
+      'delay': 350
+    });
+  });
+})(jQuery);

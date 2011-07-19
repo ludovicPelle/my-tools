@@ -1,0 +1,303 @@
+<?php
+
+/**
+ * This file declare the chCmsCompanyPluginUser class.
+ *
+ * @package     chCmsCompanyPlugin
+ * @subpackage  user
+ * @author      Your name here
+ * @version     SVN: $Id$
+ */
+
+/**
+ * static methods used to register chCmsCompanyPlugin user function
+ */
+class chCmsCompanyPluginUser
+{
+  /**
+   * listen to user.method_not_found event and call plugin function
+   * if exists.
+   * this method is set up in chCmsCompanyPluginConfiguration::initialize
+   *
+   * @param sfEvent $event the user.method_not_found event.
+   */
+  public static function methodNotFound(sfEvent $event)
+  {
+    if (method_exists('chCmsCompanyPluginUser', $event['method']))
+    {
+      $event->setReturnValue(call_user_func_array(
+        array('chCmsCompanyPluginUser', $event['method']),
+        array_merge(array($event->getSubject()), $event['arguments'])
+      ));
+      return true;
+    }
+  }
+  /**
+   * listen to user.pre_signin event
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public static function listenToPreSigninEvent(sfEvent $event)
+  {
+    $guardUser  = $event['guard_user'];
+    $context    = $event['context'];
+    $sf_user    = $context->getUser();
+
+    if (! CompanyQuery::countGuardUserIsValidMemberOf($guardUser))
+    {
+       $sf_user->addInfo('This professional account does not exist.<br />If you want to get an account please contact us.');
+       throw new chCmsCompanyNotAMemberSigninErrorException('The user does not belong to any company');
+    }
+  }
+
+  /**
+   * listen to user.post_signin event
+   * select company given by company_id parameter or first available.
+   *
+   * @return void
+   **/
+  public static function listenToPostSigninEvent(sfEvent $event)
+  {
+    try
+    {
+      if (!in_array('proCompany', sfConfig::get('sf_enabled_modules')))
+      {
+        return false;
+      }
+
+      $sf_user = $event->getSubject();
+      $request = $event['context']->getRequest();
+      $company_id = $request->getParameter('company_id', false);
+
+      sfContext::getInstance()->getLogger()->info(sprintf('try to select company "%d"', $company_id));
+      if ($company_id && $sf_user->isCompanyMine($company_id))
+      {
+        // select given company
+        $sf_user->selectCompany($sf_user->getCompany($company_id));
+      }
+      else
+      {
+        // default: select first available company
+        $sf_user->getSelectedCompany();
+      }
+    }
+    catch(chCmsCompanyNotAMemberException $e)
+    {
+      throw new chCmsCompanyNotAMemberSigninErrorException($e->getMessage());
+    }
+  }
+
+  /**
+   * undocumented function
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public static function listenToNotAMemberSigninErrorException(sfEvent $event)
+  {
+    $sf_user = $event->getSubject();
+    $context = $event['context'];
+    $exception = $event['exception'];
+    $controller = $context->getController();
+
+    if (! ($exception instanceof chCmsCompanyNotAMemberSigninErrorException))
+    {
+      return null;
+    }
+
+    $sf_user->signout();
+    $sf_user->addError($exception->getMessage());
+    $controller->redirect($sf_user->getSigninKickOutRedirectUrl($context->getRequest(), $this->getContext()), 0, 302);
+    throw new sfStopException();
+    return true;
+  }
+
+
+  /* define here your user methods. */
+
+  /**
+   * company list for connected user
+   **/
+  protected static $companies;
+
+  /**
+   * parse a company argument to return the company id
+   * will try to:
+   * - treat data as number
+   * - get it's id
+   * - retrieve selected company
+   * - throw a logic exception
+   *
+   * @return Integer
+   * @throw LogicException unable to parse
+   **/
+  public static function parseCompanyArgument($sf_user, $company)
+  {
+    if (is_numeric($company))
+    {
+      return (int) $company;
+    }
+
+    if (is_string($company) && $c = CompanyQuery::create()->findOneBySlug($company))
+    {
+      $company = $c;
+    }
+
+    // have a getId() ?
+    if (is_callable(array($company, 'getId')))
+    {
+      return (int) $company->getId();
+    }
+
+    // selected company id ?
+    if (is_null($company) && ($selected_id = $sf_user->getAttribute('SELECTED_COMPANY_ID', false)))
+    {
+      return $selected_id;
+    }
+
+    // well unable to resolve it.
+    throw new LogicException('unable to parse given company id.');
+  }
+
+  /**
+   * count the companies the user is in
+   *
+   * @return void
+   **/
+  public static function countCompanies($sf_user)
+  {
+    return count($sf_user->getCompanies());
+  }
+
+  /**
+   * return the company list for the user
+   *
+   * @return array
+   */
+  public static function getCompanies($sf_user)
+  {
+    if (is_null(self::$companies))
+    {
+      if ($sf_user->isAuthenticated())
+      {
+        self::$companies = CompanyQuery::create()
+                            ->leftJoinCompanyEntity()
+                            ->useCompanyEntityQuery()
+                              ->filterByUserId($sf_user->getId())
+                            ->endUse()
+                            ->orderByName('ASC')
+                            ->find();
+      }
+      else
+      {
+        return array();
+      }
+    }
+
+    return self::$companies;
+  }
+
+  /**
+   * checks wether otr not given company is one of the user's
+   *
+   * @param int|Company $company the company to determine wether it is accessible for the user.
+   * @return Boolean
+   **/
+  public static function isCompanyMine($sf_user, $company)
+  {
+    $companyId = $sf_user->parseCompanyArgument($company);
+
+    foreach ($sf_user->getCompanies() as $c)
+    {
+      if ($sf_user->parseCompanyArgument($c) === $companyId)
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public static function getCompanyEntity($sf_user, $company = null)
+  {
+    if (!$sf_user->isAuthenticated() || !$sf_user->countCompanies())
+    {
+      throw new sfSecurityException('No company entity for user');
+    }
+    return $sf_user->getGuardUser()->getCompanyEntity(is_null($company) ? $sf_user->getSelectedCompany() : $company);
+  }
+
+  /**
+   * change the selected company in session.
+   * @param Company|Integer $company the company or company id to select
+   * @return myUser
+   * @throws sfSecurityException if the company is not accessible to this user.
+   */
+  public static function selectCompany($sf_user, $company)
+  {
+    $company = $sf_user->parseCompanyArgument($company);
+
+    if ($sf_user->isCompanyMine($company))
+    {
+      $sf_user->setAttribute('SELECTED_COMPANY_ID', $company);
+      return $sf_user;
+    }
+
+    throw new sfSecurityException(sprintf('company with id "%s" is not accessible by this user', $company));
+  }
+
+  /**
+   * return the current selected company
+   *
+   * @return Company
+   * @throws sfSecurityException if no company is available or user is no more member of selected company.
+   **/
+  public static function getSelectedCompany($sf_user)
+  {
+    if (!$sf_user->countCompanies())
+    {
+      throw new chCmsCompanyNotAMemberException('The user does not belong to any company');
+    }
+
+    $companies = $sf_user->getCompanies();
+
+    if (!($selected_id = $sf_user->getAttribute('SELECTED_COMPANY_ID', false)))
+    {
+      $sf_user->selectCompany($companies[0]);
+      return $companies[0];
+    }
+
+    return $sf_user->getCompany($selected_id);
+  }
+
+  /**
+   * find company with $company_id in user companies
+   *
+   * @param Integer $company_id the company to retrieve
+   * @return Company
+   * @throws sfSecurityException if no company is available or user is not member of company.
+   **/
+  static public function getCompany($sf_user, $company_id)
+  {
+    $company_id = $sf_user->parseCompanyArgument($company_id);
+    $companies = $sf_user->getCompanies();
+
+    // browse until current is found
+    foreach ($companies as $company)
+    {
+      if ($company_id === $sf_user->parseCompanyArgument($company))
+      {
+        return $company;
+      }
+    }
+
+    // now try to fetch a public company
+    if ($company = CompanyQuery::findByIdForUser($company_id, $sf_user))
+    {
+      return $company;
+    }
+
+    // still there ?
+    throw new sfSecurityException(sprintf('The company "%s" is not one of the user', $company_id));
+  }
+}

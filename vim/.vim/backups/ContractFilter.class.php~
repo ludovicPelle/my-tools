@@ -1,0 +1,43 @@
+<?php
+/**
+ * This file declare the ContractFilter class.
+ *
+ * @package package
+ * @subpackage subpackage
+ * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-06-27
+ */
+
+/**
+ * Class with no description
+ */
+class ContractFilter extends sfFilter
+{
+  /**
+   * undocumented function
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function execute($filterChain)
+  {
+    $user = $this->getContext()->getUser();
+    $response = $this->getContext()->getResponse();
+
+    if ($user->isAuthenticated() &&
+        $user->getSelectedCompany()->getContract()->hasRetailer() )
+    {
+      $retailer = $user->getSelectedCompany()->getContract()->getRetailer();
+      $path = '/retailer/%retailer%/css/%retailer%.css';
+
+      $response->addStylesheet(strtr($path, array('%retailer%' => $retailer->getSlug())), sfWebResponse::LAST,array('no_archive' => true));
+//      $response->setRetailerThemeStylesheet($retailer);
+      $this->getContext()->getEventDispatcher()->notify(new sfEvent($this, 'application.log', array('level' => sfLogger::INFO,
+                                sprintf('add retailer %s stylesheet', $retailer->getName()))));
+    }
+
+    $filterChain->execute();
+
+  }
+} // END OF ContractFilter

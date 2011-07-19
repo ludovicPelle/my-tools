@@ -1,0 +1,607 @@
+<?php
+
+// vim: ft=symfony.php.sftest
+
+$app = 'users';
+include(dirname(__FILE__).'/../../../../test/bootstrap/functional.php');
+$browser = ProviderTestFunctional::initialize(true);
+
+$yahooForm = new YahooRegistrationForm();
+$yahooFormWithoutMail = new YahooRegistrationForm();
+unset($yahooFormWithoutMail['mail']);
+
+$browser
+  ->signin('demo', 'demo')
+  ->revoqueProvider("carpehoratest@gmail.com")
+  ->revoqueProvider("carpe_hora_test@yahoo.fr")
+  ->revoqueProvider("http://carpe-hora-test.myopenid.com/")
+  ->signout()
+
+  ->info("CASE already used mail")
+    ->gotoLoginPage()
+    ->signinYahooAccount(array('openid_ext1_value_email' => 'demo@user.com'))
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'chCmsFrontendSignup')
+      ->isParameter('action', 'register')
+    ->end()
+
+    // check the response
+    ->with('response')->begin()
+      ->isStatusCode(200)
+      ->isValid()
+      ->checkForm($yahooForm)
+      ->checkForm(new AssociateForm())
+      ->checkElement('button:contains("Associer")')
+      ->checkElement('button:contains("Enregistrer")')
+    ->end()
+    // unvalid form to account
+    ->info('try create account from provider with bad info')
+      ->click('Enregistrer')
+      //check routing is OK
+      ->with('request')->begin()
+        ->isMethod('post')
+        ->isParameter('module', 'chCmsFrontendSignup')
+        ->isParameter('action', 'create')
+      ->end()
+      ->with('form')->begin()
+        ->hasErrors(true)
+        ->isError('mail','invalid')
+      ->end() // end on form block
+  // end of block CASE already used mail
+
+  ->info("CASE new provider")
+    ->gotoLoginPage()
+    ->signinYahooAccount()
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'chCmsFrontendSignup')
+      ->isParameter('action', 'register')
+    ->end()
+
+    // check the response
+    ->with('response')->begin()
+      ->isStatusCode(200)
+      ->isValid()
+      ->checkForm($yahooFormWithoutMail)
+      ->checkForm(new AssociateForm())
+      ->checkElement('button:contains("Associer")')
+      ->checkElement('button:contains("Enregistrer")')
+    ->end()
+
+    // valid form to create account
+    ->info('create account from provider')
+      ->click('Enregistrer')
+      //check routing is OK
+      ->with('request')->begin()
+        ->isMethod('post')
+        ->isParameter('module', 'chCmsFrontendSignup')
+        ->isParameter('action', 'create')
+      ->end()
+
+      ->with('response')->begin()
+        ->isRedirected()
+      ->end() // end on request block
+
+      ->with('user')->begin()
+        ->isAuthenticated()
+      ->end() // end on user block
+
+      ->with('propel')->begin()
+        ->check('YahooAuthentication', array('account_identifier' => 'carpe_hora_test@yahoo.fr'))
+      ->end() // end on propel block
+
+      ->followRedirect()
+
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'chCmsFrontendSignup')
+      ->isParameter('action', 'register')
+    ->end()
+
+    // check the response
+    ->with('response')->begin()
+      ->isRedirected()
+    ->end()
+    ->followRedirect()
+
+    ->with('request')->begin()
+      ->isParameter('module', 'chCmsFrontendAccount')
+      ->isParameter('action', 'index')
+    ->end() // end on response block
+
+  // end of block CASE already used mail
+
+  ->signout()
+
+  ->info("CASE existing provider: directly connect")
+    ->gotoLoginPage()
+    ->signinYahooAccount()
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'chCmsFrontendAccount')
+      ->isParameter('action', 'index')
+    ->end()
+
+    // check the response
+    ->with('response')->begin()
+      ->isStatusCode(200)
+      ->isValid()
+      ->checkElement('h3', '/Tableau de bord/')
+      ->checkElement('li a:contains("Se déconnecter [Carpe Hora]")')
+    ->end()
+
+  ->checkProviderIsUnrevocable('carpe_hora_test@yahoo.fr')
+  ->addPassword('tototo')
+  ;
+  $browser->test()->ok(!$browser->getUser()->hasDummyPassword(), 'password was updated');
+  $browser
+  ->revoqueProvider('carpe_hora_test@yahoo.fr')
+  ->signin('Carpe Hora', 'tototo')
+  ->signout()
+  //Try associate
+
+  ->info("Associate new provider")
+    ->gotoLoginPage()
+    ->signinYahooAccount()
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'chCmsFrontendSignup')
+      ->isParameter('action', 'register')
+    ->end()
+
+    // check the response
+    ->with('response')->begin()
+      ->isStatusCode(200)
+      ->isValid()
+      ->checkForm($yahooFormWithoutMail)
+      ->checkForm(new AssociateForm())
+      ->checkElement('button:contains("Associer")')
+      ->checkElement('button:contains("Enregistrer")')
+    ->end()
+
+    // unvalid form to associate account
+    ->info('associate account from provider bad pass')
+      ->click('Associer',array('associate' => array('username'=> 'demo', 'password' =>'o')))
+      //check routing is OK
+      ->with('request')->begin()
+        ->isMethod('post')
+        ->isParameter('module', 'Associate')
+        ->isParameter('action', 'create')
+      ->end()
+
+      ->with('form')->begin()
+        ->hasErrors(true)
+        ->isError('username', 'invalid')
+      ->end() // end on form block
+
+      ->with('response')->begin()
+        ->isRedirected()
+      ->end() // end on request block
+
+      ->with('user')->begin()
+        ->isAuthenticated(false)
+      ->end() // end on user block
+
+      ->followRedirect()
+
+    // check the response
+    ->with('request')->begin()
+      ->isParameter('module', 'chCmsFrontendSignup')
+      ->isParameter('action', 'register')
+    ->end() // end on response block
+
+
+    // unvalid form to associate account
+    ->info('associate account from provider bad user')
+      ->click('Associer',array('associate' => array('username'=> 'de', 'password' =>'o')))
+      //check routing is OK
+      ->with('request')->begin()
+        ->isMethod('post')
+        ->isParameter('module', 'Associate')
+        ->isParameter('action', 'create')
+      ->end()
+
+      ->with('form')->begin()
+        ->hasErrors(true)
+        ->isError('username', 'invalid')
+      ->end() // end on form block
+      ->with('response')->begin()
+        ->isRedirected()
+      ->end() // end on request block
+
+      ->with('user')->begin()
+        ->isAuthenticated(false)
+      ->end() // end on user block
+
+      ->followRedirect()
+
+    // check the response
+    ->with('request')->begin()
+      ->isParameter('module', 'chCmsFrontendSignup')
+      ->isParameter('action', 'register')
+    ->end() // end on response block
+
+    // valid form to associate account
+    ->info('associate account from provider')
+      ->click('Associer',array('associate' => array('username'=> 'demo', 'password' =>'demo')))
+      //check routing is OK
+      ->with('request')->begin()
+        ->isMethod('post')
+        ->isParameter('module', 'Associate')
+        ->isParameter('action', 'create')
+      ->end()
+
+      ->with('form')->begin()
+        ->hasErrors(false)
+      ->end() // end on form block
+
+      ->with('response')->begin()
+        ->isRedirected()
+      ->end() // end on request block
+
+      ->with('user')->begin()
+        ->isAuthenticated()
+      ->end() // end on user block
+
+      ->with('propel')->begin()
+        ->check('YahooAuthentication', array('account_identifier' => 'carpe_hora_test@yahoo.fr'))
+      ->end() // end on propel block
+exit();/*
+      ->followRedirect()
+
+    // check the response
+    ->with('request')->begin()
+      ->isParameter('module', 'chCmsFrontendAccount')
+      ->isParameter('action', 'index')
+    ->end() // end on response block
+
+;
+  //Now check if fisrt url asked (here myProfile) is the redirect url  when signin success
+$browser = ProviderTestFunctional::initialize(true);
+$browser
+  ->signin('demo', 'demo')
+  ->revoqueProvider('carpe_hora_test@yahoo.fr')
+  ->signout()
+  ->get('/compte/myProfile')
+  //check routing is OK
+  ->with('request')->begin()
+    ->isMethod('get')
+    ->isParameter('module', 'chCmsFrontendAccount')
+    ->isParameter('action', 'myProfile')
+  ->end()
+
+  ->isForwardedTo('chCmsFrontendAccount', 'signin')
+
+  ->with('user')->begin()
+    ->isAttribute('referer', 'http://localhost/index.php/compte/myProfile')
+  ->end() // end on user block
+
+  // check the response
+  ->with('response')->begin()
+    ->isStatusCode(401)
+    ->isValid()
+    // insert your tests here
+    ->checkForm(new chCmsFormSignin)
+  ->end()
+
+  ->info("Try signup with bad information")
+    ->signinYahooAccount(array('openid_ext1_value_email' => 'demo@user.com'))
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'chCmsFrontendSignup')
+      ->isParameter('action', 'register')
+    ->end()
+
+    // check the response
+    ->with('response')->begin()
+      ->isStatusCode(200)
+      ->isValid()
+      ->checkForm($yahooForm)
+      ->checkForm(new AssociateForm())
+      ->checkElement('button:contains("Associer")')
+      ->checkElement('button:contains("Enregistrer")')
+    ->end()
+
+    // check refere is still here
+    ->with('user')->begin()
+      ->isAttribute('referer', 'http://localhost/index.php/compte/myProfile')
+    ->end() // end on user block
+
+    // unvalid form to account
+    ->info('try create account from provider with bad info')
+      ->click('Enregistrer')
+      //check routing is OK
+      ->with('request')->begin()
+        ->isMethod('post')
+        ->isParameter('module', 'chCmsFrontendSignup')
+        ->isParameter('action', 'create')
+      ->end()
+
+      // check refere is still here
+      ->with('user')->begin()
+        ->isAttribute('referer', 'http://localhost/index.php/compte/myProfile')
+      ->end() // end on user block
+
+      ->with('form')->begin()
+        ->hasErrors(true)
+        ->isError('mail','invalid')
+      ->end() // end on form block
+
+      ->with('response')->begin()
+        ->isStatusCode(200)
+        ->isValid()
+        ->debug()
+        ->checkForm($yahooForm)
+      ->end() // end on response block
+  // end of block CASE already used mail
+
+  ->info('cancel authentication')
+    ->click('demo')
+
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'chCmsFrontendSignup')
+      ->isParameter('action', 'cancelAuthentication')
+    ->end()
+
+    ->with('response')->begin()
+      ->isRedirected()
+    ->end() // end on response block
+
+    ->followRedirect()
+
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'chCmsFrontendSignup')
+      ->isParameter('action', 'register')
+    ->end()
+
+    // check refere is still here
+    ->with('user')->begin()
+      ->isAttribute('referer', 'http://localhost/index.php/compte/myProfile')
+    ->end() // end on user block
+
+    // check the response
+    ->with('response')->begin()
+      ->isStatusCode(200)
+      ->isValid()
+    ->end()
+  // end of click demo@user.com
+
+  ->info("Now good singup with provider: where are we redirected?")
+    ->signinYahooAccount()
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'chCmsFrontendSignup')
+      ->isParameter('action', 'register')
+    ->end()
+
+    // check refere is still here
+    ->with('user')->begin()
+      ->isAttribute('referer', 'http://localhost/index.php/compte/myProfile')
+    ->end() // end on user block
+
+    // check the response
+    ->with('response')->begin()
+      ->isStatusCode(200)
+      ->isValid()
+      ->checkForm($yahooFormWithoutMail)
+      ->checkForm(new AssociateForm())
+      ->checkElement('button:contains("Associer")')
+      ->checkElement('button:contains("Enregistrer")')
+    ->end()
+
+    // valid form to create account
+    ->info('create account from provider')
+      ->click('Enregistrer')
+      //check routing is OK
+      ->with('request')->begin()
+        ->isMethod('post')
+        ->isParameter('module', 'chCmsFrontendSignup')
+        ->isParameter('action', 'create')
+      ->end()
+      ->with('form')->begin()
+        ->hasErrors(false)
+      ->end() // end on form block
+      ->with('response')->begin()
+        ->isRedirected()
+      ->end() // end on request block
+
+      ->with('user')->begin()
+        ->isAuthenticated()
+      ->end() // end on user block
+
+      ->with('propel')->begin()
+        ->check('YahooAuthentication', array('account_identifier' => 'carpe_hora_test@yahoo.fr'))
+      ->end() // end on propel block
+
+    ->followRedirect()
+
+    ->with('request')->begin()
+      ->isParameter('module', 'chCmsFrontendAccount')
+      ->isParameter('action', 'myProfile')
+    ->end() // end on response block
+; // end of get /copte/
+
+
+//Now check if returnUrl param is the  url  when signin success
+$browser = ProviderTestFunctional::initialize(true);
+$browser
+  ->signin('demo', 'demo')
+  ->revoqueProvider('carpe_hora_test@yahoo.fr')
+  ->signout()
+  ->get('/login', array('return_url' => 'http://localhost/my/oauth/clients'))
+  //check routing is OK
+  ->with('request')->begin()
+    ->isMethod('get')
+    ->isParameter('module', 'chCmsFrontendAccount')
+    ->isParameter('action', 'signin')
+    ->isParameter('return_url', 'http://localhost/my/oauth/clients')
+  ->end()
+
+  // check the response
+  ->with('response')->begin()
+    ->isStatusCode(401)
+    ->isValid()
+    // insert your tests here
+    ->checkForm(new chCmsFormSignin)
+  ->end()
+
+  ->info("Try signup with bad information")
+    ->signinYahooAccount(array('openid_ext1_value_email' => 'demo@user.com'))
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'chCmsFrontendSignup')
+      ->isParameter('action', 'register')
+    ->end()
+
+    // check refere is still here
+    ->with('user')->begin()
+      ->isAttribute('referer', 'http://localhost/my/oauth/clients')
+    ->end() // end on user block
+
+    // check the response
+    ->with('response')->begin()
+      ->isStatusCode(200)
+      ->isValid()
+      ->checkForm($yahooForm)
+      ->checkForm(new AssociateForm())
+      ->checkElement('button:contains("Associer")')
+      ->checkElement('button:contains("Enregistrer")')
+        ->debug()
+    ->end()
+
+    // unvalid form to account
+    ->info('try create account from provider with bad info')
+      ->click('Enregistrer')
+      //check routing is OK
+      ->with('request')->begin()
+        ->isMethod('post')
+        ->isParameter('module', 'chCmsFrontendSignup')
+        ->isParameter('action', 'create')
+      ->end()
+
+      // check refere is still here
+      ->with('user')->begin()
+        ->isAttribute('referer', 'http://localhost/my/oauth/clients')
+      ->end() // end on user block
+
+      ->with('form')->begin()
+        ->hasErrors(true)
+        ->isError('mail','invalid')
+      ->end() // end on form block
+
+      ->with('response')->begin()
+        ->isStatusCode(200)
+        ->isValid()
+        ->checkForm($yahooForm)
+      ->end() // end on response block
+  // end of block CASE already used mail
+
+  ->info('cancel authentication')
+    ->click('demo')
+
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'chCmsFrontendSignup')
+      ->isParameter('action', 'cancelAuthentication')
+    ->end()
+
+    // check refere is still here
+    ->with('user')->begin()
+      ->isAttribute('referer', 'http://localhost/my/oauth/clients')
+    ->end() // end on user block
+
+    ->with('response')->begin()
+      ->isRedirected()
+    ->end() // end on response block
+
+    ->followRedirect()
+
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'chCmsFrontendSignup')
+      ->isParameter('action', 'register')
+    ->end()
+
+    // check refere is still here
+    ->with('user')->begin()
+      ->isAttribute('referer', 'http://localhost/my/oauth/clients')
+    ->end() // end on user block
+
+    // check the response
+    ->with('response')->begin()
+      ->isStatusCode(200)
+      ->isValid()
+    ->end()
+  // end of click demo@user.com
+
+  ->info("Now good singup with provider: where are we redirected?")
+    ->signinYahooAccount()
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'chCmsFrontendSignup')
+      ->isParameter('action', 'register')
+    ->end()
+
+    // check refere is still here
+    ->with('user')->begin()
+      ->isAttribute('referer', 'http://localhost/my/oauth/clients')
+    ->end() // end on user block
+
+    // check the response
+    ->with('response')->begin()
+      ->isStatusCode(200)
+      ->isValid()
+      ->checkForm($yahooFormWithoutMail)
+      ->checkForm(new AssociateForm())
+      ->checkElement('button:contains("Associer")')
+      ->checkElement('button:contains("Enregistrer")')
+    ->end()
+
+    // valid form to create account
+    ->info('create account from provider')
+      ->click('Enregistrer')
+      //check routing is OK
+      ->with('request')->begin()
+        ->isMethod('post')
+        ->isParameter('module', 'chCmsFrontendSignup')
+        ->isParameter('action', 'create')
+      ->end()
+      ->with('form')->begin()
+        ->hasErrors(false)
+      ->end() // end on form block
+      ->with('response')->begin()
+        ->isRedirected()
+      ->end() // end on request block
+
+      ->with('user')->begin()
+        ->isAuthenticated()
+      ->end() // end on user block
+
+      ->with('propel')->begin()
+        ->check('YahooAuthentication', array('account_identifier' => 'carpe_hora_test@yahoo.fr'))
+      ->end() // end on propel block
+
+    ->followRedirect()
+
+    ->with('request')->begin()
+      ->isParameter('module', 'oAuthMyClients')
+      ->isParameter('action', 'index')
+    ->end() // end on response block
+  // end of get /copte/
+;
+;

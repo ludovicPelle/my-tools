@@ -1,0 +1,132 @@
+<?php
+/**
+ * This file declare the chCmsApplicationAdminRoute class.
+ *
+ * @package chCmsApplicationPlugin
+ * @subpackage Routing
+ * @author Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2010
+ * @since 2010-12-16
+ */
+
+/**
+ * the route class for application administration
+ * You can pass following:
+ */
+class chCmsApplicationAdminRoute extends sfRequestRoute
+{
+  /**
+   * defines the main route for AdminMenu.
+   * the url is only a prefix path. All the added subroutes are prefixed with it.
+   * you can pass following parameters :
+   * - params:
+   *    * module: the admin module
+   *    * action the default admin action
+   *  - options:
+   *    * action_action: the module and action to use to redirect actions
+   *    * component_action: the module and action to use to forward components
+   *    * route_prefix: the route name prefix 
+   *    * main_routing: the main routing instance
+   */
+  public function __construct($pattern, $defaults = array(), $requirements = array(), $options = array())
+  {
+    $pattern = sprintf('/%s', join('/', array_filter(explode('/', $pattern))));
+    $options['url_prefix'] = $pattern;
+    parent::__construct($pattern, $defaults, $requirements, $options);
+  }
+
+  /**
+   * determines wether or not the url matches the current route
+   *
+   * @return boolean
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function matchesUrl($url, $context = array())
+  {
+    if(0 !== strpos($url, $this->getPrefixUrl()))
+    {
+      return false;
+    }
+    
+    $this->context = $context;
+    $this->url =$url;
+
+    return $this->getDefaults();
+  }
+
+  protected $context, $url;
+
+  /**
+   * dispatch the request for given user.
+   *
+   * @return array
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function dispatch($menu, $action)
+  {
+    $context = array_merge(array('user' => $action->getUser()), $this->context);
+
+    if(false === $parameters = $menu->matchesUrl($this->url, $context))
+    {
+      sfContext::getInstance()->getLogger()->info('does not match the menu route');
+      return false;
+    }
+
+    $request = $action->getRequest();
+    $route = isset($parameters['sf_route']) ? $parameters['sf_route'] : null;
+
+    if (!$route)
+    {
+      throw new sfError404Exception('no matching route !');
+    }
+
+    if( $parameters['module'] === $request->getParameter('module') && 
+        $parameters['action'] === $request->getParameter('action'))
+    {
+      //we are here, no need to forward !
+      return false;
+    }
+
+    //now bind route:
+    $route->bind($context, $parameters);
+
+    $request->getAttributeHolder()->add($parameters);
+    //$request->getParameterHolder()->add($parameters);
+    $action->forward($parameters['module'], $parameters['action']);
+  }
+
+  /**
+   * @access PrefixUrl
+   *
+   * @return string the prefix url
+   */
+  public function getPrefixUrl()
+  {
+    $opt = $this->getOptions();
+    return $opt['url_prefix'];
+  }
+  
+  /**
+   * returns the route prefix
+   *
+   * @return string
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function getRoutePrefix()
+  {
+    $opt = $this->getOptions();
+    return $opt['route_prefix'];
+  }
+
+  /**
+   * checks wether or not the current user has credentials to access this route.
+   * always true for chCmsApplicationAdminRoute
+   *
+   * @param sfUser $user the current logged in user
+   * @return boolean
+   */
+  public function isAccessibleForUser($user)
+  {
+    return true;
+  }
+} // END OF chCmsApplicationAdminRoute

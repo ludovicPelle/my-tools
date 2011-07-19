@@ -1,0 +1,11 @@
+<?php
+
+class usersConfiguration extends sfApplicationConfiguration
+{
+  public function configure()
+  {
+    $this->dispatch('user.register_success', array('chCmsGuardExtraUser', 'autoSigninAfterRegister'));
+    // just in case ;)
+    //$this->dispatcher('user.register_success', array('chCmsGuardExtraUser', 'autoSigninAfterRegisterOnlyIfProvider'));
+  }
+}

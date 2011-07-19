@@ -1,0 +1,148 @@
+<?php
+/**
+ * This file declare the chCmsGuardExtraUserMessages class.
+ *
+ * @package chCmsGuardExtra
+ * @subpackage user
+ * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-07-12
+ */
+
+/**
+ * This class contains all method to prepare sf_user messages
+ */
+class chCmsGuardExtraUserMessages
+{
+  static public function methodNotFound(sfEvent $event)
+  {
+    if (method_exists('chCmsGuardExtraUserMessages', $event['method']))
+    {
+      $event->setReturnValue(call_user_func_array(
+        array('chCmsGuardExtraUserMessages', $event['method']),
+        array_merge(array($event->getSubject()), $event['arguments'])
+      ));
+
+      return true;
+    }
+  }
+
+  /**
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public static function sendActivationMessage($sf_user, $activation)
+  {
+    $guardUser = $activation->getUser();
+
+    $partial = array('module' => 'chCmsGuardExtraMessage',
+                         'action' => 'activate');
+
+    $params = array('activation'  => $activation, 'guard_user' => $guardUser);
+
+    sfGuardMessageManager::sendMessage($guardUser, $partial, $params);
+  }
+
+  /**
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public static function sendResendActivationMessage($activation)
+  {
+    $guardUser = $activation->getGuardUser();
+
+    $messagePartial = array('module' => 'chCmsGuardExtraMessage',
+                         'action' => 'activate');
+
+    $params = array('activation'  => $activation);
+
+    sfGuardMessageManager::sendMessage($guardUser, $messagePartial, $params);
+
+  }
+
+  /**
+   *
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public static function sendWelcomeMessage($guardUser)
+  {
+
+    $messagePartial = array('module' => 'chCmsGuardExtraMessage',
+                         'action' => 'welcome');
+
+    sfGuardMessageManager::sendMessage($guardUser, $messagePartial);
+  }
+
+  /**
+   * undocumented function
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public static function sendWelcomeProviderMessage($guardUser, $auth)
+  {
+    $messagePartial = array('module' => 'chCmsGuardExtraMessage',
+                         'action' => 'welcomeProvider');
+    $params = array ('provider' => $auth,
+                     'guardUser' => $guardUser);
+    sfGuardMessageManager::sendMessage($guardUser, $messagePartial, $params);
+  }
+
+
+  /**
+   * undocumented function
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public static function sendAddedProviderMessage($guardUser, $auth)
+  {
+    $messagePartial = array('module' => 'chCmsGuardExtraMessage',
+                         'action' => 'addedProvider');
+    $params = array ('provider' => $auth);
+    sfGuardMessageManager::sendMessage($guardUser, $messagePartial, $params);
+  }
+  /**
+   * undocumented function
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public static function sendNewPasswordMessage($guardUser, $password)
+  {
+    $messagePartial = array('module' => 'chCmsGuardExtraMessage',
+                         'action' => 'newPassword');
+    $params = array ('password' => $password);
+    sfGuardMessageManager::sendMessage($guardUser, $messagePartial, $params);
+  }
+
+  /**
+   * undocumented function
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public static function sendModifiedPasswordMessage($guardUser, $password)
+  {
+    $messagePartial = array('module' => 'chCmsGuardExtraMessage',
+                         'action' => 'modifiedPassword');
+    $params = array ('password' => $password);
+    sfGuardMessageManager::sendMessage($guardUser, $messagePartial, $params);
+  }
+
+  /**
+   * undocumented function
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public static function sendLostPasswordMessage($guardUser, $link)
+  {
+    $messagePartial = array('module' => 'chCmsGuardExtraMessage',
+                         'action' => 'lostPassword');
+    $params = array ('link' => $link);
+    sfGuardMessageManager::sendMessage($guardUser, $messagePartial, $params);
+  }
+} // END OF chCmsGuardExtraUserMessages

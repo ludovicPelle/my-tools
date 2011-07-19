@@ -1,0 +1,85 @@
+<?php
+/**
+ * This file declare the OpenIdConsumerTester class.
+ *
+ * @package chCmsGuardExtraPlugin
+ * @subpackage test
+ * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-06-23
+ */
+
+/**
+ * consumer used for tests in openId
+ */
+class OpenIdConsumerTester extends OpenIdConsumer
+{
+  protected $valid_params = array(
+      'openid_assoc_handle' => '{HMAC-SHA1}{4e038e0e}{cMaWrg==}',
+      'openid_ax_count_contact_email' => '0',
+      'openid_ax_count_namePerson' => '0',
+      'openid_ax_count_namePerson_first' => '0',
+      'openid_ax_count_namePerson_friendly' => '0',
+      'openid_ax_count_namePerson_last' => '0',
+      'openid_ax_mode' => 'fetch_response',
+      'openid_ax_type_contact_email' => 'http://axschema.org/contact/email',
+      'openid_ax_type_namePerson' => 'http://axschema.org/namePerson',
+      'openid_ax_type_namePerson_first' => 'http://axschema.org/namePerson/first',
+      'openid_ax_type_namePerson_friendly' => 'http://axschema.org/namePerson/friendly',
+      'openid_ax_type_namePerson_last' => 'http://axschema.org/namePerson/last',
+      'openid_claimed_id' => 'http://carpe-hora-test.myopenid.com/',
+      'openid_identity' => 'http://carpe-hora-test.myopenid.com/',
+      'openid_mode' => 'id_res',
+      'openid_ns' => 'http://specs.openid.net/auth/2.0',
+      'openid_ns_ax' => 'http://openid.net/srv/ax/1.0',
+      'openid_ns_sreg' => 'http://openid.net/extensions/sreg/1.1',
+      'openid_op_endpoint' => 'http://www.myopenid.com/server',
+      'openid_response_nonce' => '2011-06-23T19:03:42ZfKjVC7',
+      'openid_return_to' => 'http://www.t-resa.loc/users_dev.php/register/openid/verify',
+      'openid_sig' => 'Jm+myuy5nzqqCl5CVc96Qq7ULN8=',
+      'openid_signed' => 'assoc_handle,ax.count.contact_email,ax.count.namePerson,ax.count.namePerson_first,ax.count.namePerson_friendly,ax.count.namePerson_last,ax.mode,ax.type.contact_email,ax.type.namePerson,ax.type.namePerson_first,ax.type.namePerson_friendly,ax.type.namePerson_last,claimed_id,identity,mode,ns,ns.ax,ns.sreg,op_endpoint,response_nonce,return_to,signed,sreg.email,sreg.fullname,sreg.nickname',
+      'openid_sreg_email' => 'myopenid@carpe-hora.com',
+      'openid_sreg_fullname' => 'Carpe Hora',
+      'openid_sreg_nickname' => 'carpehora',
+   );
+
+
+  public function __construct($realm, sfRequest $request, $provider)
+  {
+    parent::__construct($realm, $request, $provider);
+  }
+
+  public function prepareValidRequest(sfRequest $request, $params = array())
+  {
+    $this->valid_params = array_merge($this->valid_params, $params);
+
+    $request->getParameterHolder()->add($this->valid_params);
+
+  //  $request->getParameterHolder()->set('openid_sig', $this->publicComputeSignature($this->valid_params));
+  }
+
+  public function getValidParam($key)
+  {
+    return $this->valid_params[$key];
+  }
+
+  public function getValidParams()
+  {
+    return $this->valid_params;
+  }
+
+  public function publicCheckHandle()
+  {
+    return $this->checkHandle();
+  }
+
+  public function publicGetHandle()
+  {
+    return $this->getHandle();
+  }
+
+  public function publicComputeSignature(array $params)
+  {
+    return $this->computeSignature($params);
+  }
+} // END OF OpenIdConsumerTester

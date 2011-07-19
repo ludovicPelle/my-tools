@@ -1,0 +1,98 @@
+<?php
+
+/**
+ * Base actions for the chCmsAdminContractorPlugin adminContractor module.
+ * 
+ * @package     chCmsAdminContractorPlugin
+ * @subpackage  module-adminContractor
+ * @author      Julien Muetton <julien_muetton@carpe-hora.com>
+ * @version     SVN: $Id$
+ */
+abstract class BaseadminContractorActions extends BasechCmsAdminContractorPluginAction
+{
+  /**
+   * the user creation action.
+   *
+   * @param sfWebRequest $request the user request
+   * @return 
+   */
+  public function executeCreate(sfWebRequest $request)
+  {
+    AdminContractorEntityTools::protectCreate($this->getRoute(), $this->getUser());
+    $this->company = $this->getUser()->getSelectedCompany();;
+
+    $this->form = new ContractorAdminProfileForm();
+
+    //this has to be done for new template
+    $this->lookupForUserForm = new LookupForUserForm(array(), array('autocomplete_url' => chCmsAdminContractorPluginRouting::getLookupForUserAcUrl()));
+
+
+    $lookupForm = new LookupForUserHiddenForm(array(),array('autocomplete_url' => chCmsAdminContractorPluginRouting::getLookupForUserAcUrl()));
+    $this->userToBind = $lookupForm->getsfGuardUser();
+    $lookupForm->bind($request->getParameter($lookupForm->getName()));
+
+    if ($lookupForm->isValid())
+    {
+      $this->form->getObject()->setUser($this->userToBind);
+    }
+    else 
+    {
+      $this->getuser()->addError('<ul><li>'. join('<li></li>', $lookupForm->getFormattedErrors()) . '</li></ul>');
+      $this->setTemplate('contractor_new');
+    }
+
+    $this->form->getObject()->setCompany($this->getUser()->getSelectedCompany());
+
+    $this->processForm($this->form, 'contractor_new');
+  }
+
+  /**
+   * entry point for Update action
+   *
+   * @param sfWebRequest $request the user request
+   * @return 
+   */
+  public function executeUpdate(sfWebRequest $request)
+  {
+    AdminContractorEntityTools::protectEdit($this->getRoute(), $this->getUser());
+
+    $this->contractor = $this->getRoute()->getObject();
+    $this->company = $this->getUser()->getSelectedCompany();;
+
+    $this->form = new ContractorAdminProfileForm($this->contractor);
+
+    //this has to be done for edit template
+    $this->lookupForUserForm = new LookupForUserForm(array(), array('autocomplete_url' => chCmsAdminContractorPluginRouting::getLookupForUserAcUrl()));
+
+    $this->processForm($this->form, 'contractor_edit');
+  }
+  
+  /**
+   * entry point for Delete action
+   *
+   * @param sfWebRequest $request the user request
+   * @return 
+   */
+  public function executeDelete(sfWebRequest $request)
+  {
+    $request->checkCSRFProtection();
+    $company = $this->getUser()->getSelectedCompany();
+    
+    if ($contractor = AdminContractorEntityTools::protectDelete($this->getRoute(), $this->getUser()))
+    {
+      try
+      {
+        $contractor->delete();
+        $this->getUser()->addInfo('%contractor% n\'est plus membre de %company%', array(
+																		'%contractor%' => $contractor->getCompanyName(), 
+																		'%company%' => $company->getName()));
+      }
+      catch(Exception $e)
+      {
+        return $this->renderError('Erreur technique inconnue');
+      }
+    }
+    
+    return $this->renderResult(array(), null);
+  }
+}

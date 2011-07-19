@@ -1,0 +1,13 @@
+<?php include_admin_panel_title('Editerles droits par défaut des  %assistant% de %contractor_name%',array('%assistant%' => vocabulary('assistant',2),
+                                                                                       '%contractor_name%' => $contractor
+                                                                                       )); ?>
+<?php include_partial("adminContractorAssistants/contractorEditDefaultAssistanceLink", array(
+      'form' =>$defaultRightsForm,
+      'group' => $group,
+      'contractor' => $contractor,
+      'company' => $contractor->getCompany()
+      ))
+      ?>
+<?php 
+// vim:ft=php.html.sftemplate
+?>

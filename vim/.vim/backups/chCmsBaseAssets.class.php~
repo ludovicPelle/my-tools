@@ -1,0 +1,104 @@
+<?php
+/**
+ * This file declare the chCmsBaseAssets class.
+ *
+ * @package chCmsBasePlugin
+ * @subpackage lib
+ * @author Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-05-12
+ */
+
+/**
+ * class used to manipulate assets
+ */
+class chCmsBaseAssets
+{
+  protected static $config = array();
+
+  /**
+   * regiter all asstes into the response object
+   *
+   * @return void
+   **/
+  public static function registerAssets($response, $sf_user)
+  {
+    self::$config['jQueryVersion'] = chTools::get('jquery_version', '1.4.4');
+    self::$config['uiVersion']     = chTools::get('ui_version', '1.8');
+    self::$config['theme']         = $sf_user->getTheme();
+    self::$config['debug']         = chTools::get('sf_debug', false);
+
+    self::registerStylesheets($response, self::$config['debug']);
+    self::registerScripts($response, self::$config['debug']);
+  }
+
+  /**
+   * register stylesheets into response.
+   * when debug is true, local include is used
+   *
+   * @param sfWebResponse $response current request response
+   * @param boolean       $debug    use debug include ?
+   * @return void
+   **/
+  protected static function registerStylesheets($response, $debug = false)
+  {
+    // include reset
+    $response->addStylesheet('/chCmsBasePlugin/css/reset-min.css', sfWebResponse::MIDDLE);
+
+    // include jqueryui theme
+    $response->addStylesheet('/chCmsBasePlugin/css/themes/'.self::$config['theme'].'/jquery-ui-'.self::$config['uiVersion'].'.custom.css', sfWebResponse::FIRST);
+
+    // include main.css (base + theme)
+    $response->addStylesheet('/chCmsBasePlugin/css/main.css', sfWebResponse::MIDDLE);
+    $response->addStylesheet('/chCmsBasePlugin/css/themes/'.self::$config['theme'].'/main.css', sfWebResponse::MIDDLE);
+
+    // include icons
+    $response->addStylesheet('/chCmsBasePlugin/css/silk.css', sfWebResponse::MIDDLE);
+    $response->addStylesheet('/chCmsBasePlugin/css/social.css', sfWebResponse::MIDDLE);
+    $response->addStylesheet('/chCmsBasePlugin/css/icojoy.css', sfWebResponse::MIDDLE);
+
+    // include plugins
+    $response->addStylesheet('/chCmsBasePlugin/css/jquery.qtip.css', sfWebResponse::MIDDLE);
+    $response->addStylesheet('/chCmsBasePlugin/css/ui.notify.css', sfWebResponse::MIDDLE);
+    $response->addStylesheet('/chCmsBasePlugin/css/uniform/jquery.uniform.css', sfWebResponse::MIDDLE);
+    $response->addStylesheet('/chCmsBasePlugin/css/themes/'.self::$config['theme'].'/uniform/jquery.uniform.css', sfWebResponse::MIDDLE);
+  }
+
+  /**
+   * register scripts into response.
+   * when debug is true, local include is used.
+   *
+   * @param sfWebResponse $response current request response
+   * @param boolean       $debug    use debug include ?
+   * @return void
+   **/
+  protected static function registerScripts($response, $debug = false)
+  {
+    if (self::$config['debug'])
+    {
+      $response->addJavaScript('/chCmsBasePlugin/js/debug/jquery-'.self::$config['jQueryVersion'].'.js', sfWebResponse::FIRST);
+      $response->addJavaScript('/chCmsBasePlugin/js/debug/jquery-ui-'.self::$config['uiVersion'].'.custom.js');
+      $response->addJavascript('/chCmsBasePlugin/js/debug/jquery.qtip.js', sfWebResponse::MIDDLE);
+      $response->addJavascript('/chCmsBasePlugin/js/debug/jquery.uniform.js', sfWebResponse::MIDDLE);
+      $response->addJavascript('/chCmsBasePlugin/js/debug/jquery.notify.js', sfWebResponse::MIDDLE);
+    }
+    else
+    {
+      $response->addJavaScript('/chCmsBasePlugin/js/jquery-'.self::$config['jQueryVersion'].'.min.js');
+      $response->addJavaScript('/chCmsBasePlugin/js/jquery-ui-'.self::$config['uiVersion'].'.custom.min.js');
+      $response->addJavascript('/chCmsBasePlugin/js/debug/jquery.qtip.js', sfWebResponse::MIDDLE);
+      $response->addJavascript('/chCmsBasePlugin/js/debug/jquery.notify.js', sfWebResponse::MIDDLE);
+      $response->addJavascript('/chCmsBasePlugin/js/jquery.uniform.min.js', sfWebResponse::MIDDLE);
+    }
+
+    $response->addJavaScript('/chCmsBasePlugin/js/i18n/jquery-ui-i18n.js');
+    $response->addJavaScript('/chCmsBasePlugin/js/jquery.cookie.js');
+
+    // theme related script(s)
+    $response->addJavascript('/chCmsBasePlugin/js/themes/'.self::$config['theme'].'/theme.js', sfWebResponse::MIDDLE);
+    $response->addJavaScript('/chCmsBasePlugin/js/jquery.livequery.js', sfWebResponse::MIDDLE);
+
+    // application script
+    $response->addJavaScript('/chCmsBasePlugin/js/app.js');
+  }
+} // END OF chCmsBaseAssets

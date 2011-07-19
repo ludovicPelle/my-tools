@@ -1,0 +1,246 @@
+/**
+ * Utility classes
+ */
+
+.hidden {
+  display: none;
+}
+
+.inline_block {
+  display: inline-block;
+}
+
+.r_float {
+  float: right;
+}
+
+.l_float {
+  float: left;
+}
+
+.c_align {
+  text-align: center;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.not_clickable {
+  cursor: default;
+}
+
+.helpable {
+  cursor: help;
+}
+
+.spaced_layout {
+  padding: 10px;
+}
+
+.large_input {
+  height: 40px;
+}
+
+.large_input input {
+  width: 100%;
+  height: 100%;
+  font-size: 25px;
+}
+
+.spaceTop {
+  margin-top: 15px;
+}
+
+
+/**
+ * Contacts page specific
+ */
+
+/** Contact dashboard */
+
+#dashboard_content {
+  margin: auto;
+  padding:36px;
+  width: 300px;
+  position: relative;
+  top: 200px;
+  text-align: center;
+  background-image: url("/chCmsBasePlugin/images/social/t-resa-48x48.png");
+  background-repeat:no-repeat;
+  background-position: 50% 0%;
+}
+
+#dashboard_content > span {
+  margin: auto;
+  margin-bottom: 15px;
+}
+
+#dashboard_add_link {
+  margin-top: 30px;
+}
+
+
+/** Search Form */
+
+input#search_term {
+  width: 100%;
+  height: 25px;
+}
+
+input.search_mode {
+  background: url(/chCmsBasePlugin/images/silk/magnifier.png) no-repeat right;
+}
+
+.labelifyHighlight {
+  color: grey;
+}
+
+input.load_mode {
+  background: url(/images/pro/load.gif) no-repeat right;
+}
+
+#search_layout_container form {
+  margin: 0;
+  padding-top: 5px;
+}
+
+/** Results list */
+
+.selected_contact {
+  font-weight: bold;
+}
+
+ul#contacts_list li {
+  line-height: 16px;
+  width: 100%;
+  display: inline-block;
+}
+
+ul#contacts_list li.even {
+  background-color: #EEE;
+}
+
+ul#contacts_list li img {
+  margin: 3px 5px;
+  float: left;
+  height: 32px;
+  width: 32px;
+}
+
+ul#contacts_list li a {
+  color: black;
+  margin: 12px 5px;
+  text-decoration: none;
+  float: left;
+}
+
+ul#contacts_list li a:hover {
+  text-decoration: underline;
+}
+
+span.contact_control {
+  float: right;
+  width: 16px;
+  height: 16px;
+  margin: 12px 3px 5px 5px;
+}
+
+span.contact_control_show {
+  background: url(/chCmsBasePlugin/images/silk/control_play_blue.png) no-repeat;
+}
+
+span.contact_control_hide {
+  background: url(/chCmsBasePlugin/images/silk/control_play_blue_reversed.png) no-repeat;
+}
+
+
+/** Search action bar */
+
+#search_layout_container .ui-layout-south {
+  overflow: hidden;
+}
+
+#add_button {
+  width: 100%;
+  min-height: 30px;
+}
+
+/** Form titles */
+
+#contact_form_table h2 {
+  display: inline-block;
+}
+
+#contact_form_table th a {
+  margin-top: 8px;
+}
+
+/* Other */
+
+.full_height_layout_container {
+  height:100%;
+  overflow: visible;
+}
+
+#contact_form_table {
+  width: 99%;
+}
+
+#contact_form_table th > label {
+  font-size: 1.4em;
+  font-weight: normal;
+}
+
+.search_field_container {
+  padding-right: 10px;
+}
+
+#del_button {
+  margin-right: 10px;
+}
+
+#bottom_infos_ul {
+  float: left;
+}
+
+#bottom_infos_ul > li {
+  display: inline-block;
+  padding: 0 5px;
+}
+
+table tbody th {
+  text-align: left;
+  vertical-align: middle;
+}
+
+.contact_button {
+  margin-top: 10px;
+}
+
+.itemDeleted {
+  background-color: #FFD4D4;
+}
+
+.fieldModified {
+  border: 1px dashed #FF0000;
+}
+
+/** Visibility */
+
+#visibility_selector {
+  display: block;
+}
+
+#visibility_viewer {
+  margin-top: 4px;
+  width: 45px;
+  display: inline-block;
+}
+
+#name_container {
+  display: inline-block;
+  height: 38px;
+  width: 94%;
+  float: right;
+}

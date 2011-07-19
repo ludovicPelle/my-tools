@@ -1,0 +1,339 @@
+<?php
+/**
+ * This file declare the chCmsAdminContractorPluginRouting class.
+ *
+ * @package chCmsAdminContractorPlugin
+ * @subpackage routing
+ * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-05-25
+ */
+
+/**
+ * define the routing for plugin
+ */
+class chCmsAdminContractorPluginRouting
+{
+  /**
+   * listen to the admin panel init event
+   *
+   * @return void
+   **/
+  public static function listenToAdminMenuInitEvent(sfEvent $event)
+  {
+    foreach (sfConfig::get('sf_enabled_modules') as $module)
+    {
+      if (    0 === strpos($module, 'adminContractor') 
+          &&  is_callable(array(
+                        'chCmsAdminContractorPluginRouting', 
+                        ($prependRouteMethod = sprintf('prepend%sRoutes', ucfirst($module))))))
+      {
+        call_user_func(array('chCmsAdminContractorPluginRouting', $prependRouteMethod), /* menu */ $event->getSubject(), $event['user']);
+      }
+    }
+  }
+
+  /**
+   * return the autocomplete url for lookup form
+   *
+   * @return string
+   **/
+  public static function getLookupForUserAcUrl()
+  {
+    return self::getContractorGroup(AdminMenu::getInstance(), AdminMenu::getUser())->generateUrl('lookup_for_user');
+  }
+
+  /**
+   * get the default menu group unless on is given.
+   *
+   * @param AdminMenu         $menu   the admin menu
+   * @param [AdminMenuGroup|String] $group the given admin group or it's name
+   * @return AdminMenuGroup
+   **/
+  public static function getAgendaGroup($menu, $user, $group=null)
+  {
+    if (!is_null($group))
+    {
+      $group = AdminMenu::getInstance()->getGroup($group);
+    }
+
+    return chCmsAdminAgendaPluginRouting::getAgendaGroup($menu, $user, $group);
+  }
+
+  /**
+   * get the default menu group unless on is given.
+   *
+   * @param AdminMenu         $menu   the admin menu
+   * @param [AdminMenuGroup|String] $group the given admin group or it's name
+   * @return AdminMenuGroup
+   **/
+  public static function getContractorGroup($menu, $user, $group=null)
+  {
+    if (!is_null($group))
+    {
+      return AdminMenu::getInstance()->getGroup($group);
+    }
+    $company = $user->getSelectedCompany();
+    $contractor = $company->getVocabulary('contractor');
+    $contractors = $company->getVocabulary('contractor', 2);
+
+    return $menu
+              ->addGroup(
+                        'contractor',                 // group_id
+                        ucfirst($contractors),        // menu entry
+                        sprintf('/%s', $contractors), // url prefix
+                        'icon=icojoy-calculator-32'   // html options
+                      );
+  }
+
+  /**
+   * register adminContractor module admin routes
+   * requires :
+   * - adminContractorUser module
+   * - adminContractorCustomProfile module
+   *
+   * @param AdminMenu               $menu   the admin menu
+   * @param [AdminGroupMenu|string] $group  the group
+   * @return void
+   **/
+  public static function prependAdminContractorRoutes($menu, $user, $group = null)
+  {
+    $group = self::getContractorGroup($menu, $user, $group);
+
+    $group
+        ->addRouteCollection('contractor', array(
+                    'model' => 'Contractor',
+                    'column' => 'id',
+                    'module' => 'adminContractor',
+                    'credentials' => 'admin_edit_contractor',
+                    'with_show' => false),
+                    'personnel')
+        ->addPropelPanel('contractor', 
+                          array(), 
+                          array(),
+                          array('credentials' => array(array('admin_edit_contractor', 'admin_edit_assistants')), 'model' => 'Contractor', 
+                                'type' => 'list', 'column' => "id",
+                                'module'=> 'adminContractor', 'component' => 'index'),
+                          'personnel')
+        ->addMenuEntry('contractor', 'Liste');
+  }
+
+  /**
+   * register adminContractorUser module admin routes
+   * requires :
+   * - adminContractor module
+   * - adminContractorCustomProfile module
+   *
+   * @param AdminMenu               $menu   the admin menu
+   * @param [AdminGroupMenu|string] $group  the group
+   * @return void
+   **/
+  public static function prependAdminContractorUserRoutes($menu, $user, $group = null)
+  {
+    $group = self::getContractorGroup($menu, $user, $group);
+
+    $group
+        ->addActionRoute('lookup_for_user', 
+                          array('module'=> 'adminContractorUser', 'action' => 'lookupForUser'), 
+                          array('sf_method' => array('GET', 'HEAD')),
+                          array('credentials' => 'admin_edit_contractor'),
+                          '/search/user')
+        ->addPropelAction('contractor_bind', 
+                          array('module'=> 'adminContractorUser', 'action' => 'bind'), 
+                          array('sf_method' => array('GET', 'HEAD'), 'id' => '\d+' ),
+                          array('credentials' => 'admin_edit_contractor', 'model' => 'Contractor', 'type' => 'object'),
+                          ':id/bind')
+        ->addPropelAction('contractor_unbind', 
+                          array('module'=> 'adminContractorUser', 'action' => 'unbind'), 
+                          array('sf_method' => array('GET', 'HEAD'), 'id' => '\d+'),
+                          array('credentials' => 'admin_edit_contractor', 'model' => 'Contractor', 'type' => 'object'),
+                          ':id/unbind')
+        ->addActionRoute('contractor_populate_from_user', 
+                          array('module'=> 'adminContractorUser', 'action' => 'populateFromUser'), 
+                          array('sf_method' => array('GET', 'HEAD'), 'id' => '\d+'),
+                          array('credentials' => 'admin_edit_contractor'),
+                          '/popuplate-from-user')
+        ->addActionRoute('contractor_reset_populate_user', 
+                          array('module'=> 'adminContractorUser', 'action' => 'resetPopulatedUser'), 
+                          array('sf_method' => array('GET', 'HEAD'), 'id' => '\d+'),
+                          array('credentials' => 'admin_edit_contractor'),
+                          '/reset-populated-user');
+  }
+
+  /**
+   * register adminContractorCustomprofile module admin routes
+   * requires :
+   * - adminContractorUser module
+   * - adminContractor module
+   *
+   * @param AdminMenu               $menu   the admin menu
+   * @param [AdminGroupMenu|string] $group  the group
+   * @return void
+   **/
+  public static function prependAdminContractorCustomProfileRoutes($menu, $user, $group = null)
+  {
+    $group = self::getContractorGroup($menu, $user, $group);
+
+    $group
+        ->addRouteCollection('employer_profile',array(
+                      'model' => 'CompanyEntityExtraFormField',
+                      'column' => 'id',
+                      'module' => 'adminContractorCustomProfile', 
+                      'credentials' => 'admin_edit_contractor',
+                      'with_show' => false))
+        ->addMenuEntry('employer_profile', 'Profil complémentaire');
+  }
+
+  /**
+   * register adminContractorCredentials module admin routes
+   * requires :
+   * - nothing
+   *
+   * @param AdminMenu               $menu   the admin menu
+   * @param [AdminGroupMenu|string] $group  the group
+   * @return void
+   **/
+  public static function prependAdminContractorCredentialsRoutes($menu, $user, $group = null)
+  {
+    $group = self::getContractorGroup($menu, $user, $group);
+
+    $group
+        ->addPropelPanel('rights', 
+                          array(), 
+                          array(),
+                          array('credentials' => 'admin_edit_contractor', 'model' => 'Contractor', 
+                                'type' => 'list', 'query_methods' => array('joinWithCompanyRights'),
+                                'module'=> 'adminContractorCredentials', 'component' => 'index'),
+                          'droits-acces')
+        ->addPropelAction('rights_update', 
+                          array('module'=> 'adminContractorCredentials', 'action' => 'update'), 
+                          array(),
+                          array('credentials' => 'admin_edit_contractor', 'model' => 'Contractor', 
+                                'type' => 'list', 'query_methods' => array('joinWithCompanyRights')),
+                          'droits-acces')
+        ->addMenuEntry('rights', 'Droits d\'accès');
+  }
+
+  /**
+   * register adminContractorAssistants module admin routes
+   * requires :
+   * - adminContractor (for the index panel)
+   *
+   * @param AdminMenu               $menu   the admin menu
+   * @param [AdminGroupMenu|string] $group  the group
+   * @return void
+   **/
+  public static function prependAdminContractorAssistantsRoutes($menu, $user, $group = null)
+  {
+    $group = self::getContractorGroup($menu, $user, $group);
+
+    $group
+        ->addPanelRoute('assistant_list',
+                          array(),
+                          array( 'contractor_id' => '\d+' ), 
+                          array('module' => 'adminContractorAssistants', 'component' => 'editAssistantsList', 'credentials' => 'admin_edit_assistants'),
+                          '/:contractor_id/assistants'
+                      )
+        //Without ajax we shunt it
+        ->addPanelRoute('assistant_edit_without_ajax',
+                          array(),
+                          array( 'contractor_id' => '\d+' ), 
+                          array('module' => 'adminContractorAssistants', 'component' => 'editAssistant', 'credentials' => 'admin_edit_assistants'),
+                          '/:contractor_id/assistants/wa/edit/:assistant_id'
+                      )
+       ->addActionRoute('assistant_new',
+                         array('module' => 'adminContractorAssistants', 'action' => 'editAssistant'),
+                         array( 'contractor_id' => '\d+', 'assistant_id' =>'\d+', 'sf_method' => array('GET')),
+                         array('credentials' => 'admin_edit_assistants'),
+                         '/:contractor_id/assistants/new/:assistant_id'
+                       )
+       ->addActionRoute('assistant_create',
+                         array('module' => 'adminContractorAssistants', 'action' => 'updateAssistant'),
+                         array( 'contractor_id' => '\d+', 'assistant_id' =>'\d+', 'sf_method' => array('POST', 'PUT')),
+                         array('credentials' => 'admin_edit_assistants'),
+                         '/:contractor_id/assistants/new/:assistant_id'
+                       )
+       ->addActionRoute('assistant_delete',
+                         array('module' => 'adminContractorAssistants', 'action' => 'deleteAssistant'),
+                         array( 'contractor_id' => '\d+', 'assistant_id' =>'\d+', 'sf_method' => array('GET')),
+                         array('credentials' => 'admin_edit_assistants'),
+                         '/:contractor_id/assistants/delete/:assistant_id'
+                       )
+       ->addActionRoute('assistant_edit',
+                         array('module' => 'adminContractorAssistants', 'action' => 'editAssistant'),
+                         array( 'contractor_id' => '\d+', 'assistant_id' =>'\d+', 'sf_method' => array('GET')),
+                         array('credentials' => 'admin_edit_assistants'),
+                         '/:contractor_id/assistants/edit/:assistant_id'
+                       )
+       ->addActionRoute('assistant_update',
+                         array('module' => 'adminContractorAssistants', 'action' => 'updateAssistant'),
+                         array( 'contractor_id' => '\d+', 'assistant_id' =>'\d+', 'sf_method' => array('POST', 'PUT')),
+                         array('credentials' => 'admin_edit_assistants'),
+                         '/:contractor_id/assistants/update/:assistant_id'
+                       )
+       ->addActionRoute('assistant_show',
+                         array('module' => 'adminContractorAssistants', 'action' => 'showAssistant'),
+                         array( 'contractor_id' => '\d+', 'sf_method' => array('GET')),
+                         array('credentials' => 'admin_edit_assistants'),
+                         '/:contractor_id/assistants/show/:assistant_id'
+                       )
+        //Routing for default assistant right
+          ->addPanelRoute('assistant_default_edit_without_ajax',
+                            array(),
+                            array( 'contractor_id' => '\d+' ), 
+                            array('module' => 'adminContractorAssistants', 'component' => 'editDefaultAssistant', 'credentials' => 'admin_edit_assistants'),
+                            '/:contractor_id/assistants/wa/default'
+                        )
+       ->addActionRoute('assistant_default_edit',
+                         array('module' => 'adminContractorAssistants', 'action' => 'editDefaultAssistant'),
+                         array( 'contractor_id' => '\d+', 'sf_method' => array('GET')),
+                         array('credentials' => 'admin_edit_assistants'),
+                         '/:contractor_id/assistants/default'
+                       )
+         ->addActionRoute('assistant_default_update',
+                           array('module' => 'adminContractorAssistants', 'action' => 'updateDefault'),
+                           array( 'contractor_id' => '\d+', 'sf_method' => array('POST', 'PUT')),
+                           array('credentials' => 'admin_edit_assistants'),
+                           '/:contractor_id/assistants/default'
+                         )
+         ->addActionRoute('assistant_default_show',
+                           array('module' => 'adminContractorAssistants', 'action' => 'showDefault'),
+                           array( 'contractor_id' => '\d+', 'sf_method' => array('GET')),
+                           array('credentials' => 'admin_edit_assistants'),
+                           '/:contractor_id/assistants/default/show'
+                         )
+
+      ;
+  }
+
+  /**
+   * register adminContractorFreeBusy module admin routes
+   * requires :
+   * - adminContractorUser module
+   * - adminContractorCustomProfile module
+   *
+   * @param AdminMenu               $menu   the admin menu
+   * @param [AdminGroupMenu|string] $group  the group
+   * @return void
+   **/
+  public static function prependAdminContractorFreeBusyBusinessHourRoutes($menu, $user, $group = null)
+  {
+    $group = self::getAgendaGroup($menu, $user, $group);
+
+    $group
+        ->addRouteCollection('free_busy_business_hour', array(
+                      'model' => 'FreeBusyBusinessHour',
+                      'column' => 'id',
+                      'module' => 'adminContractorFreeBusyBusinessHour', 
+                      'credentials' => 'admin_edit_contractor',
+                      'with_show' => false), '/horaires/ouverture')
+        ->addPropelAction('free_busy_business_hour_delete_for_day', 
+                          array('module'=> 'adminContractorFreeBusyBusinessHour', 'action' => 'deleteForDay'), 
+                          array(),
+                          array('credentials' => 'admin_edit_contractor', 'model' => 'adminContractorFreeBusyBusinessHour', 
+                                'type' => 'object'),
+                          'rights/:day/:id')
+      
+        ->addMenuEntry('free_busy_business_hour', 'Ouverture');
+  }
+} // END OF chCmsAdminContractorPluginRouting

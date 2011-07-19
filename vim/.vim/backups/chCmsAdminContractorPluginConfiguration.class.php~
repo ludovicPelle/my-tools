@@ -1,0 +1,93 @@
+<?php
+
+/**
+ * chCmsAdminContractorPlugin configuration.
+ * 
+ * @package     chCmsAdminContractorPlugin
+ * @subpackage  config
+ * @author      Julien Muetton <julien_muetton@carpe-hora.com>
+ * @version     SVN: $Id$
+ */
+class chCmsAdminContractorPluginConfiguration extends sfPluginConfiguration
+{
+  const VERSION = '1.0.0-DEV';
+
+  /**
+   * register admin panel routing and credentials
+   * on AdminMenu init event.
+   *
+   * to prevent auto registration, define:
+   *
+   *  > ch_cms_admin_contractor_plugin_prevent_admin_registration: true
+   *
+   * in your app.yml
+   *
+   * @see sfPluginConfiguration
+   * @see chCmsAdminContractorPluginRouting
+   */
+  public function initialize()
+  {
+    $this->dispatcher->connect(
+          AdminMenu::getEventName(), 
+          array('chCmsAdminContractorPluginCredentials', 'listenToAdminMenuInitEvent'));
+
+    if (!sfConfig::get('sf_app_ch_cms_admin_contractor_plugin_prevent_admin_registration', false))
+    {
+      $this->dispatcher->connect(
+          AdminMenu::getEventName(), 
+          array('chCmsAdminContractorPluginRouting', 'listenToAdminMenuInitEvent'));
+    }
+  }
+
+  /**
+   * the function that compiles the menu group for chCmsAdminAgendaPlugin
+   *
+   * @param sfEvent         $event  the <b>chCmsApplicationPlugin.admin.menu.init</b> event
+   * @param AdminGroupMenu  $group  the group you want to use if not default one.
+   * @return AdminGroupMenu
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public  static function getMenuGroup($event, $group = null)
+  {
+    if(!is_null($group))
+    {
+      return AdminMenu::getInstance()->getGroup($group);
+    }
+    $menu = $event->getSubject();
+    $user = $event['user'];
+    $company = $user->getSelectedCompany();
+    $contractor = $company->getVocabulary('contractor');
+    $contractors = $company->getVocabulary('contractor', 2);
+
+    return $menu
+              ->addGroup('contractor', ucfirst($contractors), sprintf('/%s', $contractors), 'icon=icojoy-calculator-32');
+  }
+
+  /**
+   * initializes the free busy management menu
+   *
+   * @param sfEvent         $event  the <b>chCmsApplicationPlugin.admin.menu.init</b> event
+   * @param AdminGroupMenu  $group  the group you want to use if not default one.
+   * @return AdminGroupMenu
+   **/
+  public static function initializeFreeBusyMenu(sfEvent $event, $group = null)
+  {
+    $group = self::getMenuGroup($event, $group);
+
+    return $group
+        ->addRouteCollection('free_busy_business_hour', array(
+                      'model' => 'FreeBusyBusinessHour',
+                      'column' => 'id',
+                      'module' => 'adminContractorFreeBusyBusinessHour', 
+                      'credentials' => 'admin_edit_contractor',
+                      'with_show' => false), '/horaires/ouverture')
+        ->addPropelAction('free_busy_business_hour_delete_for_day', 
+                          array('module'=> 'adminContractorFreeBusyBusinessHour', 'action' => 'deleteForDay'), 
+                          array(),
+                          array('credentials' => 'admin_edit_contractor', 'model' => 'adminContractorFreeBusyBusinessHour', 
+                                'type' => 'object'),
+                          'rights/:day/:id')
+      
+        ->addMenuEntry('free_busy_business_hour', 'Ouverture');
+  }
+}

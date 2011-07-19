@@ -1,0 +1,39 @@
+<?php
+/**
+ * testfile for the adminContractorAssistants module.
+ *Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright carpe-hora.com 2011
+ * @package chCmsAdminMyAccountPlugin
+ * @subpackage test
+ *
+ * @todo when request params are uniformed, check parameters
+ **/
+
+$app = "pro";
+
+include(dirname(__FILE__).'/../../../../test/bootstrap/functional.php');
+
+$browser = TresaTestFunctional::initialize(/* load to be able to authenticate */ true);
+
+$browser
+  ->info("Test not Logged")
+  ->get('/admin/prestataires/')
+
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+    
+    // check the response
+    ->with('response')->begin()
+      ->isStatusCode(401)
+      ->isValid()
+      ->checkForm(new chCmsFormSignin())
+  ->end()
+    // end of get /admin/prestataires/1/assistants
+    // end of block check when not logged in
+    
+  ->signin('demo', 'demo')
+;

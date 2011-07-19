@@ -1,0 +1,82 @@
+<?php
+/**
+* @classname:LookupForUserForm
+* the form used to search for a user
+*
+* @package chCmsAdminContractorPlugin
+* @subpackage Forms
+* @author Julien MUETTON <julien_muetton@carpe-hora.com> 
+* @copyright 2010
+*/
+class LookupForUserForm extends BaseForm
+{
+	protected $sfGuardUser;
+
+	public function configure()
+	{
+		$this->setWidgets(array(
+					'user_id'	=> new chCmsFormWidgetAutocomplete(array(
+                  'url' => $this->getOption('autocomplete_url', 'please provide a "autocomplete_url" option for LookupForUserForm'))),
+					'pin_code'					=> new sfWidgetFormInputText()
+				));
+		$this->setValidators(array(
+					'user_id'						=> new sfValidatorInteger(array('required' => false)),
+					'autocomplete_id'		=> new sfValidatorPass(),
+					'pin_code'					=> new sfValidatorString(array('required' => false)),
+				));
+
+		$this->validatorSchema->setPostValidator(new sfValidatorCallback(array(
+										'callback' => array($this, 'validateUserChoice')
+									), array(
+									)));
+
+		$this->widgetSchema->setLabels(array(
+					'user_id'  => 'Identifiant ou nom',
+					'pin_code'					=> 'Clé t-resas'
+				));
+
+		$this->widgetSchema->setNameFormat('lookup_for_user[%s]');
+	}
+
+	public function getsfGuardUser()
+	{
+		return $this->sfGuardUser;
+	}
+
+	public function validateUserChoice($validator, $values, $arguments = array())
+	{
+
+		$validator->addMessage('invalid_key', 'La clé fournie est invalide');
+		$validator->addMessage('already_contractor', 'L\'utilisateur choisi est déjà associé à un compte');
+		$validator->addMessage('unknown_user', 'Vous devez choisir un compte utilisateur dans la liste proposée');
+
+		$user = sfGuardUserQuery::create()
+							->filterById($values['user_id'])
+							->leftJoinWithsfGuardUserPinCode()
+							->findOne();
+
+		if (!$user)
+		{
+			throw new sfValidatorError($validator, 'unknown_user', array());
+		}
+
+		$alreadyInUse = CompanyEntityQuery::create()
+											->filterByCompanyId($this->getUser()->getSelectedCompany()->getId())
+											->filterByUserId($user->getId())
+											->count();
+
+		if ($alreadyInUse)
+		{
+			throw new sfValidatorError($validator, 'already_contractor', array());
+		}
+
+		if (!$user->checkPinCode($values['pin_code']))
+		{
+			throw new sfValidatorError($validator, 'invalid_key', array());
+		}
+
+		$this->sfGuardUser = $user;
+
+		return $values;
+	}
+} // END OF LookupForUserForm

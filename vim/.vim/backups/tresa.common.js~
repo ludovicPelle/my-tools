@@ -1,0 +1,282 @@
+window.Tresa = window.Tresa || {};
+var previous_error_message,
+    previous_info_message;
+
+(function($) {
+
+  $.extend(Tresa, (function() {
+    var getMsgContainer = function()
+    {
+      if ($('#messages').length)
+      {
+        return $('#messages');
+      }
+      var $message = $('<div id="messages"></div>');
+      return $message.prependTo('#main-content .yui-g');
+    };
+
+    return {
+      addInfo: function(message)
+      {
+        var $message = getMsgContainer();
+        $message.html(Tresa.getInfo(message));
+      },
+      addError: function(message)
+      {
+        var $message = getMsgContainer();
+        $message.html(Tresa.getError(message));
+      },
+      getError: function(message)
+      {
+        return Tresa.i18n.get('error_message').replace(/%message%/, message);
+      },
+      getInfo: function(message)
+      {
+        return Tresa.i18n.get('info_message').replace(/%message%/, message);
+      },
+      openErrorDialog: function(message, options)
+      {
+        if(previous_error_message !== message)
+        {
+          var _title =  Tresa.i18n.get('error_title');
+          if('unknown message error_title' === Tresa.i18n.get('error_title')){
+            _title = 'Erreur';
+          }
+          previous_error_message = message;
+          var _notify = $('#notify-container').notify();
+          var instance = _notify.notify(
+            "create",
+            "notify-error-message",
+            {
+              title: _title,
+              text: message
+            },
+            {
+              expires: false,
+              click: function(e,instance){instance.close()}
+            }
+          );
+        }
+      },
+      openDialog: function(message, options) {
+        var _b = {}, _d;
+        _b[Tresa.i18n.get('Ok')] = function() {_d.dialog('close');};
+        _d = $('<div />')
+                  .append(message && message.body || message)
+                  .attr('title', message && message.text || Tresa.i18n.get('info_title'))
+                  .dialog($.extend({
+                        modal: true,
+                        buttons: _b
+                      },options || {}));
+        return _d;
+      },
+      openInfoDialog: function(message, options)
+      {
+        if(previous_info_message !== message)
+        {
+          var _title =  Tresa.i18n.get('info_title');
+          if('unknown message info_title' === Tresa.i18n.get('info_title')){
+            _title = 'Information';
+          }
+          previous_info_message = message; 
+          var _notify = $('#notify-container').notify();
+          var instance = _notify.notify(
+            "create",
+            "notify-info-message",
+            {
+              title: _title,
+              text: message
+            },
+            {
+              expires:10000,
+              click: function(e,instance){instance.close()}
+            }
+          );
+        }
+      },
+      openConfirmDialog: function(message, confirmCallback, options)
+      {
+        var _b = {}, _d;
+        _b[Tresa.i18n.get('Confirm')] = function() {
+                                        if (!confirmCallback || ($.isFunction(confirmCallback) && (confirmCallback() !== false)))
+                                        {
+                                          _d.dialog('close');
+                                        }
+                                    };
+        _b[Tresa.i18n.get('Cancel')] = function() {
+                                          _d.dialog('close');
+                                        };
+        _d = $('<div />')
+                  .append(message && message.body || message)
+                  .attr('title', message && message.text || Tresa.i18n.get('confirm_title'))
+                  .dialog($.extend({
+                        modal: true,
+                        dialogClass: 'dialog-confirm',
+                        buttons: _b
+                      },options || {}));
+        return _d;
+      }
+    };
+  })()
+  ); //end of extend
+
+  Tresa.i18n = (function() {
+    var messages = {};
+    var replace = function(message, replacements) {
+                    var ret = message;
+                    $.each(replacements, function(index, value) {var _r = new RegExp(index, 'g');ret = ret.replace(_r, value)});
+                    return ret;
+                  };
+    return {
+      get: function(key, replacements) {
+        if (!replacements) {
+          var replacements = {};
+        }
+        var _mess = messages[key] ? messages[key] : 'unknown message ' + key;
+        return replace(_mess, replacements);
+      },
+      set: function() {
+        var _obj = {};
+        switch (arguments.length)
+        {
+          case 2:
+            _obj[arguments[0]] = arguments[1];
+            break;
+          case 1:
+            _obj = arguments[0];
+        }
+        $.extend(messages, _obj);
+      }
+    };
+  })();
+
+  $('body').trigger('Tresa.i18n.load');
+
+	Tresa.Tools = (function() {
+			var _encodeDiv = $('<div>');
+			return {
+				htmlencode: function(text) {
+					return _encodeDiv
+						.html('')
+						.append(document.createTextNode(text))
+						.html();
+				}
+			};
+	})(); // end of Tresa.Tools
+
+  // now the
+})(jQuery);
+
+Tresa.Color = (function() {
+  var hexDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
+  var _hex = function(x) {
+    return isNaN(x) ? '00' : hexDigits[(x - x % 16) / 16] + hexDigits[x % 16];
+  };
+  var _RgbReg = /rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/;
+
+  return {
+    RGB_ARRAY: 0,
+    RGB_STRING: 1,
+    HEX_STRING: 2,
+    rgb2hex: function(rgb) {
+      return '#' + _hex(rgb[0]) + _hex(rgb[1]) + _hex(rgb[2]);
+    },
+    hex2rgb: function($colour ) {
+      var $r, $g, $b;
+      if ($colour.charAt(0) == '#') {
+        $colour = $colour.substr(1);
+      }
+      if ($colour.length == 6) {
+        $r = $colour.substr(0, 2);
+        $g = $colour.substr(2, 2);
+        $b = $colour.substr(4, 2);
+      } else if ($colour.length == 3) {
+        $r = $colour.charAt(0) + $colour.charAt(0);
+        $g = $colour.charAt(1) + $colour.charAt(1);
+        $b = $colour.charAt(2) + $colour.charAt(2);
+      } else {
+        return false;
+      }
+      $r = parseInt($r, 16);
+      $g = parseInt($g, 16);
+      $b = parseInt($b, 16);
+      return [$r, $g, $b];
+    },
+    contrast: function(color, percent, returnType) {
+      var _color, _returnType;
+      if (percent > 1)
+      {
+        percent = percent / 100;
+      }
+      if ($.isArray(color))
+      {
+        _color = color;
+        _returnType = returnType ? returnType : Tresa.Color.RGB_ARRAY;
+      }
+      else if (_RgbReg.test(color))
+      {
+        _color = _RgbReg.exec(color);
+        _color = [_color[1], _color[2], _color[3]];
+        _returnType = returnType ? returnType : Tresa.Color.RGB_STRING;
+      }
+      else if (!!(_color = Tresa.Color.hex2rgb(color)))
+      {
+        _returnType = returnType ? returnType : Tresa.Color.HEX_STRING;
+      }
+      else
+      {
+        throw new Error('Unable to parse color');
+      }
+      //now color is obviously a rgb array
+      for (var _i = 0; _i < 3; _i++)
+      {
+        _color[_i] = Math.min(Math.round(_color[_i] - percent * _color[_i]), 255);
+      }
+
+      //now return
+      switch (_returnType)
+      {
+        case Tresa.Color.RGB_ARRAY:
+          return _color;
+        case Tresa.Color.RGB_STRING:
+          return 'rgb(%r%, %g%, %b%)'.replace(/%r%/, _color[0])
+                                      .replace(/%g%/, _color[1])
+                                      .replace(/%b%/, _color[2]);
+        case Tresa.Color.HEX_STRING:
+          return Tresa.Color.rgb2hex(_color);
+        default:
+          throw new Error('Unknown return type %ret%'.replace(/%ret%/, _returnType));
+      }
+    },
+    findForegroundColor: function(color)
+    {
+      var _color;
+      if ($.isArray(color))
+      {
+        _color = Tresa.Color.rgb2hex(color);
+      }
+      else if (_RgbReg.test(color))
+      {
+        _color = _RgbReg.exec(color);
+        _color = [_color[1], _color[2], _color[3]];
+        _color = Tresa.Color.rgb2hex(_color);
+      }
+      else
+      {
+        _color = color;
+      }
+
+      if (
+            parseInt(_color.charAt(3), 16) > 9 || parseInt(_color.charAt(1), 16) + parseInt(_color.charAt(3), 16) + parseInt(_color.charAt(5), 16) > 30
+      ) {
+        return '#000';
+      }
+      else
+      {
+        return '#fff';
+      }
+    }
+  };
+})();
+
+

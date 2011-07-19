@@ -1,0 +1,94 @@
+<?php
+
+/**
+ * Base actions for the chCmsGuardExtraPlugin YahooAuthentication module.
+ *
+ * @package     chCmsGuardExtraPlugin
+ * @subpackage  YahooAuthentication
+ * @author      Your name here
+ * @version     SVN: $Id$
+ */
+abstract class BaseYahooAuthenticationActions extends BaseExternalProviderActions
+{
+
+  /**
+   * is the incoming request successfull
+   *
+   * @param sfWebRequest $request the user request
+   * @return boolean
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  protected function isRequestSuccessfull(sfRequest $request)
+  {
+    return $request->getParameter('openid_mode') != 'cancel';
+  }
+
+  /**
+   * compute request checker
+   *
+   * @param sfWebRequest $request the user request
+   * @return Mixed
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  protected function getRequestChecker(sfRequest $request)
+  {
+    // compute hostname
+    $hostname = $request->getUriPrefix();
+
+    // create the openId request parser
+    return new YahooOpenIdConsumer($hostname);
+  }
+
+  /**
+   * initialize external provider authentication from
+   * current request.
+   * if authentication is ok, then:
+   * -> check if object exists
+   * -> create authentication object
+   *
+   * else
+   * -> return null
+   *
+   * @param Mixed $requestChecker   the returned request checker.
+   * @return GoogleOpenId|null
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  protected function getAuthentication($requestChecker)
+  {
+    if ($requestChecker->verifyLogin() &&
+        ($token = $requestChecker->getUser()) &&
+        ($uniqueId = $requestChecker->getAccountIdentifier()))
+    {
+      // there is an authentication
+      // is it registered in the database ?
+      if ($authentication =  YahooAuthenticationQuery::create()->findOneByAccountIdentifier($uniqueId))
+      {
+        return $authentication;
+      }
+
+      // none ?
+      // let's create it
+      $authentication = new YahooAuthentication();
+      $authentication->setUserToken($token);
+      $authentication->setAccountIdentifier($uniqueId);
+
+      return $authentication;
+    }
+    return null;
+  }
+
+
+  protected function prefillSignup($authentication)
+  {
+        // We define the registration form to use by giving its class name
+        $this->getUser()->setchCmsGuardExtraProviderForm('YahooRegistrationForm');
+
+        // we give the form's default values
+        $this->getUser()->setchCmsGuardExtraProviderFormValues(array(
+          'mail'      => $authentication->getEmail(),
+          'username'  => $authentication->getUsername(),
+          'firstname' => $authentication->getFirstname(),
+          'lastname'  => $authentication->getLastname()
+        ));
+  }
+}

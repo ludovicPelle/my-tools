@@ -1,0 +1,15 @@
+(function($, undefined){
+	$.extend($, {
+		ch: {
+			config: {
+				qtip: { 
+					style: {
+						classes: 'ui-tooltip-rounded ui-tooltip-dark ui-tooltip-plain', 
+						widget: false,
+						tip: true
+						}
+					}
+				}
+			}
+		});
+})(jQuery);

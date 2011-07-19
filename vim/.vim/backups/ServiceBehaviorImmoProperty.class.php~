@@ -1,0 +1,66 @@
+<?php
+/**
+ * @package    T-resa-lib
+ * @subpackage  default
+ * @author     Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright  (c) Carpe Hora SARL 2011
+ */
+/**
+* @classname:ServiceBehaviorImmoProperty
+* the behavior to add a car model field
+*
+* @package T-resa-lib
+* @subpackage Behaviors
+* @author Julien MUETTON <julien_muetton@carpe-hora.com>
+* @copyright 2010
+*/
+class ServiceBehaviorImmoProperty extends chCmsBaseServiceBehavior
+{
+  public function getName()
+  {
+    return 'ImmoProperty';
+  }
+
+  public function initEvent($service, $event)
+  {
+    $event->registerSingleProperty('IMMO_PROPERTY', '');
+  }
+
+  /**
+   * called to update the form before validation
+   *
+   * @param {Service} $service the service to use
+   * @param {vEventForm} $form the form to update
+   *
+   * @see Service::updateEventForm
+   * @see vEventForm::bind
+   */
+  public function updateEventForm($service, $form, $taintedValues, $taintedFiles)
+  {
+    $form->setWidget('immo_property', new sfWidgetFormInputText());
+    $form->setValidator('immo_property', new sfValidatorString(array('required' => true )));
+    $form->getWidgetSchema()->setLabel('immo_property', 'Bien Immobilier');
+  }
+
+  /**
+   * update the event object within form validation from submitted values
+   *
+   * @param {Service} $service the service to use
+   * @param {sfForm} $form the form
+   * @param {vEvent} $event the event to update
+   * @param {array} $values the cleaned values
+   *
+   * @see Service::updateEventObject
+   * @see vEventForm::updateObject
+   */
+  public function updateEventObject($service, sfForm $form, $event, $values)
+  {
+    $event->setImmoProperty($values['immo_property']);
+  }
+
+  public function updateEventJson(&$json, $service, $action)
+  {
+    parent::updateEventJson($json, $service, $action);
+    $json['immo_property'] = $service->getImmoProperty();
+  }
+} // END OF ServiceBehaviorImmoProperty

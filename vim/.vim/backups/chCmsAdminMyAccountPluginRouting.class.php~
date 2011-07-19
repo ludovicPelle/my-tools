@@ -1,0 +1,228 @@
+<?php
+/**
+ * This file declare the chCmsAdminMyAccountPluginRouting class.
+ *
+ * @package chCmsAdminMyAccountPlugin
+ * @subpackage routing
+ * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-05-25
+ */
+
+/**
+ * define the routing for plugin
+ */
+class chCmsAdminMyAccountPluginRouting
+{
+  /**
+   * listen to the admin panel init event
+   *
+   * @return void
+   **/
+  public static function listenToAdminMenuInitEvent(sfEvent $event)
+  {
+    foreach (sfConfig::get('sf_enabled_modules') as $module)
+    {
+      if (    0 === strpos($module, 'adminMy')
+          &&  is_callable(array(
+                        'chCmsAdminMyAccountPluginRouting',
+                        ($prependRouteMethod = sprintf('prepend%sRoutes', ucfirst($module))))))
+      {
+        call_user_func(array('chCmsAdminMyAccountPluginRouting', $prependRouteMethod), /* menu */ $event->getSubject(), $event['user']);
+      }
+    }
+  }
+
+  /**
+   * get the default menu group unless on is given.
+   *
+   * @param AdminMenu         $menu   the admin menu
+   * @param [AdminMenuGroup|String] $group the given admin group or it's name
+   * @return AdminMenuGroup
+   **/
+  public static function getMyAccountGroup($menu, $user, $group=null)
+  {
+    if (!is_null($group))
+    {
+      return AdminMenu::getInstance()->getGroup($group);
+    }
+    $company = $user->getSelectedCompany();
+    $contractor = $company->getVocabulary('contractor');
+
+    return $menu
+              ->addGroup('my', 'Mon compte', '/mon-compte', 'icon=icojoy-briefcase-32');
+  }
+
+  /**
+   * register adminMyAccount module admin routes
+   * requires :
+   * - adminContractorUser module
+   * - adminContractorCustomProfile module
+   *
+   * @param AdminMenu               $menu   the admin menu
+   * @param [AdminGroupMenu|string] $group  the group
+   * @return void
+   **/
+  public static function prependAdminMyAccountRoutes($menu, $user, $group = null)
+  {
+    $group = self::getMyAccountGroup($menu, $user, $group);
+
+    $group
+      ->addPanelRoute(
+          'my_account',
+            array(),
+            array(),
+            array('module' => 'adminMyAccount', 'component' => 'index', 'credentials' => 'my_account'),
+          '/edit')
+      ->addActionRoute(
+          'my_account_update',
+            array('module' => 'adminMyAccount', 'action' => 'update'),
+            array(),
+            array('credentials' => 'my_account', 'sf_method' => 'put', 'extra_parameters_as_query_string' => false),
+          '/edit')
+        ->addMenuEntry('my_account', 'Mon compte')
+        ->setIndexRouteName('my_account')
+        ;
+  }
+
+  /**
+   * register adminMyPreferences module admin routes
+   * requires :
+   * @param AdminMenu               $menu   the admin menu
+   * @param [AdminGroupMenu|string] $group  the group
+   * @return void
+   **/
+  public static function prependAdminMyPreferencesRoutes($menu, $user, $group = null)
+  {
+    $group = self::getMyAccountGroup($menu, $user, $group);
+
+    $group
+     ->addPanelRoute(
+          'my_preferences',
+            array(),
+            array(),
+            array('module' => 'adminMyPreferences', 'component' => 'index', 'credentials' => 'my_preferences'),
+          '/preferences')
+      ->addActionRoute(
+          'my_preferences_update',
+            array('module' => 'adminMyPreferences', 'action' => 'update'),
+            array(),
+            array('credentials' => 'my_preferences'),
+          '/preferences')
+        ->addMenuEntry('my_preferences', 'Mes préférences')
+        ;
+  }
+
+  /**
+   * register adminMyRights module admin routes
+   *
+   * @param AdminMenu               $menu   the admin menu
+   * @param [AdminGroupMenu|string] $group  the group
+   * @return void
+   **/
+  public static function prependAdminMyRightsRoutes($menu, $user, $group = null)
+  {
+    $group = self::getMyAccountGroup($menu, $user, $group);
+
+    $group
+      ->addPanelRoute(
+          'my_rights',
+            array(),
+            array(),
+            array('module' => 'adminMyRights', 'component' => 'index', 'credentials' => 'my_rights'),
+            '/rights')
+        ->addMenuEntry('my_rights', 'Mes droits')
+        ;
+  }
+
+  /**
+   * register adminMyAssistants module admin routes
+   *
+   * @param AdminMenu               $menu   the admin menu
+   * @param [AdminGroupMenu|string] $group  the group
+   * @return void
+   **/
+  public static function prependAdminMyAssistantsRoutes($menu, $user, $group = null)
+  {
+    $group = self::getMyAccountGroup($menu, $user, $group);
+
+    $assistants = $user->getSelectedCompany()->getVocabulary('assistant', 2);
+    $group
+      ->addPanelRoute(
+          'my_assistants',
+            array(),
+            array(),
+            array('module' => 'adminMyAssistants', 'component' => 'index', 'credentials' => 'my_sharing'),
+          '/partage')
+        //Without ajax we shunt it
+        ->addPanelRoute('assistant_edit_without_ajax',
+                          array(),
+                          array( 'contractor_id' => '\d+' ),
+                          array('module' => 'adminMyAssistants', 'component' => 'editAssistant', 'credentials' => array('my_sharing', 'my_sharing_admin')),
+                          '/partage/wa/edit/:assistant_id'
+                      )
+       ->addActionRoute('assistant_new',
+                         array('module' => 'adminMyAssistants', 'action' => 'editAssistant'),
+                         array( 'contractor_id' => '\d+', 'assistant_id' =>'\d+', 'sf_method' => array('GET')),
+                         array('credentials' => 'my_sharing_admin'),
+                         '/partage/new/:assistant_id'
+                       )
+       ->addActionRoute('assistant_create',
+                         array('module' => 'adminMyAssistants', 'action' => 'updateAssistant'),
+                         array( 'contractor_id' => '\d+', 'assistant_id' =>'\d+', 'sf_method' => array('POST', 'PUT')),
+                         array('credentials' => 'my_sharing_admin'),
+                         '/partage/new/:assistant_id'
+                       )
+       ->addActionRoute('assistant_delete',
+                         array('module' => 'adminMyAssistants', 'action' => 'deleteAssistant'),
+                         array( 'contractor_id' => '\d+', 'assistant_id' =>'\d+', 'sf_method' => array('GET')),
+                         array('credentials' => 'my_sharing_admin'),
+                         '/partage/delete/:assistant_id'
+                       )
+       ->addActionRoute('assistant_edit',
+                         array('module' => 'adminMyAssistants', 'action' => 'editAssistant'),
+                         array( 'contractor_id' => '\d+', 'assistant_id' =>'\d+', 'sf_method' => array('GET')),
+                         array('credentials' => 'my_sharing_admin'),
+                         '/partage/edit/:assistant_id'
+                       )
+       ->addActionRoute('assistant_update',
+                         array('module' => 'adminMyAssistants', 'action' => 'updateAssistant'),
+                         array( 'contractor_id' => '\d+', 'assistant_id' =>'\d+', 'sf_method' => array('POST', 'PUT')),
+                         array('credentials' => 'my_sharing_admin'),
+                         '/partage/update/:assistant_id'
+                       )
+       ->addActionRoute('assistant_show',
+                         array('module' => 'adminMyAssistants', 'action' => 'showAssistant'),
+                         array( 'contractor_id' => '\d+', 'sf_method' => array('GET')),
+                         array('credentials' => 'my_sharing'),
+                         '/partage/show/:assistant_id'
+                       )
+        //Routing for default assistant right
+          ->addPanelRoute('assistant_default_edit_without_ajax',
+                            array(),
+                            array( 'contractor_id' => '\d+' ),
+                            array('module' => 'adminMyAssistants', 'component' => 'editDefaultAssistant', 'credentials' => 'my_sharing'),
+                            '/partage/wa/default'
+                        )
+       ->addActionRoute('assistant_default_edit',
+                         array('module' => 'adminMyAssistants', 'action' => 'editDefaultAssistant'),
+                         array( 'contractor_id' => '\d+', 'sf_method' => array('GET')),
+                         array('credentials' => 'my_sharing'),
+                         '/partage/default'
+                       )
+         ->addActionRoute('assistant_default_update',
+                           array('module' => 'adminMyAssistants', 'action' => 'updateDefault'),
+                           array( 'contractor_id' => '\d+', 'sf_method' => array('POST', 'PUT')),
+                           array('credentials' => 'my_sharing'),
+                           '/partage/default'
+                         )
+         ->addActionRoute('assistant_default_show',
+                           array('module' => 'adminMyAssistants', 'action' => 'showDefault'),
+                           array( 'contractor_id' => '\d+', 'sf_method' => array('GET')),
+                           array('credentials' => 'my_sharing'),
+                           '/partage/default/show'
+                         )
+        ->addMenuEntry('my_assistants', 'Options de partage')
+        ;
+  }
+}

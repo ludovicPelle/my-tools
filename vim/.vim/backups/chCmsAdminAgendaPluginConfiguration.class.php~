@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * chCmsAdminAgendaPlugin configuration.
+ * 
+ * @package     chCmsAdminAgendaPlugin
+ * @subpackage  config
+ * @author      Julien Muetton <julien_muetton@carpe-hora.com>
+ * @version     SVN: $Id$
+ */
+class chCmsAdminAgendaPluginConfiguration extends sfPluginConfiguration
+{
+  const VERSION = '1.0.0-DEV';
+
+  /**
+   * @see sfPluginConfiguration
+   */
+  public function initialize()
+  {
+    $this->dispatcher->connect(
+          AdminMenu::getEventName(), 
+          array('chCmsAdminAgendaPluginCredentials', 'listenToAdminMenuInitEvent'));
+
+    if (!sfConfig::get('sf_app_ch_cms_admin_agenda_plugin_prevent_admin_registration', false))
+    {
+      $this->dispatcher->connect(
+          AdminMenu::getEventName(), 
+          array('chCmsAdminAgendaPluginRouting', 'listenToAdminMenuInitEvent'));
+    }
+  }
+
+}

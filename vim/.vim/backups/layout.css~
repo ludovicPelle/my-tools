@@ -1,0 +1,108 @@
+/**
+ * feuille de style pour le layout principal
+ * © carpe-hora 2009
+ */
+body{font-size:13px; font-family: arial,helvetica,clean,'sans-serif';}
+body.with-js{font-size:12px;font-family:"Lucida Grande", Verdana, sans-serif;}
+body.no-js{font-size:12px;font-family:"Lucida Grande", Verdana, sans-serif;}
+#wrapper{width:98%;margin:auto;}
+#header{font-size:13px;font-family: arial,helvetica,clean,'sans-serif'}
+
+#main{}
+.ui-layout-pane{padding:0}
+.ui-layout-pane-north{overflow:hidden}
+.ui-layout-pane-north .menu-container{overflow:visible;height:100%;}
+.ui-layout-pane-north .yuimenubar{border-width:0 0 1px 0;}
+#help-panel #help-title h1,
+#main-content .backend-title h1{padding:0 0.5em;font-size:1.3em;}
+#help-panel .help-content{padding:0.5em;}
+#main-content .ui-layout-pane,
+#help-panel .ui-layout-pane{border:none;}
+#footer{}
+
+form .yui-navset{width: 700px; margin:2em auto;}
+form .yui-navset table{width:680px;margin:auto;}
+form .yui-navset table tfoot th{ width:460px;padding-left:190px}
+form .yui-navset table th{width:180px;}
+form .yui-navset table td{width:460px;}
+form .yui-navset table td input{display:block;width: 470px;}
+
+
+.checkbox_list li{display:inline-block !important;display:inline;margin-right:20px;}
+.checkbox_list li input{width:auto;display:inline;}
+.inline_list li span.ui-icon, .inline_list li span.ch-icon-silk{float:left;}
+.inline_list li{display:inline-block !important;display:inline;margin-right:20px;}
+
+
+/* PAGE MON COMPTE */
+#mon-compte-navset{width: 700px; margin:2em auto;}
+#mon-compte-navset form table{width:680px;margin:auto;}
+#mon-compte-navset form table tfoot th{ width:460px;padding-left:190px}
+#mon-compte-navset form table tbody th{width:180px;}
+#mon-compte-navset form table tbody td{width:460px;}
+#mon-compte-navset form table tbody td input{display:block;width: 470px;}
+
+/* PAGE FICHE */
+#file-navset{width: 700px; margin:2em auto;}
+#file-navset table{width:680px;margin:auto;}
+#file-navset table tfoot th{ width:460px;padding-left:190px}
+#file-navset table tbody th{width:180px;}
+#file-navset table tbody td{width:460px;}
+#file-navset table tbody td input{display:block;width: 470px;}
+#file-navset table tbody td .checkbox_list li{display:inline-block !important;display:inline;margin-right:20px;}
+#file-navset table tbody td .checkbox_list li input{width:auto;display:inline;}
+
+/* PAGE FICHE */
+#preferences-navset{width: 700px; margin:2em auto;}
+#preferences-navset table{width:680px;margin:auto;}
+#preferences-navset table tfoot th{ width:460px;padding-left:190px}
+#preferences-navset table tbody th{width:180px;}
+#preferences-navset table tbody td{width:460px;}
+#preferences-navset table tbody td input{display:block;width: 470px;}
+#preferences-navset table tbody td .checkbox_list li{display:inline-block !important;display:inline;margin-right:20px;}
+#preferences-navset table tbody td .checkbox_list li input{width:auto;display:inline;}
+
+/* PAGES CONTACTORS */
+#contractor-wrapper{margin:auto;}
+
+/* VOCABULARY */
+#company-vocabulary-form{margin:auto;width:400px;}
+
+/* Agenda */
+#appointments_form{}
+#appointments_form .date_time_widget,
+#appointments_form .date_widget,
+#appointments_form .date_time_widget select,
+#appointments_form .date_widget select,
+#appointments_form input,
+#appointments_form select{font-size:15px;}
+
+/* HOMEPAGE */
+.widget-homepage{
+  width:300px;
+  float:left;
+  margin:10px;
+  padding:0 0 10px 0;
+  border:2px solid #BBCCFF;
+  height: 200px;
+  background-color:#BBCCFF;
+}
+.widget-homepage h2.widget-header{
+  margin:0;
+  padding:5px;
+  border: 2px solid #BBCCFF;
+  font-size:15px;
+  font-weight:bold;
+}
+.widget-homepage .widget-body{
+  padding:0;
+  height:175px;
+  background-color:#E3E9FF;
+}
+
+
+/* DEBUG */
+#sfWebDebug .sfWebDebugTop{height:100%;overflow:auto;}
+
+/* Show company */
+#company-detail-map{width:380px;float:right;}

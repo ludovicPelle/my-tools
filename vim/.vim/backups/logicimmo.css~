@@ -1,0 +1,22 @@
+.admin-content, .admin-content .ui-layout-pane{background-color: transparent;}
+ .wc-scrollable-grid {background-color: transparent;}
+.logo-retailer-home{
+/*  background-image: url("../images/euromaster-logo-op60-430x390.png");*/
+  background-image: url("../images/logic-immo-op60-500x246.png");
+  height:500px;
+  margin:auto;
+  background-repeat:no-repeat;
+  background-position: 50% 100%;
+}
+.wc-scrollable-grid{
+  background-image: url("../images/logic-immo-op60-500x246.png");
+  background-repeat:no-repeat;
+  background-position: 50% 50%;
+
+}
+.menu-container{
+  padding-left:35px;
+  background-image: url("../images/euromaster-logo-36x36.png");
+  background-repeat:no-repeat;
+  background-position: 0% 0%;
+}

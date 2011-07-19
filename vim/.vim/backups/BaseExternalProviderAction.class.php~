@@ -1,0 +1,175 @@
+<?php
+/**
+ * This file declare the BaseExternalProviderAction class.
+ *
+ * @package chCmsGuardExtraPlugin
+ * @subpackage actions
+ * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-06-17
+ */
+
+/**
+ * the base class for external parovider actions
+ */
+abstract class BaseExternalProviderActions extends chCmsActions
+{
+  /**
+   * check the request was successfull
+   *
+   * @param sfWebRequest $request the user request
+   * @return boolean
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  abstract protected function isRequestSuccessfull(sfRequest  $request);
+
+  /**
+   * compute request checker
+   *
+   * @param sfWebRequest $request the user request
+   * @return Mixed
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  abstract protected function getRequestChecker(sfRequest $request);
+
+  /**
+   * initialize external provider authentication from
+   * current request
+   *
+   * @param sfWebRequest $request the user request
+   * @return Authentication
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  abstract protected function getAuthentication(sfRequest $request);
+
+  /**
+   * initialize and prefill form for signup with this provider.
+   * you should use $sf_user->setchCmsGuardExtraProviderForm
+   * and$sf_user->setchCmsGuardExtraProviderFormValues methods.
+   *
+   * @param Authentication $authentication the authentication object returned from external provider.
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  abstract protected function prefillSignup($authentication);
+
+  /**
+   * render result for verify action
+   *
+   * @return
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  protected function renderVerify($url)
+  {
+    $this->returnUrl = $url;
+    $this->setLayout(false);
+    $this->setTemplate('verify', 'chCmsFrontendAccount');
+  }
+
+  /**
+   * redirect user to signup or kick out if cannot signup
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  protected function redirectToSignupOrKickOut(sfRequest $request, Authentication $authentication)
+  {
+    $sf_user = $this->getUser();
+
+    if ($sf_user->canSignup())
+    {
+      // create prefilled form,
+      $this->prefillSignup($authentication);
+      // and redirect user to signup process
+      return $this->renderVerify($sf_user->getSignupRedirectUrl($request));
+    }
+
+    // still there ?
+    // kickout.
+    return $this->renderVerify($sf_user->getSigninKickOutUrl($request));
+  }
+
+  /**
+   * return action
+   *
+   * @param sfWebRequest $request the user request
+   * @return
+   */
+  public function executeVerify(sfWebRequest $request)
+  {
+    $sf_user = $this->getUser();
+
+    $this->success = $this->isRequestSuccessfull();
+
+    if (!$this->success)
+    {
+      return $this->renderVerify(null);
+    }
+
+    if ( $authentication = $this->getAuthentication() )
+    {
+
+      $sf_user->setchCmsGuardExtraProvider($authentication);
+
+      if (! $authentication->isNew() )
+      {
+        // get the guard user for this authentication
+        if ($guardUser = $authentication->getUser())
+        {
+          try
+          {
+            // sign the user in
+            $sf_user->extraSignIn($this->getContext(), $guardUser, /*remember*/ false, /* con */ null);
+
+            return $this->renderVerify($sf_user->getSigninSuccessRedirectUrl($request));
+          }
+          catch (sfSecurityException $e)
+          {
+            $this->redirectToSignupOrKickOut($request, $authentication);
+          }
+        }
+
+        // uhu ?
+        // orphan provider...
+        $authentication->delete();
+        // follow normal redirection to signup or kickout
+        return $this->redirectToSignupOrKickOut($request, $authentication);
+
+      } // end of isNew
+
+      // is the user authenticated
+      if ($sf_user->isAuthenticated())
+      {
+        // associate account with provider
+        return $this->renderVerify($this->generateUrl('sf_guard_associate_provider'));
+      }
+
+      // signup with provider or kickout
+      return $this->redirectToSignupOrKickOut();
+
+    } // end if authentication found
+
+    // no provider ?
+    // ouch, cancelled or error: display template
+    return $this->renderVerify(null);
+  }
+
+  /**
+   * prepare external provider contact url, configure it and redirect.
+   *
+   * @param sfWebRequest $request the user request
+   * @return
+   */
+  public function executeRedirect(sfWebRequest $request)
+  {
+    $requestChecker = $this->getRequestChecker($request);
+
+    $extra_signin_params = $this->parseSigninExtraParameters($request);
+
+    $returnTo = $this->generateUrl(sprintf('%s/verify', $this->getModuleName()), $extra_signin_params, true);
+
+    $url = $requestChecker->getLoginUrl($returnTo);
+
+    $this->redirect($url);
+  }
+} // END OF BaseExternalProviderAction

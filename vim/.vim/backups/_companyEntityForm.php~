@@ -1,0 +1,123 @@
+<?php use_helper('JqueryUi', 'I18N'); ?>
+<div class="ui-tabs">
+  <ul>
+    <li><a href="#tab-name">Nom</a></li>
+    <li><a href="#tab-contact">Informations de contact</a></li>
+    <li><a href="#tab-company-fields">Champs personnalisés</a></li>
+  </ul>
+
+  <div id="tab-name">
+
+    <?php echo $form->renderHiddenFields() ?>
+
+    <table>
+      <tbody>
+        <tr>
+          <td colspan="2">
+            <?php include_partial('adminContractor/linkContractor', array('contractor' => $form->getObject(), 'group' => $group)); ?>
+          </td>
+        </tr>
+        <tr>
+          <th><?php echo $form['company_name']->renderLabel(); ?></th>
+          <td>
+              <?php echo $form['company_name']->renderError() ?>
+              <?php echo $form['company_name']->render() ?>
+          </td>
+        </tr>
+        <tr>
+          <th><?php echo $form['agenda_header']->renderLabel(); ?></th>
+          <td>
+              <?php echo $form['agenda_header']->renderError() ?>
+              <?php echo $form['agenda_header']->render() ?>
+          </td>
+        </tr>
+        <tr>
+          <th><?php echo $form['public_name']->renderLabel(); ?></th>
+          <td>
+              <?php echo $form['public_name']->renderError() ?>
+              <?php echo $form['public_name']->render() ?>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="tab-company-fields">
+  <?php if ($form->hasExtraFields()): ?>
+    <table>
+      <tbody>
+          <?php foreach ($form->getExtraFields() as $field): ?>
+
+        <tr>
+          <th><?php echo $form[sprintf('field_%d', $field->getId())]->renderLabel(); ?></th>
+          <td>
+              <?php echo $form[sprintf('field_%d', $field->getId())]->renderError() ?>
+              <?php echo $form[sprintf('field_%d', $field->getId())]->render() ?>
+          </td>
+        </tr>
+
+          <?php endforeach; ?>
+      </tbody>
+    </table>
+  <?php else: ?>
+    <?php echo jui_get_info_box(__('Aucun champ définit pour le moment. <a href="%url%">Paramétrer les champs du profil %contractor%</a>', array(
+                '%url%' => admin_url_for($group, 'employer_profile'),
+                '%contractor%' => vocabulary('contractor')
+              ))); ?>
+  <?php endif; ?>
+  </div>
+
+  <div id="tab-contact">
+    <table>
+      <tbody>
+        <tr>
+          <th><?php echo $form['phone']->renderLabel(); ?></th>
+          <td>
+              <?php echo $form['phone']->renderError() ?>
+              <?php echo $form['phone']->render() ?>
+          </td>
+          <th><?php echo $form['address_1']->renderLabel(); ?></th>
+          <td>
+              <?php echo $form['address_1']->renderError() ?>
+              <?php echo $form['address_1']->render() ?>
+          </td>
+        </tr>
+        <tr>
+          <th><?php echo $form['mobile']->renderLabel(); ?></th>
+          <td>
+              <?php echo $form['mobile']->renderError() ?>
+              <?php echo $form['mobile']->render() ?>
+          </td>
+          <th><?php echo $form['address_2']->renderLabel(); ?></th>
+          <td>
+              <?php echo $form['address_2']->renderError() ?>
+              <?php echo $form['address_2']->render() ?>
+          </td>
+        </tr>
+        <tr>
+          <th><?php echo $form['mail']->renderLabel(); ?></th>
+          <td>
+              <?php echo $form['mail']->renderError() ?>
+              <?php echo $form['mail']->render() ?>
+          </td>
+          <th><?php echo $form['address_3']->renderLabel(); ?></th>
+          <td>
+              <?php echo $form['address_3']->renderError() ?>
+              <?php echo $form['address_3']->render() ?>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2"></td>
+          <th><?php echo $form['town']->renderLabel(); ?></th>
+          <td>
+              <?php echo $form['zip_code']->renderError() ?>
+              <?php echo $form['town']->renderError() ?>
+              <?php echo $form['zip_code']->render(array('size' => 5)) ?>
+              <?php echo $form['town']->render() ?>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

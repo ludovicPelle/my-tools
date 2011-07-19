@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * chCmsCompanyPlugin configuration.
+ *
+ * @package     chCmsCompanyPlugin
+ * @subpackage  config
+ * @author      Your name here
+ * @version     SVN: $Id$
+ */
+class chCmsCompanyPluginConfiguration extends sfPluginConfiguration
+{
+  const VERSION = '1.0.0-DEV';
+
+  /**
+   * @see sfPluginConfiguration
+   */
+  public function initialize()
+  {
+    $this->dispatcher->connect('routing.load_configuration',
+            array('chCmsCompanyPluginRouting', 'listenToRoutingLoadConfigurationEvent'));
+
+    $this->dispatcher->connect('user.method_not_found',
+            array('chCmsCompanyPluginUser', 'methodNotFound'));
+
+    $this->dispatcher->connect(AdminMenu::getEventName(),
+            array('chCmsCompanyPluginCredentials', 'listenToAdminMenuInitEvent'));
+
+    // to set company on login
+    $this->dispatcher->connect('user.pre_signin',
+            array('chCmsCompanyPluginUser', 'listenToPreSigninEvent'));
+
+    $this->dispatcher->connect('user.post_signin',
+            array('chCmsCompanyPluginUser', 'listenToPostSigninEvent'));
+
+    $this->dispatcher->connect('user.signin_exception',
+            array('chCmsCompanyPluginUser', 'listenToNotAMemberSigninErrorException'));
+    // uncomment this->dispatcher to add admin routes
+    // ==================================
+    /*
+    if (!sfConfig::get('sf_app_ch_cms_chCmsCompanyPlugin_prevent_admin_registration', false))
+    {
+      $this->dispatcher->connect(AdminMenu::getEventName(),
+            array('chCmsCompanyPluginRouting', 'listenToAdminMenuInitEvent'));
+    }
+    //*/
+  }
+}

@@ -1,0 +1,49 @@
+<?php
+/**
+ * Configuration file of chCmsFrontendSignupConfig module's
+ *
+ * @packaged chCmsFrontendSignupConfig
+ * @subpackaged config
+ * @author Camille NERON <camille_neron@carpe-hora.com>
+ **/
+class chCmsFrontendSignupConfig 
+{
+  /**
+   * registerImplementation
+   *
+   * @return void
+   * @author Camille NERON <camille_neron@carpe-hora.com>
+   **/
+  public function initialize(sfContext $sfContext)
+  {
+  }
+
+  /**
+   * configure routes
+   *
+   * @return void
+   * @author Camille NERON <camille_neron@carpe-hora.com>
+   **/
+  static public function prependRoutes($routing)
+  {
+    $routing->prependRoute(
+      'sf_guard_signup', 
+        new sfRequestRoute(
+          '/register',
+          array('module' => 'chCmsFrontendSignup', 'action' => 'register'),
+          array('sf_method' => array('get'))));
+
+    $routing->prependRoute(
+            'sf_guard_signup_create', 
+            new sfRequestRoute(
+              '/register', 
+              array('module' => 'chCmsFrontendSignup', 'action' => 'create'),
+              array('sf_method' => array('post', 'put'))));
+
+    $routing->prependRoute(
+              'signup_cancel', 
+              new sfRoute(
+                '/register/cancel', 
+                array('module' => 'chCmsFrontendSignup', 'action' => 'cancelAuthentication')));
+  }
+} // END class chCmsFrontendSignupConfig

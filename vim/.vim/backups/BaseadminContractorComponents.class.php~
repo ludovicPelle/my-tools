@@ -1,0 +1,74 @@
+<?php
+
+/**
+ * Base components for the chCmsAdminContractorPlugin adminContractor module.
+ * 
+ * @package     chCmsAdminContractorPlugin
+ * @subpackage  module-adminContractor
+ * @author      Julien Muetton <julien_muetton@carpe-hora.com>
+ * @version     SVN: $Id$
+ */
+abstract class BaseadminContractorComponents extends chCmsAdminPanelComponents
+{
+  /**
+   * entry point for Index action
+   *
+   * @param sfWebRequest $request the user request
+   * @return 
+   */
+  public function executeIndex(sfWebRequest $request)
+  {
+    $this->company = $this->getUser()->getSelectedCompany();
+
+    $this->contractors = $this->company->getContractors();
+  }
+
+  /**
+   * entry point for Show action
+   *
+   * @param sfWebRequest $request the user request
+   * @return 
+   */
+  public function executeShow(sfWebRequest $request)
+  {
+    AdminContractorEntityTools::protectShow($this->getRoute(), $this->getUser());
+
+    $this->contractor = $this->getRoute()->getObject();
+
+    $this->company = $this->getUser()->getSelectedCompany();;
+  }
+
+  /**
+   * entry point for Edit action
+   *
+   * @param sfWebRequest $request the user request
+   * @return 
+   */
+  public function executeEdit(sfWebRequest $request)
+  {
+    AdminContractorEntityTools::protectEdit($this->getRoute(), $this->getUser());
+
+    $this->contractor = $this->getRoute()->getObject();
+    $this->company = $this->getUser()->getSelectedCompany();;
+
+    $this->form = new ContractorAdminProfileForm($this->contractor);
+    $this->lookupForUserForm = new LookupForUserForm(array('autocomplete_url' => chCmsAdminContractorPluginRouting::getLookupForUserAcUrl()));
+  }
+
+  /**
+   * entry point for New action
+   *
+   * @param sfWebRequest $request the user request
+   * @return 
+   */
+  public function executeNew(sfWebRequest $request)
+  {
+    AdminContractorEntityTools::protectCreate($this->getRoute(), $this->getUser());
+    
+    $this->company = $this->getUser()->getSelectedCompany();
+
+    $this->form = new ContractorAdminProfileForm();
+    $this->form->setDefaultForCompany($this->company);
+    $this->lookupForUserForm = new LookupForUserForm(array('autocomplete_url' => chCmsAdminContractorPluginRouting::getLookupForUserAcUrl()));
+  }
+}

@@ -1,0 +1,139 @@
+<?php
+/**
+ * This file declare the sfProviderTestFunctionnal class.
+ *
+ * @package chCmsGuardExtraPlugin
+ * @subpackage lib
+ * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-06-20
+ */
+
+/**
+ * Main class to ease test of differents provider
+ */
+class sfProviderTestFunctionnal extends TresaTestFunctional
+{
+  $provider_map = array(1 =>'Google',
+                    2 =>'Yahoo',
+                    3 =>'OpenId',
+                    4 =>'Twitter'
+                  );
+
+  /**
+   * undocumented function
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public static function initialize($loadData=true)
+  {
+    return TresaTestFunctional::initialize($loadData);
+  }
+
+
+  /**
+   * Add a new provider to an account
+   *
+   * @param sfUser $user the user for the action
+   * @return sfBrowser
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function associateProvider($user, $provider)
+  {
+    return $this;
+  }
+
+
+  /**
+   * remove a Provider from an account
+   *
+   * @param sfUser $user the user for the action
+   * @return sfBrowser
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function removeProvider($user, $provider)
+  {
+    return $this;
+  }
+
+  /**
+   * Test authentication with a provider
+   *
+   * @return sfBrowser
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function signinWithProvider($provider, $provider_data)
+  {
+    //Now we generate a fake provider response
+    $ProviderTester = sprintf('%sOpenIdConsumerTester',ucfirst($PROVIDER_NAME[$provider->getProvider]));
+    $openid = new $ProviderTester('http://'.$_SERVER['SERVER_NAME']);
+    $openid->prepareValidRequest($provider_data);
+
+    return $this
+    ->info(strtr('signin with %account% on %provider%',
+                  array('%account%' => $provider->getAccountIdentifier(),
+                        '%provider' =>  $PROVIDER_NAME[$provider->getProvider],
+                       )
+                ))
+    ->get(sprintf('/register/%s/verify',strtolower($PROVIDER_NAME[$provider->getProvider])))
+    ->with('request')->begin()
+      ->isParameter('module', sprintf('%sAuthentication', ucfirst($PROVIDER_NAME[$provider->getProvider])))
+      ->isParameter('action', 'verify')
+    ->end()
+
+    ->with('user')->begin()
+      ->isAuthenticated(true)
+    ->end()
+    ;
+  }
+
+  /**
+   * undocumented function
+   *
+   * @return sfBrowser
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function signupWithProvider($provider, $provider_data)
+  {
+    return $this;
+  }
+
+  /**
+   * undocumented function
+   *
+   * @param sfUser $user the user for the action
+   * @return sfBrowser
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function checkedProviderLinkedAccount($user)
+  {
+    return $this;
+  }
+
+  /**
+   * undocumented function
+   *
+   * @param sfUser $user the user for the action
+   * @return sfBrowser
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function checkedIndependantAccount($user)
+  {
+      return $this;
+  }
+
+  /**
+   * To add a new password for an account, enable to an account to be independant
+   *
+   * @param sfUser $user the user for the action
+   * @return sfBrowser
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function addAccountPassword($user)
+  {
+      return $this;
+  }
+
+
+} // END OF sfProviderTestFunctionnal

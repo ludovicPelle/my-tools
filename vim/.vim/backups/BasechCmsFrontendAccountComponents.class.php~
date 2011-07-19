@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * Base components for the chCmsGuardExtraPlugin chCmsFrontendAccount module.
+ * 
+ * @package     chCmsGuardExtraPlugin
+ * @subpackage  module-chCmsFrontendAccount
+ * @author      MoUeTtE <julien_muetton@carpe-hora.com>
+ * @version     SVN: $Id: BaseComponents.class.php 12628 2008-11-04 14:43:36Z Kris.Wallsmith $
+ */
+abstract class BasechCmsFrontendAccountComponents extends sfComponents
+{
+  public function executeLinks(sfWebRequest $request)
+  {
+  }
+
+  public function executeVerticalMenuBar(sfWebRequest $request)
+  {
+    $this->getConnexionForm();
+  }
+
+  public function executeHorizontalMenuBar(sfWebRequest $request)
+  {
+    $this->getConnexionForm();
+  }
+
+  protected function getConnexionForm()
+  {
+    $request = $this->getRequest();
+    $class = sfConfig::get('app_sf_guard_plugin_signin_form', 'chCmsFormSignin');
+    $this->form = new $class();
+
+    if ($request->isMethod('POST') || $request->isMethod('PUT'))
+    {
+      $this->form->bind($request->getParameter('signin'));
+      if ($this->form->isValid())
+      {
+        $values = $this->form->getValues();
+        $this->getUser()->signin($values['user'], array_key_exists('remember', $values) ? $values['remember'] : false);
+
+        $signinUrl = sfConfig::get('app_sf_guard_plugin_success_signin_url', $this->getUser()->getReferer('@homepage'));
+        return $this->getController()->redirect($signinUrl, 0, 302);
+      }
+    }
+  }
+}

@@ -1,0 +1,104 @@
+<?php
+
+/**
+ * chCmsAdminTresaPlugin configuration.
+ * 
+ * @package     chCmsAdminTresaPlugin
+ * @subpackage  config
+ * @author      Julien Muetton <julien_muetton@carpe-hora.com>
+ * @version     SVN: $Id$
+ */
+class chCmsAdminTresaPluginConfiguration extends sfPluginConfiguration
+{
+  const VERSION = '1.0.0-DEV';
+
+  /**
+   * @see sfPluginConfiguration
+   */
+  public function initialize()
+  {
+//        $this->dispatcher->connect(
+//            AdminMenu::getEventName(), 
+//            array('chCmsAdminTresaPluginCredentials', 'listenToAdminMenuInitEvent'));
+  
+      if (!sfConfig::get('sf_app_ch_cms_admin_tresa_plugin_prevent_admin_registration', false))
+      {
+        $this->dispatcher->connect(
+            AdminMenu::getEventName(), 
+            array('chCmsAdminTresaPluginRouting', 'listenToAdminMenuInitEvent'));
+      }
+  }
+
+  /**
+   * the function that compiles the menu group for chCmsAdminTresaPlugin
+   *
+   * @param sfEvent $event the <b>chCmsApplicationPlugin.admin.menu.init</b> event
+   * @return AdminGroupMenu
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public static function getMenuGroup($event)
+  {
+    $menu = $event->getSubject();
+    return $menu
+              ->addGroup('t_resa', 'T-resa', '/t-resa', 'icon=social-t-resa-32');
+  }
+
+  /**
+   * initializes the contract.
+   * to enable the contract tab into your config panel, just connect 
+   * this callback to the <b>chCmsApplicationPlugin.admin.menu.init</b>
+   * event.
+   *
+   * @param sfEvent $event the <b>chCmsApplicationPlugin.admin.menu.init</b> event
+   * @return AdminGroupMenu
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   * 
+   * @see AdminMenu
+   **/
+  public static function initializeContractMenu($event)
+  {
+//    return self::getMenuGroup($event)
+//        ->addPanel('contract', 'adminContract', 'index', 'admin_view_contract')
+//        ->addMenuEntry('contract', 'Contrat');
+  }
+//
+//  /**
+//   * initializes the company preferences.
+//   * to enable the preferences tab into your config panel, just connect 
+//   * this callback to the <b>chCmsApplicationPlugin.admin.menu.init</b>
+//   * event.
+//   *
+//   * @param sfEvent $event the <b>chCmsApplicationPlugin.admin.menu.init</b> event
+//   * @return AdminGroupMenu
+//   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+//   * 
+//   * @see AdminMenu
+//   **/
+  public static function initializePreferencesMenu($event)
+  {
+//    self::getMenuGroup($event)
+//        ->addPanel('preferences', 'adminCompanyPreferences', 'index', 'admin_edit_vocabulary', /* extra options */ array(), /* uri */ 'preferences')
+//        ->addAction('preferences_update', 'adminCompanyPreferences', 'update', 'admin_edit_vocabulary', /* extra options */ array(), /* uri */ 'preferences')
+//        ->addMenuEntry('preferences', 'Centrale de réservation');
+  }
+//
+//  /**
+//   * initializes the menu entry for company configuration.
+//   * to enable the company profile tab into your config panel, just connect 
+//   * this callback to the <b>chCmsApplicationPlugin.admin.menu.init</b>
+//   * event.
+//   *
+//   * @param sfEvent $event the <b>chCmsApplicationPlugin.admin.menu.init</b> event
+//   * @return AdminGroupMenu
+//   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+//   * 
+//   * @see AdminMenu
+//   */
+  public static function initializeCompanyMenu($event)
+  {
+//    return self::getMenuGroup($event)
+//        ->addPanel('company', 'adminCompany', 'index', 'admin_edit_company', /* extra options */ array(), /* uri */ 'entreprise')
+//        ->addAction('company_update', 'adminCompany', 'update', 'admin_edit_company', /* extra options */ array(), /* uri */ 'entreprise')
+//        ->addMenuEntry('company', 'Profil d\'entreprise');
+  }
+}

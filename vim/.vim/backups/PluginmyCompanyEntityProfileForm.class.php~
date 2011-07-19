@@ -1,0 +1,34 @@
+<?php
+/**
+ * This file declare the PluginmyCompanyEntityProfileForm class.
+ *
+ * @package chCmsAdminMyAccount
+ * @subpackage form
+ * @author Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-02-02
+ */
+
+/**
+ * the plugin implementation of CompanyEntityProfileForm
+ */
+class PluginmyCompanyEntityProfileForm extends CompanyEntityForm
+{
+  /**
+   * configure the myProfileForm
+   *
+   * @return void
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function configure()
+  {
+    parent::configure();
+    unset(
+      $this['id'],
+      $this['entity_type'],
+      $this['contacts_default_visibility'],
+    );
+
+    $this->widgetSchema->setNameFormat('pro_profile[%s]');
+  }
+} // END OF PluginmyCompanyEntityProfileForm

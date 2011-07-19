@@ -1,0 +1,173 @@
+<?php
+/**
+ * @package    T-resa-lib
+ * @subpackage  default
+ * @author     Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright  (c) Carpe Hora SARL 2011
+ */
+
+/**
+ * sfGuardProfile form.
+ *
+ * @package    T-resa-lib
+ * @subpackage form
+ * @author     Julien Muetton <julien_muetton@carpe-hora.com>
+ * @version    SVN: $Id: sfPropelFormTemplate.php 10377 2008-07-21 07:10:32Z dwhittle $
+ */
+class sfGuardProfileForm extends BasesfGuardProfileForm
+{
+  public function configure()
+  {
+    unset(
+      $this['id'],
+      $this['user_id'],
+      $this['search_index'],
+      $this['latitude'],
+      $this['longitude']
+    );
+
+    $possibleYears = array();
+    for($i=date('Y'); $i>1900; $i--)
+    {
+      $possibleYears[$i] = $i;
+    }
+
+    $this->setWidget('update_ziptown_for_autocomplete', new chCmsFormWidgetUpgradeZipTown(array(
+                            'zipcode' => 'zip_code',
+                            'town'    => 'town',
+                      )));
+
+    $this->setWidget('birthday', new chCmsWidgetFormBirthdate(array(
+          'culture' => 'fr',
+        ),array()));
+
+    $this->setValidators(array(
+      'firstname' => new chCmsValidatorFrSentence(array(
+                        'max_length' => 55,
+                        'required' => true
+                    ),array(
+                        'invalid'  => 'Vous ne pouvez utiliser de caractères spéciaux',
+                        'required' => 'Ce champ est obligatoire',
+                        'max_length' => 'Ce champ ne peut contenir plus de %max_length% caractères'
+                    )),
+      'lastname' => new chCmsValidatorFrSentence(array(
+                        'max_length' => 55,
+                        'required' => true
+                    ),array(
+                        'invalid'  => 'Vous ne pouvez utiliser de caractères spéciaux',
+                        'required' => 'Ce champ est obligatoire',
+                        'max_length' => 'Ce champ ne peut contenir plus de %max_length% caractères'
+                    )),
+      'birthday' => new sfValidatorDate(array(
+                        'required'    => false,
+                        'date_format' => '/^[0-9]{2}\-[0-9]{2}\-[0-9]{4}$/',
+                        'max'         => strtotime('now'),
+                        'min'         => strtotime('01-01-1900')
+                    ),array(
+                        'bad_format' => 'La date fournie n\'est pas au bon format',
+                        'max'        => 'Vous ne pouvez être né après aujourd\'hui !',
+                        'min'        => 'Vous seriez si vieux ?'
+                    )),
+      'phone'     => new chCmsValidatorPhone(array(
+                            'required' => false
+                        ),array(
+                            'invalid'=>'"%value%" n\'est pas un numéro de téléphone'
+                        )),
+      'mobile'    => new chCmsValidatorPhone(array(
+                            'required' => false
+                        ),array(
+                            'invalid'=>'"%value%" n\'est pas un numéro de téléphone'
+                        )),
+      'mail'        =>  new sfValidatorEmail(array(
+                              'required'   => true,
+                              'max_length' => '255'
+                        ),array(
+                            'invalid'    => '"%value%" n\'est pas une adresse de courier electronique',
+                            'max_length' => 'Vous ne pouvez avoir une adresse mail de plus de %max_length% caractères'
+                        )),
+      'address_1' => new chCmsValidatorFrSentence(array(
+                            'required'    => false,
+                            'max_length'  => 255,
+                            'min_length'  => 4
+                        ),array(
+                            'required'    => 'Ce champ est obligatoire',
+                            'invalid'     => 'Ce champ ne peut pas contenir de caractères spéciaux !',
+                            'min_length'  => 'Ce champ doit comporter au moins "%min_length%" caractères',
+                            'max_length'  => 'Ce champ ne peut dépasser %max_length% caractères'
+                        )),
+      'address_2' => new chCmsValidatorFrSentence(array(
+                            'required'    => false,
+                            'max_length'  => 255,
+                            'min_length'  => 4
+                        ),array(
+                            'invalid'     => 'Ce champ ne peut pas contenir de caractères spéciaux !',
+                            'min_length'  => 'Ce champ doit comporter au moins "%min_length%" caractères',
+                            'max_length'  => 'Ce champ ne peut dépasser %max_length% caractères'
+                        )),
+      'address_3' => new chCmsValidatorFrSentence(array(
+                            'required'    => false,
+                            'max_length'  => 255,
+                            'min_length'  => 4
+                        ),array(
+                            'invalid'     => 'Ce champ ne peut pas contenir de caractères spéciaux !',
+                            'min_length'  => 'Ce champ doit comporter au moins "%min_length%" caractères',
+                            'max_length'  => 'Ce champ ne peut dépasser %max_length% caractères'
+                        )),
+      'zip_code'    => new sfValidatorRegex(array(
+                            'required'    => false,
+                            'pattern'     => '#^\d{5}$#'
+                      ),array(
+                            'invalid'     => 'Un code postal est composé de 5 chiffres',
+                            'required'    => 'Ce champ est obligatoire',
+                      )),
+      'town'        => new chCmsValidatorFrSentence(array(
+                            'required'    => false,
+                            'max_length'  => '255'
+                      ),array(
+                            'invalid'     => 'Une ville ne contient pas de caractères spéciaux !',
+                            'max_length'  => 'Ce champ ne peut dépasser %max_length% caractères',
+                            'required'    => 'Ce champ est obligatoire'
+                      ))
+    ));
+
+    $this->validatorSchema->setPostValidator(new sfValidatorAnd(array(
+        new sfValidatorCallback(array(
+          'callback' => array($this, 'validateUniqueMail')
+        ), array(
+          'invalid' => 'Cette adresse mail est déjà utilisée pour un autre compte')),
+        new chCmsValidatorUpgradeZipTown(array(
+          'zipcode' => 'zip_code',
+          'town'    => 'town',
+          'check_consistancy' => false
+        ))
+    )));
+
+    $this->widgetSchema->setLabels(array(
+      'firstname'  => 'Prénom',
+      'lastname'  => 'Nom',
+      'birthday'  => 'Date de naissance',
+      'phone'     => 'Téléphone',
+      'mobile'    => 'Téléphone mobile',
+      'mail'      => 'Adresse mail',
+      'address_1' => 'Adresse',
+      'address_2'   => 'Bâtiment',
+      'address_3'   => 'Champ complémentaire',
+      'zip_code'  => 'Code postal',
+      'town'  => 'Ville'
+    ));
+
+    chTools::setFormFormatter($this);
+  }
+
+  public function validateUniqueMail($validator, $values, $args)
+  {
+    $obj = sfGuardProfileQuery::create()
+            ->filterByMail($values['mail'])
+            ->findOne();
+    if (!$obj || $obj->getUserId() == $this->object->getUserId())
+    {
+      return $values;
+    }
+    throw new sfValidatorError($validator, 'invalid');
+  }
+}

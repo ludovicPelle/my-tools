@@ -1,0 +1,72 @@
+<?php
+/**
+ * This file declare the PluginProviderRegistrationForm class.
+ *
+ * @package chCmsGuardExtraPlugin
+ * @subpackage form
+ * @author Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-06-17
+ */
+
+/**
+ * base class for every provider registration for
+ */
+class PluginProviderRegistrationForm extends RegistrationForm
+{
+  /**
+   * conigure form
+   *
+   * @return void
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function configure()
+  {
+    parent::configure();
+
+    if (isset($this['password']))
+    {
+      unset($this['password']);
+    }
+    if (isset($this['password_again']))
+    {
+      unset($this['password_again']);
+    }
+  }
+
+  /**
+   * fix mail
+   *
+   * @return void
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function fixMail($mail)
+  {
+    if (!$this->object->isNew() || $this->isMailValid($mail))
+    {
+      $this->setWidget('mail', new sfWidgetFormPlain());
+      unset($this->validatorSchema['mail']);
+      $this->getObject()->getProfile()->setMail($mail);
+      $this->getObject()->isMailValidated(true);
+      $this->mergePreValidator(
+          new sfValidatorSchemaRemove(array('fields' => array('mail')))
+        );
+    }
+  }
+
+  public function isMailValid($mail)
+  {
+    try
+    {
+      $v = new sfValidatorEmail(array('required' => true));
+      $mail = $v->clean($mail);
+      $v = RegistrationForm::getMailUnicityValidator();
+      $v->clean(array('mail' => $mail));
+    }
+    catch(sfValidatorError $e)
+    {
+      return false;
+    }
+    return true;
+  }
+} // END OF PluginProviderRegistrationForm

@@ -1,0 +1,40 @@
+<?php
+/**
+ * @package    T-resa-lib
+ * @subpackage  default
+ * @author     Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright  (c) Carpe Hora SARL 2011
+ */
+/**
+ * this file defines the Contract model class
+ *
+ * @author Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2010
+ * @since 2010-12-23
+ */
+
+/**
+ * this is the company contract model class.
+ *
+ * @package T-resa-lib
+ * @subpackage subpackage
+ */
+class Contract extends BaseContract
+{
+  public function __construct()
+  {
+    parent::__construct();
+    $this->registerMultipleProperty('SERVICE', null);
+  }
+
+  /**
+   * checks wether or not given service is available for this company
+   *
+   * @param string $serviceModelName the service class name
+   * @return string
+   */
+  public function isServiceAvailable($serviceModelName)
+  {
+    return in_array($serviceModelName, $this->getService());
+  }
+}

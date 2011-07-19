@@ -1,0 +1,44 @@
+<?php
+/**
+ * This file declare the PluginchCmsCompanyFilter class.
+ *
+ * @package chCmsCompany
+ * @subpackage filter
+ * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-07-07
+ */
+
+/**
+ * company plugin filter
+ */
+class PluginchCmsCompanyFilter extends sfFilter
+{
+  /**
+   * execute filter
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function execute($sfFilterChain)
+  {
+    try
+    {
+      if ( !CompanyQuery::countGuardUserIsValidMemberOf($this->getContext()->getUser()->getGuardUser() ))
+      {
+        throw new chCmsCompanyNotAMemberSigninErrorException('User does not belong to any company');
+      }
+      $sfFilterChain->execute();
+    }
+    catch(chCmsCompanyNotAMemberSigninErrorException $e)
+    {
+      echo 'toto';
+      exit;
+    }
+    catch(chCmsCompanyNotAMemberException $e)
+    {
+      $this->getContext()->getUser()->signout();
+      throw new sfException();
+    }
+  }
+} // END OF PluginchCmsCompanyFilter

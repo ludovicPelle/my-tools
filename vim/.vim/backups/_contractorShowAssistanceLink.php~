@@ -1,0 +1,94 @@
+<?php
+/*
+  $assistant
+  $contractor
+  $assistantName
+*/
+$company = $contractor->getCompany();
+?>
+<table>
+  <tbody>
+    <tr>
+      <th>
+          <?php if ($current->getId() === $contractor->getId()): ?>
+              <?php $icon_a = jui_icon('silk-user_green');?>
+              <?php $icon_c = jui_icon('silk-user_star');?>
+          <?php else: ?>
+              <?php $icon_c = jui_icon('silk-user_green');?>
+              <?php $icon_a = jui_icon('silk-user_star');?>
+          <?php endif; ?>
+          <?php echo __('%c_icon% %contractor% accorde à %a_icon% %assistant% les droits suivants', array(
+                            '%assistant%' => $assistant,
+                            '%contractor%' => $contractor,
+                            '%c_icon%' => $icon_c,
+                            '%a_icon%'  => $icon_a)) ?>
+      </th>
+      <th class="actions-cell">
+          <?php echo jui_link_to_function('Modifier',
+                        'Tresa.Contractors.rightsModify(this)',
+                        array('icon' => "silk-bullet_edit",
+                              'href' => admin_url_for(
+                                            $group,
+                                            "assistant_edit",
+                                            array('contractor_id' => $contractor->getId(), 'assistant_id' => $assistant->getId(), 'current' => $current->getId())))); ?>
+
+        <?php if ($assistant->hasAssistanceLinkFor($contractor->getId())): ?>
+          <?php echo jui_link_to_function('Rétablir les valeurs par défaut',
+                        'Tresa.Contractors.rightsRestore(this)',
+                        array('icon' => "silk-bullet_wrench_red",
+                              'href' => admin_url_for(
+                                            $group,
+                                            "assistant_delete",
+                                            array('contractor_id' => $contractor->getId(), 'assistant_id' => $assistant->getId(), 'current' => $current->getId())))); ?>
+        <?php endif; ?>
+      </th>
+    </tr>
+    <tr>
+      <th><?php echo __("Accès aux agendas d'entrprise") ?></th>
+      <td>
+        <ul class="inline_list">
+          <li><?php echo include_boolean_value($assistant->canViewCalendarCompanyFor($contractor)); ?> peut voir</li>
+          <li><?php echo include_boolean_value($assistant->canUpdateCalendarCompanyFor($contractor)); ?> peut mettre à jour</li>
+          <li><?php echo include_boolean_value($assistant->canCreateCalendarCompanyFor($contractor)); ?> peut créer</li>
+          <li><?php echo include_boolean_value($assistant->canDeleteCalendarCompanyFor($contractor)); ?> peut supprimer</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <th><?php echo __("Accès aux agendas protégés") ?></th>
+      <td>
+        <ul class="inline_list">
+          <li><?php echo include_boolean_value($assistant->canViewCalendarProtectedFor($contractor)); ?> peut voir</li>
+          <li><?php echo include_boolean_value($assistant->canUpdateCalendarProtectedFor($contractor)); ?> peut mettre à jour</li>
+          <li><?php echo include_boolean_value($assistant->canCreateCalendarProtectedFor($contractor)); ?> peut créer</li>
+          <li><?php echo include_boolean_value($assistant->canDeleteCalendarProtectedFor($contractor)); ?> peut supprimer</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <th>Accès aux <?php echo $company->getVocabulary('client', 2) ?> publics</th>
+      <td>
+        <ul class="inline_list">
+          <li><?php echo include_boolean_value($assistant->canViewCompanyContactFor($contractor)); ?> peut voir</li>
+          <li><?php echo include_boolean_value($assistant->canUpdateCompanyContactFor($contractor)); ?> peut mettre à jour</li>
+          <li><?php echo include_boolean_value($assistant->canCreateCompanyContactFor($contractor)); ?> peut créer</li>
+          <li><?php echo include_boolean_value($assistant->canDeleteCompanyContactFor($contractor)); ?> peut supprimer</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <th>Accès aux <?php echo $company->getVocabulary('client', 2) ?> protégés</th>
+      <td>
+        <ul class="inline_list">
+          <li><?php echo include_boolean_value($assistant->canViewProtectedContactFor($contractor)); ?> peut voir</li>
+          <li><?php echo include_boolean_value($assistant->canUpdateProtectedContactFor($contractor)); ?> peut mettre à jour</li>
+          <li><?php echo include_boolean_value($assistant->canCreateProtectedContactFor($contractor)); ?> peut créer</li>
+          <li><?php echo include_boolean_value($assistant->canDeleteProtectedContactFor($contractor)); ?> peut supprimer</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<?php
+// vim:ft=php.html.sftemplate
+?>

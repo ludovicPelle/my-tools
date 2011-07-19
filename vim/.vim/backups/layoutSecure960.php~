@@ -1,0 +1,109 @@
+<?php use_stylesheet('/css/grid-fix.css', 'first') ?>
+<?php use_stylesheet('/css/users/main.css', 'first') ?>
+<?php use_stylesheet('/css/users/main-fix.css', 'first') ?>
+<?php use_stylesheet('/css/pro/layoutSecure.css', 'first') ?>
+<!DOCTYPE html>
+<html lang="fr">
+
+	<head>
+    <?php echo include_http_metas() ?>
+    <?php echo include_metas() ?>
+		<meta name="title" content="t-resas.fr, votre assistante en ligne" />
+
+		<title>t-resa.fr, votre assistante en ligne</title>
+
+		<link rel="shortcut icon" href="./favicon.ico" />
+
+		<!--[if IE]>
+	    	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	    <![endif]-->
+	</head>
+
+	<body>
+
+		<header>
+
+			<div id="header-wrapper">
+
+				<div class="container_12 clearfix">
+
+					<h1 id="logo" class="grid_5"><a href=".">t-resas.fr, votre assistante en ligne</a></h1>
+
+					<nav class="grid_7">
+
+            <ul>
+
+              <?php echo link_to_styled('Nous contacter', '@main_contact', 'tag=li class=selected') ?>
+
+              <?php echo link_to_styled('Accès perdus', 'chCmsFrontendAccount/lostPassword', 'tag=li class=selected') ?>
+
+              <?php echo link_to_styled('Accueil', '@homepage', 'tag=li class=selected') ?>
+
+            </ul>
+
+          </nav>
+
+        </div>
+
+      </div>
+
+    </header>
+
+		<section id="content">
+			<div id="content-wrapper-1">
+				<div id="content-wrapper-2"  class="content">
+          <div class="container_12">
+
+            <?php if (has_slot('title')): ?>
+              <?php include_slot('title') ?>
+            <?php else: ?>
+              <h3>T-resa Pro</h3>
+            <?php endif; ?>
+            <?php if (has_slot('toolbar')): ?>
+              <?php include_slot('toolbar') ?>
+            <?php endif; ?>
+            <?php cms_include_messages() ?>
+            <?php echo $sf_content ?>
+          </div>
+				</div>
+			</div>
+		</section>
+
+		<footer>
+			<div id="footer-wrapper">
+
+				<div class="container_12 clearfix">
+						<div class="grid_3 copyright">
+							<p>&#169; <a href="http://www.carpe-hora.com">CARPE HORA SARL</a> 2006-2010</p>
+						</div>
+
+						<div class="grid_3">
+							<dl>
+								<dt>t-resas.fr</dt>
+								<dd><a href="./mentions-legales">Mentions légales</a></dd>
+								<dd><a href="./confidentialite">Politique de confidentialité</a></dd>
+								<dd><?php echo link_to('Foire aux questions - FAQ', '@faq'); ?></dd>
+							</dl>
+						</div>
+
+						<div class="grid_3">
+							<dl>
+								<dt>Qui sommes-nous ?</dt>
+                <dd><?php echo link_to('Qui se cache derrière t-resas.fr ?', 'http://www.carpe-hora.com'); ?></dd>
+                <dd><?php echo link_to('Nous contacter', '@main_contact') ?></dd>
+							</dl>
+						</div>
+
+						<div class="grid_3">
+							<dl>
+								<dt>Autres accès</dt>
+                  <dd><a href="http://www.t-resa.fr">Accès particulier</a></dd>
+							</dl>
+						</div>
+				</div>
+
+			</div>
+		</footer>
+	</body>
+
+</html>

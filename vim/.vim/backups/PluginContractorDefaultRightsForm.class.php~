@@ -1,0 +1,35 @@
+<?php
+/**
+ * This file declare the PluginContractorDefaultAssistantRightsForm class.
+ *
+ * @package chCmsContractorPlugin
+ * @subpackage forms
+ * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-05-16
+ */
+
+/**
+ * default form for contractor assistant rights
+ */
+abstract class PluginContractorDefaultAssistantRightsForm extends ContractorForm
+{
+  /**
+   * set up the form
+   **/
+  public function setup()
+  {
+    parent::setup();
+
+
+
+    $this->useFields(array(
+      'access_freebusy',
+      'access_event',
+      'access_contact_public',
+      'access_contact_protected',
+    ));
+
+    $this->widgetSchema->setNameFormat('contractor_default_assistant_rights[%s]');
+  }
+} // END OF PluginContractorDefaultAssistantRightsForm

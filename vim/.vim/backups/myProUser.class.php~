@@ -1,0 +1,243 @@
+<?php
+/**
+ * @package    T-resa-lib
+ * @subpackage  default
+ * @author     Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright  (c) Carpe Hora SARL 2011
+ */
+/**
+ * this file defines the myProUser class.
+ **/
+
+/**
+ * the myProUser class is the base class for any pro application.
+ * @see sfGuardSecurityUser
+ * @see sfBasicSecurityUser
+ * @see sfUser
+ */
+class myProUser extends sfGuardSecurityUser
+{
+  protected $companies = null,
+            $preferences = array(),
+            $CompanyRights = array();
+
+  public function sudo($user)
+  {
+    if (!$this->isTresaAdmin())
+    {
+      throw new sfSecurityException('you cannont sudo unless you are TresaAdmin');
+    }
+    $this->companies = null;
+    $this->preferences = array();
+    $this->CompanyRights = array();
+    if (!$this->hasAttribute('sudoer_id', 'sudoer'))
+    {
+      $this->setAttribute('sudoer_id', $this->getGuardUser()->getId(), 'sudoer');
+    }
+    $this->setAttribute('user_id', $user->getId(), 'sfGuardSecurityUser');
+    $this->setAttribute('SELECTED_COMPANY_ID', null);
+  }
+
+  /**
+   * used in case the user is a sudoer
+   */
+  public function getOriginalUserId()
+  {
+    return $this->getAttribute('sudoer_id', $this->getGuardUser()->getId(), 'sudoer');
+  }
+
+  /**
+   * checks wether or not the user has given credentials
+   * @param String|array $credential the credential to check
+   */
+  public function hasAdminCredential($credentials)
+  {
+    if (!is_array($credentials))
+    {
+      return      $this->isAuthenticated()
+              && (
+                    $this->getCompanyEntity()->hasCredential($credentials, /* check into company default */ true)
+                 || ( 0 === strpos($credentials, 'admin_') && $this->isAdmin())
+                );
+    }
+    return $this->hasCredential($credentials);
+  }
+
+  /**
+   * is the user admin ? or force the user to be an admin
+   *
+   * @param boolean $value if provided, set or reset admin
+   * @return boolean
+   * @see CompanyEntity
+   **/
+  public function isAdmin($value = null)
+  {
+    return $this->getCompanyEntity()->isAdmin($value);
+  }
+
+  /**
+   * override the default has credential to check for
+   * admin panel credentials, defined in the chCmsApplication plugin
+   *
+   * @param  mixed $credentials
+   * @param  bool  $useAnd       specify the mode, either AND or OR
+   * @return bool
+   */
+  public function hasCredential($credentials, $useAnd = true)
+  {
+    if (!is_array($credentials))
+    {
+      return $this->hasAdminCredential($credentials) || parent::hasCredential($credentials, $useAnd);
+    }
+    return parent::hasCredential($credentials, $useAnd);
+  }
+
+  public function getUserProfile()
+  {
+    return $this->getGuardUser()->getUserProfile();
+  }
+
+  public function getMail()
+  {
+    $mail = $this->getCompanyEntity()->getMail();
+    if (!strlen($mail))
+    {
+      return $this->getGuardUser()->getUserProfile()->getMail();
+    }
+    return $mail;
+  }
+
+  public function getName()
+  {
+    return $this->getCompanyEntity()->getCompanyName();
+  }
+
+  public function getListLength()
+  {
+    return $this->getPreference('list_length');
+  }
+
+  public function signIn($user, $remember = false, $con = null)
+  {
+    parent::signIn($user, $remember, $con);
+    $this->getSelectedCompany();
+  }
+
+  public function getPreferences()
+  {
+    if (!array_key_exists($this->getSelectedCompany()->getId(), $this->preferences))
+    {
+      $pref = sfGuardProPreferencesQuery::create()
+                ->filterByUserId($this->getGuardUser()->getId())
+                ->filterByCompanyId($this->getSelectedCompany()->getId())
+                ->findOne();
+
+      if (!$pref)
+      {
+        $pref = new sfGuardProPreferences();
+        $pref->setUserId($this->getGuardUser()->getId());
+        $pref->setCompanyId($this->getSelectedCompany()->getId());
+      }
+
+      $this->preferences[$this->getSelectedCompany()->getId()] = $pref;
+    }
+    return $this->preferences[$this->getSelectedCompany()->getId()];
+  }
+
+  public function getPreference($preferenceName, $default = null)
+  {
+    $p = $this->getPreferences();
+    $m = sprintf('get%s', ucfirst(Tresa::camelize($preferenceName)));
+    $value = call_user_func(array($p, $m));
+
+    return $value;
+  }
+
+  public function getFiles($company = null)
+  {
+    throw new Exception('This method is deprecated. Please use the new ContactsPlugin');
+    $company_id = $company ? is_numeric($company) ? $company : $company->getId() : $this->getSelectedCompany()->getId();
+
+    return FilePeer::doSelectForUserView($this->getGuardUser(), $company_id);
+  }
+
+  public function getCollegues($company = null, $criteria = null)
+  {
+    static $collegues;
+    if (!$collegues)
+    {
+      $collegues = $this->getGuardUser()->getCollegues($company, $criteria);
+    }
+    return $collegues;
+  }
+
+  public function getAssistants($company = null, $criteria = null)
+  {
+  throw new sfException('this function is deprecated, use more precise rights');
+    static $assistants;
+    if (!$assistants)
+    {
+      $assistants = $this->getGuardUser()->getAssistants($company, $criteria);
+    }
+    return $assistants;
+  }
+
+  public function getAssistedByMe($company = null, $criteria = null)
+  {
+  throw new sfException('this function is deprecated, use more precise rights');
+    static $assistedByMe;
+    if (!$assistedByMe)
+    {
+      $assistedByMe = $this->getGuardUser()->getAssistedByMe($company, $criteria);
+    }
+    return $assistedByMe;
+  }
+
+  /**
+   * due to historical reasons, this is a wrapper
+   * to getCompanyEntity
+   * @deprecated
+   */
+  public function getProProfile()
+  {
+    return $this->getCompanyEntity($this->getSelectedCompany());
+  }
+
+  public function getCompanyEntity($company = null)
+  {
+    return $this->getGuardUser()->getCompanyEntity(is_null($company) ? $this->getSelectedCompany() : $company);
+  }
+
+  public function getCompanyEntityId($company = null)
+  {
+    return $this->getCompanyEntity($company)->getId();
+  }
+
+  /**
+   * get the user fullname
+   *
+   * @return String
+   **/
+  public function getFullname()
+  {
+    return $this->getName();
+  }
+
+  /**
+   * get the current user theme
+   *
+   * @return string
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function getTheme()
+  {
+    if (  $this->isAuthenticated() &&
+          ($retailer = $this->getSelectedCompany()->getContract()->getRetailer()))
+    {
+      return $retailer->getTheme();
+    }
+
+    // return default theme
+    return chCmsBasicUser::getTheme($this);
+  }
+}

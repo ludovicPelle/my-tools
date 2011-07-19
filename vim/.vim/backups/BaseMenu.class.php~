@@ -1,0 +1,378 @@
+<?php
+/**
+ * This file declare the BaseMenu class.
+ *
+ * @package chCmsApplicationPlugin
+ * @subpackage Menu
+ * @author Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2010
+ * @since 2010-12-15
+ */
+
+/**
+ * the base class for menus.
+ * it defines the user, dispatcher and items management functions.
+ *
+ * To add item to the menu, just regiter on the event given by the getEventNamspace() method.
+ *
+ * Listeners recieves the event as parameter.
+ * You can access the menu through the getSubject method, and parameters thanks to the 
+ * ArrayInterface of event.
+ *
+ * <code>
+ *  <!-- define your listeners -->
+ *  <?php
+ *  class MyMenu
+ *  {
+ *    public static function myListener($event)
+ *    {
+ *      $menu = $event->getSubject();
+ *      $user = $event['user'];
+ *      // your code comes here
+ *    }
+ *  }
+ *  ?>
+ *  <!-- register your listeners -->
+ *  <?php
+ *    // register events
+ *    $dispatcher->connect(Menu::getEventName(), array('MyMenu', 'myListener'));
+ *  ?>
+ *  <!-- in your template -->
+ *  <div id="my-menu">
+ *    <?php foreach(Menu::getInstance()->getItems() as $name => $item): ?>
+ *      <!-- do whatever you want with each item -->
+ *    <?php endofreach; ?>
+ *  </div>
+ * </code>
+ */
+abstract class BaseMenu
+{
+  /**
+   * plugged on the context.load_factories event
+   **/
+  public static function listenToLoadFactoriesEvent(sfEvent $event)
+  {
+    $context = $event->getSubject();
+    self::setUser($context->getUser());
+    self::setRouting($context->getRouting());
+    self::setDispatcher($context->getEventDispatcher());
+    self::setRequest($context->getRequest());
+    self::setResponse($context->getResponse());
+  }
+
+  /**
+   * for test purpose only
+   * destroy the current instance.
+   */
+  public static function clearInstance()
+  {
+    self::$instance = null;
+  }
+
+  /**
+   * gives the event name for the menu to collect items
+   * @access public
+   * @static
+   * @abstract
+   */
+  public static function getEventName()
+  {
+    return 'please.define.me';
+  }
+
+  /**
+   * retrieves the instance.
+   * this function is the base function for the singleton.
+   * @access public
+   * @static
+   * @abstract
+   *
+   * @return BaseMenu
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public static function getInstance()
+  {
+    if(is_null(self::$instance))
+    {
+      self::$instance = new BaseMenu();
+      // call initialize in there
+      // to be able to access instance 
+      // through initialization process
+      self::$instance->initialize();
+    }
+    return self::$instance;
+  }
+
+  /**
+   * compute the event parameters.
+   * parameters are available through $event['parameter_name'].
+   * basicly, following parameters are given. 
+   * @access protected
+   *
+   * @return array
+   */
+  protected function getEventParameters()
+  {
+    return array(
+      'user' => self::getUser(),
+      'dispatcher' => self::getDispatcher());
+  }
+
+  /**
+   * @var BaseMenu
+   * @static
+   * @abstract
+   * the singleton instance
+   */
+  protected static $instance;
+
+  /**
+   * the singleton construct 
+   * @access public
+   * @see getInstance
+   */
+  public function initialize()
+  {
+    $dispatcher = self::getDispatcher();
+    $event = new sfEvent($this, $this->getEventName(), $this->getEventParameters());
+    $dispatcher->notify($event);
+  }
+
+  /**
+   * the list of menu items in the key => value format
+   * @access protected
+   * @var array
+   */
+   protected $items = array();
+  
+  /**
+   * getter for item
+   * @access public
+   *
+   * @param string $name the entry name
+   *
+   * @return array the item value
+   */
+  public function getItem($name)
+  {
+    return $this->items[$name];
+  }
+  
+  /**
+   * setter for item
+   * @access public
+   *
+   * @param string $name the entry name
+   * @param array $config the entry config
+   *
+   * @return array the item value
+   */
+  public function addItem($name, $config)
+  {
+    return $this->items[$name] = $config;
+  }
+  
+  /**
+   * checks wether or not the given entry key is available
+   * @access public
+   *
+   * @param string $name the entry name
+   * @return boolean
+   */
+  public function hasItem($name)
+  {
+    return array_key_exists($name, $this->items);
+  }
+
+  /**
+   * returns the item list.
+   * @access public
+   *
+   * @return array
+   */
+  public function getItems()
+  {
+    return $this->items;
+  }
+
+  /**
+   * the current user
+   * @access protected 
+   * @static
+   */
+   protected static $user;
+  
+  /**
+   * getter for current user
+   * @access public 
+   * @static
+   *
+   * @return myUser       the current user
+   */
+  public static function getUser()
+  {
+    return self::$user;
+  }
+  
+  /**
+   * setter for current user
+   * @access public 
+   * @static
+   *
+   * @param myUser $user the current user
+   *
+   * @return array the user value
+   */
+  public static function setUser($user)
+  {
+    return self::$user = $user;
+  }
+
+  /**
+   * the current dispatcher
+   * @access protected 
+   * @static
+   * @var sfDispatcher
+   */
+   protected static $dispatcher;
+  
+  /**
+   * getter for current dispatcher
+   * @access public 
+   * @static
+   *
+   * @return sfDispatcher       the current dispatcher
+   */
+  public static function getDispatcher()
+  {
+    return self::$dispatcher;
+  }
+  
+  /**
+   * setter for current dispatcher
+   * @access public 
+   * @static
+   *
+   * @param sfDispatcher $dispatcher the current dispatcher
+   *
+   * @return array the dispatcher value
+   */
+  public static function setDispatcher($dispatcher)
+  {
+    return self::$dispatcher = $dispatcher;
+  }
+
+  /**
+   * the current routing in used. 
+   * should be loaded from context.load_factories
+   * @var sfRouting
+   */
+   protected static $routing;
+  
+  /**
+   * getter for routing
+   *
+   * @return sfRouting the routing value
+   */
+  public function getRouting()
+  {
+    return self::$routing;
+  }
+  
+  /**
+   * setter for routing
+   *
+   * @return sfRouting the routing value
+   */
+  public static function setRouting($routing)
+  {
+    return self::$routing = $routing;
+  }
+
+  /**
+   * the current response
+   * @access protected 
+   * @static
+   * @var sfResponse
+   */
+   protected static $response;
+  
+  /**
+   * getter for current response
+   * @access public 
+   * @static
+   *
+   * @return sfResponse       the current response
+   */
+  public static function getResponse()
+  {
+    return self::$response;
+  }
+  
+  /**
+   * setter for current response
+   * @access public 
+   * @static
+   *
+   * @param sfResponse $response the current response
+   *
+   * @return array the response value
+   */
+  public static function setResponse($response)
+  {
+    return self::$response = $response;
+  }
+
+  /**
+   * the current request
+   * @access protected 
+   * @static
+   * @var sfRequest
+   */
+   protected static $request;
+  
+  /**
+   * getter for current request
+   * @access public 
+   * @static
+   *
+   * @return sfRequest       the current request
+   */
+  public static function getRequest()
+  {
+    return self::$request;
+  }
+  
+  /**
+   * setter for current request
+   * @access public 
+   * @static
+   *
+   * @param sfRequest $request the current request
+   *
+   * @return array the request value
+   */
+  public static function setRequest($request)
+  {
+    return self::$request = $request;
+  }
+
+  /**
+   * log a message.
+   *
+   * @param string  $message  the message to log.
+   * @param int     $level    te log level (sfLogger::INFO, sfLogger::WARNING, ...)
+   *
+   * @return BaseMenu
+   **/
+  public function log($message, $level = null)
+  {
+    if (is_null($level))
+    {
+      $level = sfLogger::INFO;
+    }
+    self::$dispatcher->notify(new sfEvent($this, 'application.log', array(
+            $message, 
+            'priority' => $level)));
+  }
+} // END OF BaseMenu

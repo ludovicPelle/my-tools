@@ -1,0 +1,97 @@
+<?php
+
+/**
+ * chCmsAdminMyAccountPlugin configuration.
+ * 
+ * @package     chCmsAdminMyAccountPlugin
+ * @subpackage  config
+ * @author      Julien Muetton <julien_muetton@carpe-hora.com>
+ * @version     SVN: $Id$
+ */
+class chCmsAdminMyAccountPluginConfiguration extends sfPluginConfiguration
+{
+  const VERSION = '1.0.0-DEV';
+
+  /**
+   * @see sfPluginConfiguration
+   */
+  public function initialize()
+  {
+    $this->dispatcher->connect(
+        'routing.load_configuration', 
+        array('chCmsAdminMyAccountPluginConfiguration', 'listenToRoutingLoadConfigurationEvent'));
+
+      $this->dispatcher->connect(
+          AdminMenu::getEventName(), 
+          array('chCmsAdminMyAccountPluginCredentials', 'listenToAdminMenuInitEvent'));
+
+    if (!sfConfig::get('sf_app_ch_cms_admin_my_account_plugin_prevent_admin_registration', false))
+    {
+      $this->dispatcher->connect(
+          AdminMenu::getEventName(), 
+          array('chCmsAdminMyAccountPluginRouting', 'listenToAdminMenuInitEvent'));
+    }
+  }
+
+  /**
+   * undocumented function
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public static function listenToRoutingLoadConfigurationEvent(sfEvent $event)
+  {
+    $routing = $event->getSubject();
+
+    // directly included in the layout
+    $routing->prependRoute(
+      'my_preferences_script', 
+      new sfRoute(
+        '/js/preferences.:sf_format',
+        array('module' => 'adminMyPreferences', 'action' => 'script'),
+        array('sf_format' => 'js'),
+        array()
+      ));
+  }
+
+  /**
+   * initializes the my account menu
+   *
+   * @param sfEvent         $event  the <b>chCmsApplicationPlugin.admin.menu.init</b> event
+   * @param AdminGroupMenu  $group  the group you want to use if not default one.
+   *
+   * @return AdminMenuGroup
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+//  public static function initializeMyAccountMenu($event, $group = null)
+//  {
+//    $group = self::getMenuGroup($event, $group);
+//    $user = $event['user'];
+//    $company = $user->getSelectedCompany();
+//    $assistants = $company->getVocabulary('assistant',2);
+//    $group;
+//
+//
+//    
+//  }
+
+  /**
+   * the function that compiles the menu group for chCmsAdminMyAccountPlugin
+   *
+   * @param sfEvent         $event  the <b>chCmsApplicationPlugin.admin.menu.init</b> event
+   * @param AdminGroupMenu  $group  the group you want to use if not default one.
+   *
+   * @return AdminGroupMenu
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public static function getMenuGroup($event, $group = null)
+  {
+    if (!is_null($group))
+    {
+      return AdminMenu::getInstance()->getGroup($group);
+    }
+    $menu = $event->getSubject();
+    return $menu
+              ->addGroup('my', 'Mon compte', '/mon-compte', 'icon=icojoy-briefcase-32');
+  }
+}//end of chCmsAdminMyAccountPluginConfiguration.class.php

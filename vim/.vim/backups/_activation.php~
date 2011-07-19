@@ -1,0 +1,10 @@
+<?php
+?>
+<p>
+  mail activation
+  <?php echo $user->getName() ?>
+  <?php echo $activation_link ?>
+
+</p>
+<?php
+// vim:ft=php.html.sftemplate

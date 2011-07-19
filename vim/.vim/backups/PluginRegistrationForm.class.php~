@@ -1,0 +1,252 @@
+<?php
+class PluginRegistrationForm extends chCmsFormManagerForm
+{
+  public function setup()
+  {
+    parent::setup();
+    $this->widgetSchema->setNameFormat('user_register[%s]');
+
+    /*$f = new AccountRegistrationForm();
+    $f->widgetSchema->setNameFormat('user_register_identification[%s]');
+    unset($f['id']);
+    $this->embedForm('identification', $f);* @package    chCmsGuardExtraPlugin
+    $this->embedForm('identification', $f);* @subpackage default
+    $this->embedForm('identification', $f);* @author     Julien Muetton <julien_muetton@carpe-hora.com>
+    $this->embedForm('identification', $f);* @package    chCmsGuardExtraPlugin
+    $this->embedForm('identification', $f);* @subpackage default
+    $this->embedForm('identification', $f);* @author     Julien Muetton <julien_muetton@carpe-hora.com>
+    $this->embedForm('identification', $f);* @package    chCmsGuardExtraPlugin
+    $this->embedForm('identification', $f);* @subpackage default
+    $this->embedForm('identification', $f);* @author     Julien Muetton <julien_muetton@carpe-hora.com>
+    $this->embedForm('identification', $f);*/
+
+    $this->addForm('identification', array(
+        'class' => 'AccountRegistrationForm',
+        'label' => 'Identification',
+        'no_select' => true));
+
+    $this->addForms(chTools::get('guard_extra_register_subforms', array()));
+
+    if (chTools::get('guard_extra_use_captcha', true))
+    {
+      $key = $this->getKeyForCaptcha();
+      $f = new sfForm();
+      //captcha
+      $f->setWidgets(array(
+        'captcha' => new chCmsWidgetFormCaptcha(array(
+          'public_key' => sfConfig::get('app_recaptcha_public_key')
+        ))));
+      $f->setValidators(array(
+        'captcha' => new chCmsValidatorCaptcha(array(
+          'private_key' => sfConfig::get('app_recaptcha_private_key')
+        ))));
+      $f->widgetSchema->setNameFormat(sprintf('%s[%s][%%s]', $this->getName(),$key));
+      $f->widgetSchema->setLabel('captcha', 'Code de sécurité');
+      chTools::setFormFormatter($f);
+      $this->embedForm($key, $f);
+      $this->chConfig[$key] = array('help' => 'To ensure you are a human, you have to copy this security code.');
+      $this->widgetSchema->setLabel('captcha', 'Code de sécurité');
+    }
+  }
+
+  public function bind(array $taintedValues = null, array $taintedFiles = null)
+  {
+//    $request = sfContext::getInstance()->getRequest();
+    if (chTools::get('guard_extra_use_captcha', true))
+    {
+      unset($this->embeddedForms[$this->getKeyForCaptcha()]);
+/*      $this->embeddedForms[$this->getKeyForCaptcha()]->bind(array( 'captcha' => array(
+        'recaptcha_challenge_field' => $request->getParameter('recaptcha_challenge_field'),
+        'recaptcha_response_field'  => $request->getParameter('recaptcha_response_field'),
+      )));*/
+    }
+    parent::bind($taintedValues, $taintedFiles);
+  }
+
+  public function getKeyForCaptcha()
+  {
+    return 'captcha';
+  }
+
+  public function save($con = null)
+  {
+    $con = is_null($con) ? Propel::getConnection(sfGuardUserPeer::DATABASE_NAME) : $con;
+    $con->beginTransaction();
+    try
+    {
+      //user
+      $user = new sfGuardUser();
+      $values = $this->embeddedForms['identification']->getValues();
+      $user->setUsername($values['username']);
+      $user->setPassword($values['password']);
+      $user->setIsActive(false);
+
+      //activation
+      if (true /*chTools::get('guard_extra_need_activation', true)*/)
+      {
+        $activation = new GuardActivation();
+        $activation->setHash(md5(sha1(uniqid($values['username'], true) . uniqid())));
+        $activation->save();
+      }
+
+      $user->save($con);
+
+      //profil
+      $profil = $user->getProfile();
+      foreach ($values as $key => $v)
+      {
+        $values[ucfirst(chTools::camelize($key))] = $v;
+      }
+      $profil->fromArray($values);
+      $profil->save($con);
+
+
+      $forms = $this->getEmbeddedForms();
+
+      //$sfGuardUser = $forms['identification']->save($con);
+      foreach (chTools::get('guard_extra_register_subforms', array()) as $key => $form)
+      {
+        $obj = $forms[$key]->getObject();
+
+        if (array_key_exists($key, $this->chConfig) && array_key_exists('scope', $this->chConfig[$key]) && is_array($this->chConfig[$key]['scope']))
+        {
+          foreach ($this->chConfig[$key]['scope'] as $scope)
+          {
+            $method = sprintf('set%s', ucfirst(chTools::camelize($scope['field'])));
+            $val = $user->getId();
+            if (isset($val) && method_exists($obj, $method))
+            {
+              call_user_func(array($obj, $method), $val);
+              unset($val);
+            }
+          }
+        }
+
+        foreach ($this->embeddedForms[$key]->getValues() as $field => $value)
+        {
+          $method = sprintf('set%s', ucfirst(chTools::camelize($field)));
+          if (method_exists($obj, $method))
+          {
+            call_user_func(array($obj, $method), $value);
+          }
+        }
+
+        $obj->save($con);
+      }
+
+      $con->commit();
+      $this->sendActivationMail($user);
+    }
+    catch(PDOException $sqle)
+    {
+      $con->rollBack();
+      throw $sqle;
+    }
+    catch(Exception $e)
+    {
+      // in case anything went bad...
+      $con->rollBack();
+      throw $e;
+    }
+
+    return $user;
+  }
+
+  public function sendActivationMail($user)
+  {
+    //get values
+    chTools::LoadHelpers(array('Url'));
+
+    $activation = $user->getActivations();
+    $activation = $activation[0];
+    $methodName = sprintf('get%ss', chTools::camelize(chTools::get('guard_extra_mail_table_name', 'sfGuardUserProfile')));
+    if (method_exists($user, $methodName))
+    {
+      $user_mail = call_user_func(array($user, $methodName));
+      $mailMethod = sprintf('get%s', ucfirst(chTools::camelize(chTools::get('guard_extra_mail_field_name', 'mail'))));
+      $user_mail = call_user_func(array($user_mail[0], $mailMethod));
+    }
+    else
+    {
+      $user_mail = $user->getProfile()->getEmail();
+    }
+
+    $values = $this->embeddedForms['identification']->getValues();
+    $password = $values['password'];
+
+    //read configuration
+    ProjectConfiguration::registerZend();
+    $configuration = chTools::get('guard_extra_activation_mail', array());
+    $configuration = array_merge(array(
+                  'from_mail' => 'no-reply@carpe-hora.com',
+                  'from_name' => 'carpe-hora.com',
+                  'subject'   => 'registration',
+                  'html_body' => <<<EOF
+    <p>
+      Votre compte sur <a href="http://www.t-resa.fr">t-resa.fr</a> a été créé.<br />
+      Vous devez maintenant l'activer avant de pouvoir vous connecter.
+    </p><p>
+      Pour activer votre compte, il suffit de cliquer sur ce lien: <a href="%ACTIVATION_URL%">Activez votre compte</a>
+      ou de vous rendre à l'adresse suivante:
+      -----------------------------<br />
+            %ACTIVATION_URL%.
+      -----------------------------</br />
+    </p><p>
+      Pour rappel, vos informations de connexion sont les suivantes:
+    <p><ul>
+      <li>Pseudo: %USERNAME%</li>
+      <li>Mot de passe: %PASSWORD%</li>
+    </ul><p>
+      Cordialement,<br />
+      Toute l'équipe de <a href="http://www.t-resa.fr">t-resa.fr</a>
+    </p>
+EOF
+                  ,
+                  'text_body' => <<<EOF
+    Votre compte sur http://t-resa.fr a été créé.
+    Vous devez maintenant l'activer avant de pouvoir vous connecter.
+
+    Pour l'activer, il suffit de copier cette adresse dans votre navigateur:
+    -----------------------
+        %ACTIVATION_URL%
+    -----------------------
+    Pour rappel, vos informations de connexion sont les suivantes:
+      * Pseudo: %USERNAME%
+      * Mot de passe: %PASSWORD%
+
+    Cordialement,
+    Toute l'équipe de t-resa.fr
+EOF
+                  ),
+                  $configuration);
+
+    //prepare mail
+    $mail = new Zend_Mail('utf-8');
+    $mail->setFrom($configuration['from_mail'], $configuration['from_name']);
+    $mail->addTo($user_mail);
+    $mail->setSubject($configuration['subject']);
+    $replaceArray = array(
+      '%ACTIVATION_URL%' => url_for ('chCmsFrontendSignup/activate?hash='.$activation->getHash().'&username='.$user->getUsername(), true),
+      '%USERNAME%' => $user->getUsername(),
+      '%PASSWORD%' => $password
+    );
+    $mail->setBodyHtml(__(
+        $configuration['html_body'],
+        $replaceArray
+    ));
+    $mail->setBodyText(__(
+        $configuration['html_body'],
+        $replaceArray
+    ));
+
+    //send
+    $mail->send();
+  }
+
+  public static function getUserId($form)
+  {
+//    throw new sfException();
+    $forms = $form->getEmbeddedForms();
+    return $forms['identification']->getObject()->getId();
+  }
+}

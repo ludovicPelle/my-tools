@@ -1,0 +1,27 @@
+<?php
+/**
+ * This file declare the TestUser class.
+ *
+ * @package chCmsApplicationPlugin
+ * @subpackage tests
+ * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-05-24
+ */
+
+/**
+ * basic user for tests
+ */
+class TestUser
+{
+  /**
+   * check if user has credential, true if not admin_***
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function hasAdminCredential($credential)
+  {
+    return 0 !== strpos($credentials, 'admin_');
+  }
+} // END OF TestUser

@@ -1,0 +1,595 @@
+window.Tresa = window.Tresa || {};
+(function($){
+  $(function(){
+	var Agenda    = Tresa.Agenda,
+			Attendees = Agenda.Attendees,
+			Services  = Tresa.Services;
+
+  var updateInput = function(input, id){
+				return $(input)
+                .attr('id', 'event_'+id)
+                .attr('name', 'event['+id+']');
+		},
+  getFormContainer = function(id, label_text, input){
+    return $('<p />')
+      .addClass('text')
+      .append($('<label />')
+                .attr('for', 'event_'+id)
+                .text(label_text))
+      .append($('<br />'))
+      .append(updateInput(input, id));
+    },
+    getFormCheckBoxContainer = function(id, label_text, input){
+      return $('<p />')
+        .addClass('checkbox')
+				.append(updateInput(input, id))
+        .append($('<label />')
+                  .attr('for', 'event_'+id)
+                  .text(label_text));
+
+
+    },
+    addTabToForm = function($form, title, id){
+      var _tab;
+      $form.find('.ui-tabs')
+            .tabs({tabTemplate: '<li><a href="#{href}">#{label}</a></li>', 
+                  add: function(event, ui){
+                        $(ui.panel).append(_tab = $('<div id="'+id+'"></div>'));
+                      }})
+            .tabs('add', '#'+id, title);
+
+      return _tab;
+    },
+    removeTab = function($form, id){
+      var tab = $form.find('a[href=#'+id+']').parent();
+      if(tab.length)
+      {
+				var index = $form.find('.ui-tabs-nav li').index(tab);
+        $form.find('.ui-tabs-panel:eq('+index+')').remove();
+        $form.find('.ui-tabs').tabs('remove', index);
+      }
+    };
+
+    // START TO REGISTER BEHAVIORS
+    Services.registerBehavior('Price', (function(){
+                  return {
+                    renderEvent: function(service, event, element){},
+                    updateEventForm: function($form, service, event){},
+                    resetEventForm: function($form, service, event){}
+                  };
+                })());
+    Services.registerBehavior('Description', (function(){
+                  return {
+                    renderEvent: function(service, event, element){
+											element
+												.find('.wc-title')
+												.append(
+														$('<p />')
+															.addClass('wc-event-description')
+															.html(event.Description));
+										},
+                    updateEventForm: function($form, service, event){},
+                    resetEventForm: function($form, service, event){}
+                  };
+                })());
+    Services.registerBehavior('AutoLocation', (function(){
+                var addAttendeeCallback, 
+                    removeAttendeeCallback,
+                    checkKeepAddress = function(){
+                          var $keepAddress = $('#event_keep_as_file_address');
+                          if(!$keepAddress.attr('checked')){
+                              $keepAddress
+                                  .attr('checked', 'checked')
+                                    .parent()
+                                      .show('pulsate');
+                          }
+                        },
+                    getGeoSelect = function($form, service, event){
+                            var $select = $('<select />')
+                                  .append($('<option />')
+                                              .attr('value', 'COMPANY')
+                                              .text(service.vocabulary_company))
+                                  .append($('<option />')
+                                              .attr('value', 'HOME')
+                                              .text(service.vocabulary_home))
+                                  .val(event.geo_select || 'COMPANY');
+                            return getFormContainer('geo_select', Tresa.i18n.get('geo_select'), $select);
+                        },
+                    getLocation = function($form, service, event){
+                          var $div = $('<div id="event_location" />');
+                          $div.append(getFormContainer(
+                                            'address_1', 
+                                            Tresa.i18n.get('address_1'), 
+                                            $('<input type="text" />').val(event.address_1 || '')));
+                          $div.append(getFormContainer(
+                                            'address_2', 
+                                            Tresa.i18n.get('address_2'), 
+                                            $('<input type="text" />').val(event.address_2 || '')));
+                          $div.append(getFormContainer(
+                                            'address_3', 
+                                            Tresa.i18n.get('address_3'), 
+                                            $('<input type="text" />').val(event.address_3 || '')));
+                          $div.append(getFormContainer(
+                                            'zip_code', 
+                                            Tresa.i18n.get('zip_code'), 
+                                            $('<input type="text" />').val(event.zip_code || '')));
+                          $div.append(getFormContainer(
+                                            'town', 
+                                            Tresa.i18n.get('town'), 
+                                            $('<input type="text" />').val(event.town || '')));
+                          $div.find('input')
+                                            .keypress(checkKeepAddress);
+                          $div.append(getFormCheckBoxContainer(
+                                            'keep_as_file_address',
+                                            Tresa.i18n.get('keep_as_file_address'),
+                                            $('<input type="checkbox" />').val('true').attr('checked', false)));
+													//now init the autocomplete
+													$div.townAutoComplete({'zipcode': '#event_zip_code', 'town':'#event_town'});
+                          return $div;
+                        },
+                    setAddressFromItem = function(addressPanel, item){
+                          if(!addressPanel.find('input[type=checkbox]').attr('checked'))
+                          {
+                            addressPanel.find('input')
+                                      .eq(0).val(item.address_1 || '').end()
+                                      .eq(1).val(item.address_2 || '').end()
+                                      .eq(2).val(item.address_3 || '').end()
+                                      .eq(3).val(item.zip_code || '').end()
+                                      .eq(4).val(item.town || '').end();
+                          }
+                        };
+
+                  return {
+                    renderEvent: function(service, event, element){},
+                    updateEventForm: function($form, service, event){
+                      var $attendeeSelector = $form.find(Agenda.getAutocompleteMultipleSelector());
+                      var _a = getLocation($form, service, event);
+
+                      //callbacks for the attendee change
+                      var addAttendeeCallback = function(event, $acm, item){
+                            if($acm.autocompleteMultiple('count') == 1){
+                              setAddressFromItem(_a, item);
+                            }
+                          };
+                      var removeAttendeeCallback = function(event, $acm, item){
+                            if($acm.autocompleteMultiple('count') > 0){
+                              setAddressFromItem(_a, $acm.autocompleteMultiple('getValues')[0]);
+                            }
+                            else{
+                              setAddressFromItem(_a, {});
+                            }
+                          };
+                      switch(service.geo_select)
+                      {
+                        case 'COMPANY':
+                          //no update, that's in company, whatever
+                          break;
+                        case 'HOME':
+                          addTabToForm($form, 'localisation', 'loc')
+                            .append(_a);
+
+                          if(event.id){
+                            setAddressFromItem(_a, event);
+                          }
+                          else if($attendeeSelector.autocompleteMultiple('count') > 0){
+                            setAddressFromItem(_a, $attendeeSelector.autocompleteMultiple('getValues')[0]);
+                          }
+
+                          $attendeeSelector.bind('addresult', addAttendeeCallback);
+                          $attendeeSelector.bind('removeresult', removeAttendeeCallback);
+                          break;
+                        case 'HOME_OR_COMPANY':
+                          var _s = getGeoSelect($form, service, event);
+                          $('#tab-event-form-1', $form)
+                            .append(_s);
+                          _s.find('select')
+                              .bind('change', function(){
+                                  if($(this).val() == 'HOME'){
+                                    addTabToForm($form, 'localisation', 'loc')
+                                      .append(_a);
+                                    if(event.id){
+                                      setAddressFromItem(_a, event);
+                                    }
+                                    else if($attendeeSelector.autocompleteMultiple('count') > 0){
+                                      setAddressFromItem(_a, $attendeeSelector.autocompleteMultiple('getValues')[0]);
+                                    }
+                                  }
+                                  else{
+                                    removeTab($form, 'loc');
+                                  }
+                                })
+                                .trigger('change');
+
+                          $attendeeSelector.bind('addresult', addAttendeeCallback);
+                          $attendeeSelector.bind('removeresult', removeAttendeeCallback);
+                      }
+                    },
+                    resetEventForm: function($form, service, event){
+                      var $attendeeSelector = $form.find(Agenda.getAutocompleteMultipleSelector());
+                      $('#tab-event-form-1', $form)
+                          .find('#event_geo_select')
+                          .parent()
+                            .remove();
+                      removeTab($form, 'loc');
+                      $attendeeSelector.unbind('addresult', addAttendeeCallback);
+                      $attendeeSelector.unbind('removeresult', removeAttendeeCallback);
+                    }
+                  }
+                })()); // end of behavior AutoLocation
+
+    //define some tools for color management
+    var colors = {},
+        initForColor = function(color){
+          colors[color] = {
+            'header': Tresa.Color.contrast(color, 20, Tresa.Color.HEX_STRING),
+            'border': Tresa.Color.contrast(color, 50, Tresa.Color.HEX_STRING),
+            'foreground':Tresa.Color.findForegroundColor(color) 
+          };
+        },
+        getHeaderCss = function(color){
+          if(!colors[color]){
+            initForColor(color);
+          }
+          return {
+              'background': colors[color]['header'], 
+              'border-color': colors[color]['border'], 
+              'color': colors[color]['foreground']};
+        },
+        getBodyCss = function(color){
+          return {
+              'background': color, 
+              'border-color': colors[color]['border'], 
+              'color': colors[color]['foreground']};
+        };
+    Services.registerBehavior('ServiceColor', (function(){
+                  return {
+                    renderEvent: function(service, event, element){
+											if( !Agenda.isEventPersonnal(event) ){
+												element.find('.wc-time').css(getHeaderCss(service.color));
+												element.css(getBodyCss(service.color));
+											}
+											else{
+												var PersonnalService = Services.getService('ServicePersonnal');
+												element.find('.wc-time').css(getHeaderCss(PersonnalService.color));
+												element.css(getBodyCss(PersonnalService.color));
+											}
+                    },
+                    updateEventForm: function($form, service, event){},
+                    resetEventForm: function($form, service, event){}
+                  };
+                })()); // end of behavior Color
+    Services.registerBehavior('AutoLocationColor', (function(){
+                  return {
+                    renderEvent: function(service, event, element){
+											if( !Agenda.isEventPersonnal(event) ){
+												var color;
+												switch(event.geo_select)
+												{
+													case 'HOME':
+														color = service.home_color;
+														break;
+													case 'COMPANY':
+														color = service.company_color;
+														break;
+													default:
+														return;
+												}
+												element.find('.wc-time').css(getHeaderCss(color));
+												element.css(getBodyCss(color));
+											}
+											else{
+												var PersonnalService = Services.getService('ServicePersonnal');
+												element.find('.wc-time').css(getHeaderCss(PersonnalService.color));
+												element.css(getBodyCss(PersonnalService.color));
+											}
+                    },
+                    updateEventForm: function($form, service, event){},
+                    resetEventForm: function($form, service, event){}
+                  };
+                })()); // end of behavior Color
+
+    Services.registerBehavior('Title', (function(){
+									var _title,
+											getTitle = function($form, service, event){
+												if(!_title){
+													_title = getFormContainer('summary', Tresa.i18n.get('Summary'),$('<input type="text" />'));
+												}
+												_title.find('input').val(event.title);
+												return _title;
+											};
+                  return {
+                    updateEventForm: function($form, service, event){
+											$form
+												.find('#event_service_id')
+												.parent()
+												.after(getTitle($form, service, event));
+										},
+                    resetEventForm: function($form, service, event){
+											$form
+												.find(_title)
+												.remove();
+										}
+                  }
+                })()); //end of behavior Title
+		Services.registerBehavior('AttendeesAsContacts', (function(){
+								//placeolders for removed fields
+								var _contractor,
+										_orginalUrl,
+										$acm;
+								return {
+									updateEventForm: function($form, service, calEvent){
+										$acm = $acm || $form.find(Agenda.getAutocompleteMultipleSelector());
+										_contractor = $form.find('#event_contractor_list').parent().parent();
+										_contractor.remove();
+										_serviceSelector = $form.find('#event_service_id').parent();
+										_serviceSelector.remove();
+										$acm.autocompleteMultiple('option', {
+																			'source': '/agenda/getAttendees',
+																			'formatResult': function(data, $li, $removeLink, $acm){
+																										return Attendees.formatContact(data, $li, $removeLink, $acm, calEvent);
+																								},
+																			'preprocessData': Attendees.preprocessContact
+																		});
+										$acm.autocompleteMultiple('setResults', calEvent.attendees);
+									},
+									resetEventForm: function($form, service, event){
+										$form.find('#tab-event-form-2').prepend(_contractor);
+										$form.find('#tab-event-form-1').prepend(_serviceSelector);
+									}
+								};
+		})());//end of behavior AttendeesAsUsers
+		Services.registerBehavior('AttendeesAsContractors', (function(){
+								//placeolders for removed fields
+								var _contractor,
+										_serviceSelector,
+										_orginalUrl,
+										$acm;
+								return {
+									updateEventForm: function($form, service, calEvent){
+										$acm = $acm || $form.find(Agenda.getAutocompleteMultipleSelector());
+										_contractor = $form.find('#event_contractor_list').parent().parent();
+										_contractor.remove();
+										_serviceSelector = $form.find('#event_service_id').parent();
+										_serviceSelector.hide();
+										$acm.autocompleteMultiple('option', {
+																'source': '/agenda/getContractors', 
+																'formatResult': function(data, $li, $removeLink, $acm){
+																								return Attendees.formatContractor(data, $li, $removeLink, $acm, calEvent);
+																					},
+																'preprocessData': Attendees.preprocessContractor
+															});
+										var _contractors = [];
+										for(var _i in calEvent.attendees){
+											if(Attendees.isContractor(calEvent.attendees[_i])){
+												_contractors.push(calEvent.attendees[_i]);
+											}
+										}
+										$acm.autocompleteMultiple('setResults', _contractors);
+									},
+									resetEventForm: function($form, service, event){
+										$form.find('#tab-event-form-2').prepend(_contractor);
+//										$form.find('#tab-event-form-1').prepend(_serviceSelector);
+										_serviceSelector.show();
+									}
+								};
+		})());//end of behavior AttendeesAsContractors
+		Services.registerBehavior('AttendeesAsFiles', (function(){
+			//placeolders for removed fields
+			var _contractor,
+					$acm;
+			return {
+				renderEvent: function(service, event, element){
+					var attendeeList = $('<ul />');
+					$.each(event.attendees, function(index, attendee){
+						if(Attendees.isClient(attendee))
+						{
+							attendeeList.append(Agenda.getAttendeeItem(attendee));
+						}
+						else
+						{
+							element.find('.wc-time').prepend(Agenda.getStatusIcon(attendee.status));
+						}
+					});
+					element
+							.find('.wc-title')
+							.append(attendeeList);
+				},
+				updateEventForm: function($form, service, calEvent){
+					$acm = $acm || $form.find(Agenda.getAutocompleteMultipleSelector());
+					$acm.autocompleteMultiple('option', {
+												'source': Routing.generate('contacts_api_search'),
+												'formatResult': function(data, $li, $removeLink, $acm){
+															return Attendees.formatFile(data, $li, $removeLink, $acm, calEvent);
+																			},
+												'preprocessData': Attendees.preprocessFile
+											});
+					//here comes the logic to separate the different attendees and add it
+					var attendees = Agenda.preprocessAttendeesForEvent(calEvent);
+					//now add the clients / files
+					$acm.autocompleteMultiple('setResults', attendees.clients);
+				},
+				resetEventForm: function($form, service, event){
+				}
+			};
+		})());//end of behavior AttendeesAsFiles
+
+		Services.registerBehavior('Transparency', (function(){
+								// functions to create the new elements
+								var _getTransparencyCheckbox = function($form, service, event){
+										return getFormCheckBoxContainer(
+													'transparency',
+													Tresa.i18n.get('transparency'),
+													$('<input type="checkbox" />')
+															.val(true)
+															.attr('checked', event.transparency ? 'checked' : false));
+								}
+								return {
+									updateEventForm: function($form, service, event){
+										$form.find('#tab-event-form-2')
+											.append(_getTransparencyCheckbox($form, service, event));
+									},
+									resetEventForm: function($form, service, event){
+										$form.find('#event_transparency').parent().remove();
+									}
+								};
+		})());//end of behavior Transparency
+    Services.registerBehavior('CarModel', (function(){
+									var autocomplete,
+											_getCarAutocompleter = function($form, service, event) {
+												autocomplete = $('<input type="text" />')
+																				.val(event.car_model || '')
+																				.simplecarAutoComplete();
+												return getFormContainer(
+															'car_model',
+															Tresa.i18n.get('car_model'),
+															autocomplete);
+									};
+                  return {
+                    renderEvent: function(service, event, element){},
+                    updateEventForm: function($form, service, event){
+                      $('#tab-event-form-1', $form)
+														.append(_getCarAutocompleter($form, service, event));
+										},
+                    resetEventForm: function($form, service, event){
+											if(autocomplete){
+												autocomplete
+													.autocomplete('destroy')
+													.parent()
+													.remove();
+											}
+											autocomplete = null;
+										}
+                  };
+                })()); // end of behavior CarModel
+
+		Services.registerBehavior('SelectContractor', (function(){
+			var selectContractor,
+					_getContractorSelect = function($form, service, event){
+						selectContractor = $('<select />');
+						var _contractors = Agenda.agenda.weekCalendar('option', 'users');
+						for(var _i=0, _l = _contractors.length; _i<_l ; _i++){
+							selectContractor.append(
+									$('<option />')
+										.val(_contractors[_i].entity_id)
+										.html(_contractors[_i].name));
+						}
+						return getFormContainer(
+										'contractor_id',
+										Tresa.i18n.get('contractor_id'),
+										selectContractor);
+					};
+			return {
+				updateEventForm: function($form, service, calEvent){
+					$('#tab-event-form-2', $form)
+									.prepend(_getContractorSelect($form, service, calEvent));
+					var attendees = Agenda.preprocessAttendeesForEvent(calEvent);
+					if(attendees.contractors.length){
+						var _contractor			= attendees.contractors[0],
+								_contStatus			= _contractor.status,
+								_contStatusTxt	= Agenda.getStatusText(_contStatus);
+
+						$(Agenda.dialog)
+								.find('#status_description')
+								.html(Tresa.i18n.get(
+										'your_status_is', {
+											'%status_text%': _contStatusTxt}));
+						selectContractor
+							.val(_contractor.id);
+					}
+				},
+				resetEventForm: function($form, service, event){
+					selectContractor
+							.parent()
+							.remove();
+
+					$(Agenda.dialog)
+							.find('#status_description')
+							.html('');
+				}
+			};
+		})()); //end of SelectContractor behavior
+
+		Services.registerBehavior('SelectRessource', (function(){
+									var selectContractor,
+											_getContractorSelect = function($form, service, event){
+												selectContractor = $('<select />');
+												var _contractors = Agenda.agenda.weekCalendar('option', 'users');
+												for(var _i=0, _l = _contractors.length; _i<_l ; _i++){
+													selectContractor.append(
+															$('<option />')
+																.val(_contractors[_i].entity_id)
+																.html(_contractors[_i].name));
+												}
+												for(_i = 0, _l = event.attendees.length; _i < _l ; _i++){
+													if(Attendees.isRessource(event.attendees[_i])){
+														selectContractor.val(event.attendees[_i].entity_id);
+													}
+												}
+												return getFormContainer(
+																'ressource_id',
+																Tresa.i18n.get('ressource_id'),
+																selectContractor);
+											};
+									return {
+                    updateEventForm: function($form, service, event){
+                      $('#tab-event-form-2', $form)
+															.prepend(_getContractorSelect($form, service, event));
+										},
+                    resetEventForm: function($form, service, event){
+											selectContractor
+													.parent()
+													.remove();
+										}
+									};
+								})()); //end of SelectRessource behavior
+
+
+		Services.registerBehavior('SelectContractorForRessource', (function(){
+									return {
+                    updateEventForm: function($form, service, calEvent){
+											var _contractors = [];
+											for(var _i in calEvent.attendees){
+												if(Attendees.isContractor(calEvent.attendees[_i])){
+													_contractors.push(calEvent.attendees[_i]);
+												}
+											}
+											if(!_contractors.length){
+												Attendees.addAttendeeToEvent(Attendees.getCurrentUser(), calEvent);
+											}
+										},
+                    resetEventForm: function($form, service, calEvent){
+										}
+									};
+								})()); //end of SelectContractorForRessource behavior
+
+    Services.registerBehavior('ImmoProperty', (function(){
+									var immo_field,
+											_getImmoProperty = function($form, service, calEvent) {
+												immo_field = $('<input type="text" />')
+																				.val(calEvent.immo_property || '');
+												return getFormContainer(
+															'immo_property',
+															Tresa.i18n.get('immo_property'),
+															immo_field);
+									};
+                  return {
+                    renderEvent: function(service, calEvent, element){
+                        element.append(calEvent.immo_property || '');
+                      },
+                    updateEventForm: function($form, service, calEvent){
+                      $('#tab-event-form-1', $form)
+														.append(_getImmoProperty($form, service, calEvent));
+										},
+                    resetEventForm: function($form, service, calEvent){
+											if(immo_field){
+												immo_field
+													.parent()
+													.remove();
+											}
+											immo_field = null;
+										}
+                  };
+                })()); // end of behavior ImmoProperty
+
+  })
+})(jQuery)

@@ -1,0 +1,39 @@
+.admin-content, .admin-content .ui-layout-pane{background-color: transparent;}
+ .wc-scrollable-grid {background-color: transparent;}
+#dashboard_content{
+  background-image: url("../images/euromaster-logo-36x36.png");
+  background-position: 50% 0%;
+  background-repeat:no-repeat;
+}
+.logo-retailer-home{
+/*  background-image: url("../images/euromaster-logo-op60-430x390.png");*/
+  background-image: url("../images/euromaster-logo-text-op60-500x145.png");
+  height:500px;
+  margin:auto;
+  background-repeat:no-repeat;
+  background-position: 50% 100%;
+}
+.wc-scrollable-grid{
+  background-image: url("../images/euromaster-logo-text-op60-500x145.png");
+  background-repeat:no-repeat;
+  background-position: 50% 50%;
+
+}
+.menu-container{
+  padding-left:35px;
+  background-image: url("../images/euromaster-logo-36x36.png");
+  background-repeat:no-repeat;
+  background-position: 0% 0%;
+}
+.wc-today{background:#fff}
+
+.wc-header table {
+  background:white;
+}
+form th{
+  background:#69c9d1;
+}
+/*#main-content{
+  background:#00d900;
+  color:black;
+}*/

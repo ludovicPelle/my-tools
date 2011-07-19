@@ -1,0 +1,27 @@
+<?php
+/**
+ * @package    T-resa-lib
+ * @subpackage  default
+ * @author     Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright  (c) Carpe Hora SARL 2011
+ */
+
+/**
+ * CompanyEntityConfig form.
+ *
+ * @package    T-resa-lib
+ * @subpackage form
+ * @author     Julien Muetton <julien_muetton@carpe-hora.com>
+ */
+class CompanyEntityConfigForm extends BaseCompanyEntityConfigForm
+{
+  public function configure()
+  {
+    unset($this['id'], $this['entity_id']);
+
+    $this->widgetSchema->setLabels(array(
+        'is_admin' => 'administrateur de l\'entreprise',
+        'has_public_agenda' => 'possède un agenda public',
+      ));
+  }
+}

@@ -1,0 +1,51 @@
+<?php
+
+ /**
+  * Get loggin on Google Account and get information of this account
+  * Based on the plugin sfGoogleLoginPlugin-1.0.5
+  *
+  * @packaged lib/provider
+  * @see BaseOpenIdConsumer.class.php
+  * @author Camille NERON <camille_neron@carpe-hora.com>
+  **/
+class GoogleOpenIdConsumer extends BaseOpenIdConsumer
+{
+  /**
+   * Google provider, this URL allow to get conenxion on Google Account
+   */
+  protected $provider = 'https://www.google.com/accounts/o8/id';
+
+  /**
+   * Requests the OpenID endpoint from the provider.
+   *
+   * @return String Endpoint URL
+   */
+  protected function getEndpoint()
+  {
+    if (false == ($endpoint = $this->cacheGet('endpoint')))
+    {
+      $response = file_get_contents($this->getProviderUrl());
+      preg_match( '$<URI>(.*)</URI>$', $response, $matches);
+      $endpoint = $matches[1];
+      $this->cachePut( 'endpoint', $endpoint );
+    }
+    return $endpoint;
+  }
+
+  /**
+   * prepare the openid params
+   *
+   * @return array
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  protected function prepareRequestParams($params)
+  {
+    $params['openid.ax.required'] = 'email,firstname,lastname';
+    return $params;
+  }
+
+  protected function getProviderName()
+  {
+    return 'Google';
+  }
+} // END class GoogleOpenIdConsumer extends BaseOpenIdConsumer

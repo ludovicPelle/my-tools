@@ -1,0 +1,325 @@
+<?php
+/**
+ * This file declare the chCmsAdminMenuPropelRouteCollection class.
+ *
+ * @package chCmsApplicationPlugin
+ * @subpackage Routing
+ * @author Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-01-04
+ */
+
+/**
+ * admin panel Propel route collection
+ */
+class chCmsAdminMenuPropelRouteCollection extends sfPropel15RouteCollection
+{
+
+  /**
+   * Constructor.
+   *
+   * @param array $options An array of options
+   */
+  public function __construct(array $options)
+  {
+    if (!isset($options['credentials']))
+    {
+      throw new InvalidArgumentException(
+              sprintf('You must pass a "credentials" option for a %s object (%s).', get_class($this), $options['name']));
+    }
+    
+    parent::__construct($options);
+  }
+
+  protected function generateRoutes()
+  {
+    // collection actions
+    if (isset($this->options['collection_actions']))
+    {
+      foreach ($this->options['collection_actions'] as $action => $methods)
+      {
+        $this->routes[$this->getRoute($action)] = $this->getRouteForCollection($action, $methods);
+      }
+    }
+
+    // "standard" actions
+    $actions = false === $this->options['actions'] ? $this->getDefaultActions() : $this->options['actions'];
+    foreach ($actions as $action)
+    {
+      $method = 'getRouteFor'.ucfirst($action);
+      if (!method_exists($this, $method))
+      {
+        throw new InvalidArgumentException(sprintf('Unable to generate a route for the "%s" action.', $action));
+      }
+
+      $this->routes[$this->getRoute($action)] = $this->$method();
+    }
+
+    // object actions
+    if (isset($this->options['object_actions']))
+    {
+      foreach ($this->options['object_actions'] as $action => $methods)
+      {
+        $this->routes[$this->getRoute($action)] = $this->getRouteForObject($action, $methods);
+      }
+    }
+
+    if ($this->options['with_wildcard_routes'])
+    {
+      // wildcard object actions
+      $this->routes[$this->getRoute('object')] = $this->getWildcardRouteForObject();
+
+      // wildcard collection actions
+      $this->routes[$this->getRoute('collection')] = $this->getWildcardRouteForCollection();
+    }
+  }
+
+  const PANEL = 1,
+        ACTION = 2;
+
+  /**
+   * check wether the method is for a panel or an action
+   *
+   * @return integer
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  protected function getRouteTypeForMethod($methods)
+  {
+    if (!is_array($methods))
+    {
+      $methods = array($methods);
+    }
+    foreach ($methods as $m)
+    {
+      $m = strtoupper($m);
+      if ($m == 'GET')
+      {
+        return self::PANEL;
+      }
+      elseif ($m == 'POST')
+      {
+        return self::ACTION;
+      }
+    }
+    
+    throw new sfError404Exception(sprintf('Unable to determine which method to use, given %s', var_export($methods, true)));
+  }
+
+  /**
+   * get the route for a single object
+   *
+   * @return chCmsAdminPanelPropelRoute
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   */
+  protected function getRouteForObject($action, $methods)
+  {
+    if (self::PANEL === $this->getRouteTypeForMethod($methods))
+    {
+      return new chCmsAdminMenuPanelPropelRoute(
+        sprintf('%s/:%s/%s.:sf_format', $this->options['prefix_path'], $this->options['column'], $action),
+        array_merge(array(
+					'sf_format' => 'html'),
+        $this->options['default_params']),
+        array_merge($this->options['requirements'], array('sf_method' => $methods)),
+        array(
+          'group' => $this->options['group'],
+          'credentials' => $this->options['credentials'],
+          'module' => $this->options['module'],
+					'component' => $action,
+          'model' => $this->options['model'],
+					'type' => 'object',
+					'query_methods' => $this->options['query_methods']['object'])
+      );
+    }
+    else
+    {
+      return new chCmsAdminMenuActionPropelRoute(
+        sprintf('%s/:%s/%s.:sf_format', $this->options['prefix_path'], $this->options['column'], $action),
+        array_merge(array(
+          'module' => $this->options['module'],
+					'action' => $action,
+					'sf_format' => 'html'),
+        $this->options['default_params']),
+        array_merge($this->options['requirements'], array('sf_method' => $methods)),
+        array(
+          'group' => $this->options['group'],
+          'credentials' => $this->options['credentials'],
+          'model' => $this->options['model'],
+					'type' => 'object',
+					'query_methods' => $this->options['query_methods']['object'])
+      );
+    }
+  }
+
+  /**
+   * get the route for a list of object
+   *
+   * @return void
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  protected function getRouteForCollection($action, $methods)
+  {
+    if (self::PANEL === $this->getRouteTypeForMethod($methods))
+    {
+      return new chCmsAdminMenuPanelPropelRoute(
+        sprintf('%s/%s.:sf_format', $this->options['prefix_path'], $action),
+        array_merge(array(
+          'sf_format' => 'html'),
+				$this->options['default_params']),
+        array_merge($this->options['requirements'], array('sf_method' => $methods)),
+        array(
+          'group' => $this->options['group'],
+          'credentials' => $this->options['credentials'],
+          'module' => $this->options['module'],
+          'component' => $action,
+          'model' => $this->options['model'],
+					'type' => 'list',
+					'query_methods' => $this->options['query_methods']['list'])
+      );
+    }
+    else
+    {
+      return new chCmsAdminMenuActionPropelRoute(
+        sprintf('%s/%s.:sf_format', $this->options['prefix_path'], $action),
+        array_merge(array(
+          'module' => $this->options['module'],
+          'action' => $action,
+          'sf_format' => 'html'),
+        $this->options['default_params']),
+        array_merge($this->options['requirements'], array('sf_method' => $methods)),
+        array(
+          'group' => $this->options['group'],
+          'credentials' => $this->options['credentials'],
+          'model' => $this->options['model'],
+          'type' => 'list',
+          'query_methods' => $this->options['query_methods']['list'])
+      );
+    }
+  }
+
+  protected function getRouteForList()
+  {
+    return new chCmsAdminMenuPanelPropelRoute(
+      sprintf('%s.:sf_format', $this->options['prefix_path']),
+      array_merge(array('sf_format' => 'html'),
+			$this->options['default_params']),
+      array_merge($this->options['requirements'], array('sf_method' => 'get')),
+      array(
+        'group' => $this->options['group'],
+        'credentials' => $this->options['credentials'],
+        'module' => $this->options['module'],
+        'component' => $this->getActionMethod('list'),
+        'model' => $this->options['model'],
+        'type' => 'list',
+        'query_methods' => $this->options['query_methods']['list'])
+    );
+  }
+
+  protected function getRouteForShow()
+  {
+    return new chCmsAdminMenuPanelPropelRoute(
+      sprintf('%s/:%s.:sf_format', $this->options['prefix_path'], $this->options['column']),
+      array_merge(array('sf_format' => 'html'),
+			$this->options['default_params']),
+      array_merge($this->options['requirements'], array('sf_method' => 'get')),
+      array(
+        'group' => $this->options['group'],
+        'credentials' => $this->options['credentials'],
+        'module' => $this->options['module'],
+        'component' => $this->getActionMethod('show'),
+        'model' => $this->options['model'],
+        'type' => 'object',
+        'query_methods' => $this->options['query_methods']['object'])
+    );
+  }
+
+  protected function getRouteForEdit()
+  {
+    return new chCmsAdminMenuPanelPropelRoute(
+      sprintf('%s/:%s/%s.:sf_format', $this->options['prefix_path'], $this->options['column'], $this->options['segment_names']['edit']),
+      array_merge(array('sf_format' => 'html'),
+      $this->options['default_params']),
+      array_merge($this->options['requirements'], array('sf_method' => 'get')),
+      array(
+        'group' => $this->options['group'],
+        'credentials' => $this->options['credentials'],
+        'module' => $this->options['module'],
+        'component' => $this->getActionMethod('edit'),
+        'model' => $this->options['model'],
+        'type' => 'object',
+        'query_methods' => $this->options['query_methods']['object'])
+    );
+  }
+
+  protected function getRouteForNew()
+  {
+    return new chCmsAdminMenuPanelRoute(
+      sprintf('%s/%s.:sf_format', $this->options['prefix_path'], $this->options['segment_names']['new']),
+      array_merge(array('sf_format' => 'html'),
+      $this->options['default_params']),
+      array_merge($this->options['requirements'], array('sf_method' => 'get')),
+      array(
+        'group' => $this->options['group'],
+        'credentials' => $this->options['credentials'],
+        'module' => $this->options['module'],
+        'component' => $this->getActionMethod('new'),
+        'model' => $this->options['model'],
+        'type' => 'object',
+        'query_methods' => $this->options['query_methods']['object'])
+    );
+  }
+
+  protected function getRouteForUpdate()
+  {
+    return new chCmsAdminMenuActionPropelRoute(
+      sprintf('%s/:%s/%s.:sf_format', $this->options['prefix_path'], $this->options['column'], $this->options['segment_names']['edit']),
+      array_merge(array(
+        'module' => $this->options['module'], 
+        'action' => $this->getActionMethod('update'),
+        'sf_format' => 'html'), $this->options['default_params']),
+      array_merge($this->options['requirements'], array('sf_method' => 'put')),
+      array(
+        'group' => $this->options['group'],
+        'credentials' => $this->options['credentials'],
+        'model' => $this->options['model'], 
+        'type' => 'object',
+        'query_methods' => $this->options['query_methods']['object'])
+    );
+  }
+
+  protected function getRouteForCreate()
+  {
+    return new chCmsAdminMenuActionRoute(
+      sprintf('%s/%s.:sf_format', $this->options['prefix_path'], $this->options['segment_names']['new']),
+      array_merge(array(
+        'module' => $this->options['module'], 
+        'action' => $this->getActionMethod('create'),
+        'sf_format' => 'html'), $this->options['default_params']),
+      array_merge($this->options['requirements'], array('sf_method' => 'post')),
+      array(
+        'group' => $this->options['group'],
+        'credentials' => $this->options['credentials'],
+        'model' => $this->options['model'], 
+        'type' => 'object',
+        'query_methods' => $this->options['query_methods']['object'])
+    );
+  }
+
+  protected function getRouteForDelete()
+  {
+    return new chCmsAdminMenuActionPropelRoute(
+      sprintf('%s/:%s.:sf_format', $this->options['prefix_path'], $this->options['column']),
+      array_merge(array(
+        'module' => $this->options['module'], 
+        'action' => $this->getActionMethod('delete'),
+        'sf_format' => 'html'), $this->options['default_params']),
+      array_merge($this->options['requirements'], array('sf_method' => 'delete')),
+      array(
+        'group' => $this->options['group'],
+        'credentials' => $this->options['credentials'],
+        'model' => $this->options['model'], 
+        'type' => 'object', 
+        'query_methods' => $this->options['query_methods']['object'])
+    );
+  }
+} // END OF chCmsAdminMenuPropelRouteCollection

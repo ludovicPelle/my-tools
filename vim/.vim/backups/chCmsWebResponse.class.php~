@@ -1,0 +1,49 @@
+<?php
+/**
+ * This file declare the chCmsWebResponse class.
+ *
+ * @package lib
+ * @subpackage pro
+ * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-06-28
+ */
+
+/**
+ * extend sfWebResponse for add dynamic method
+ */
+class chCmsWebResponse extends sfWebResponse
+{
+
+  public static function methodNotFound(sfEvent $event)
+  {
+    if (method_exists('chCmsWebResponse', $event['method']))
+    {
+      $event->setReturnValue(call_user_func_array(
+        array('chCmsWebResponse', $event['method']),
+        array_merge(array($event->getSubject()), $event['arguments'])
+      ));
+      return true;
+    }
+  }
+
+
+  /**
+   * Dynamic call for add different theme (in different path)
+   *
+   * @return void
+   * @param $file the filename
+   * @param $theme theme's name
+   * @param $plugin the plugin path
+   * @param $position @see addStylesheet native method
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public static function setRetailerThemeStylesheet($response, $retailer)
+  {
+    sfConfig::set('ch_cms_theme', $retailer->getName());
+    $theme = sfConfig::get('ch_cms_theme');
+
+    $response->addStylesheet('/retailer/'.$retailer->getName().'/css/themes/'.$theme.'/jquery-ui-1.8.13.custom.css', sfWebResponse::LAST, array('no_archive' => true));
+  }
+
+} // END OF chWebResponse

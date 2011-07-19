@@ -1,0 +1,61 @@
+body{
+  min-height:500px;
+  height:500px;
+  max-height:500px;
+  min-width:500px;
+  width:500px;
+  max-width:500px;
+  margin:0 auto 0;
+}
+
+#signup{
+  margin:50px 150px;
+  position:relative;
+}
+
+
+#main-content{
+  min-height:440px;
+  height:440px;
+  max-height:440px;
+  min-width:465px;
+  width:465px;
+  max-width:465px;
+}
+
+.submit{
+  float:left;
+}
+
+.text-2em{
+  font-size:1.3em;
+}
+.validation-center{
+  float:left;
+  margin-left:50px;
+  width:200px;
+  display:block;
+  text-align:center;
+  padding:auto;
+}
+.right-text{
+  float:left;
+  padding-left:10px;
+  margin-top:100px;
+  position:relative:
+  display:inline-block;
+  width:320px;
+  height:130px;
+}
+.left-img{
+  margin-top:50px;
+  float:left;
+  position:relative:
+  display:inline-block;
+  height:130px;
+}
+.big-bouton-right{
+  width:190px;
+  height:2.5em;
+  font-size:2em;
+}

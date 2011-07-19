@@ -1,0 +1,60 @@
+<div class="container_12 clearfix container" id="signin-page">
+
+ <div class="grid_6">
+  <div id="signin-content" class="centered-content">
+    <form action="<?php echo url_for('@sf_guard_signin', $extra_signin_params) ?>" method="post">
+      <?php echo $form->renderGlobalErrors() ?>
+      <?php echo $form['username']->renderError() ?>
+      <p class="text">
+        <?php echo $form['username']->renderLabel() ?><br />
+        <?php echo $form['username']->render() ?>
+      </p>
+
+      <?php echo $form['password']->renderError() ?>
+      <p class="text">
+        <?php echo $form['password']->renderLabel() ?><br />
+        <?php echo $form['password']->render() ?>
+      </p>
+
+      <p class="forgetmenot">
+          <?php echo $form['remember']->renderLabel() ?>
+          <?php echo $form['remember']->render() ?>
+      </p>
+
+      <p class="submit">
+        <?php echo $form->renderHiddenFields(); ?>
+        <?php echo jui_submit_button('Sign in', array('icon' => 'silk-lock_go')); ?>
+      </p>
+
+
+    </form>
+  </div>
+ </div>
+
+ <div class="grid_5 prefix_1">
+   <div id="signin-link-to-signup">
+        <?php echo image_tag('users/speakvect', 'size=130x155') ?>
+        <?php echo jui_button_link('Créer un compte', 'chCmsFrontendSignup/register', 'icon=silk-user_add id=signup') ?>
+    </div>
+  </div>
+
+  <div class="clear"></div>
+  <div class="grid_6 prefix_3 suffix_3">
+    <p class="bottom-links">
+      <?php echo link_to('Obtenir un nouveau lien d\'activation', 'chCmsFrontendSignup/resendActivation') ?>
+      &#160; | &#160;
+      <?php echo link_to('J\'ai perdu mon mot de passe', 'chCmsFrontendSignup/lostPassword') ?>
+    </p>
+  </div>
+
+  <div class="clear"></div>
+</div>
+
+  <?php slot('title') ?>
+    <h3>Connexion</h3>
+  <?php end_slot() ?>
+  <?php slot('toolbar') ?>
+    <div class="ch-toolbar">
+      <?php include_partial('chCmsFrontendSignup/externalAuthentications'); ?>
+    </div>
+  <?php end_slot() ?>

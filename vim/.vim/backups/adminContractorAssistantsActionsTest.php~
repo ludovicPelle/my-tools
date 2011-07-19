@@ -1,0 +1,511 @@
+<?php
+/**
+ * testfile for the adminContractorAssistants module.
+ *Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright carpe-hora.com 2011
+ * @package chCmsAdminMyAccountPlugin
+ * @subpackage test
+ *
+ * @todo when request params are uniformed, check parameters
+ **/
+
+$app = "pro";
+
+include(dirname(__FILE__).'/../../../../test/bootstrap/functional.php');
+
+$allEmptyTab = array("assistant_link" => array(
+                                              "access_freebusy"=> 0,
+                                              "access_event"=> 0,
+                                              "access_file"=> 0,
+                                              ),
+
+                    "contractor_default_assistant_rights" => array(
+                                              "access_freebusy"=> 0,
+                                              "access_event"=> 0,
+                                              "access_file"=> 0,
+                                              )
+                    );
+$allCheckedTab = array("assistant_link" => array(
+                                              "access_freebusy"=> 15,
+                                              "access_event"=> 15,
+                                              "access_file"=> 15,
+                                              ),
+                    "contractor_default_assistant_rights" => array(
+                                              "access_freebusy"=> 15,
+                                              "access_event"=> 15,
+                                              "access_file"=> 15,
+                                              )
+                    );
+
+$browser = TresaTestFunctional::initialize(/* load to be able to authenticate */ false && true);
+
+
+$browser
+  ->info("Test not Logged")
+  ->get('/admin/prestataires/1/assistants')
+
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+    
+    // check the response
+    ->with('response')->begin()
+      ->isStatusCode(401)
+      ->isValid()
+      ->checkForm(new chCmsFormSignin())
+  ->end()
+    // end of get /admin/prestataires/1/assistants
+    // end of block check when not logged in
+    
+  ->signin('demo', 'demo')
+;
+
+$company = $browser->getUser()->getSelectedCompany();
+$browser->info(sprintf('vocabulaire utilisé pour assistant: "%s"', $company->getVocabulary('assistant', 2)));
+$browser->info(sprintf('vocabulaire utilisé pour contractor: "%s"', $company->getVocabulary('contractor', 2)));
+
+$browser
+
+  ->info("display admin panel and search buttoni assistant")
+  ->click('administration')
+    
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+    
+    // check the response
+    ->with('response')->begin()
+      ->isStatusCode(200)
+      ->isValid()
+      ->contains(sfInflector::camelize(sprintf('%s', $company->getVocabulary('contractor',2))))
+    ->end()
+
+  ->click("".sfInflector::camelize($company->getVocabulary('contractor',2))."")
+    
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+    
+    // check the response
+    ->with('response')->begin()
+      ->isStatusCode(200)
+      ->isValid()
+      ->contains(sprintf('ses %s', $company->getVocabulary('assistant',2)))
+    ->end()
+  
+  ->info("Try to click on assistants")
+    ->click(sprintf('ses %s', $company->getVocabulary('assistant',2)))
+    
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+
+    ->with('response')->begin()
+      ->isForwardedTo('admin', 'component')
+    ->end()
+    
+    // check the response
+    ->with('response')->begin()
+      ->isStatusCode(200)
+      ->checkElement('div#tab-assistants div.assistant-rights th.actions-cell:eq(0) a:eq(0)', "Modifier")
+      ->checkElement('div#tab-assistants div.assistant-rights tbody:eq(0) span[class$="ch-icon-silk-tick"]', true, array("count"=>12))
+      ->isValid()
+    ->end()
+/**
+ * Now TEST all action of the form (modify save cancel restore)
+ **/
+
+ /**
+  * Modify
+  **/
+  ->info("*******************************************************************\n
+          Now Test on assisted_by tab\n
+*******************************************************************")
+  ->info("Try to click on Modifier")
+    ->click('div#tab-assistants div.assistant-rights a')
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+
+    ->with('response')->begin()
+      ->isForwardedTo('admin', 'setTemplate')
+      ->checkElement('th.actions-cell p button[type="submit"]', "Enregistrer")
+      ->checkElement('th.actions-cell p a', "Annuler")
+      ->checkForm('AssistantLinkForm')
+      ->checkElement('tbody:eq(0) select', true, array("count"=>3))
+
+    ->end()
+/**
+ * Save
+ **/
+  ->info("Try to click on Enregister")
+    ->click('Enregistrer', $allEmptyTab)
+    
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('post')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+
+    ->with('response')->begin()
+      ->isForwardedTo('adminContractorAssistants', 'updateAssistant')
+      ->isRedirected()// Check that the response is a redirect
+    ->end()
+
+    ->followRedirect()
+
+    ->with('response')->begin()
+      ->checkElement('div#tab-assistants div.assistant-rights:eq(0) th.actions-cell a', "Modifier")
+      ->checkElement('div#tab-assistants div.assistant-rights:eq(0) th.actions-cell a:eq(1)', 'Rétablir les valeurs par défaut')
+      ->checkElement('div#tab-assistants div.assistant-rights:eq(0) tbody:eq(0) span[class$="ch-icon-silk-cross"]', true, array("count"=>12))
+    ->end()
+ /**
+  * Restore
+  **/
+  ->info("Try to click on Restore")
+    ->click('div#tab-assistants div.assistant-rights th.actions-cell a:eq(1)')
+    
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+
+    ->with('response')->begin()
+      ->isForwardedTo('adminContractorAssistants', 'deleteAssistant')
+      ->isRedirected()// Check that the response is a redirect
+    ->end()
+
+    ->followRedirect()
+
+    ->with('response')->begin()
+      ->checkElement('div#tab-assistants div.assistant-rights:eq(0) th.actions-cell a', "Modifier")
+      ->checkElement('div#tab-assistants div.assistant-rights:eq(0) th.actions-cell a span:contains("Rétablir les valeurs par défaut")',false)
+      ->checkElement('div#tab-assistants div.assistant-rights:eq(0) tbody span[class$="ch-icon-silk-tick"]', true, array("count"=>12))
+    ->end()
+
+ /**
+  * Modify
+  **/
+  ->info("Try to click on Modifier")
+    ->click('div#tab-assistants div.assistant-rights a')
+    
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+
+    ->with('response')->begin()
+      ->isForwardedTo('admin', 'setTemplate')
+      ->checkElement('th.actions-cell p button[type="submit"]', "Enregistrer")
+      ->checkElement('th.actions-cell p a', "Annuler")
+      ->checkForm('AssistantLinkForm')
+      ->checkElement('tbody:eq(0) select', true, array("count"=>3))
+
+    ->end()
+/**
+ *Cancel 
+ **/
+  ->info("Try to click on Annuler")
+    ->click('Annuler')
+    
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+
+    ->with('response')->begin()
+      ->isForwardedTo('adminContractorAssistants', 'showAssistant')
+      ->isRedirected()// Check that the response is a redirect
+    ->end()
+
+    ->followRedirect()
+
+    ->with('response')->begin()
+      ->checkElement('div#tab-assistants div.assistant-rights:eq(0) th.actions-cell a', "Modifier")
+      ->checkElement('div#tab-assistants div.assistant-rights:eq(0) th.actions-cell a:eq(1) span:contains("Rétablir les valeurs par défaut")',false)
+      ->checkElement('div#tab-assistants div.assistant-rights:eq(0) tbody:eq(0) span[class$="ch-icon-silk-tick"]', true, array("count"=>12))
+    ->end()
+
+  ->info("*******************************************************************\n
+          Now Test on assistant_of tab\n
+*******************************************************************")
+  ->info("Try to click on Modifier")
+    ->click('div#tab-collegues div.assistant-rights th.actions-cell a')
+    
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+
+    ->with('response')->begin()
+      ->isForwardedTo('admin', 'setTemplate')
+      ->checkElement('th.actions-cell:eq(0) p button[type="submit"]', "Enregistrer")
+      ->checkElement('th.actions-cell:eq(0) p a', "Annuler")
+      ->checkForm('AssistantLinkForm')
+      ->checkElement('tbody:eq(0) select', true, array("count"=>3))
+
+    ->end()
+/**
+ * Save
+ **/
+  ->info("Try to click on Enregister")
+    ->click('th.actions-cell:eq(0) p button[type="submit"]', $allEmptyTab)
+    
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('post')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+
+    ->with('response')->begin()
+      ->isForwardedTo('adminContractorAssistants', 'updateAssistant')
+      ->isRedirected()// Check that the response is a redirect
+    ->end()
+
+    ->followRedirect()
+
+    ->with('response')->begin()
+     // ->debug()
+      ->checkElement('div#tab-collegues div.assistant-rights th.actions-cell a:eq(0)', "Modifier")
+      ->checkElement('div#tab-collegues div.assistant-rights th.actions-cell a:eq(1)', "Rétablir les valeurs par défaut")
+      ->checkElement('div#tab-collegues div.assistant-rights tbody span[class$="ch-icon-silk-cross"]', true, array("count"=>12))
+    ->end()
+ /**
+  * Restore
+  **/
+  ->info("Try to click on Restore")
+    ->click('div#tab-collegues a:eq(1)')
+    
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+
+    ->with('response')->begin()
+      ->isForwardedTo('adminContractorAssistants', 'deleteAssistant')
+      ->isRedirected()// Check that the response is a redirect
+    ->end()
+
+    ->followRedirect()
+
+    ->with('response')->begin()
+      ->checkElement('div#tab-collegues div.assistant-rights:eq(0)  th.actions-cell a', "Modifier")
+      ->checkElement('div#tab-collegues div.assistant-rights:eq(0)  th.actions-cell a:eq(1) span:contains("Rétablir les valeurs par défaut")',false)
+      ->checkElement('div#tab-collegues div.assistant-rights:eq(0)  tbody span[class$="ch-icon-silk-tick"]', true, array("count"=>12))
+    ->end()
+
+ /**
+  * Modify
+  **/
+  ->info("Try to click on Modifier")
+    ->click('div#tab-collegues div.assistant-rights th.actions-cell a')
+    
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+
+    ->with('response')->begin()
+      ->isForwardedTo('admin', 'setTemplate')
+      ->checkElement('th.actions-cell:eq(0) p button[type="submit"]', "Enregistrer")
+      ->checkElement('th.actions-cell:eq(0) p a', "Annuler")
+      ->checkForm('AssistantLinkForm')
+      ->checkElement('tbody:eq(0) select', true, array("count"=>3))
+
+    ->end()
+/**
+ *Cancel 
+ **/
+  ->info("Try to click on Annuler")
+    ->click('Annuler')
+    
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+
+    ->with('response')->begin()
+      ->isForwardedTo('adminContractorAssistants', 'showAssistant')
+      ->isRedirected()// Check that the response is a redirect
+    ->end()
+
+    ->followRedirect()
+
+    ->with('response')->begin()
+      ->checkElement('div#tab-collegues div.assistant-rights:eq(0)  th.actions-cell a', "Modifier")
+      ->checkElement('div#tab-collegues div.assistant-rights:eq(0)  th.actions-cell a span:contains("Rétablir les valeurs par défaut")',false)
+      ->checkElement('div#tab-collegues div.assistant-rights:eq(0)  tbody span[class$="ch-icon-silk-tick"]', true, array("count"=>12))
+    ->end()
+
+
+
+
+  ->info("*******************************************************************\n
+          Now Test on assistant_Default tab\n
+*******************************************************************")
+  ->info("Try to click on Modifier")
+    ->click('div#tab-rights div.assistant-rights th.actions-cell a')
+    
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+
+    ->with('response')->begin()
+      ->isForwardedTo('admin', 'setTemplate')
+      ->checkElement('th.actions-cell:eq(0) button[type="submit"]', "Enregistrer")
+      ->checkElement('th.actions-cell:eq(0) a', "Annuler")
+      ->checkForm('ContractorDefaultAssistantRightsForm')
+      ->checkElement('tbody:eq(0) select', true, array("count"=>3))
+
+    ->end()
+/**
+ * Save
+ **/
+  ->info("Try to click on Enregister")
+    ->click('th.actions-cell button[type="submit"]', $allEmptyTab)
+    
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('post')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+
+    ->with('response')->begin()
+      ->isForwardedTo('adminContractorAssistants', 'updateDefault')
+      ->isRedirected()// Check that the response is a redirect
+    ->end()
+
+    ->followRedirect()
+
+    ->with('response')->begin()
+     // ->debug()
+      ->checkElement('div#tab-rights div.assistant-rights th.actions-cell a:eq(0)', "Modifier")
+      ->checkElement('div#tab-rights div.assistant-rights tbody span[class$="ch-icon-silk-cross"]', true, array("count"=>12))
+    ->end()
+
+ /**
+  * Modify
+  **/
+  ->info("Try to click on Modifier")
+    ->click('div#tab-rights div.assistant-rights th.actions-cell a')
+    
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+
+    ->with('response')->begin()
+      ->isForwardedTo('admin', 'setTemplate')
+      ->checkElement('th.actions-cell:eq(0) button[type="submit"]', "Enregistrer")
+      ->checkElement('th.actions-cell:eq(0) a', "Annuler")
+      ->checkForm('ContractorDefaultAssistantRightsForm')
+      ->checkElement('tbody:eq(0) select', true, array("count"=>3))
+
+    ->end()
+/**
+ *Cancel 
+ **/
+  ->info("Try to click on Annuler")
+    ->click('Annuler')
+    
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+
+    ->with('response')->begin()
+      ->isForwardedTo('adminContractorAssistants', 'showDefault')
+      ->isRedirected()// Check that the response is a redirect
+    ->end()
+
+    ->followRedirect()
+
+    ->with('response')->begin()
+      ->checkElement('div#tab-rights div.assistant-rights:eq(0)  th.actions-cell a', "Modifier")
+      ->checkElement('div#tab-rights div.assistant-rights:eq(0)  tbody span[class$="ch-icon-silk-cross"]', true, array("count"=>12))
+    ->end()
+
+  ->info("Try to click on Modifier")
+    ->click('div#tab-rights div.assistant-rights th.actions-cell a')
+    
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+
+    ->with('response')->begin()
+      ->isForwardedTo('admin', 'setTemplate')
+      ->checkElement('th.actions-cell:eq(0) button[type="submit"]', "Enregistrer")
+      ->checkElement('th.actions-cell:eq(0) a', "Annuler")
+      ->checkForm('ContractorDefaultAssistantRightsForm')
+      ->checkElement('tbody:eq(0) select', true, array("count"=>3))
+
+    ->end()
+/**
+ * Save
+ **/
+  ->info("Try to click on Enregister")
+    ->click('th.actions-cell button[type="submit"]', $allCheckedTab)
+    
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('post')
+      ->isParameter('module', 'admin')
+      ->isParameter('action', 'index')
+    ->end()
+
+    ->with('response')->begin()
+      ->isForwardedTo('adminContractorAssistants', 'updateDefault')
+      ->isRedirected()// Check that the response is a redirect
+    ->end()
+
+    ->followRedirect()
+
+    ->with('response')->begin()
+     // ->debug()
+      ->checkElement('div#tab-rights div.assistant-rights th.actions-cell a:eq(0)', "Modifier")
+      ->checkElement('div#tab-rights div.assistant-rights tbody span[class$="ch-icon-silk-tick"]', true, array("count"=>12))
+    ->end()
+    ;
+    // end of get url

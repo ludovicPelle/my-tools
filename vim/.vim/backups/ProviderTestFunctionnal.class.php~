@@ -1,0 +1,250 @@
+<?php
+/**
+ * This file declare the sfProviderTestFunctional class.
+ *
+ * @package chCmsGuardExtraPlugin
+ * @subpackage lib
+ * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-06-20
+ */
+
+/**
+ * Main class to ease test of differents provider
+ */
+class ProviderTestFunctional extends TresaTestFunctional
+{
+  protected $google = array(
+    'name'  => 'Google',
+    'auth'  => GoogleAuthenticationQuery::create()->findOneByAccountIdentifier('carpehoratest@gmail.com'),
+    'openid'=> new GoogleOpenIdConsumerTester('http://'.$_SERVER['SERVER_NAME']),
+    'openid_parameter' => array(
+      'openid_ns' =>'http://specs.openid.net/auth/2.0',
+      'openid_mode' =>'id_res',
+      'openid_op_endpoint' =>'https://www.google.com/accounts/o8/ud',
+      'openid_response_nonce' =>'2011-06-20T12:41:00ZFjq3cXVAJMZWhQ',
+      'openid_return_to' =>'http://www.t-resa.loc/users_dev.php/register/google/verify',
+      'openid_signed' =>'op_endpoint,claimed_id,identity,return_to,response_nonce,assoc_handle,ns.ext1,ext1.mode,ext1.type.firstname,ext1.value.firstname,ext1.type.email,ext1.value.email,ext1.type.lastname,ext1.value.lastname',
+      'openid_identity' =>'https://www.google.com/accounts/o8/id?id=AItOawkzKwmMTcpRPixWEC59CvVe5ed2SAM8ai4',
+      'openid_claimed_id' =>'https://www.google.com/accounts/o8/id?id=AItOawkzKwmMTcpRPixWEC59CvVe5ed2SAM8ai4',
+      'openid_ns_ext1' =>'http://openid.net/srv/ax/1.0',
+      'openid_ext1_mode' =>'fetch_response',
+      'openid_ext1_type_firstname' =>'http://axschema.org/namePerson/first',
+      'openid_ext1_value_firstname' =>'Carpe',
+      'openid_ext1_type_email' =>'http://axschema.org/contact/email',
+      'openid_ext1_value_email' =>'carpehoratest@gmail.com',
+      'openid_ext1_type_lastname' =>'http://axschema.org/namePerson/last',
+      'openid_ext1_value_lastname' =>'Hora',
+    )
+  );
+
+  $yahoo = array(
+    'name'  => 'Yahoo',
+    'auth'  => new YahooOpenIdConsumerTester('http://'.$_SERVER['SERVER_NAME']),
+    'openid'=> YahooAuthenticationQuery::create()->findOneByAccountIdentifier('carpe_hora_test@yahoo.fr'),
+    'openid_parameter'=> array(
+      'openid_ns' =>'http://specs.openid.net/auth/2.0',
+      'openid_mode' =>'id_res',
+      'openid_return_to' =>'http://www.t-resa.loc/users_dev.php/register/yahoo/verify',
+      'openid_claimed_id' =>'https://me.yahoo.com/a/uXjzeWUaxZnPGfJ95Jt58qBgZnIhBn8NPe4lxA--#a4f64',
+      'openid_identity' =>'https://me.yahoo.com/a/uXjzeWUaxZnPGfJ95Jt58qBgZnIhBn8NPe4lxA--',
+      'openid_realm' =>'http://www.t-resa.loc',
+      'openid_ns_ax' =>'http://openid.net/srv/ax/1.0',
+      'openid_ax_mode' =>'fetch_response',
+      'openid_ax_value_email' =>'carpe_hora_test@yahoo.fr',
+      'openid_ax_value_fullname' =>'Carpe Hora',
+      'openid_ax_value_nickname'=>'Carpe Hora',
+      'openid_response_nonce' =>'2011-06-20T13:01:11Zp9kGxn6rJi6fZgDCsEHBQCIFH87uG4qIxw--',
+      'openid_signed' =>'assoc_handle,claimed_id,identity,mode,ns,op_endpoint,response_nonce,return_to,signed,ax.value.email,ax.type.email,ax.value.fullname,ax.type.fullname,ax.value.nickname,ax.type.nickname,ns.ax,ax.mode,pape.auth_level.nist',
+      'openid_op_endpoint' =>'https://open.login.yahooapis.com/openid/op/auth',
+      'openid_ax_type_email' =>'http://axschema.org/contact/email',
+      'openid_ax_type_fullname' =>'http://axschema.org/namePerson',
+      'openid_ax_type_nickname' =>'http://axschema.org/namePerson/friendly',
+      'openid_pape_auth_level_nist' =>'0',
+    )
+  );
+
+  $provider_map = array(1 =>'Google',
+                    2 =>'Yahoo',
+                    3 =>'OpenId',
+                    4 =>'Twitter'
+                  );
+  /**
+   * create an instance of functionnal testing browser.
+   * if data are loaded, then the propel tester is available.
+   * You can give a directory pattern to load only given data
+   *
+   * @param   Boolean     $loadData   should the database be initialized ?
+   * @return  sfGuardTestFunctional
+   */
+  public static function initialize($loadData = true)
+  {
+    $browser = new sfGuardTestFunctional(new sfBrowser());
+
+    $browser
+      // for chCmsBasePlugin
+      ->addListener('context.load_factories', array('chCmsBasePluginConfiguration', 'loadAppConfiguration'));
+
+    if ($loadData)
+    {
+      $browser->info('load the data fixtures');
+
+      self::loadData($loadData);
+
+      $browser
+        ->info('data loaded, now register propel tester')
+        ->setTester('propel', 'sfTesterPropel');
+    }
+
+    $browser
+        ->info('register the new response tester')
+        ->setTester('response', 'chCmsTesterResponse');
+
+    $browser
+        ->info('tester initialized');
+    return $browser;
+  }
+
+  /**
+   * initialize database with test fixtures.
+   *
+   **/
+  public static function loadData($files = null)
+  {
+    if (!is_string($files))
+    {
+      $files = sfConfig::get('sf_test_dir').'/fixtures';
+    }
+    $loader = new sfPropelData();
+    $loader->loadData($files);
+  }
+
+  /**
+   * Add a new provider to an account
+   *
+   * @param sfUser $user the user for the action
+   * @return sfBrowser
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function associateProvider($user, $provider)
+  {
+    return $this;
+  }
+
+
+  /**
+   * remove a Provider from an account
+   *
+   * @param sfUser $user the user for the action
+   * @return sfBrowser
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function removeProvider($user, $provider)
+  {
+    $auth = $provider_map[$provider];
+
+
+    return $this
+    ->get('/')
+    ->click('a:contains("Mon Compte")');
+      //check routing is OK
+      ->with('request')->begin()
+        ->isMethod('get')
+        ->isParameter('module', 'chCmsFrontendAccount')
+        ->isParameter('action', 'myProfile')
+      ->end()
+
+    ->info("Provider is listed")
+
+    ->with('response')->begin()
+      ->isStatusCode(200)
+      ->isValid()
+//      ->debug()
+      ->checkElement('#providers tr td:eq(1)', sprintf('/%s/', $auth->getAccountIdentifier()))
+    ->end()
+
+
+
+
+  }
+
+  /**
+   * Test authentication with a provider
+   *
+   * @return sfBrowser
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function signinWithProvider($provider, $provider_data)
+  {
+    //Now we generate a fake provider response
+    $ProviderTester = sprintf('%sOpenIdConsumerTester',ucfirst($PROVIDER_NAME[$provider->getProvider]));
+    $openid = new $ProviderTester('http://'.$_SERVER['SERVER_NAME']);
+    $openid->prepareValidRequest($provider_data);
+
+    return $this
+    ->info(strtr('signin with %account% on %provider%',
+                  array('%account%' => $provider->getAccountIdentifier(),
+                        '%provider' =>  $PROVIDER_NAME[$provider->getProvider],
+                       )
+                ))
+    ->get(sprintf('/register/%s/verify',strtolower($PROVIDER_NAME[$provider->getProvider])))
+    ->with('request')->begin()
+      ->isParameter('module', sprintf('%sAuthentication', ucfirst($PROVIDER_NAME[$provider->getProvider])))
+      ->isParameter('action', 'verify')
+    ->end()
+
+    ->with('user')->begin()
+      ->isAuthenticated(true)
+    ->end()
+    ;
+  }
+
+  /**
+   * undocumented function
+   *
+   * @return sfBrowser
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function signupWithProvider($provider, $provider_data)
+  {
+    return $this;
+  }
+
+  /**
+   * undocumented function
+   *
+   * @param sfUser $user the user for the action
+   * @return sfBrowser
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function checkedProviderLinkedAccount($user)
+  {
+    return $this;
+  }
+
+  /**
+   * undocumented function
+   *
+   * @param sfUser $user the user for the action
+   * @return sfBrowser
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function checkedIndependantAccount($user)
+  {
+      return $this;
+  }
+
+  /**
+   * To add a new password for an account, enable to an account to be independant
+   *
+   * @param sfUser $user the user for the action
+   * @return sfBrowser
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function addAccountPassword($user)
+  {
+      return $this;
+  }
+
+
+} // END OF sfProviderTestFunctionnal

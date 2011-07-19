@@ -1,0 +1,154 @@
+<?php
+
+require(dirname(__FILE__).'/../../../../../test/bootstrap/unit.php');
+
+require dirname(__FILE__).'/../../lib/TestEvent.php';
+require dirname(__FILE__).'/../../lib/TestUser.php';
+//require dirname(__FILE__).'/../../../lib/menu/BaseMenu.class.php';
+//require dirname(__FILE__).'/../../../lib/menu/AdminMenu.class.php';
+
+$t = new lime_test(43, new lime_output_color());
+
+// set factories. (done in the loadFactoryEvent). 
+$dispatcher = new sfEventDispatcher();
+$routing = new sfNoRouting($dispatcher);
+AdminMenu::setDispatcher($dispatcher);
+AdminMenu::setRouting($routing);
+AdminMenu::setUser(new TestUser());
+
+$adminRoute = new chCmsApplicationAdminRoute('/admin',
+          array('module' => 'admin','action' => 'index'),
+          array(),
+          array(
+              'action_action' => array('admin', 'action'),
+              'component_action' => array('admin', 'component'),
+              //'main_routing' => $routing,
+              'route_prefix' => 'admin'));
+
+AdminMenu::setRoute($adminRoute);
+
+$t->is(AdminMenu::getEventName(), 'chCmsApplicationPlugin.admin.menu.init', '"AdminMenu" init event is "chCmsApplicationPlugin.admin.menu.init"');
+
+$t->info('create menu instance, check init event is thrown');
+// check the init event is called
+$dispatcher->connect('chCmsApplicationPlugin.admin.menu.init', array('TestEvent', 'listenToEvent'));
+// check the menu object can be accessed in the init phase
+$dispatcher->connect('chCmsApplicationPlugin.admin.menu.init', array('TestEvent', 'listenToMenuInitEvent'));
+$menu = AdminMenu::getInstance();
+$t->isa_ok($menu, 'AdminMenu', 'getInstance return value is an "AdminMenu"');
+$t->ok(TestEvent::hasEventBeenRaised('chCmsApplicationPlugin.admin.menu.init'), 'the init event has been raised');
+
+$t->info('check util functions:');
+
+$t->info('-> getRoutePrefix');
+$t->is($menu->getRoutePrefix(), 'admin', 'access route option "prefix"');
+
+$t->info('-> getUrlPrefix');
+$t->is($menu->getUrlPrefix(), '/admin', 'access route option "url"');
+
+$t->info('-> normalizeRouteName');
+$t->is($menu->normalizeRouteName('foo'), 'admin_foo', 'prefixes the route as expected');
+$t->is($menu->normalizeRouteName('foo_bar'), 'admin_foo_bar', 'prefixes the route as expected');
+$t->is($menu->normalizeRouteName('foo__bar'), 'admin_foo_bar', 'remove double underscore');
+$t->is($menu->normalizeRouteName('foo_bar_'), 'admin_foo_bar', 'remove trailing undescores');
+$t->is($menu->normalizeRouteName('_foo_bar'), 'admin_foo_bar', 'remove leading undescores');
+
+$t->info('-> normalizeUrl');
+$t->is($menu->normalizeUrl('foo'), '/admin/foo/', 'prefixes the url with route prefix');
+$t->is($menu->normalizeUrl('/foo'), '/admin/foo/', 'leading slash doesn\'t double');
+$t->is($menu->normalizeUrl('foo/'), '/admin/foo/', 'trailing slash stays');
+$t->is($menu->normalizeUrl('foo/bar/'), '/admin/foo/bar/', 'multiple chunk url is ok');
+$t->is($menu->normalizeUrl('//foo//bar///'), '/admin/foo/bar/', 'sanitize multiple slashes');
+
+$t->info('permissions');
+$menu->addPermission('test','testname', 'testdesc', 'testgroup');
+$t->ok($menu->hasPermission('test'), 'permission test is initialized');
+$perm = $menu->getAllPermissions();
+$t->is($perm['test'], array(
+           'human_name' => 'testname',
+           'description' => 'testdesc',
+           'group_name' => 'testgroup',
+         ), 'test Full credential');
+print_r($perm);
+// overrides 
+$menu->addPermission('test');
+$perm = $menu->getAllPermissions();
+$t->is($perm['test'],array(
+           'human_name' => 'testname',
+           'description' => 'testdesc',
+           'group_name' => 'testgroup',
+         ), 'description overrides only if provided');
+
+
+
+require dirname(__FILE__).'/../../../lib/menu/AdminGroupMenu.class.php';
+$t->info('group manipulation');
+$t->info('-> check addGroup');
+$menu->addGroup(/* id */ 'foo', /* title */ 'bar', /* url_refix */ 'baz');
+$menu->addGroup(/* id */ 'bar', /* title */ 'baz', /* url_refix */ 'foo');
+$t->ok($menu->hasGroup('foo'), 'foo group is registered');
+$group_foo = $menu->getGroup('foo');
+$group_bar = $menu->getGroup('bar');
+$t->isa_ok($group_foo, 'AdminGroupMenu', '"foo" group is an "AdminGroupMenu"');
+$group_bis = $menu->getGroup($group_foo);
+$t->isa_ok($group_bis, 'AdminGroupMenu', 'can access "foo" group through getGroup');
+$t->cmp_ok($group_bis, "===", $group_foo, 'can access "foo" group through getGroup');
+$t->is($group_foo->getTitle(), 'bar', '"foo" group has "bar" as title');
+$t->is($group_bar->getTitle(), 'baz', '"bar" group has "baz" as title');
+$t->is($group_foo->getUrlPrefix(), '/admin/baz/', 'url prefix is with menu prefix');
+
+
+$t->info('panels and action check');
+// let's add routes in every manner
+$group_foo->addPanelRoute(
+      'foo', // panel_id
+      array(), // parameters
+      array(), // requirements
+      array('module' => 'foo', 'component' => 'bar', 'credentials' => 'foo_credentials'), // options
+      'baz'  // uri
+    );
+$t->ok($group_foo->hasPanel('foo'), 'foo panel is registered');
+$group_foo->addActionRoute(
+      'bar', // panel_id
+      array('module' => 'foo', 'action' => 'bar'), // parameters
+      array(), // requirements
+      array('credentials' => 'foo_credentials'), // options
+      'bar'  // uri
+    );
+$t->ok(!$group_foo->hasPanel('bar'), 'bar panel is not registered');
+
+// now check the url parameters
+$group_bar->addActionRoute(
+      'bar', // panel_id
+      array('module' => 'foo', 'action' => 'bar'), // parameters
+      array(), // requirements
+      array('credentials' => 'foo_credentials'), // options
+      '/bar/:id/test'  // uri
+    );
+$t->is($group_foo->generateUrl('bar'), '/admin/baz/bar', 'generated url is prefixed');
+$t->is($group_foo->generateUrl('bar', array('id' => 1)), '/admin/baz/bar?id=1', 'generated url includes parameters');
+$t->is($group_bar->generateUrl('bar', array('id' => 1)), '/admin/foo/bar/1/test', 'generated url includes parameters');
+
+$t->info('-> matchUrl');
+$user = AdminMenu::getUser();
+// add menu entry to get an index route.
+$group_bar->addPanelRoute(
+      'bar_panel', // panel_id
+      array(), // parameters
+      array(), // requirements
+      array('module' => 'bar', 'component' => 'bar', 'credentials' => 'foo_credentials'), // options
+      'bar_panel'  // uri
+    );
+$group_bar->addMenuEntry('bar_panel', 'Bar title');
+$t->ok($user->hasAdminCredential('foo_credentials'), 'test user has credential "foo_credentials"');
+$t->is($user->hasAdminCredential('admin_credentials'), false, 'test user is restricted for "admin_credentials"');
+$t->ok($menu->matchesUrl('/admin'), 'matches "/admin"');
+$t->ok($menu->matchesUrl('/admin/'), 'matches "/admin/"');
+$t->ok($menu->matchesUrl('/admin/foo'), 'matches "/admin/foo"');
+$t->ok($menu->matchesUrl('/admin'), 'matches "/admin"');
+$t->is($menu->matchesUrl('/test'), false, 'does not match "/test"');
+$t->is($menu->matchesUrl('/test/admin'), false, 'does not match "/test/admin"');
+$t->is($menu->matchesUrl('/test/admin/'), false, 'does not match "/test/admin/"');
+$t->is($menu->matchesUrl('/test/admin/foo'), false, 'does not match "/test/admin/foo"');
+$t->is($menu->matchesUrl('/test/admin/foo/'), false, 'does not match "/test/admin/foo/"');
+$t->is($menu->matchesUrl('/ad/min/foo'), false, 'does not match "/ad/min/foo"');

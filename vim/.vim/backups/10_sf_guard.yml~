@@ -1,0 +1,45 @@
+sfGuardUser:
+  demo:
+    username:       demo
+    password:       demo
+  collaborateurDemo:
+    username:       collaborateurDemo
+    password:       collaborateurDemo
+  admin:
+    username:       admin
+    password:       admin
+  pro1:
+    username:       pro1
+    password:       pro1
+  pro2:
+    username:       pro2
+    password:       pro2
+  user1:
+    username:       user1
+    password:       user1
+  user2:
+    username:       user2
+    password:       user2
+
+sfGuardPermission:
+  admin:
+    name:           admin
+    description:    Administrator permission
+
+sfGuardGroup:
+  admin:
+    name:           admin
+    description:    Administrator group
+
+sfGuardGroupPermission:
+  admin:
+    group_id:       admin
+    permission_id:  admin
+
+sfGuardUserGroup:
+  admin:
+    group_id:       admin
+    user_id:        admin
+  demo:
+    group_id:       admin
+    user_id:        demo

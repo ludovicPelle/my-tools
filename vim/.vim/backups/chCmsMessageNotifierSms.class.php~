@@ -1,0 +1,61 @@
+<?php
+/**
+ * This file declare the chCmsMessageNotifierSms class.
+ *
+ * @package lib
+ * @subpackage notifier
+ * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-07-13
+ */
+
+/**
+ * class whose define notifierSms
+ */
+class chCmsMessageNotifierSms
+{
+  /**
+   * listener to sendMessage to GuardUser
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  protected function sendUser(sfEvent $event)
+  {
+
+  }
+
+  /**
+   * listener to sendMessage to Contact
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  protected function sendContact(sfEvent $event)
+  {
+
+  }
+
+  /**
+   * listener to sendMessage to Company
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  protected function sendCompany(sfEvent $event)
+  {
+
+  }
+
+  /**
+   * listener to sendMessage to CompanyEntity
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  protected function sendCompanyEntity(sfEvent $event)
+  {
+
+  }
+
+} // END OF chCmsMessageNotifierSms

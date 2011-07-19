@@ -1,0 +1,14 @@
+<?php
+?>
+  <?php include_slot("title") ?>
+    Welcome Provider
+  <?php end_slot() ?>
+<p>
+  mail welcome
+  <br/>
+  <?php echo $guardUser->getName() ?>
+  <br/>
+  <?php echo $auth->getMail() ?>
+</p>
+<?php
+// vim:ft=php.html.sftemplate

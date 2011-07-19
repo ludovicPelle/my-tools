@@ -1,0 +1,34 @@
+
+<?php open_admin_form($form, $group, '@employer_profile') ?>
+  
+  <?php include_admin_form_field($form['field_type']) ?>
+  <?php include_admin_form_field($form['field_label']) ?>
+  <?php include_admin_form_field($form['field_help']) ?>
+
+
+  <?php open_admin_action_panel_footer(); ?>
+
+    <?php echo jui_button_link(
+                  'Retour à la liste', 
+                  admin_url_for($group, 'employer_profile'), array(
+                  'icon' => 'silk-application_view_list')); ?>
+    
+    <?php if(!$form->getObject()->isNew()): ?>
+
+      <?php echo jui_button_link(
+                  'supprimer', 
+                  admin_url_for($group, 'employer_profile_delete', $form->getObject()), 
+                        array('icon'    => 'silk-application_form_delete',
+                              'method'  => 'delete',
+                              'confirm' => 'Êtes vous certain de vouloir effacer ce champ ?')); ?>
+
+    <?php endif; ?>   
+
+    <?php echo jui_submit_object_form_button($form) ?>
+  
+  <?php close_admin_action_panel_footer(); ?>
+
+<?php close_admin_form() ?>
+<?php 
+// vim:ft=php.html.sftemplate
+?>

@@ -1,0 +1,153 @@
+<?php
+
+/**
+ * sfGuardProPreferences form.
+ *
+ * @package    T-resa-pro
+ * @subpackage form
+ * @author     Julien Muetton <julien_muetton@carpe-hora.com>
+ * @version    SVN: $Id: sfPropelFormTemplate.php 10377 2008-07-21 07:10:32Z dwhittle $
+ */
+class sfGuardProPreferencesForm extends BasesfGuardProPreferencesForm
+{
+  public function getChoicesTimeslotHeight()
+  {
+    return array(
+      5 => '5 pixels',
+      10 => '10 pixels',
+      15 => '15 pixels',
+      20 => '20 pixels',
+      25 => '25 pixels',
+      30 => '30 pixels',
+      35 => '35 pixels',
+      40 => '40 pixels',
+      45 => '45 pixels',
+    );
+  }
+
+  public function getChoicesTimeslotsPerHour()
+  {
+    return array(
+        1 => '1 heure',
+        2 => '30 minutes',
+        3 => '20 minutes',
+        4 => '15 minutes',
+        6 => '10 minutes',
+        12 => '5 minutes'
+      );
+  }
+  public function configure()
+  {
+    unset(
+        $this['user_id'],
+        $this['company_id'],
+        $this['id']);
+
+    $choices = $this->getDateChoices();
+
+    // general preferences
+    $this->setWidget('date_format', new sfWidgetFormSelect(array(
+          'choices' => $choices
+    )));
+    $this->setValidator('date_format', new sfValidatorChoice(array(
+          'choices' => array_keys($choices),
+          'multiple' => false,
+          'required' => true
+        ),array(
+          'invalid' => 'ceci n\'est pas un choix valide'
+    )));
+    $this->setValidator('list_length', new sfValidatorInteger(array(
+          'max' => '50',
+          'min' => '10'
+        ), array(
+          'max' => 'Vous ne pouvez afficher plus de %max% résultats à la fois',
+          'min' => 'Vous devez afficher au moins %min% résultats'
+    )));
+
+    // agenda preferences
+    $hours = array();
+    for($i = 0; $i<24;$i++)
+    {
+      $hours[] = $i;
+    }
+    $this->setWidget('agenda_start_display_time', new sfWidgetFormChoice(array('choices' => $hours)));
+    $this->setWidget('agenda_end_display_time', new sfWidgetFormChoice(array('choices' => $hours)));
+    $this->setWidget('agenda_limit_display', new sfWidgetFormInputCheckbox(array('value_attribute_value' => true)));
+    $this->setWidget('agenda_nb_days', new sfWidgetFormChoice(array(
+                'choices' => array(1 => 'jour courant', 3 => '3 prochains jours', 5 => 'semaine de 5 jours', 7 => 'semaine de 7 jours'))));
+    $this->setWidget('agenda_timeslots_per_hour', new sfWidgetFormChoice(array('choices' => $this->getChoicesTimeslotsPerHour())));
+    $this->setWidget('agenda_timeslot_height', new sfWidgetFormChoice(array('choices' => $this->getChoicesTimeslotHeight())));
+
+    $this->setValidator('agenda_start_display_time', new sfValidatorChoice(array('choices' => $hours)));
+    $this->setValidator('agenda_end_display_time', new sfValidatorChoice(array('choices' => $hours)));
+    $this->setValidator('agenda_limit_display', new sfValidatorBoolean());
+    $this->setValidator('agenda_nb_days', new sfValidatorChoice(array('choices' => array(1,3,5,7))));
+    $this->setValidator('agenda_timeslots_per_hour', new sfValidatorChoice(array('choices' => array_keys($this->getChoicesTimeslotsPerHour()))));
+    $this->setValidator('agenda_timeslot_height', new sfValidatorChoice(array('choices' => array_keys($this->getChoicesTimeslotHeight()))));
+
+    $this->setDefault('agenda_start_display_time', '08:00');
+    $this->setDefault('agenda_end_display_time', '19:00');
+    $this->setDefault('agenda_nb_days', 3);
+
+    $this->widgetSchema->setLabels(array(
+      'date_format' => 'format de date',
+      'list_length' => 'nombre de résultats dans les listes',
+      'agenda_start_display_time' => 'heure de début d\'affichage',
+      'agenda_end_display_time' => 'heure de fin d\'affichage',
+      'agenda_limit_display' => 'limiter l\'affichage à ces horaires ?',
+      'agenda_nb_days' => 'Nombre de jours à afficher',
+      'agenda_timeslots_per_hour' => 'Durée pour chaque cellule',
+      'agenda_timeslot_height' => 'Hauteur de chaque cellule',
+    ));
+
+    $this->validatorSchema->setPostValidator(new sfValidatorAnd(array(
+        new sfValidatorSchemaCompare('agenda_start_display_time', sfValidatorSchemaCompare::LESS_THAN, 'agenda_end_display_time'),
+        new sfValidatorCallback(
+                              array('callback' => array('sfGuardProPreferencesForm', 'agendaValidateHeight')), 
+                              array('invalid' => 'Vous devez afficher des cases d\'au moins 30px en tout, merci de modifier la hauteur d\'une plage horaire ou le nombre de séparations.'))
+      )));
+
+    $this->widgetSchema['contacts_default_visibility'] = new sfWidgetFormChoice(array('choices' => self::getVisibilities()));
+    $this->validatorSchema['contacts_default_visibility'] = new sfValidatorChoice(array('choices' => array_keys(self::getVisibilities()), 'required' => true));
+
+    $this->widgetSchema->setLabels(array(
+      'contacts_default_visibility' => 'Visibilité de mon répertoire'
+    ));
+
+    chTools::setFormFormatter($this);
+  }
+
+  protected static function getVisibilities()
+  {
+    return array(
+      1 => 'répertoire',
+      2 => 'privée',
+      3 => 'protégée',
+      4 => 'publique'
+    );
+  }
+
+  protected function getDateChoices()
+  {
+    sfApplicationConfiguration::getActive()->loadHelpers(array('Date'));
+    return array(
+      'd' => format_date(strftime('%F %T'), 'd'),
+      'D' => format_date(strftime('%F %T'), 'D'),
+      'p' => format_date(strftime('%F %T'), 'p'),
+      'P' => format_date(strftime('%F %T'), 'P')
+    );
+  }
+
+  /**
+   * validates the height of the cell
+   * @return array();
+   */
+  public static function agendaValidateHeight($validator, $values, $arguments)
+  {
+    if ($values['agenda_timeslots_per_hour'] * $values['agenda_timeslot_height'] < 30)
+    {
+      throw new sfValidatorError($validator, 'invalid');
+    }
+    return $values;
+  }
+}

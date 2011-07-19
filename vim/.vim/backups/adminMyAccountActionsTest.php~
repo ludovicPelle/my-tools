@@ -1,0 +1,210 @@
+<?php
+/**
+ * testfile for the adminMyAccount module.
+ *
+ * @author Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright carpe-hora.com 2011
+ * @package chCmsAdminMyAccountPlugin
+ * @subpackage test
+ *
+ * @todo when request params are uniformed, check parameters
+ **/
+
+//include dirname(__FILE__).'/../bootstrap/functional.php';
+$app = "pro";
+
+include(dirname(__FILE__).'/../../../../test/bootstrap/functional.php');
+
+$browser = TresaTestFunctional::initialize(/* load to be able to authenticate */ true);
+
+/**
+ * returns the array for profile form submission
+ *
+ * @param array $pro        the array to overload default with
+ * @param array $personnal  the array to overload default with
+ * @return array
+ */
+function test_get_profile_array($pro = array(), $personnal = array())
+{
+  return array(
+          'pro_profile'  => array_merge(array(
+                                'company_name'  => 'demo',
+                                'agenda_header' => 'demo',
+                                'agenda_header' => 'demo',
+                                'phone'         => '0645781245',
+                                'mobile'        => '0615364457',
+                                'mail'          => 'demo@demo1.com',
+                                'address_1'     => '12 rue du pré la reine',
+                                'address_2'     => '',
+                                'address_3'     => '',
+                                'zip_code'      => '63000',
+                                'town'          => 'Clermont-Ferrand',
+                              ), $pro),
+          'sf_guard_profile' => array_merge(array(
+                                'firstname'     => 'Demo',
+                                'lastname'      => 'Demo',
+                                'birthday'      => array('day' => '28', 'month' => '03', 'year' => '1982' ),
+                                'phone'         => '0473215487',
+                                'address_1'     => '17 avenue Carnot',
+                                'address_2'     => '',
+                                'address_3'     => '',
+                                'zip_code'      => '63000',
+                                'town'          => 'Clermont Ferrand',
+                              ), $personnal));
+}
+
+$browser
+
+  ->info('1 - Display without log')
+
+    ->get('/admin/mon-compte/edit')
+    ->with('response')->begin()
+      ->isStatusCode(401)
+      ->isValid()
+    ->end()
+
+
+  ->info('2 - signin')
+
+    ->signin('demo','demo')
+    ->get('/admin/mon-compte/edit')
+
+    //check the routing is OK
+    ->with('request')->begin()
+      // TODO
+      //->isParameter('adminModule', 'adminMyAccount')
+      //->isParameter('adminAction', 'index')
+    ->end()
+
+    //check the forms are in
+    ->with('response')->begin()
+      ->isStatusCode(200)
+      ->isValid()
+      ->checkForm( AdminMyAccountTools::getProfileForm($browser->getUser()) )
+      ->checkForm( AdminMyAccountTools::getEntityForm($browser->getUser()) )
+    ->end()
+
+  ->info('3 - update data')
+    
+    ->info('  3.1 - update with badly formatted data')
+
+    ->click('Enregistrer', test_get_profile_array(array(
+                                  'phone' => 'sdjk',
+                                  'mail'  => 'toto'
+                                ),array(
+                                  'phone' => '123',
+                                )))
+
+      //check the routing is OK
+      ->with('request')->begin()
+        // TODO
+        //->isParameter('adminModule', 'adminMyAccount')
+        //->isParameter('adminAction', 'update')
+      ->end()
+
+      //check the forms are in
+      ->with('response')->begin()
+        ->isStatusCode(200)
+        ->isValid()
+        ->isRedirected(false)
+        ->checkForm( AdminMyAccountTools::getProfileForm($browser->getUser()) )
+        ->checkForm( AdminMyAccountTools::getEntityForm($browser->getUser()) )
+        ->checkElement('body', '/"sdjk" n\'est pas un numéro de téléphone/')
+        ->checkElement('body', '/"123" n\'est pas un numéro de téléphone/')
+        ->checkElement('body', '/"toto" n\'est pas une adresse de courier electronique/')
+      ->end()
+
+      //->with('form')->begin()
+        //->hasErrors(2)
+        //->isError('phone', 'invalid')
+        //->isError('mail', 'invalid')
+      //->end()
+
+    
+    ->info('  3.2 - update with badly formatted data for pro profile only')
+
+    ->click('Enregistrer', test_get_profile_array(array(
+                                  'phone' => 'sdjk'
+                                ), array(
+                                )))
+
+      //check the routing is OK
+      ->with('request')->begin()
+        // TODO
+        //->isParameter('adminModule', 'adminMyAccount')
+        //->isParameter('adminAction', 'update')
+      ->end()
+
+      //check the forms are in
+      ->with('response')->begin()
+        ->isStatusCode(200)
+        ->isValid()
+        ->isRedirected(false)
+        ->checkForm( AdminMyAccountTools::getProfileForm($browser->getUser()) )
+        ->checkForm( AdminMyAccountTools::getEntityForm($browser->getUser()) )
+        ->checkElement('body', '/"sdjk" n\'est pas un numéro de téléphone/')
+      ->end()
+
+//      ->with('form')->begin()
+//        ->hasError(true)
+//      ->end()
+    
+    ->info('  3.3 - update with badly formatted data for user profile only')
+
+    ->click('Enregistrer', test_get_profile_array(array(
+                                ), array(
+                                  'phone' => '123'
+                                )))
+
+      //check the routing is OK
+      ->with('request')->begin()
+        // TODO
+        //->isParameter('adminModule', 'adminMyAccount')
+        //->isParameter('adminAction', 'update')
+      ->end()
+
+      //check the forms are in
+      ->with('response')->begin()
+        ->isStatusCode(200)
+        ->isValid()
+        ->isRedirected(false)
+        ->checkForm( AdminMyAccountTools::getProfileForm($browser->getUser()) )
+        ->checkForm( AdminMyAccountTools::getEntityForm($browser->getUser()) )
+        ->checkElement('body', '/"123" n\'est pas un numéro de téléphone/')
+      ->end()
+
+//      ->with('form')->begin()
+//        ->hasError(true)
+//      ->end()
+    
+    ->info('  3.4 - update with correctly formatted data')
+
+    ->click('Enregistrer', test_get_profile_array())
+
+      //check the routing is OK
+      ->with('request')->begin()
+        // TODO
+        //->isParameter('adminModule', 'adminMyAccount')
+        //->isParameter('adminAction', 'update')
+      ->end()
+
+      ->with('response')
+        ->isRedirected()
+      ->followRedirect()
+
+      //check the routing is OK
+      ->with('request')->begin()
+        // TODO
+        //->isParameter('adminModule', 'adminMyAccount')
+        //->isParameter('adminAction', 'update')
+      ->end()
+
+      //check the forms are in
+      ->with('response')->begin()
+        ->isStatusCode(200)
+        ->isValid()
+        ->checkForm( AdminMyAccountTools::getProfileForm($browser->getUser()) )
+        ->checkForm( AdminMyAccountTools::getEntityForm($browser->getUser()) )
+      ->end()
+
+;

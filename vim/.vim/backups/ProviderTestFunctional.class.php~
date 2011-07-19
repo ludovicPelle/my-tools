@@ -1,0 +1,52 @@
+<?php
+/**
+ * This file declare the sfProviderTestFunctional class.
+ *
+ * @package chCmsGuardExtraPlugin
+ * @subpackage lib
+ * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-06-20
+ */
+
+/**
+ * Main class to ease test of differents provider
+ */
+class ProviderTestFunctional extends TresaTestFunctional
+{
+  /**
+   * create an instance of functionnal testing browser.
+   * if data are loaded, then the propel tester is available.
+   * You can give a directory pattern to load only given data
+   *
+   * @param   Boolean     $loadData   should the database be initialized ?
+   * @return  sfGuardTestFunctional
+   */
+  public static function initialize($loadData = true)
+  {
+    $browser = new ProviderBrowserTestFunctional(new sfBrowser());
+
+    $browser
+      // for chCmsBasePlugin
+      ->addListener('context.load_factories', array('chCmsBasePluginConfiguration', 'loadAppConfiguration'));
+
+    if ($loadData)
+    {
+      $browser->info('load the data fixtures');
+
+      self::loadData($loadData);
+
+      $browser
+        ->info('data loaded, now register propel tester')
+        ->setTester('propel', 'sfTesterPropel');
+    }
+
+    $browser
+        ->info('register the new response tester')
+        ->setTester('response', 'chCmsTesterResponse');
+
+    $browser
+        ->info('tester initialized');
+    return $browser;
+  }
+} // END OF sfProviderTestFunctionnal

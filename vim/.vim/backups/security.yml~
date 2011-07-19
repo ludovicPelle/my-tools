@@ -1,0 +1,14 @@
+regeneratePassword:
+  is_secure: false
+requestNewPassword:
+  is_secure: false
+lostPassword:
+  is_secure: false
+associateProvider:
+  is_secure:  false
+doSignin:
+  is_secure:  false
+signin:
+  is_secure:  false
+default:
+  is_secure:  true

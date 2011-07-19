@@ -1,0 +1,18 @@
+<?php
+/**
+ * This file declare the chCmsBasePluginFilter class.
+ *
+ * @package chCmsBasePlugin
+ * @subpackage filter
+ * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-07-07
+ */
+
+/**
+ * register assets
+ */
+class chCmsBasePluginFilter extends sfFilter
+{
+  // your class code here
+} // END OF chCmsBasePluginFilter

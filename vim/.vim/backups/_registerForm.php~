@@ -1,0 +1,17 @@
+<?php open_ch_form($form, url_for('@sf_guard_signup', $sf_user->parseSigninExtraParameters($sf_request), true)) ?>
+
+<?php open_backend_form_fields_container('class=backend-list') ?>
+  <?php
+      include_backend_form_field($form['username']);
+      include_backend_form_field($form['mail']);
+      include_backend_form_field($form['firstname']);
+      include_backend_form_field($form['lastname']);
+      include_backend_form_field($form['password']);
+      include_backend_form_field($form['password_again']);
+  ?>
+<?php close_backend_form_fields_container() ?>
+
+  <?php open_backend_action_panel_footer(); ?>
+    <?php echo jui_submit_button('Save', 'icon=silk-disk'); ?>
+  <?php close_backend_action_panel_footer(); ?>
+<?php close_backend_form() ?>

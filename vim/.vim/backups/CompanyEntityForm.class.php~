@@ -1,0 +1,203 @@
+<?php
+/**
+ * @package    T-resa-lib
+ * @subpackage form
+ * @author     Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright  (c) Carpe Hora SARL 2011
+ */
+
+/**
+ * CompanyEntity form.
+ */
+class CompanyEntityForm extends BaseCompanyEntityForm
+{
+
+  protected $extraFields;
+
+  public function hasExtraFields()
+  {
+    return count($this->getExtraFields()) > 0;
+  }
+
+  public function getExtraFields()
+  {
+    if (!is_array($this->extraFields))
+    {
+      $this->extraFields = CompanyEntityExtraFormFieldQuery::create()
+          ->findList(
+                $this->getObject()->getCompanyId() ? $this->getObject()->getCompanyId() : $this->getUser()->getSelectedCompany()->getId());
+    }
+    return $this->extraFields;
+  }
+
+  public function setup()
+  {
+    parent::setup();
+
+    unset(
+            $this['created_at'],
+            $this['updated_at'],
+            $this['deleted_at'],
+            $this['company_id'],
+            $this['user_id'],
+            $this['latitude'],
+            $this['longitude'],
+            $this['search_index'],
+            $this['link_free_busy_company_entity_list']
+            );
+
+    $this->mergePostValidator(
+        new sfValidatorSchemaRemove(array('fields' => array(
+                  'created_at', 'updated_at', 'deleted_at', 'company_id',
+                  'user_id', 'latitude', 'longitude', 'search_index', 'link_free_busy_company_entity_list')))
+      );
+
+
+    $rightsChoices = array(
+            0                           => 'Aucun Accès',
+
+            CompanyEntity::RIGHT_VIEW   => 'Visualisation',
+
+            (CompanyEntity::RIGHT_VIEW  +
+            CompanyEntity::RIGHT_UPDATE +
+            CompanyEntity::RIGHT_CREATE) => 'Modification',
+
+            (CompanyEntity::RIGHT_VIEW  +
+            CompanyEntity::RIGHT_UPDATE +
+            CompanyEntity::RIGHT_CREATE +
+            CompanyEntity::RIGHT_DELETE) => 'Accès Complet',
+          );
+    $rightValid = array_keys($rightsChoices);
+
+    //the bitfields widgets
+    $this->setWidget('access_calendar_company', new sfWidgetFormChoice(array('choices'  => $rightsChoices)));
+    $this->setWidget('access_calendar_protected',    new sfWidgetFormChoice(array('choices'  => $rightsChoices)));
+    $this->setWidget('access_contact_company',     new sfWidgetFormChoice(array('choices'  => $rightsChoices)));
+    $this->setWidget('access_contact_protected',     new sfWidgetFormChoice(array('choices'  => $rightsChoices)));
+
+
+    //the bitfield validators
+    $this->setValidator('access_calendar_company',  new chCmsValidatorBitOperator(array('choices' => $rightValid, "required" => false)));
+    $this->setValidator('access_calendar_protected',     new chCmsValidatorBitOperator(array('choices' => $rightValid, "required" => false)));
+    $this->setValidator('access_contact_company',      new chCmsValidatorBitOperator(array('choices' => $rightValid, "required" => false)));
+    $this->setValidator('access_contact_protected',      new chCmsValidatorBitOperator(array('choices' => $rightValid, "required" => false)));
+
+    // override validators
+    $this->setValidator('mail', new sfValidatorEmail(array(
+                              'required'   => true,
+                              'max_length' => '255'
+                        ),array(
+                            'invalid'    => '"%value%" n\'est pas une adresse de courier electronique',
+                            'max_length' => 'Vous ne pouvez avoir une adresse mail de plus de %max_length% caractères'
+                        )));
+    $this->setValidator('phone',  new chCmsValidatorPhone(array(
+                            'required' => false
+                        ),array(
+                            'invalid'=>'"%value%" n\'est pas un numéro de téléphone'
+                        )));
+    $this->setValidator('mobile',  new chCmsValidatorPhone(array(
+                            'required' => false
+                        ),array(
+                            'invalid'=>'"%value%" n\'est pas un numéro de téléphone'
+                        )));
+
+    $this->setWidget('upgrade_town_autocomplete', new chCmsFormWidgetUpgradeZipTown(array(
+                                                                'zipcode' => 'zip_code',
+                                                                'town'    => 'town')));
+
+    $this->mergePostValidator(new chCmsValidatorUpgradeZipTown(array(
+                                                                'required' => false,
+                                                                'zipcode' => 'zip_code',
+                                                                'town'    => 'town',
+                                                                'check_consistancy' => false)));
+
+    $this->widgetSchema->setLabels(array(
+        'company_name'  => 'Nom',
+        'agenda_header' => 'En-tête d\'agenda',
+        'public_name'   => 'Nom public',
+        'phone'          => 'Téléphone',
+        'mobile'        => 'Téléphone mobile',
+        'address_1'      => 'Adresse',
+        'address_2'      => 'Bâtiment',
+        'address_3'      => 'Champ complémentaire',
+        'zip_code'      => 'Code postal',
+        'town'          => 'Ville',
+        'access_calendar_company' => 'Accès aux horaires d\'ouverture',
+        'access_calendar_protected'  => 'Accès aux évènements',
+        'access_contact_company'   => sprintf('Accès aux %s publics', $this->getUser()->getSelectedCompany()->getVocabulary('client', 2)),
+        'access_contact_protected'   => sprintf('Accès aux %s protégés', $this->getUser()->getSelectedCompany()->getVocabulary('client', 2)),
+      ));
+
+  }
+  /**
+   * undocumented function
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function extendWithExtraFields()
+  {
+    foreach ($this->getExtraFields() as $field)
+    {
+      $field->addToForm($this);
+    }
+  }
+  public function updateDefaultsFromObject()
+  {
+    parent::updateDefaultsFromObject();
+
+    foreach ($this->getExtraFields() as $field)
+    {
+      $this->setDefault(sprintf('field_%s', $field->getId()), $this->getObject()->getPropertyForField($field) );
+    }
+  }
+
+  protected function doUpdateObject($values)
+  {
+    foreach ($this->getExtraFields() as $field)
+    {
+      $property = $this->getObject()->getPropertyObjectForField($field);
+      $property->setPropertyValue($this->getValue(sprintf('field_%s', $field->getId())));
+    }
+    return parent::doUpdateObject($values);
+  }
+
+  protected function doSave($con = null)
+  {
+    if (is_null($con))
+    {
+      $con = $this->getConnection();
+    }
+    $con->beginTransaction();
+    try
+    {
+      parent::doSave($con);
+
+      foreach ($this->getObject()->getCompanyEntityProperties() as $p)
+      {
+        $p->save($con);
+      }
+
+      $con->commit();
+    }
+    catch(Exception $e)
+    {
+      $con->rollback();
+      throw $e;
+    }
+
+    return $this->getObject();
+  }
+
+  public function setDefaultForCompany($company)
+  {
+    $this->widgetSchema->setDefault('phone', $company->getPhone());
+    $this->widgetSchema->setDefault('address_1', $company->getAddress1());
+    $this->widgetSchema->setDefault('address_2', $company->getAddress2());
+    $this->widgetSchema->setDefault('address_3', $company->getAddress3());
+    $this->widgetSchema->setDefault('zip_code', $company->getZipCode());
+    $this->widgetSchema->setDefault('town', $company->getTown());
+    $this->widgetSchema->setDefault('mail', $company->getMail());
+
+  }
+}

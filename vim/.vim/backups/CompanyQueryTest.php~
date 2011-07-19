@@ -1,0 +1,13 @@
+<?php
+include dirname(__FILE__) .'/../bootstrap/propel.php';
+
+$t = new lime_test(2, new lime_output_color());
+
+$t->diag('Test CompanyQuery::countGuardUserIsValidMemberOf');
+
+$user = sfGuardUserQuery::create()->findOneByUsername('demo');
+$t->ok(CompanyQuery::countGuardUserIsValidMemberOf($user) > 2, 'demo has several companies');
+$user = sfGuardUserQuery::create()->findOneByUsername('collaborateurDemo');
+$t->is(CompanyQuery::countGuardUserIsValidMemberOf($user), 1, 'collaborateurDemo is member of a single company');
+$user = sfGuardUserQuery::create()->findOneByUsername('user1');
+$t->is(CompanyQuery::countGuardUserIsValidMemberOf($user), 0, 'collaborateurDemo is member of a single company');

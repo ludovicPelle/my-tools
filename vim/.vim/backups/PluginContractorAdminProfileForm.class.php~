@@ -1,0 +1,33 @@
+<?php
+/**
+ * This file declare the PluginContractorAdminProfileForm class.
+ *
+ * @package chCmsContractorPlugin
+ * @subpackage forms
+ * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-05-16
+ */
+
+/**
+ *Forms for Contractor Profil manage by admin
+ */
+class PluginContractorAdminProfileForm extends ContractorForm
+{
+  /**
+   * set up the form
+   **/
+  public function setup()
+  {
+    parent::setup();
+
+    
+		unset($this['access_freebusy']);
+		unset($this['access_event']);
+		unset($this['access_contact_public']);
+		unset($this['access_contact_protected']);
+    $this->extendWithExtraFields();
+
+    $this->widgetSchema->setNameFormat('contractor_admin_profile[%s]');
+  }
+} // END OF PluginContractorProfileForm

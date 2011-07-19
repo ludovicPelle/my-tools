@@ -1,0 +1,250 @@
+# Auto Foobar
+# =======================
+#
+# Introduction
+# ------------
+#
+# describes scenario for "Auto Foobar"
+#
+# calendars
+# ---------
+#
+# In this scenario, Demo, Collaborator demo, Ressource 2 and Ressource 2
+# have a calendar each.
+#
+# Only Julien and Pierre can access Luc calendar
+# everybody can access Bob calendar
+#
+# Only Morgane and Luc can access Morgane calendar
+# Only Luc and Morgane can access Luc calendar
+#
+# Julien and Bob publish their calendars
+# Morgane and Luc publish their calendars for clients only
+#
+#
+# contacts
+# --------
+#
+# everything else has to be defined
+#
+# To sum up
+# ---------
+#
+# ### calendar visibility
+#
+# | contractor          | Entity    | Calendar  | Result    |
+# | demo                | PARENT    | PARENT    | PROTECTED |
+# | collaborateur demo  | COMPANY   | PARENT    | PROTECTED |
+# | ressource 1         | PARENT    | PARENT    | PROTECTED |
+# | ressource 1         | PARENT    | PARENT    | PROTECTED |
+#
+# ### calendar publication
+#
+# | contractor          | Entity    | Calendar  | Result    |
+# | demo                | PARENT    | PARENT    | PROTECTED |
+# | collaborateur demo  | COMPANY   | PARENT    | PROTECTED |
+# | ressource 1         | PARENT    | PARENT    | PROTECTED |
+# | ressource 1         | PARENT    | PARENT    | PROTECTED |
+#
+
+Company:
+  concessionnaire_auto:
+    name:         Auto Foobar
+    phone:        '0556017000'
+    mail:         auto@concessionnaire.com
+    address_1:    rue des boulevards
+    address_2:    ''
+    address_3:    ''
+    zip_code:     '33000'
+    town:         Bordeaux
+    presentation:  |
+        Un concessionnaire automobile.
+        Si vous êtes intéressé par le produit, il ne vous reste qu'à remplir une demande de contact sur le site pro.t-resa.fr
+
+LinkCompanyCategory:
+  concessionnaire_auto_root:
+    company_id:   concessionnaire_auto
+    category_id:  root
+  concessionnaire_auto_coiffeur:
+    company_id:   concessionnaire_auto
+    category_id:  coiffeur
+
+Service:
+  coupe_1_3:
+    company_id:   concessionnaire_auto
+    name:         coupe homme
+    service_type: ServiceHairCut
+    duration:     15
+  coupe_2_3:
+    company_id:   concessionnaire_auto
+    name:         coupe femme
+    service_type: ServiceHairCut
+    duration:     30
+  coupe_3_3:
+    company_id:   concessionnaire_auto
+    name:         coupe + couleur
+    service_type: ServiceHairCut
+    duration:     45
+
+Contract:
+  concessionnaire_auto:
+    company_id:         concessionnaire_auto
+    subscriber_id:      pro1
+    nb_max_contractors: 1
+    nb_max_services:    3
+    is_public:          true
+
+CompanyPreferences:
+  concessionnaire_auto:
+    company_id:   concessionnaire_auto
+    is_public:    false
+    need_ticket:  false
+
+CompanyVocabulary:
+ concessionnaire_auto:
+    company_id:   concessionnaire_auto
+    contact:      '[-Inf,1]fiche client|(1,+Inf]fiches clients'
+    client:       '[-Inf,1]client|(1,+Inf]clients'
+    assistant:    '[-Inf,1]secrétaire|(1,+Inf]secrétaires'
+
+LinkCompanyAvailableModule:
+  concessionnaire_auto_contractors:
+    company_id: concessionnaire_auto
+    available_module_id:  contractors
+  concessionnaire_auto_ressources:
+    company_id: concessionnaire_auto
+    available_module_id:  ressources
+  concessionnaire_auto_admin:
+    company_id: concessionnaire_auto
+    available_module_id:  admin
+  concessionnaire_auto_dashboard:
+    company_id: concessionnaire_auto
+    available_module_id:  dashboard
+  concessionnaire_auto_clients:
+    company_id: concessionnaire_auto
+    available_module_id:  clients
+
+CompanyDefaultCredential:
+  concessionnaire_auto_my_account:
+    company_id: concessionnaire_auto
+    credential: my_account
+
+  concessionnaire_auto_my_preferences:
+    company_id: concessionnaire_auto
+    credential: my_preferences
+
+  concessionnaire_auto_my_rights:
+    company_id: concessionnaire_auto
+    credential: my_rights
+
+Contractor:
+  auto_lucie:
+    company_id:     concessionnaire_auto
+    user_id:        demo
+    entity_type:    <?php echo CompanyEntityPeer::CLASSKEY_CONTRACTOR ?>
+    company_name:   Lucie Tuture
+    agenda_header:  Lucie
+    public_name:    Lucie
+    phone:
+    mobile:
+    mail:       lucie@auto.com
+    contacts_default_visibility:    <?php echo ContactQuery::PRIVATE_VISIBILITY ?>
+    access_contact_company:         <?php echo Contact::RIGHT_MODIFY ?>
+    access_contact_protected:       <?php echo Contact::RIGHT_NONE ?>
+    calendars_default_visibility:   <?php echo CalendarQuery::PARENT_VISIBILITY ?>
+    access_calendar_company:        <?php echo Calendar::RIGHT_VIEW ?>
+    access_calendar_protected:      <?php echo Calendar::RIGHT_NONE ?>
+    calendars_default_publication:  <?php echo CalendarQuery::PARENT_PUBLICATION ?>
+  auto_bob:
+    company_id:    concessionnaire_auto
+    entity_type:    <?php echo CompanyEntityPeer::CLASSKEY_CONTRACTOR ?>
+    company_name:  Bob Morane
+    agenda_header:  Bob
+    public_name:  Bob
+    phone:      '0098762032'
+    mobile:
+    mail:       bob@auto.com
+    contacts_default_visibility:    <?php echo ContactQuery::COMPANY_VISIBILITY ?>
+    access_contact_company:         <?php echo Contact::RIGHT_MODIFY ?>
+    access_contact_protected:       <?php echo Contact::RIGHT_NONE ?>
+    calendars_default_visibility:   <?php echo CalendarQuery::PARENT_VISIBILITY ?>
+    access_calendar_company:        <?php echo Calendar::RIGHT_VIEW ?>
+    access_calendar_protected:      <?php echo Calendar::RIGHT_NONE ?>
+    calendars_default_publication:  <?php echo CalendarQuery::PARENT_PUBLICATION ?>
+
+CompanyEntityCredential:
+  auto_lucie_admin:
+    entity_id:  auto_lucie
+    credential: company_admin
+
+
+Calendar:
+  lucie_concessionnaire_auto:
+    name: Lucie (Auto Foobar)
+  bob_concessionnaire_auto:
+    name: Bob (Auto Foobar)
+
+LinkCalendarEntity:
+  lucie_concessionnaire_auto_concessionnaire_auto:
+    calendar_id:  lucie_concessionnaire_auto
+    entity_id:    auto_lucie
+    visibility:   <?php echo CalendarQuery::PARENT_VISIBILITY ?>
+    publication:  <?php echo CalendarQuery::PARENT_PUBLICATION ?>
+  bob_concessionnaire_auto_concessionnaire_auto:
+    calendar_id:  bob_concessionnaire_auto
+    entity_id:    auto_bob
+    visibility:   <?php echo CalendarQuery::PARENT_VISIBILITY ?>
+    publication:  <?php echo CalendarQuery::PARENT_PUBLICATION ?>
+
+
+Contact:
+  auto_maria:
+    name:   Maria
+  auto_amelie:
+    name:   Amélie
+  auto_clara:
+    name:   Clara
+  auto_camille:
+    name:   Camille
+  auto_alphonse:
+    name:   Alphonse
+  auto_ed:
+    name:   Ed
+  auto_raphael:
+    name:   Raphaël
+  auto_xavier:
+    name:   Xavier
+
+
+ContactCompany:
+  auto_maria:
+    company_id: concessionnaire_auto
+    id_contact: auto_maria
+  auto_xavier:
+    company_id: concessionnaire_auto
+    id_contact: auto_xavier
+    deleted_at: 2011-05-04 11:25:00
+
+ContactEntity:
+  auto_amelie_lucie:
+    entity_id: auto_lucie
+    id_contact: auto_amelie
+  auto_clara_lucie:
+    entity_id: auto_lucie
+    id_contact: auto_clara
+    deleted_at: 2011-05-04 11:20:00
+  auto_camille_lucie:
+    entity_id: auto_lucie
+    id_contact: auto_camille
+
+  auto_alphonse_bob:
+    entity_id: auto_bob
+    id_contact: auto_alphonse
+  auto_ed_bob:
+    entity_id: auto_bob
+    id_contact: auto_ed
+    deleted_at: 2011-05-04 11:10:00
+  auto_raphael_bob:
+    entity_id: auto_bob
+    id_contact: auto_raphael
+    visibility: 2

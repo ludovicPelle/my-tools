@@ -1,0 +1,18 @@
+<?php
+/**
+ * This file declare the chCmsCompanyNotAMemberException class.
+ *
+ * @package Company
+ * @subpackage exception
+ * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-07-07
+ */
+
+/**
+ * Throwed when user not a member
+ * Need GuardExtraPlugin
+ */
+class chCmsCompanyNotAMemberException extends chCmsGuardExtraLoginErrorException
+{
+} // END OF chCmsCompanyNotAMemberException

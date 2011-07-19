@@ -1,0 +1,13 @@
+<?php open_backend_form_for ($form, '@signup_associate') ?>
+  <?php open_backend_form_fields_container('class=backend-list') ?>
+
+    <?php include_backend_form_field($form['username']); ?>
+    <?php include_backend_form_field($form['password']); ?>
+
+  <?php close_backend_form_fields_container() ?>
+
+  <?php open_backend_action_panel_footer(); ?>
+    <?php echo jui_submit_button('Associer', 'icon=silk-disk'); ?>
+  <?php close_backend_action_panel_footer(); ?>
+
+<?php close_backend_form() ?>

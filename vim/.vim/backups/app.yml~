@@ -1,0 +1,182 @@
+#all:
+#  ch_cms_guard_extra:
+#
+#    # registration: how to behave on registration
+#    registration_form:              'RegistrationForm' # the form used to handle registration
+#    use_captcha:                    false     # wether or not to use captcha on registration
+#    register_subforms:            # subforms to display during account creation
+#      profil_utilisateur:
+#        class: sfGuardUserProfileForm
+#        label: Moyen de contact
+#        model: sfGuardUserProfile
+#        scope: { field: user_id, method: [RegistrationForm, getUserId] }
+#        no_select:  true
+#      pincode:
+#        class: sfGuardUserPinCodeForm
+#        label: Sécurité de vos données
+#        model: sfGuardUserPinCode
+#        scope: { field: user_id, method: [RegistrationForm, getUserId] }
+#        no_select:  true
+#        help: |
+#            Afin de garantir la sécurité de vos données personnelles, vous pouvez les 
+#            protéger à l'aide d'un code de sécurité. Ce code sera nécessaire afin qu'un 
+#            prestataire vous ajoute à ses fiches clients. Sans ce code, il ne pourra ni 
+#            récupérer vos informations, ni profiter des mises à jour éventuelles que vous y faites.
+#
+#    after_signup_route:             '@sf_guard_signin'  # the route to redirect to after acount registration
+#    show_why:                       true
+#
+#    #authentication: the way you retrieve users
+#    auth_function:                  [chCmsLogin,retrieveUser] # authentication function 
+#    mail_table_name:                sfGuardUserProfile
+#    mail_link_field_name:           user_id
+#    mail_field_name:                mail
+#
+#    #profile form
+#    profile_forms:             # subforms to display when editing profile
+#      profil:             { class: sfGuardProfileForm, label: informations personnelles, model: sfGuardProfile, field_name: user_id, help: les informations générales vous concernant. }
+#      profil_utilisateur: { class: sfGuardUserProfileForm, label: Moyens de contact, model: sfGuardUserProfile, field_name: user_id, help: Le moyens avec lesquels il est possible de vous contacter. }
+#
+#    #preferences form
+#    preferences_forms:             # subforms to display when editing profile
+#      application:             { class: sfGuardUserPreferencesForm, label: préférences générales, model: sfGuardUserPreferences }
+#
+#    #security
+#    security_forms:
+#      password:           {class: chCmsUserChangePasswordForm, label: password, model: sfGuardUser, field_name: id }
+#      pincode:
+#        class: sfGuardUserPinCodeForm
+#        label: code pin
+#        model: sfGuardUserPinCode
+#        field_name: user_id
+#        help: |
+#            Afin de garantir la sécurité de vos données personnelles, vous pouvez les 
+#            protéger à l'aide d'un code de sécurité. Ce code sera nécessaire afin qu'un 
+#            prestataire vous ajoute à ses fiches clients. Sans ce code, il ne pourra ni 
+#            récupérer vos informations, ni profiter des mises à jour éventuelles que vous y faites.
+#
+#    #activation mail detail
+#    need_activation:                true     #wether or not a user have to activate his account
+#    activation_mail:
+#      from_mail:                    registration@t-resa.fr
+#      from_name:                    t-resa.fr
+#      subject:                      enregistrement sur t-resa.fr
+#      html_body: |
+#          <p>
+#            Votre compte sur <a href="http://www.t-resa.fr">t-resa.fr</a> a été créé.<br />
+#            Vous devez maintenant l'activer avant de pouvoir vous connecter.
+#          </p><p>
+#            Pour activer votre compte, il suffit de cliquer sur ce lien: <a href="%ACTIVATION_URL%">Activez votre compte</a> 
+#            ou de vous rendre à l'adresse suivante: <br />
+#            -----------------------------<br />
+#                  %ACTIVATION_URL%. <br />
+#            -----------------------------
+#          </p><p>
+#            Pour rappel, vos informations de connexion sont les suivantes:
+#          <p><ul>
+#            <li>Pseudo: %USERNAME%</li>
+#            <li>Mot de passe: %PASSWORD%</li>
+#          </ul><p>
+#            Cordialement,<br />
+#            Toute l'équipe de <a href="http://www.t-resa.fr">t-resa.fr</a>
+#          </p>
+#        
+#      text_body: |
+#          Votre compte sur http://t-resa.fr a été créé.
+#          Vous devez maintenant l'activer avant de pouvoir vous connecter.
+#      
+#          Pour l'activer, il suffit de copier cette adresse dans votre navigateur: 
+#          -----------------------
+#              %ACTIVATION_URL%
+#          -----------------------
+#          Pour rappel, vos informations de connexion sont les suivantes:
+#            * Pseudo: %USERNAME%
+#            * Mot de passe: %PASSWORD%
+#      
+#          Cordialement,
+#          Toute l'équipe de t-resa.fr
+#
+#    #resend password
+#    resend_password:
+#      from_mail:                    registration@t-resa.fr
+#      from_name:                    t-resa.fr
+#      subject:                      Votre nouveau mot de passe t-resa.fr
+#      html_body: |
+#          <p>
+#            Vous avez changé votre mot de passe sur <a href="http://www.t-resa.fr">t-resa.fr</a>.<br />
+#            Vous pouvez désormais vous connecter avec les informations suivantes:
+#          </p>
+#          <ul>
+#            <li>Pseudo: %USERNAME%</li>
+#            <li>Mot de passe: %PASSWORD%</li>
+#          </ul><p>
+#            Cordialement,<br />
+#            Toute l'équipe de <a href="http://www.t-resa.fr">t-resa.fr</a>
+#          </p>
+#      
+#      text_body: |
+#          Vous avez changé votre mot de passe sur http://t-resa.fr.
+#          Vous pouvez désormais vous connecter avec les informations suivantes:
+#            * Pseudo: %USERNAME%
+#            * Mot de passe: %PASSWORD%
+#      
+#          Cordialement,
+#          Toute l'équipe de t-resa.fr
+#
+#    #resend activation
+#    resend_activation:
+#      from_mail:                    registration@t-resa.fr
+#      from_name:                    t-resa.fr
+#      subject:                      nouveau lien d'activation t-resa.fr
+#      html_body: |
+#          <p>
+#            Vous avez demandé de renvoyer le lien d'activation pour votre compte <a href="http://www.t-resa.fr">t-resa.fr</a>.
+#          </p><p>
+#            Pour activer votre compte, il suffit de cliquer sur ce lien: <a href="%ACTIVATION_URL%">Activez votre compte</a> 
+#            ou de vous rendre à l'adresse suivante: %ACTIVATION_URL%.
+#          </p><p>
+#            Pour rappel, vos informations de connexion sont les suivantes:
+#          <p><ul>
+#            <li>Pseudo: %USERNAME%</li>
+#          </ul><p>
+#            Cordialement,<br />
+#            Toute l'équipe de <a href="http://www.t-resa.fr">t-resa.fr</a>
+#          </p>
+#      
+#      text_body: |
+#          Vous avez demandé de renvoyer le lien d'activation pour votre compte t-resa.fr.
+#      
+#          Pour l'activer, il suffit de copier cette adresse dans votre navigateur: %ACTIVATION_URL%
+#      
+#          Pour rappel, vos informations de connexion sont les suivantes:
+#            * Pseudo: %USERNAME%
+#      
+#          Cordialement,
+#          Toute l'équipe de t-resa.fr
+#        
+#    #changed_password
+#    changed_password:
+#      from_mail:                    registration@t-resa.fr
+#      from_name:                    t-resa.fr
+#      subject:                      Votre nouveau mot de passe t-resa.fr
+#      html_body: |
+#          <p>
+#            Vous avez changé votre mot de passe sur <a href="http://www.t-resa.fr">t-resa.fr</a>.<br />
+#            Vous pouvez désormais vous connecter avec les informations suivantes:
+#          </p>
+#          <ul>
+#            <li>Pseudo: %USERNAME%</li>
+#            <li>Mot de passe: %PASSWORD%</li>
+#          </ul><p>
+#            Cordialement,<br />
+#            Toute l'équipe de <a href="http://www.t-resa.fr">t-resa.fr</a>
+#          </p>
+#      
+#      text_body: |
+#          Vous avez changé votre mot de passe sur http://t-resa.fr.
+#          Vous pouvez désormais vous connecter avec les informations suivantes:
+#            * Pseudo: %USERNAME%
+#            * Mot de passe: %PASSWORD%
+#      
+#          Cordialement,
+#          Toute l'équipe de t-resa.fr

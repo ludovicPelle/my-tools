@@ -1,0 +1,574 @@
+/etc/gdm3/Xsession: Beginning session setup...
+GNOME_KEYRING_CONTROL=/tmp/keyring-bfZwvk
+GNOME_KEYRING_CONTROL=/tmp/keyring-bfZwvk
+SSH_AUTH_SOCK=/tmp/keyring-bfZwvk/ssh
+GNOME_KEYRING_CONTROL=/tmp/keyring-bfZwvk
+   /org/gnome/SessionManager/Client3
+(polkit-gnome-authentication-agent-1:2329): GLib-GObject-WARNING **: cannot register existing type `_PolkitError'
+
+(polkit-gnome-authentication-agent-1:2329): GLib-CRITICAL **: g_once_init_leave: assertion `initialization_value != 0' failed
+option --sm-config-prefix not recognized
+for help use --help
+Initializing nautilus-gdu extension
+
+** (nautilus:2310): WARNING **: Can not determine workarea, guessing at layout
+[2575:2599:344014436:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:3324:542086928:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:3324:542218824:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:3324:542253951:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:3324:542254925:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:3326:542256387:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:3324:542256982:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:3328:542261385:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:3326:544375762:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:2575:547977468:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:548241222:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:548241316:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:548304905:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:548304958:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:548328846:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:548328881:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:548496862:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:548496907:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:548561239:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:548561337:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:548657115:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:548657234:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:548689300:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:548689394:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:548744464:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:548744590:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:548792849:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:548792995:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:548855792:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:548855979:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:548896912:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:548896989:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:549033051:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:549033086:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:550009687:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:550009723:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:550138928:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:550138996:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:550257487:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:550257532:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:550513679:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:550513719:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:550553792:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:550553835:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:550873373:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:550873409:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:552058144:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:552058189:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:552179629:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:552179670:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+/usr/share/gajim/src/common/passwords.py:108: UserWarning: multiple gnome keyring items found for account ch-regent; trying to use the first one...
+  % account_name)
+10:13:24 (E) gajim.c.resolver: Invalid host: _xmpp-client._tcp.ch-regent
+
+(exe:2700): Gdk-WARNING **: XID collision, trouble ahead
+[2575:2575:3432457814:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3433544365:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3433544477:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3433594089:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3433594147:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3433752279:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3433752336:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3433768535:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3433768579:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3433821986:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3433822049:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3434117032:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3435961311:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3435961359:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3436425014:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3436425110:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3437104925:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3437105179:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3437345157:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3437345241:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3437793249:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3437793346:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3437861950:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3437862005:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3438073159:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3438073258:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3438489160:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3438489223:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3438537352:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3438537437:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3438616109:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3438616157:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3438718344:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3438718407:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3438921686:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3438921734:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3439586282:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3439586417:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3440217820:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3440217876:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:8565:3441907274:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:8558:3442421899:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:8556:3442423596:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:8570:3442424679:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:8557:3442425907:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:8554:3442426253:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:2575:3447917403:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3448131010:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3448131066:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3448626669:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3448626732:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3448747276:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3448747318:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3448835884:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3448835932:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3448842943:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3448842983:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3448904942:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3448905005:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3448922825:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3448922871:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3449251530:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3449251578:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3449675793:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3449675836:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3450123284:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3450123333:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3450483603:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3450483648:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3450592636:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3450593512:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3450667197:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3450667327:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3451163176:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3451163222:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3455484730:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3455484775:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3455555883:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3456040260:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3458561927:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3458623102:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3459038555:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3534347100:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3534410580:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3534725619:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3672047805:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3672091272:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3672233578:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3675636537:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3675726516:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3676195645:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3677517994:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3677570891:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3776825574:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3777825059:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3968526246:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3968564793:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3969742136:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3969742420:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3970147448:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:2575:3970147550:ERROR:webkit/glue/webcursor_gtk.cc(129)] Not implemented reached in int WebCursor::GetCursorType() const
+[2575:8560:3971285336:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:8568:3971467199:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:8562:3971469700:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:8566:3971474182:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:8564:3971474551:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:8561:3971477479:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:8563:3985090509:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+deliver mode: 7
+
+(exe:2700): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:2700): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:2700): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:2700): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:2700): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:2700): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:2700): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:2700): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:2700): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:2700): Gdk-CRITICAL **: gdk_drawable_get_display: assertion `GDK_IS_DRAWABLE (drawable)' failed
+
+(exe:2700): Gdk-CRITICAL **: gdk_drawable_get_display: assertion `GDK_IS_DRAWABLE (drawable)' failed
+
+(exe:2700): Gtk-CRITICAL **: gtk_widget_hide: assertion `GTK_IS_WIDGET (widget)' failed
+
+(exe:2700): Gtk-CRITICAL **: gtk_widget_destroy: assertion `GTK_IS_WIDGET (widget)' failed
+
+(exe:2700): Gdk-CRITICAL **: gdk_drawable_get_display: assertion `GDK_IS_DRAWABLE (drawable)' failed
+
+(exe:2700): Gtk-CRITICAL **: gtk_widget_hide: assertion `GTK_IS_WIDGET (widget)' failed
+
+(exe:2700): Gtk-CRITICAL **: gtk_widget_destroy: assertion `GTK_IS_WIDGET (widget)' failed
+
+(exe:2700): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:2700): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:2700): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:2700): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:2700): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:2700): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:2700): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:2700): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:2700): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:2700): Gdk-WARNING **: XID collision, trouble ahead
+
+(exe:2700): Gdk-WARNING **: XID collision, trouble ahead
+[2575:2575:15720502791:ERROR:chrome/browser/gtk/tabs/tab_strip_gtk.cc(1159)] Not implemented reached in virtual void TabStripGtk::StopAllHighlighting()
+[2575:13480:16355823543:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:13481:16356049291:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:13492:16356050787:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:13479:16356053945:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:13478:16356060943:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+deliver mode: 0
+
+(gnome-terminal:2389): Gtk-CRITICAL **: gtk_widget_is_ancestor: assertion `ancestor != NULL' failed
+
+(gnome-terminal:2389): Gtk-CRITICAL **: gtk_widget_is_ancestor: assertion `ancestor != NULL' failed
+
+(gnome-terminal:2389): Gtk-CRITICAL **: gtk_widget_is_ancestor: assertion `ancestor != NULL' failed
+
+(gnome-terminal:2389): Gtk-CRITICAL **: gtk_widget_is_ancestor: assertion `ancestor != NULL' failed
+
+(gnome-terminal:2389): Gtk-CRITICAL **: gtk_widget_is_ancestor: assertion `ancestor != NULL' failed
+
+(gnome-terminal:2389): Gtk-CRITICAL **: gtk_widget_is_ancestor: assertion `ancestor != NULL' failed
+
+(gnome-terminal:2389): Gtk-CRITICAL **: gtk_widget_is_ancestor: assertion `ancestor != NULL' failed
+
+(gnome-terminal:2389): Gtk-CRITICAL **: gtk_widget_is_ancestor: assertion `ancestor != NULL' failed
+
+(gnome-terminal:2389): Gdk-CRITICAL **: gdk_window_get_events: assertion `GDK_IS_WINDOW (window)' failed
+
+(gnome-terminal:2389): GLib-GObject-CRITICAL **: g_object_ref: assertion `G_IS_OBJECT (object)' failed
+
+(gnome-terminal:2389): GLib-GObject-CRITICAL **: g_object_unref: assertion `G_IS_OBJECT (object)' failed
+
+(gnome-terminal:2389): Gdk-CRITICAL **: gdk_window_get_events: assertion `GDK_IS_WINDOW (window)' failed
+
+(gnome-terminal:2389): GLib-GObject-CRITICAL **: g_object_ref: assertion `G_IS_OBJECT (object)' failed
+
+(gnome-terminal:2389): GLib-GObject-CRITICAL **: g_object_unref: assertion `G_IS_OBJECT (object)' failed
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: full-authentication!!!
+connection_message_func(): Callback
+CALLBACK: save-authentication!!!
+connection_message_func(): Callback
+CALLBACK: save-authentication!!!
+
+(file-uri:16069): GLib-GIO-CRITICAL **: g_cancellable_release_fd: assertion `G_IS_CANCELLABLE (cancellable)' failed
+
+(gimp-2.6:15386): Gtk-WARNING **: Opération non prise en charge par le moteur
+
+(gimp-2.6:15386): Gtk-WARNING **: Opération non prise en charge par le moteur
+
+(gimp-2.6:15386): Gdk-CRITICAL **: gdk_window_get_events: assertion `GDK_IS_WINDOW (window)' failed
+
+(gimp-2.6:15386): GLib-GObject-CRITICAL **: g_object_ref: assertion `G_IS_OBJECT (object)' failed
+
+(gimp-2.6:15386): GLib-GObject-CRITICAL **: g_object_unref: assertion `G_IS_OBJECT (object)' failed
+
+(soffice:17096): Gdk-CRITICAL **: gdk_window_get_events: assertion `GDK_IS_WINDOW (window)' failed
+
+(soffice:17096): GLib-GObject-CRITICAL **: g_object_ref: assertion `G_IS_OBJECT (object)' failed
+
+(soffice:17096): GLib-GObject-CRITICAL **: g_object_unref: assertion `G_IS_OBJECT (object)' failed
+
+(soffice:17096): Gdk-CRITICAL **: gdk_window_get_events: assertion `GDK_IS_WINDOW (window)' failed
+
+(soffice:17096): GLib-GObject-CRITICAL **: g_object_ref: assertion `G_IS_OBJECT (object)' failed
+
+(soffice:17096): GLib-GObject-CRITICAL **: g_object_unref: assertion `G_IS_OBJECT (object)' failed
+DocxExportFilter::exportDocument()
+# Document Statistics:
+#	PageCount=<unconvertable> [long]
+#	TableCount=<unconvertable> [long]
+#	ImageCount=<unconvertable> [long]
+#	ObjectCount=<unconvertable> [long]
+#	ParagraphCount=<unconvertable> [long]
+#	WordCount=<unconvertable> [long]
+#	CharacterCount=<unconvertable> [long]
+
+(evolution-alarm-notify:2333): evolution-alarm-notify-WARNING **: alarm.c:252: Requested removal of nonexistent alarm!
+
+(soffice:26111): Gtk-WARNING **: Opération non prise en charge par le moteur
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: full-authentication!!!
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: full-authentication!!!
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: full-authentication!!!
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: full-authentication!!!
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: full-authentication!!!
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: full-authentication!!!
+NOTE: child process received `Goodbye', closing down
+
+(gimp-2.6:15386): Gtk-CRITICAL **: gtk_hsv_set_metrics: assertion `size > 0' failed
+
+(gimp-2.6:15386): Gtk-CRITICAL **: gtk_hsv_set_metrics: assertion `size > 0' failed
+
+** (gimp-2.6:15386): CRITICAL **: clearlooks_style_draw_box_gap: assertion `height >= -1' failed
+
+(gimp-2.6:15386): Gtk-CRITICAL **: gtk_hsv_set_metrics: assertion `size > 0' failed
+
+** (gimp-2.6:15386): CRITICAL **: clearlooks_style_draw_box_gap: assertion `height >= -1' failed
+
+(gimp-2.6:15386): Gtk-CRITICAL **: gtk_hsv_set_metrics: assertion `size > 0' failed
+
+** (gimp-2.6:15386): CRITICAL **: clearlooks_style_draw_box_gap: assertion `height >= -1' failed
+
+(gimp-2.6:15386): Gtk-CRITICAL **: gtk_hsv_set_metrics: assertion `size > 0' failed
+
+** (gimp-2.6:15386): CRITICAL **: clearlooks_style_draw_box_gap: assertion `height >= -1' failed
+
+(gimp-2.6:15386): Gtk-CRITICAL **: gtk_hsv_set_metrics: assertion `size > 0' failed
+
+** (gimp-2.6:15386): CRITICAL **: clearlooks_style_draw_box_gap: assertion `height >= -1' failed
+
+(gimp-2.6:15386): Gtk-CRITICAL **: gtk_hsv_set_metrics: assertion `size > 0' failed
+
+** (gimp-2.6:15386): CRITICAL **: clearlooks_style_draw_box_gap: assertion `height >= -1' failed
+
+(gimp-2.6:15386): Gtk-CRITICAL **: gtk_hsv_set_metrics: assertion `size > 0' failed
+
+** (gimp-2.6:15386): CRITICAL **: clearlooks_style_draw_box_gap: assertion `height >= -1' failed
+
+(gimp-2.6:15386): Gtk-CRITICAL **: gtk_hsv_set_metrics: assertion `size > 0' failed
+
+(gimp-2.6:15386): Gtk-CRITICAL **: gtk_hsv_set_metrics: assertion `size > 0' failed
+
+(gimp-2.6:15386): Gtk-CRITICAL **: gtk_hsv_set_metrics: assertion `size > 0' failed
+
+(gimp-2.6:15386): Gtk-CRITICAL **: gtk_hsv_set_metrics: assertion `size > 0' failed
+
+(gimp-2.6:15386): Gtk-CRITICAL **: gtk_hsv_set_metrics: assertion `size > 0' failed
+
+(gimp-2.6:15386): Gtk-CRITICAL **: gtk_hsv_set_metrics: assertion `size > 0' failed
+
+(gimp-2.6:15386): Gtk-CRITICAL **: gtk_hsv_set_metrics: assertion `size > 0' failed
+
+(gimp-2.6:15386): Gtk-CRITICAL **: gtk_hsv_set_metrics: assertion `size > 0' failed
+
+(gimp-2.6:15386): Gtk-CRITICAL **: gtk_hsv_set_metrics: assertion `size > 0' failed
+
+(gimp-2.6:15386): Gtk-CRITICAL **: gtk_hsv_set_metrics: assertion `size > 0' failed
+
+(gimp-2.6:15386): Gtk-CRITICAL **: gtk_hsv_set_metrics: assertion `size > 0' failed
+
+(gimp-2.6:15386): Gtk-CRITICAL **: gtk_hsv_set_metrics: assertion `size > 0' failed
+
+(gimp-2.6:15386): Gtk-CRITICAL **: gtk_hsv_set_metrics: assertion `size > 0' failed
+
+(gimp-2.6:15386): Gtk-CRITICAL **: gtk_hsv_set_metrics: assertion `size > 0' failed
+
+(gimp-2.6:15386): Gtk-CRITICAL **: gtk_hsv_set_metrics: assertion `size > 0' failed
+
+(gimp-2.6:15386): Gimp-Tools-CRITICAL **: gimp_tool_set_active_modifier_state: assertion `display == tool->focus_display' failed
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: fill-authentication!!!
+connection_message_func(): Callback
+CALLBACK: full-authentication!!!
+connection_message_func(): Callback
+CALLBACK: save-authentication!!!
+connection_message_func(): Callback
+CALLBACK: save-authentication!!!
+
+(exe:2700): Gdk-WARNING **: XID collision, trouble ahead
+sys:1: GtkWarning: gdk_window_get_events: assertion `GDK_IS_WINDOW (window)' failed
+sys:1: Warning: g_object_ref: assertion `G_IS_OBJECT (object)' failed
+sys:1: Warning: g_object_unref: assertion `G_IS_OBJECT (object)' failed
+[2575:5335:110118053659:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:5335:110118385870:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:5335:110118389414:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:5335:110118390404:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:5335:110118392327:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:5335:110118486241:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:6071:110118489079:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:5335:110159767805:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:6072:110160142587:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:6071:110160397119:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:6072:110160399079:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:6071:110160399433:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:5335:110160399933:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:6072:110160401071:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:5335:110160448496:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:6107:110160449460:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+[2575:6072:110160450813:ERROR:net/base/x509_certificate_nss.cc(652)] CERT_PKIXVerifyCert for redmine.office.carpe-hora.com failed err=-8179
+
+(evolution-alarm-notify:2333): evolution-alarm-notify-WARNING **: alarm.c:252: Requested removal of nonexistent alarm!
+Created new window in existing browser session.
+log4j:WARN No such property [follow] in org.apache.log4j.ConsoleAppender.
+java.lang.NullPointerException
+Fatal error on startup.  ArgoUML failed to start.
+	at java.lang.Class.isAssignableFrom(Native Method)
+	at org.argouml.moduleloader.ModuleLoader2.addClass(ModuleLoader2.java:725)
+	at org.argouml.moduleloader.ModuleLoader2.addClass(ModuleLoader2.java:688)
+	at org.argouml.moduleloader.ModuleLoader2.huntForModules(ModuleLoader2.java:460)
+	at org.argouml.moduleloader.ModuleLoader2.doInternal(ModuleLoader2.java:323)
+	at org.argouml.moduleloader.ModuleLoader2.doLoad(ModuleLoader2.java:176)
+	at org.argouml.moduleloader.InitModuleLoader.init(InitModuleLoader.java:69)
+	at org.argouml.application.SubsystemUtility.initSubsystem(SubsystemUtility.java:63)
+	at org.argouml.application.Main.initializeSubsystems(Main.java:455)
+	at org.argouml.application.Main.main(Main.java:189)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:616)
+	at net.sourceforge.jnlp.Launcher.launchApplication(Launcher.java:461)
+	at net.sourceforge.jnlp.Launcher$TgThread.run(Launcher.java:732)
+net.sourceforge.jnlp.LaunchException: Fatal: Initialization Error: Could not initialize application.
+	at net.sourceforge.jnlp.Launcher.createApplication(Launcher.java:651)
+	at net.sourceforge.jnlp.Launcher.launchApplication(Launcher.java:420)
+	at net.sourceforge.jnlp.Launcher$TgThread.run(Launcher.java:732)
+Caused by: java.lang.NullPointerException
+	at net.sourceforge.jnlp.runtime.JNLPClassLoader.initializeResources(JNLPClassLoader.java:427)
+	at net.sourceforge.jnlp.runtime.JNLPClassLoader.<init>(JNLPClassLoader.java:168)
+	at net.sourceforge.jnlp.runtime.JNLPClassLoader.getInstance(JNLPClassLoader.java:249)
+	at net.sourceforge.jnlp.Launcher.createApplication(Launcher.java:641)
+	... 2 more
+Caused by: 
+java.lang.NullPointerException
+	at net.sourceforge.jnlp.runtime.JNLPClassLoader.initializeResources(JNLPClassLoader.java:427)
+	at net.sourceforge.jnlp.runtime.JNLPClassLoader.<init>(JNLPClassLoader.java:168)
+	at net.sourceforge.jnlp.runtime.JNLPClassLoader.getInstance(JNLPClassLoader.java:249)
+	at net.sourceforge.jnlp.Launcher.createApplication(Launcher.java:641)
+	at net.sourceforge.jnlp.Launcher.launchApplication(Launcher.java:420)
+	at net.sourceforge.jnlp.Launcher$TgThread.run(Launcher.java:732)
+
+(nautilus:2310): Nautilus-GDU-WARNING **: unable to query info: L'emplacement indiqué n'est pas pris en charge
+
+
+(nautilus:2310): Nautilus-GDU-WARNING **: unable to query info: L'emplacement indiqué n'est pas pris en charge
+
+
+(nautilus:2310): Nautilus-GDU-WARNING **: unable to query info: L'emplacement indiqué n'est pas pris en charge
+
+log4j:WARN No such property [follow] in org.apache.log4j.ConsoleAppender.
+Fatalj earvrao.rl aonng .sNtualrltPuopi.n t eArrEgxocUeMpLt ifoaniled to start.
+
+	at java.lang.Class.isAssignableFrom(Native Method)
+	at org.argouml.moduleloader.ModuleLoader2.addClass(ModuleLoader2.java:725)
+	at org.argouml.moduleloader.ModuleLoader2.addClass(ModuleLoader2.java:688)
+	at org.argouml.moduleloader.ModuleLoader2.huntForModules(ModuleLoader2.java:460)
+	at org.argouml.moduleloader.ModuleLoader2.doInternal(ModuleLoader2.java:323)
+	at org.argouml.moduleloader.ModuleLoader2.doLoad(ModuleLoader2.java:176)
+	at org.argouml.moduleloader.InitModuleLoader.init(InitModuleLoader.java:69)
+	at org.argouml.application.SubsystemUtility.initSubsystem(SubsystemUtility.java:63)
+	at org.argouml.application.Main.initializeSubsystems(Main.java:455)
+	at org.argouml.application.Main.main(Main.java:189)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:616)
+	at net.sourceforge.jnlp.Launcher.launchApplication(Launcher.java:461)
+	at net.sourceforge.jnlp.Launcher$TgThread.run(Launcher.java:732)
+
+(nautilus:2310): Nautilus-GDU-WARNING **: unable to query info: L'emplacement indiqué n'est pas pris en charge
+
+NOTE: child process received `Goodbye', closing down
+
+(nautilus:2310): Nautilus-GDU-WARNING **: unable to query info: L'emplacement indiqué n'est pas pris en charge
+
+
+(nautilus:2310): Nautilus-GDU-WARNING **: unable to query info: L'emplacement indiqué n'est pas pris en charge
+
+
+(nautilus:2310): Nautilus-GDU-WARNING **: unable to query info: L'emplacement indiqué n'est pas pris en charge
+
+
+(gimp-2.6:15386): Gimp-Display-CRITICAL **: gimp_display_shell_draw_get_scaled_image_size_for_scale: assertion `GIMP_IS_IMAGE (shell->display->image)' failed
+
+[2575:2575:206198072356:ERROR:chrome/browser/gtk/tabs/tab_strip_gtk.cc(1159)] Not implemented reached in virtual void TabStripGtk::StopAllHighlighting()
+
+(gnome-power-manager:2289): GLib-GObject-CRITICAL **: g_object_unref: assertion `G_IS_OBJECT (object)' failed
+Shutting down nautilus-gdu extension
+
+--- Hash table keys for warning below:
+--> Ludovic PELLE
+--> smb-share:domain=carpe-hora,server=172.16.8.102,share=partage,user=ludovic
+--> ludovic
+--> image/png
+--> application/vnd.oasis.opendocument.text
+--> application/pdf
+--> l65028
+--> inode/directory
+
+(nautilus:2310): Eel-WARNING **: "unique eel_ref_str" hash table still has 8 elements at quit time (keys above)
+
+(nautilus:2310): Eel-WARNING **: "nautilus-directory.c: directories" hash table still has 20 elements at quit time
+NOTE: child process received `Goodbye', closing down
+
+(polkit-gnome-authentication-agent-1:2329): polkit-gnome-1-WARNING **: Error enumerating temporary authorizations: Remote Exception invoking org.freedesktop.PolicyKit1.Authority.EnumerateTemporaryAuthorizations() on /org/freedesktop/PolicyKit1/Authority at name org.freedesktop.PolicyKit1: org.freedesktop.PolicyKit1.Error.Failed: Cannot determine session the caller is in
+polkit-gnome-authentication-agent-1: Fatal IO error 11 (Ressource temporairement non disponible) on X server :0.0.
+The application 'firefox-bin' lost its connection to the display :0.0;
+most likely the X server was shut down or you killed/destroyed
+the application.
+bluetooth-applet: Fatal IO error 11 (Ressource temporairement non disponible) on X server :0.0.
+gdu-notification-daemon: Fatal IO error 11 (Ressource temporairement non disponible) on X server :0.0.
+update-notifier: Fatal IO error 11 (Ressource temporairement non disponible) on X server :0.0.
+kerneloops-applet: Fatal IO error 11 (Ressource temporairement non disponible) on X server :0.0.
+system-config-printer-applet: Fatal IO error 11 (Ressource temporairement non disponible) on X server :0.0.
+gnome-screensaver: Fatal IO error 11 (Ressource temporairement non disponible) on X server :0.0.
+nm-applet: Fatal IO error 11 (Ressource temporairement non disponible) on X server :0.0.
+XIO:  fatal IO error 11 (Ressource temporairement non disponible) on X server ":0.0"
+      after 4718515 requests (4718515 known processed) with 5 events remaining.
+gnome-settings-daemon: Fatal IO error 11 (Ressource temporairement non disponible) on X server :0.0.
+evolution-alarm-notify: Fatal IO error 11 (Ressource temporairement non disponible) on X server :0.0.
+Traceback (most recent call last):
+  File "/usr/lib/rhythmbox/plugins/jamendo/JamendoSource.py", line 165, in do_impl_delete_thyself
+    gconf.client_get_default().set_string(JamendoConfigureDialog.gconf_keys['sorting'], self.get_entry_view().get_sorting_type())
+glib.GError: Échec lors de la connexion au serveur de configuration. Cela est généralement dû à un défaut (absence ou mauvaise configuration) du démon de bus de session D-Bus. Veuillez consulter http://projects.gnome.org/gconf/ pour plus d'informations. (Détails :  1: Impossible d'envoyer un message au démon GConf : Did not receive a reply. Possible causes include: the remote application did not send a reply, the message bus security policy blocked the reply, the reply timeout expired, or the network connection was broken.)
+
+(rhythmbox:2323): Rhythmbox-WARNING **: Could not release media player keys: Disconnection or out-of-memory
+The application 'rhythmbox' lost its connection to the display :0.0;
+most likely the X server was shut down or you killed/destroyed
+the application.

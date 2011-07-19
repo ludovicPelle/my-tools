@@ -1,0 +1,480 @@
+<?php
+/**
+ * This file declare the AdminMenu class.
+ *
+ * @package chCmsApplicationPlugin
+ * @subpackage Menu
+ * @author Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2010
+ * @since 2010-12-15
+ */
+
+/**
+ * the class declaration for Tresa pro admin menu
+ * every menu entry configuration should at least define following configuration:
+ *
+ * Warning: panel and action are using the same route namespace ! 
+ * ========
+ *  
+ * <code>
+ *  <!-- define your listeners -->
+ *  <?php
+ *  class MyAdminMenu
+ *  {
+ *    public static function myListener($event)
+ *    {
+ *      $menu = $event->getSubject();
+ *      $user = $event['user'];
+ *      // define your admin panel as follow
+ *      $menu
+ *        ->addGroup('group_id', 'Group name', 'my-group-prefix')
+ *            ->addPanel('panel_id', 'module_name', 'component_name')
+ *            ->addAction('action_id', 'module_name', 'action_name')
+ *            ->addMenuEntry('panel_id', 'Menu Entry');
+ *    }
+ *  }
+ *  ?>
+ *  <!-- register your listeners -->
+ *  <?php
+ *    // register events
+ *    $dispatcher->connect(AdminMenu::getEventName(), array('MyAdminMenu', 'myListener'));
+ *  ?>
+ *  <!-- link to those routes -->
+ *  <?php echo admin_url('action_id') ?>
+ *  <?php echo admin_url('panel_id') ?>
+ *  <?php url_for ('admin_group_id_action_id')?>
+ *  <?php link_to('My text', 'admin_group_id_panel_id', $myParameters, $htmlOptions); ?>
+ * </code>
+
+ * @see AdminGroupMenu
+ */
+class AdminMenu extends BaseMenu
+{
+//                                                                    GROUPS
+ 
+  /**
+   * adds a group to admin panel.
+   *
+   * @param string $group_id the group internal id (to find and adress it)
+   * @param string $group_title the group title as appears in the admin panel.
+   *
+   * @return AdminGroupMenu
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function addGroup($group_id, $group_title, $url_prefix, $html_options = array())
+  {
+    if (!$this->hasGroup($group_id))
+    {
+      $group = new AdminGroupMenu($this, $this->normalizeUrl($url_prefix), $this->normalizeRouteName($group_id));
+    }
+    else
+    {
+      $group = $this->getItem($group_id);
+    }
+    $group->setTitle($group_title);
+    $group->setHtmlOptions($html_options);
+    $this->addItem($group_id, $group);
+    return $group;
+  }
+
+  /**
+   * return the grop matching given $group_id
+   *
+   * @param AdminGroupMenu|string $group_id the grou id to look for
+   *
+   * @return AdminGroupMenu
+   *
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   */
+  public function getGroup($group_id)
+  {
+    if ($group_id instanceof AdminGroupMenu)
+    {
+      return $group_id;
+    }
+    return $this->getItem($group_id);
+  }
+
+  /**
+   * returns all the menu groups
+   *
+   * @return array<AdminGroupMenu>
+   *
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function getGroups()
+  {
+    return $this->getItems();
+  }
+
+  /**
+   * determines wether a group is registered or not
+   *
+   * @param string $group_id the grop id to check for
+   *
+   * @return boolean
+   *
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function hasGroup($group_id)
+  {
+    return $this->hasItem($group_id);
+  }
+
+  /**
+   * return a list of groups accessible for given user.
+   * default user is current user
+   *
+   * @return array
+   **/
+  public function getAccessibleGroupsForUser()
+  {
+    $groups = array();
+    $user = self::getUser();
+
+    foreach ($this->getGroups() as $g)
+    {
+      foreach ($g->getMenuEntries() as $panel_id => $title) 
+      {
+        if ($g->getMenuRoute($panel_id)->isAccessibleForUser($user))
+        {
+          $groups[] = $g;
+          break ;
+        }
+      }
+    }
+
+    return $groups;
+  }
+
+//                                                                PERMISSIONS
+
+  /**
+   * the list of available persmissions
+   * @access protected
+   * @var array
+   */
+   protected $credentials = array();
+  
+
+  /**
+   * returns the whole credentials set
+   *
+   * @return array
+   **/
+  public function getAllCredentials()
+  {
+    return $this->credentials;
+  }
+  /**
+   * shortcut for getAllCredentials
+   * @deprecated
+   *
+   * @return array
+   **/
+  public function getAllPermissions()
+  {
+    return $this->getAllCredentials();
+  }
+
+  /**
+   * adds a permission to the permission set
+   *
+   * @param string $credential  the credential name
+   * @param string $human_name  the credential human readable name
+   * @param string $description the credential human readable name
+   *
+   * @return AdminMenu
+   **/
+  public function addCredential($credential, $human_name = null, $description = null, $group_name=null)
+  {
+    if (is_array($credential))
+    {
+      foreach ($credential as $c => $desc) 
+      {
+        if (is_numeric($c))
+        {
+          $this->addCredential($desc);
+        }
+        else 
+        {
+          $this->addCredential($c, $desc);
+        }
+      }
+      return $this;
+    }
+
+    // if first add, then default is null
+    if (!$this->hasCredential($credential))
+    {
+      $this->log(sprintf('add routing level permission "%s".', $credential), sfLogger::INFO);
+      
+      $original = array(
+          'human_name' => $credential,
+          'description' => $credential,
+          'group_name' =>$group_name,
+        );
+    }
+    else
+    {
+      // otherwise, override !
+      $original = $this->getCredential($credential);
+    }
+    
+    $this->credentials[$credential] = array(
+                'human_name'  => !is_null($human_name) ? $human_name : $original['human_name'],
+                'description' => !is_null($description) ? $description : $original['description'],
+                'group_name' => !is_null($group_name) ? $group_name : $original['group_name'],
+              );
+
+    return $this;
+  }
+
+  /**
+   * shortcut for addCredential
+   * @deprecated
+   */
+  public function addPermission($credential, $human_name = null, $description = null, $group_name=null)
+  {
+    return $this->addCredential($credential, $human_name, $description, $group_name);
+  }
+
+  /**
+   * get credential for $id
+   *
+   * @return array
+   **/
+  public function getCredential($credential)
+  {
+    if ($this->hasCredential($credential))
+    {
+      return $this->credentials[$credential];
+    }
+    return null;
+  }
+
+  /**
+   * check wether or not a permission is registered
+   *
+   * @return Boolean
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function hasCredential($credential)
+  {
+    return isset($this->credentials[$credential]);
+  }
+
+  /**
+   * shortcut for addCredential
+   * @deprecated
+   */
+  public function hasPermission($permission)
+  {
+    return $this->hasCredential($permission);
+  }
+
+//                                                                    ROUTING
+  
+  /**
+   * undocumented function
+   *
+   * @return array|false
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function matchesUrl($url, $context = array())
+  {
+    if (0 !== strpos($url, $this->getUrlPrefix()))
+    {
+      return false;
+    }
+    
+    foreach ($this->getGroups() as $id => $groupMenu)
+    {
+      if (false !== $parameters = $groupMenu->matchesUrl($url, $context))
+      {
+        return $parameters;
+      }
+    }
+
+    // none returned by route ?
+    // default if accessible
+    // @see getIndexRoute
+    $route = $this->getIndexRoute();
+
+    if ($route)
+    {
+      if (  is_callable(array($route, 'isAccessibleForUser')) 
+          && $route->isAccessibleForUser(self::getUser()))
+      {
+        return array_merge($route->getDefaultParameters(), $route->getDefaults());
+      }
+      //TODO check if route->isAccessibleForUser is not callable
+      // to show default index
+      throw new sfError404Exception('this content is protected !');
+    }
+    
+    // no allowed index route ! 404.
+    throw new sfError404Exception('unable to find route !');
+  }
+
+  /**
+   * undocumented function
+   *
+   * @return void
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function getUrlPrefix()
+  {
+    return self::getRoute()->getPrefixUrl();
+  }
+
+  /**
+   * return the route prefix for all the admin routes
+   *
+   * @return string
+   **/
+  public function getRoutePrefix()
+  {
+    return self::getRoute()->getRoutePrefix();
+  }
+
+  /**
+   * returns the index route.
+   */
+  public function getIndexRoute()
+  {
+    foreach ($this->getAccessibleGroupsForUser() as $group_id => $group)
+    {
+      return $group->getIndexRoute();
+    }
+    //no group, return false
+    return false;
+    // used to return index
+    //return self::getRoute();
+  }
+
+  /**
+   * prefixes the route name
+   *
+   * @param string $route the route name to prefix
+   * @return string
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function normalizeRouteName($route)
+  {
+    $route = sprintf('%s_%s', $this->getRoutePrefix(), $route);
+
+    return sprintf('%s', join('_', array_filter(explode('_', $route))));
+  }
+
+  /**
+   * computes the internal url by adding the prefix.
+   * if no url is given, then the index url is used.
+   *
+   * @param string $url the sub url.
+   * @return string
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function normalizeUrl($url='')
+  {
+    $url = sprintf('%s/%s', $this->getUrlPrefix(), $url);
+
+    return sprintf('/%s/', join('/', array_filter(explode('/', $url))));
+  }
+
+
+
+
+//                                                                    SINGLETON
+
+
+  /**
+   * gives the event name for the menu to collect items
+   * @access public
+   * @static
+   *
+   * @return string
+   */
+  public static function getEventName()
+  {
+    return 'chCmsApplicationPlugin.admin.menu.init';
+  }
+
+  protected static $instance;
+  /**
+   * retrieves the instance.
+   * this function is the base function for the singleton.
+   * @access public
+   * @static
+   *
+   * @return BaseMenu
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public static function getInstance()
+  {
+    if (is_null(self::$instance))
+    {
+      self::$instance = new AdminMenu();
+      // call initialize in there
+      // to be able to access instance 
+      // through initialization process
+      self::$instance->initialize();
+    }
+    return self::$instance;
+  }
+
+  /**
+   * for test purpose, clears the actual instance
+   */
+  public static function clearInstance()
+  {
+    return self::$instance = null;
+  }
+
+
+
+//                                                                    ADMIN ROUTE
+
+
+  /**
+   * the admin route for this menu
+   * @access protected static
+   * @var chCmsApplicationAdminRoute
+   */
+   protected static $route;
+  
+  /**
+   * getter for route
+   * @access public 
+   * @static
+   *
+   * @return chCmsApplicationAdminRoute the route value
+   */
+  public static function getRoute()
+  {
+    return self::$route;
+  }
+  
+  /**
+   * setter for route
+   * @access public 
+   * @static
+   *
+   * @return chCmsApplicationAdminRoute the route value
+   */
+  public static function setRoute($route)
+  {
+    return self::$route = $route;
+  }
+
+  /**
+   * return the admin route
+   *
+   * @return chCmsApplicationAdminRoute
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public function getAdminRoute()
+  {
+    return self::getRoute();
+  }
+} // END OF AdminMenu

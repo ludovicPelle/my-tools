@@ -1,0 +1,99 @@
+<?php
+/**
+ * This file declare the AdminMenuPro class.
+ *
+ * @package T-resa-pro
+ * @subpackage Menu
+ * @author Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2010
+ * @since 2010-12-15
+ */
+
+/**
+ * the pro application administration menu configuration
+ */
+class AdminMenuPro
+{
+  /**
+   * the callback registered on the admin menu init event
+   *
+   * @param sfEvent $sfEvent the init admin menu event
+   *
+   * @return void
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   *
+   * @see proConfiguration
+   **/
+  public static function listenToAdminMenuEvent($sfEvent)
+  {
+    sfContext::getInstance()->getLogger()->info('initializes the admin menu ("AdminMenuPro::listenToAdminMenuEvent") and if admin, register admin credentials');
+    
+    self::registerMyAccountMenu($sfEvent);
+    self::registerAgendaMenu($sfEvent);
+    self::registerContractorMenu($sfEvent);
+    self::registerCompanyMenu($sfEvent);
+    self::registerTresaMenu($sfEvent);
+  }
+
+  /**
+   * registers the contractor tab in admin panle
+   *
+   * @return void
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  protected static function registerContractorMenu($sfEvent)
+  {
+   // chCmsAdminContractorPluginConfiguration::initializeListMenu($sfEvent);
+    // force group to agenda
+    //chCmsAdminContractorPluginConfiguration::initializeFreeBusyMenu($sfEvent, 'agenda');
+  }
+
+  /**
+   * registers the Tresa tab in the admin panel
+   *
+   * @param sfEvent $sfEvent the init admin menu event
+   *
+   * @return void
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  protected static function registerTresaMenu($sfEvent)
+  {
+    //chCmsAdminTresaPluginConfiguration::initializePreferencesMenu($sfEvent);
+    //chCmsAdminTresaPluginConfiguration::initializeCompanyMenu($sfEvent);
+    //chCmsAdminTresaPluginConfiguration::initializeContractMenu($sfEvent);
+  }
+
+  /**
+   * registers the agenda tab in admin panle
+   *
+   * @return void
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  protected static function registerAgendaMenu($sfEvent)
+  {
+//    chCmsAdminAgendaPluginConfiguration::initializeServicesMenu($sfEvent);
+  }
+
+  /**
+   * registers the company tab in admin panle
+   *
+   * @return void
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  protected static function registerCompanyMenu($sfEvent)
+  {
+    //chCmsAdminCompanyPluginConfiguration::initializeVocabularyMenu($sfEvent);
+    //chCmsAdminCompanyPluginConfiguration::initializeCompanyContactsMenu($sfEvent);
+  }
+
+  /**
+   * registers the my account tab in admin panel
+   *
+   * @return void
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  protected static function registerMyAccountMenu($sfEvent)
+  {
+   // chCmsAdminMyAccountPluginConfiguration::initializeMyAccountMenu($sfEvent);
+  }
+} // END OF AdminMenuPro

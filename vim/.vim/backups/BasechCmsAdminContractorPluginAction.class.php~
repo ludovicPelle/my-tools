@@ -1,0 +1,114 @@
+<?php
+/**
+ * This file declare the BasechCmsAdminContractorPluginAction class.
+ *
+ * @package chCmsAdminContractorPlugin
+ * @subpackage Actions
+ * @author Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-01-06
+ */
+
+/**
+ * the base class for chCmsAdminContractorPlugin
+ * It defines the different ways to render results
+ */
+class BasechCmsAdminContractorPluginAction extends chCmsAdminPanelActions
+{
+  /**
+   * variable $defaultRoute
+   * @access protected
+   * @var string
+   */
+   protected $defaultRoute = 'contractor';
+
+  /**
+   * the classic process form function
+   *
+   * @param sfForm  $form      the form to process
+   * @param string  $component the component to render
+   * 
+   * @see BaseadminContractorActions::RenderResult
+   */
+  protected function processForm($form, $component)
+  {
+    $isNew = $form->getObject()->isNew();
+    $request = $this->getRequest();
+
+    $form->bind($request->getParameter($form->getName(), $request->getFiles($form->getName())));
+    if ($form->isValid())
+    {
+      $obj = $form->save();
+
+      if ($isNew)
+      {
+        $this->getUser()->addInfo('Les données ont été ajoutées');
+      }
+      else
+      {
+        $this->getUser()->addInfo('Les modifications ont été enregistrées');
+      }
+    }
+    else
+    {
+      $this->getUser()->addError('Une erreur s\'est glissée dans le formulaire merci de la corriger.');
+    }
+
+    $this->form = $form;
+
+
+    return $this->renderResult(array(), $component);
+  }
+
+  /**
+   * returns ajax result when needed
+   * provide the result array, and adds a success / error flag and messages.
+   * 
+   * @param array $data the data to process
+   *
+   * @return array
+   */
+  protected function processAjaxResult($data = array())
+  {
+    if ($this->getUser()->hasError())
+    {
+      $data['success'] = false;
+      $data['messages'] = $this->getUser()->getErrors();
+    }
+    else
+    {
+      $data['success'] = true;
+      $data['messages'] = $this->getUser()->getInfos();
+    }
+
+    $this->getUser()->resetMessages();
+    
+    return $data;
+  }
+
+  /**
+   * render the result for the action.
+   * it checks wether there is errors or not, 
+   * modify the result structure consequently
+   * and handle data return if 
+   * @param array $data the data to process
+   */
+  protected function renderResult($data = array(), $component)
+  {
+    if ($this->getRequest()->isXmlHttpRequest())
+    {
+      $data = $this->processAjaxResult($data);
+
+      return $this->renderText( json_encode( $data ) );
+    }
+
+    //we now are for sure in a http request, no ajax
+    if ($this->getUser()->hasError() && !is_null($component) )
+    {
+      return $this->setTemplate($component);
+    }
+
+    //successfull or need to redirect, back to contractor list
+    $this->redirect($this->defaultRoute);
+  }
+} // END OF BasechCmsAdminContractorPluginAction

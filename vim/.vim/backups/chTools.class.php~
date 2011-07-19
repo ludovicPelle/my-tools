@@ -1,0 +1,132 @@
+<?php
+class chTools
+{
+  /**
+   * extract a field of an array of objects.
+   * returns an array with the extracted value of each object
+   * @package    chCmsBasePlugin
+   * @subpackage default
+   * @author     Julien Muetton <julien_muetton@carpe-hora.com>
+   * @package    chCmsBasePlugin
+   * @subpackage default
+   * @author     Julien Muetton <julien_muetton@carpe-hora.com>
+   * @package    chCmsBasePlugin
+   * @subpackage default
+   * @author     Julien Muetton <julien_muetton@carpe-hora.com>
+   */
+  public static function extractField($array, $field)
+  {
+    $method = sprintf('get%s', ucfirst(Tresa::camelize($field)));
+    $ret = array();
+    foreach ($array as $key => $obj)
+    {
+      $ret[$key] = call_user_func(array($obj, $method));
+    }
+    return $ret;
+  }
+
+  static public function camelize($text)
+  {
+    return sfInflector::camelize($text);
+  }
+
+  static public function embedI18nForm($form, $modelName = null)
+  {
+    $modelName = !is_null($modelName) ? $modelName : sprintf('%sI18n', $form->getModelName());
+    $formName = sprintf('%sForm', $modelName);
+    $langs = chTools::get('lang_switcher_available_lang', array(sfContext::getInstance()->getUser()->getCulture()));
+    foreach ($langs as $lang)
+    {
+      if (is_callable($form->getObject(), sprintf('get%sForCulture', ucfirst($modelName))))
+      {
+        $o = call_user_func($form->getObject(), sprintf('get%sForCulture', ucfirst($modelName)), $lang);
+      }
+      else
+      {
+        $o = new $modelName();
+        $o->setCulture($lang);
+      }
+      $form->embedForm($lang, new $formName());
+    }
+  }
+
+  // code derived from http://php.vrana.cz/vytvoreni-pratelskeho-url.php
+  static public function slugify($text)
+  {
+    // replace non letter or digits by -
+    $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
+   
+    // trim
+    $text = trim($text, '-');
+   
+    // transliterate
+    if (function_exists('iconv'))
+    {
+      $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+    }
+   
+    // lowercase
+    $text = strtolower($text);
+   
+    // remove unwanted characters
+    $text = preg_replace('~[^-\w]+~', '', $text);
+   
+    if (empty($text))
+    {
+      return 'n-a';
+    }
+    return $text;
+  }
+
+  /**
+   * uses the form formatter $classname to render $form.
+   */
+  static public function setFormFormatter($form, $classname=null)
+  {
+    if (is_null($classname))
+    {
+      $classname = 'chCmsAdminFormFormatter';
+    }
+    $decorator = new $classname($form->getWidgetSchema());
+    $decorator->setValidatorSchema($form->getValidatorSchema());
+    $widgetSchema = $form->getWidgetSchema();
+    $widgetSchema->addFormFormatter($classname, $decorator);
+    $widgetSchema->setFormFormatterName($classname);
+    $form->setWidgetSchema($widgetSchema);
+  }
+  
+ /**
+  * returns the config value associated to $key
+  */
+  static public function get($key, $default = null)
+  {
+    return sfConfig::get('ch_cms_'.$key, sfConfig::get('app_ch_cms_'.$key, $default));
+  }
+  
+  static public function set($key, $value)
+  {
+    return sfConfig::set('ch_cms_'.$key, $value);
+  }
+  
+  static public function loadHelpers($helpers = array())
+  {
+    sfApplicationConfiguration::getActive()->loadHelpers(array_merge(
+                   array('Helper', 'I18N', 'chCms', 'JqueryUi'), 
+                   $helpers));
+  }
+  
+  static public function showError($message)
+  {
+    chTools::loadHelpers();
+    $response = sfContext::getInstance()->getResponse();
+    $response->setContent(jui_get_error_box($message));
+    $response->setTitle(__('Error.'));
+    $response->send();
+    throw new sfStopException();
+  }
+  
+  static public function getI18n()
+  {
+    return sfContext::getInstance()->getI18n();
+  }
+}

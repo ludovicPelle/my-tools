@@ -1,0 +1,108 @@
+<?php
+$app = 'pro';
+include(dirname(__FILE__).'../../../../test/bootstrap/functional.php');
+$browser = ProviderTestFunctional::initialize(true);
+//*
+$browser
+  ->info("1.Check proUser directly connect")
+  ->get('/')
+  ->gotoLoginPage()
+  ->signinGoogleAccount()
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'chCmsFrontendAccount')
+      ->isParameter('action', 'doSigninProvider')
+    ->end()
+
+    // check the response
+    ->with('response')->begin()
+      ->isRedirected()
+    ->end()
+
+    ->followRedirect()
+
+    ->with('request')->begin()
+      ->isParameter('module', 'home')
+      ->isParameter('action', 'index')
+    ->end() // end on request block
+
+    ->with('response')->begin()
+      ->isValid()
+      ->contains('Vous êtes actuellement connecté sous le nom demo')
+      ->checkInfoMessage('Votre entreprise est configurée pour ne pas apparaitre sur le site public mais votre contrat vous y autorise.')
+    ->end() // end on response block
+    ->signout()
+
+  ->get('/')
+  ->gotoLoginPage()
+  ->signinYahooAccount()
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'chCmsFrontendAccount')
+      ->isParameter('action', 'doSigninProvider')
+    ->end()
+
+    // check the response
+    ->with('response')->begin()
+      ->isRedirected()
+    ->end()
+
+    ->followRedirect()
+
+    ->with('request')->begin()
+      ->isParameter('module', 'home')
+      ->isParameter('action', 'index')
+    ->end() // end on request block
+
+    ->with('response')->begin()
+      ->isValid()
+      ->contains('Vous êtes actuellement connecté sous le nom demo')
+      ->checkInfoMessage('Votre entreprise est configurée pour ne pas apparaitre sur le site public mais votre contrat vous y autorise.')
+    ->end() // end on response block
+    ->signout()
+
+->info('2.Check not user redirect on contactForm')
+  ->get('/')
+  ->gotoLoginPage()
+  ->signinGoogleAccount(array('openid_ext1_value_firstname' => 'tititi',
+                                'openid_ext1_value_lastname'  => 'titit',
+                                'openid_ext1_value_email'     => 'tititititi@gmail.com'))
+    //check routing is OK
+    ->with('request')->begin()
+      ->isMethod('get')
+      ->isParameter('module', 'contact')
+      ->isParameter('action', 'index')
+    ->end()
+
+    // check the response
+    ->with('response')->begin()
+      ->isValid()
+      ->checkForm(new getProAccountContactForm)
+      ->checkInfoMessage('Vous n\'avez pas accès à l\'application professionnelle.Pour obtenir un compte pro, contactez nous !')
+    ->end() // end on response block
+
+->info('3.Check not proUser redirect on contactForm with good message')
+  ->get('/')
+  ->gotoLoginPage()
+  ->signinGoogleAccount(array(  'openid_ext1_value_firstname' => 'carpe2',
+                                'openid_ext1_value_lastname'  => 'hora2',
+                                'openid_ext1_value_email'     => 'carpehoratest2@gmail.com'))
+    //check routing is OK
+    ->with('request')->begin()
+      ->isParameter('module', 'chCmsFrontendAccount')
+      ->isParameter('action', 'doSigninProvider')
+    ->end() // end on request block
+    ->with('response')->begin()
+      ->isRedirected()
+    ->end() // end on response block
+
+    ->followRedirect()
+    // check the response
+    ->with('response')->begin()
+      ->isValid()
+      ->checkForm(new getProAccountContactForm)
+    ->end() // end on response block
+    ;
+// vim: ft=symfony.php.sftest

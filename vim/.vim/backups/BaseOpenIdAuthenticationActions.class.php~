@@ -1,0 +1,141 @@
+<?php
+
+/**
+ * Base actions for the chCmsGuardExtraPlugin OpenIdAuthentication module.
+ *
+ * @package     chCmsGuardExtraPlugin
+ * @subpackage  OpenIdAuthentication
+ * @author      Your name here
+ * @version     SVN: $Id$
+ */
+abstract class BaseOpenIdAuthenticationActions extends BaseExternalProviderActions
+{
+  /**
+   * is the incoming request successfull
+   *
+   * @param sfWebRequest $request the user request
+   * @return boolean
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  protected function isRequestSuccessfull(sfRequest $request)
+  {
+    return $request->getParameter('openid_mode') != 'cancel';
+  }
+
+  /**
+   * compute request checker
+   *
+   * @param sfWebRequest $request the user request
+   * @return Mixed
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  protected function getRequestChecker(sfRequest $request)
+  {
+    // compute hostname
+    $hostname = $request->getUriPrefix();
+
+    // create the openId request parser
+    $requestChecker = new OpenIdConsumer($hostname, $request, $this->getUser()->getFlash('openIdProvider', null));
+
+    return $requestChecker;
+  }
+
+  /**
+   * initialize external provider authentication from
+   * current request.
+   * if authentication is ok, then:
+   * -> check if object exists
+   * -> create authentication object
+   *
+   * else
+   * -> return null
+   *
+   * @param Mixed $requestChecker   the returned request checker.
+   * @return OpenIdOpenId|null
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  protected function getAuthentication($requestChecker)
+  {
+    if ($requestChecker->verifyLogin() &&
+        ($token = $requestChecker->getUser()) &&
+        ($uniqueId = $requestChecker->getAccountIdentifier()))
+    {
+      // there is an authentication
+      // is it registered in the database ?
+      if ($authentication =  OpenIdAuthenticationQuery::create()->findOneByAccountIdentifier($uniqueId))
+      {
+        return $authentication;
+      }
+
+      // none ?
+      // let's create it
+      $authentication = new OpenIdAuthentication();
+      $authentication->setUserToken($token);
+      $authentication->setAccountIdentifier($uniqueId);
+
+      return $authentication;
+    }
+    return null;
+  }
+
+  /**
+   * initialize and prefill form for signup with this provider.
+   * you should use $sf_user->setchCmsGuardExtraProviderForm
+   * and$sf_user->setchCmsGuardExtraProviderFormValues methods.
+   *
+   * @param  $authentication the authentication object returned from external provider.
+   * @return void
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  protected function prefillSignup($responseChecker)
+  {
+    $sf_user = $this->getUser();
+    // init registration form to prefill
+    $sf_user->setchCmsGuardExtraProviderForm('OpenIdRegistrationForm');
+
+    // init registration default values
+    $sf_user->setchCmsGuardExtraProviderFormValues(array(
+      'mail'      => $responseChecker->getEmail(),
+      'username'  => $responseChecker->getUsername(),
+      'firstname' => $responseChecker->getFirstname(),
+      'lastname'  => $responseChecker->getLastname()
+    ));
+  }
+
+  /**
+   * entry point for AskForProvider action
+   *
+   * @param sfWebRequest $request the user request
+   * @return
+   */
+  public function executeAskForProvider(sfWebRequest $request)
+  {
+    $this->form = new OpenIdIdentityForm();
+    echo $this->form->getName();
+  }
+
+  /**
+   * parse provider url
+   *
+   * @param sfWebRequest $request the user request
+   * @return
+   */
+  public function executeRecieveProvider(sfWebRequest $request)
+  {
+    // now bind form if needed
+    $this->form = new OpenIdIdentityForm();
+
+    if ($request->hasParameter($this->form->getName()))
+    {
+      $this->form->bind($request->getParameter($this->form->getName()));
+
+      if ($this->form->isValid())
+      {
+        $this->getUser()->setFlash('openIdProvider', $this->form->getProvider(), false);
+        $this->forward($this->getModuleName(), 'redirect');
+      }
+    }
+
+    $this->setTemplate('askForProvider');
+  }
+}

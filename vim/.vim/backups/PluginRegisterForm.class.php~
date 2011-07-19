@@ -1,0 +1,225 @@
+<?php
+
+/**
+ * This file declare the RegisterForm class.
+ *
+ * @package lib
+ * @subpackage form
+ * @author Camille NERON <camille_neron@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2010
+ * @since 2010-12-27
+ */
+
+/**
+ * declare the Register Form
+ */
+class PluginRegisterForm extends BasesfGuardUserForm
+{
+  /**
+   * configure Register Form
+   *
+   * @return void
+   * @author Camille NERON <camille_neron@carpe-hora.com>
+   **/
+  public function configure()
+  {
+    unset(
+#      $this['id'],
+      $this['algorithm'],
+      $this['salt'],
+      $this['created_at'],
+      $this['last_login'],
+      $this['is_active'],
+      $this['is_super_admin'],
+
+      $this['event_comment_list'],
+      $this['link_free_busy_contractor_list'],
+      $this['sf_guard_user_group_list'],
+      $this['sf_guard_user_permission_list']
+    );
+
+    $this->widgetSchema['password'] = new sfWidgetFormInputPassword();
+    $this->validatorSchema['password']->setOption('required', false);
+    $this->widgetSchema['password_again'] = new sfWidgetFormInputPassword();
+    $this->validatorSchema['password_again'] = clone $this->validatorSchema['password'];
+
+    // set the position of password_again after password widget
+    $this->widgetSchema->moveField('password_again', 'after', 'password');
+
+    $this->mergePostValidator(new sfValidatorSchemaCompare('password', sfValidatorSchemaCompare::EQUAL, 'password_again', array(), array('invalid' => 'The two passwords must be the same.')));
+
+    $this->validatorSchema['password'] = new sfValidatorString(array(
+            'min_length' => 5,
+            'required'    => true,
+          ),array(
+            'min_length' => 'password should contain more than %min_length% characters',
+      ));
+
+    $this->validatorSchema['password_again'] = new sfValidatorString(array(
+            'required'    => true,
+            'min_length' => 5,
+          ),array(
+            'min_length' => 'password should contain more than %min_length% characters',
+        ));
+
+    // labels
+    $this->widgetSchema->setLabels(array(
+      'username' => 'Pseudo',
+      'password' => 'Mot de passe',
+      'password_again' => 'Confirmer le mot de passe',
+    ));
+
+   $this->widgetSchema->setHelps(array(
+      'username' => '<strong>Choisissez un nom d\'utilisateur composé de plus de 4 caractères</strong>',
+      'password' => '<strong>choisissez un mot de passe comportant plus de 5 caractères</strong>',
+      'password_again' => '<strong>Confirmez votre mot de passe pour éviter les erreurs de saisie</strong>',
+   ));
+
+  $this->setWidget('mail', new sfWidgetFormInputText(array(), array('disabled' => 'disabled')));
+
+    $this->validatorSchema['username'] = new sfValidatorString(array(
+            'required'    => true,
+            'min_length' => 4,
+            'max_length' => 128,
+      ),array(
+            'required' => 'Ce champ est obligatoire',
+            'min_length' => 'Le pseudo doit comporter plus de %min_length% caractères',
+            'max_length' => 'Le pseudo doit comporter moins de %max_length% caractères',
+            'invalid' => 'Vous ne pouvez entrer que des caratères alphanumériques et les tirets: _ et -'
+    ));
+
+    $this->setPostValidators();
+
+   // -------------------- mergeForm sfGuardProfile ------------------------------------------
+
+    if ($sfGuardProfileForm = $this->getProfileFormForRegistration())
+    {
+      $this->mergeForm($sfGuardProfileForm);
+    }
+
+   // -------------------- END mergeForm sfGuardProfile ------------------------------------------
+  }
+
+  /**
+   * retruned form is merged to the registration form
+   */
+  protected function getProfileFormForRegistration()
+  {
+    $form = new sfGuardProfileForm($this->getObject()->getProfile());
+    $form->useFields(array(
+        'firstname',
+        'lastname',
+        'mail'
+      ));
+    return $form;
+  }
+
+  /**
+   * Define post validators for the form
+   *
+   * @return void
+   * @author Kevin Gomez <contact@kevingomez.fr>
+   **/
+  protected function setPostValidators()
+  {
+    $this->mergePostValidator(new sfValidatorAnd(array(
+      new sfValidatorPropelUnique(
+        array('model' => 'sfGuardUser', 'column' => array('username')),
+        array('invalid'=>'Ce pseudo est déjà utilisé')
+      ),
+      RegistrationForm::getMailUnicityValidator()
+    )));
+  }
+
+  /**
+   * undocumented function
+   *
+   * @return void
+   * @author Julien Muetton <julien_muetton@carpe-hora.com>
+   **/
+  public static function getMailUnicityValidator()
+  {
+    return new sfValidatorPropelUnique(
+      array('model' => 'sfGuardProfile', 'column' => array('mail')),
+      array('invalid'=>'Cet email est déjà utilisé')
+    );
+  }
+
+  /**
+   * Sets a dummy password to an user. It's usefull for users able to
+   * authenticate with a provider.
+   *
+   * @return void
+   * @author Kevin Gomez <contact@kevingomez.fr>
+   **/
+  protected function setDummyPassword()
+  {
+    $this->getObject()->setPassword(chCmsGuardExtraUser::NULL_PASSWORD);
+    $this->getObject()->setPasswordHash(chCmsGuardExtraUser::NULL_PASSWORD);
+  }
+
+  protected function doUpdateObject($values)
+  {
+    parent::doUpdateObject($values);
+
+    // fixes the password if a provider is used
+    $password = $this->getValue('password');
+    if (!$password && 0 == strlen($password))
+    {
+      $this->setDummyPassword();
+    }
+
+    $this->getObject()->getProfile()->fromArray($values, BasePeer::TYPE_FIELDNAME);
+  }
+
+  public function save($con = null)
+  {
+    $con = is_null($con) ? Propel::getConnection(sfGuardUserPeer::DATABASE_NAME) : $con;
+    $con->beginTransaction();
+    try
+    {
+      $user = new sfGuardUser();
+      $values = $this->getValues();
+      $user->setUsername($values['username']->getValue());
+      $user->setPassword($values['password']->getValue());
+      $user->setIsActive(false);
+
+      if (chTools::get('guard_extra_need_activation', true))
+      {
+        $activation = new GuardActivation();
+        $activation->setHash(md5(sha1(uniqid($values['username']->getValue(), true) . uniqid())));
+        $user->setActivation($activation);
+      }
+      else
+      {
+        $user->setIsActive(true);
+      }
+
+      $user->save($con);
+      //profil
+      $profil = $user->getProfile();
+      foreach ($values as $key => $v)
+      {
+        $values[ucfirst(chTools::camelize($key))] = $v;
+      }
+      $profil->fromArray($values);
+      $profil->save($con);
+
+      $con->commit();
+    }
+    catch(PDOException $sqle)
+    {
+      $con->rollBack();
+      throw $sqle;
+    }
+    catch(Exception $e)
+    {
+      // in case anything went bad...
+      $con->rollBack();
+      throw $e;
+    }
+
+    return $user;
+  }
+} // END OF RegisterForm
+

@@ -1,0 +1,353 @@
+<?php
+/**
+ * This file is part of the chCms project.
+ * this class allow to embed multiple indepenent forms within a single one.
+ *
+ * possible options for form embedding are:
+ *  - class: the form class
+ *  - formatter: the form formatter to use
+ *  - label: the label for form (title or tab title)
+ *  - help: the help text for the form
+ *  - model: the associated model
+ *  - selectMethod: the method selection (should return only one record !)
+ *  - scope: the scope to apply. required value is 'field'. You can provide
+ *           wether a 'method' or a 'value' field to find
+ *  - name or nameFormat: the name format for form.
+ *  - no_select: no binding with existing object
+ *
+ * @package    chCmsBasePlugin
+ * @subpackage default
+ * @author     Julien Muetton <julien_muetton@carpe-hora.com>
+ */
+class chCmsFormManagerForm extends sfForm
+{
+  protected $chConfig = array(),
+            $pkName = array();
+
+  public function setup()
+  {
+    chTools::setFormFormatter($this);
+  }
+
+  public function getHelpText($key)
+  {
+    return array_key_exists($key, $this->chConfig) && array_key_exists('help', $this->chConfig[$key]) ? $this->chConfig[$key]['help'] : '';
+  }
+
+  public function bind(array $taintedValues = null, array $taintedFiles = null)
+  {
+    $request = sfContext::getInstance()->getRequest();
+    foreach ($this->embeddedForms as $key => $form)
+    {
+      $this->embeddedForms[$key]->bind(
+            $request->getParameter($form->getName(), is_array($taintedValues) && array_key_exists($form->getName(), $taintedValues) ? $taintedValues[$form->getName()]: array()),
+            $request->getFiles($form->getName(), $taintedFiles));
+    }
+  }
+
+  public function isValid()
+  {
+    $valid = true;
+    foreach ($this->getEmbeddedForms() as $key => $form)
+    {
+      $valid = $valid && $form->isValid();
+    }
+    return $valid;
+  }
+
+  public function save($con=null)
+  {
+    $con = is_null($con) ? Propel::getConnection(sfGuardUserPeer::DATABASE_NAME) : $con;
+    $con->beginTransaction();
+    try
+    {
+      foreach ($this->getEmbeddedForms() as $form)
+      {
+        if (method_exists($form, 'save'))
+        {
+          $form->save($con);
+        }
+      }
+      $con->commit();
+    }
+    catch(Exception $e)
+    {
+      $con->rollBack();
+      throw $e;
+    }
+  }
+
+  public function addForms(array $formsConfig)
+  {
+    foreach ($formsConfig as $key => $config)
+    {
+      $this->addForm($key, $config);
+    }
+  }
+
+ /**
+  * possible options are:
+  *  - class: the form class
+  *  - formatter: the form formatter to use
+  *  - label: the label for form (title or tab title)
+  *  - help: the help text for the form
+  *  - model: the associated model
+  *  - selectMethod: the method selection (should return only one record !)
+  *  - scope: the scope to apply. required value is 'field'. You can provide
+  *           wether a 'method' or a 'value' field to find
+  *  - name or nameFormat: the name format for form.
+  *  - no_select: no binding with existing object
+  *
+  * @param string $key
+  * @param array $config
+  * @throw sfException if no valid form is found
+  */
+  public function addForm($key, $config)
+  {
+    if (!is_array($config)) // if just given the form name
+    {
+      $config = array('class' => $config);
+    }
+
+    if (!array_key_exists('class', $config))
+    {
+      throw new sfException(sprintf('You have to provide a class for embedded form %s', var_dump($config)));
+    }
+
+    # tries to findout the related model class
+    #-----------------------------------------
+    if (!array_key_exists('model', $config))
+    {
+      $config['model'] = $this->guessModel($config);
+    }
+
+    # tries to findout the related select method
+    #-------------------------------------------
+    if (!array_key_exists('selectMethod', $config))
+    {
+      $config['selectMethod'] = $this->guessSelectMethod($config);
+    }
+
+    # tries to findout the scope(s)
+    #------------------------------
+    $config['scope'] = $this->guessScope($config);
+
+    # embed the form
+    #---------------
+    if (!array_key_exists('no_select', $config) || !$config['no_select'])
+    {
+      if (!is_null($config['selectMethod']))
+      {
+        $associatedObject = DbFinder::from($config['model']);
+        foreach ($config['scope'] as $scope)
+        {
+          if (array_key_exists('value', $scope))
+          {
+            $associatedObject = $associatedObject->where($scope['field'], $scope['value']);
+          }
+          else if (array_key_exists('method', $scope))
+          {
+            $associatedObject = $associatedObject->where($scope['field'], call_user_func($scope['method']));
+          }
+          else
+          {
+            throw new sfException(sprintf('unable to apply scope for field "%s" in form "%s"', $scope['field'], $config['class']));
+          }
+        }
+        $associatedObject = call_user_func(array($associatedObject, $config['selectMethod']));
+      }
+      if ((!isset($associatedObject) || is_null($associatedObject)) && !is_null($config['model']) && class_exists($config['model']))
+      {
+        $associatedObject = new $config['model']();
+        foreach ($config['scope'] as $scope)
+        {
+          if (array_key_exists('value', $scope))
+          {
+            call_user_func(array($associatedObject, $scope['setterName']), $scope['value']);
+          }
+          else if (array_key_exists('method', $scope))
+          {
+            call_user_func(array($associatedObject, $scope['setterName']), call_user_func($scope['method']));
+          }
+        }
+      }
+    }
+    if (!isset($associatedObject) || is_null($associatedObject))
+    {
+      $associatedObject = null;
+      if (!array_key_exists('no_select', $config) || !$config['no_select'] && sfConfig::get('sf_logging_enabled'))
+      {
+        sfContext::getInstance()->getLogger()->alert(sprintf('chCmsFormManagerForm cannot determine associated model for form "%s".', $config['class']));
+      }
+    }
+
+    $f = new $config['class']($associatedObject);
+    $f->widgetSchema->setNameFormat($this->guessNameFormat($config, $key));
+    chTools::setFormFormatter($f, array_key_exists('formatter', $config) ? $config['formatter'] : null );
+    $pk = $this->getPrimaryKey($config['model']);
+    if ($pk && isset($f[$pk]))
+    {
+      $f->offsetUnset($pk);
+    }
+    foreach ($config['scope'] as $scope)
+    {
+      $field = sfInflector::underscore($scope['field']);
+      if (isset($f[$field]))
+      {
+        unset($f[$field]);
+      }
+      if (array_key_exists('no_select', $config) && $config['no_select'] && method_exists($f, 'getObject'))
+      {
+        $associatedObject = $f->getobject();
+        if (method_exists($associatedObject, $scope['setterName']))
+        {
+          if (array_key_exists('value', $scope))
+          {
+            call_user_func(array($associatedObject, $scope['setterName']), $scope['value']);
+          }
+          else if (array_key_exists('method', $scope))
+          {
+            call_user_func(array($associatedObject, $scope['setterName']), call_user_func($scope['method'], $this));
+          }
+        }
+      }
+    }
+
+    $this->embedForm($key, $f);
+
+    if (array_key_exists('label', $config))
+    {
+      $this->widgetSchema->setLabel($key, $config['label']);
+    }
+
+    if (array_key_exists('help', $config))
+    {
+      $this->widgetSchema->setHelp($key, $config['help']);
+    }
+
+    # finaly store the config
+    #------------------------
+    $this->chConfig[$key] = $config;
+  }
+
+ /**
+  * determines default model classname
+  */
+  protected function guessModel(array $config)
+  {
+    if (preg_match('#^(\w+)Form$#', $config['class'], $matches))
+    {
+      return $matches[1];
+    }
+    else
+    {
+      throw new sfException(sprintf('Unable to determine modelname from form class: %s', $config['class']));
+    }
+  }
+
+ /**
+  * determines the select method
+  */
+  protected function guessSelectMethod(array $config)
+  {
+    return 'findOne';
+  }
+
+ /**
+  * determines the scope(s) to apply to objects
+  */
+  protected function guessScope(array $config)
+  {
+    if (array_key_exists('scope', $config) && is_array($config['scope']) && count($config['scope']))
+    {
+      $scope = array();
+      if (array_key_exists('field', $config['scope']))
+      {
+        //only a single scope
+        $scope[] = array_merge(array(
+          'getterName' => sprintf('get%s', ucfirst(chTools::camelize($config['scope']['field']))),
+          'setterName' => sprintf('set%s', ucfirst(chTools::camelize($config['scope']['field']))),
+        ), $config['scope']);
+
+        if (!array_key_exists('method', $scope[0]) && !array_key_exists('value', $scope[0]))
+        {
+            throw new sfException(sprintf('for form %s, scope is undetermined. specify "scope" "value" as "null" if you want a null value', $config['class']));
+        }
+      }
+      else
+      {
+        //multiple scopes
+        foreach ($config['scope'] as $key => $value)
+        {
+          if (!array_key_exists('field', $value))
+          {
+            throw new sfException(sprintf('for form %s, scope field is undetermined.', $config['class']));
+          }
+
+          $scope[$key] = array_merge(array(
+            'getterName' => sprintf('get%s', ucfirst(chTools::camelize($value['field']))),
+            'setterName' => sprintf('set%s', ucfirst(chTools::camelize($value['field']))),
+          ), $value);
+
+          if (!array_key_exists('method', $scope[$key]) && !array_key_exists('value', $scope[$key]))
+          {
+            throw new sfException(sprintf('for form %s, scope is undetermined. specify "scope" "value" as "null" if you want a null value', $config['class']));
+          }
+        }
+      }
+      return $scope;
+    }
+    else
+    {
+      return array();
+    }
+  }
+
+ /**
+  * determines the name format
+  */
+  protected function guessNameFormat($config, $key)
+  {
+    if (array_key_exists('nameFormat', $config) && strlen($config['nameFormat']))
+    {
+      return $config['nameFormat'];
+    }
+    else if (array_key_exists('name', $config) && strlen($config['name']))
+    {
+      return sprintf('%s[%%s]', $config['name']);
+    }
+    else if (strlen($this->getName()) && strlen($key))
+    {
+      return sprintf('%s[%s][%%s]', $this->getName(), $key);
+    }
+    else
+    {
+      return sprintf('%s[%%s]', $key);
+    }
+  }
+
+  protected function getPrimaryKey($modelClass)
+  {
+    if (!strlen($modelClass))
+    {
+      return false;
+    }
+    if (array_key_exists($modelClass, $this->pkName))
+    {
+      return $this->pkName[$modelClass];
+    }
+
+    if (class_exists($modelClass))
+    {
+      $tableMap = call_user_func(array($modelClass.'Peer', 'getTableMap'));
+      foreach ($tableMap->getColumns() as $column)
+      {
+        if ($column->isPrimaryKey())
+        {
+          return $this->pkName[$modelClass] = call_user_func(array($modelClass.'Peer', 'translateFieldname'), $column->getPhpName(), BasePeer::TYPE_PHPNAME, BasePeer::TYPE_FIELDNAME);
+        }
+      }
+    }
+    return false;
+  }
+}

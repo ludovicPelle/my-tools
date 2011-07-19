@@ -1,0 +1,116 @@
+<?php
+/**
+ * @package    T-resa-lib
+ * @subpackage  default
+ * @author     Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright  (c) Carpe Hora SARL 2011
+ */
+/**
+* @classname:ServiceManager
+* @scope PUBLIC
+* this class gives utilities to manage installed services
+*
+* @package T-resa-lib
+* @subpackage Services
+* @author Julien MUETTON <julien_muetton@carpe-hora.com>
+* @copyright 2010
+*/
+class ServiceManager
+{
+  protected static $installed_services = array();
+
+  public static function isValidStaticService($modelName)
+  {
+    return in_array($modelName, array('ServicePersonnal', 'ServiceCompany'));
+  }
+
+  public static function registerService($model, $name, $description)
+  {
+    self::$installed_services[$model] = array('name' => $name, 'description' => $description);
+  }
+
+  public static function getServicesModel()
+  {
+    return array_keys(self::$installed_services);
+  }
+
+  public static function getServicesForForm($services = null)
+  {
+    $ret = array();
+    if (is_null($services))
+    {
+      foreach (self::$installed_services as $key => $value)
+      {
+        $ret[$key] = $value['name'];
+      }
+    }
+    else
+    {
+      foreach ($services as $service)
+      {
+        $ret[$service] = self::$installed_services[$service]['name'];
+      }
+    }
+    return $ret;
+  }
+
+  public static function getServiceName($model)
+  {
+    if (array_key_exists($model, self::$installed_services))
+    {
+      return self::$installed_services[$model]['name'];
+    }
+    return 'Inconnu';
+  }
+
+  public static function getServiceDescription($model)
+  {
+    if (array_key_exists($model, self::$installed_services))
+    {
+      return self::$installed_services[$model]['description'];
+    }
+    return 'Inconnu';
+  }
+} // END OF ServiceManager
+
+//now registers services
+ServiceManager::registerService('Service', 'Service de base', 'Ce service est le service de base. il n\'est pas utilisé en production');
+
+ServiceManager::registerService('ServiceNail', 'Service onglerie', <<<EOF
+Ce service est l'implémentation pour les ongleries.<br />
+Il définit un prix, un lieux et une description.
+EOF
+);
+
+ServiceManager::registerService('ServiceHairCut', 'Coiffure', <<<EOF
+Service spécialisé pour les coiffeurs.<br />
+Il définit un prix, un lieux et une description.
+EOF
+);
+
+ServiceManager::registerService('ServiceConsulting', 'Consulting', <<<EOF
+Service spécialisé pour les commerciaux.
+EOF
+);
+
+ServiceManager::registerService('ServiceDiagnose', 'Etude et conseil', <<<EOF
+Service d'étude et conseil
+EOF
+);
+
+ServiceManager::registerService('ServiceTechnicalInspection', 'Contrôle technique', <<<EOF
+Service pour les controles techniques automobile.
+EOF
+);
+
+ServiceManager::registerService('ServiceWai', 'Réservation de table', <<<EOF
+Reservations de tables sur mesure pour le WAI.
+EOF
+);
+
+ServiceManager::registerService('ServiceLogicImmo', 'Visite Immobilière', <<<EOF
+Service spécialisé pour les agences immobilières.<br />
+Il définit un bien et une description.
+EOF
+);
+

@@ -1,0 +1,94 @@
+window.Tresa = window.Tresa || {};
+(function($){
+  var messages = {
+    'error_message': <?php echo json_encode(jui_get_error_box('%message%')) ?>,
+    'info_message': <?php echo json_encode(jui_get_info_box('%message%')) ?>,
+    'loading': '<div style="text-align:center;"><span class="load">Chargement...</span></div>',
+    'load_icon': '<span class="ch-icon load"></span>',
+    'create_file': <?php echo json_encode(sprintf('Créer une %s', vocabulary('contact', 1))); ?>,
+    'edit_file':  <?php echo json_encode(sprintf('Modifier une %s', vocabulary('contact', 1))); ?>,
+    'file_load_error': <?php echo json_encode(sprintf('Une erreur est survenue, impossible d\'afficher la  %s  demandée.<br />Merci de réessayer.', vocabulary('contact', 1))); ?>,
+    'file_none_selected': <?php echo json_encode(sprintf('<p class="alert tip">Choisissez une %s pour la voir</p>', vocabulary('contact', 1))) ?>,
+    'Submit': 'Valider',
+    'Cancel': 'Annuler',
+    'Confirm': 'Je confirme',
+    'Save': 'Enregistrer',
+    'Update': 'Mettre à jour',
+    'Accept': 'Accepter',
+    'Deny': 'Refuser',
+    'Remove': 'Supprimer',
+    'Ok': 'Ok',
+    'error_occured': 'Ooops, une erreur est survenue',
+    'error_occured_reload': 'Ooops, une erreur est survenue.<br />Voulez vous recharger la page ?',
+    'error_title': 'Erreur',
+    'info_title': 'Info',
+    'confirm_title': 'Ëtes vous sur ?',
+    'save_in_process': 'Enregistrement en cours',
+    'Status': 'Statut',
+    'Role': 'Rôle',
+    'Mail': 'Mail',
+    'Phone': 'Téléphone',
+    'attendee_remove': 'Supprimer le participant',
+    'attendee_details': 'Afficher/masquer les détails',
+    'no_available_services': 'Aucun service n\'est disponible à cette heure-ci.',
+    'really_do_not_bind': '&Ecirc;tes vous certain de ne pas vouloir garder l\'association avec le compte utilisateur ?',
+    'pincode': 'Clé T-resa',
+    'edit': 'Modifier',
+    'addCustommerError': 'Vous devez entrer une valeur pour sélectionner un participant.',
+    'add_event': 'Ajouter un évènement',
+    'modify_event': 'Modifier l\'évènement <b>%title%</b>',
+    'accept_event': 'Accepter l\'évènement <b>%title%</b>',
+    'your_status_is': 'Votre statut pour cet évènement est <b>%status_text%</b>',
+    'contractor_name': 'avec <b>%name%</b> (status: <b>%status_text%</b>)',
+    'contractor_id': <?php echo json_encode(vocabulary('contractor', 1)); ?>,
+    'ressource_id': <?php echo json_encode(vocabulary('ressource', 1)); ?>,
+    'geo_select': 'Se déroule ',
+    'geo_select_company': 'A l\'institut',
+    'geo_select_home': 'A domicile',
+    'geo': 'Adresse',
+    'address_1': 'adresse',
+    'address_2': 'Bâtiment',
+    'address_3': 'Champ complémentaire',
+    'zip_code': 'Code postal',
+    'town': 'Ville',
+    'keep_as_file_address': 'Enregistrer cette adresse',
+    'Summary': 'Titre',
+    'transparency': 'Marquer comme libre',
+    'Delete association': 'Supprimer l\'association',
+    'status_is': 'Statut: %status%',
+    'file_created': <?php echo json_encode(sprintf('%s déjà existante', ucfirst(vocabulary('contact', 1)))); ?>,
+    'new_file': <?php echo json_encode(sprintf('%s en cours de création', ucfirst(vocabulary('contact', 1)))); ?>,
+    'no_user_associated': 'Aucun utilisateur associé',
+    'user_associated': 'Un compte utilisateur est associé à cette fiche',
+		'car_model': 'Modèle de voiture',
+		'confirm_delete_contractor_link': 'Si vous supprimez ce lien, l\'utilisateur ne pourra plus se connecter.<br />Etes vous sur de vouloir continuer ?',
+		'link_to_user_account': 'Lier à un compte utilisateur',
+		'freebusy_all_contractors': 'L\'ensemble des <?php echo vocabulary('contractor', 2)?>',
+		'freebusy_this_contractor': 'Ce <?php echo vocabulary('contractor')?> seulement',
+		'freebusy_all_days': 'Tous les jour',
+		'freebusy_this_day': 'Ce jour seulement',
+		'Add_task': 'Ajouter une tâche'
+  };
+  if (Tresa.i18n)
+  {
+    Tresa.i18n.set(messages);
+  }
+  else
+  {
+    $('body').bind('Tresa.i18n.load', function(){Tresa.i18n.set(messages)});
+  }
+})(jQuery);
+Tresa.Preferences = (function(){
+  var _vals = <?php echo json_encode($preferences->getRawValue()) ?>;
+  
+  return {
+    get: function(key,defaultVal)
+    {
+      return typeof(_vals[key]) !== 'undefined' ? _vals[key] : (arguments.length >= 2  ? defaultVal : _vals[key]);
+    },
+    set: function(key, value)
+    {
+      _vals[key] = value;
+    }
+  }
+})();

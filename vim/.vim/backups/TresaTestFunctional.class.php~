@@ -1,0 +1,153 @@
+<?php
+/**
+ * @package    T-resa-lib
+ * @subpackage test
+ * @subpackage  default
+ * @author     camille
+ * @author     Julien Muetton <julien_muetton@carpe-hora.com>
+ * @copyright  (c) Carpe Hora SARL 2011
+ */
+
+/**
+ * TrestaTestFunctional class
+ * Allow to create an instance of sfBrowser and loadData.
+ */
+
+class TresaTestFunctional extends sfTestFunctional
+{
+  /**
+   * create an instance of functionnal testing browser.
+   * if data are loaded, then the propel tester is available.
+   * You can give a directory pattern to load only given data
+   *
+   * @param   Boolean     $loadData   should the database be initialized ?
+   * @return  sfGuardTestFunctional
+   */
+  public static function initialize($loadData = true)
+  {
+    $browser = new sfGuardTestFunctional(new sfBrowser());
+
+    $browser
+      // for chCmsBasePlugin
+      ->addListener('context.load_factories', array('chCmsBasePluginConfiguration', 'loadAppConfiguration'));
+
+    if ($loadData)
+    {
+      $browser->info('load the data fixtures');
+
+      self::loadData($loadData);
+
+      $browser
+        ->info('data loaded, now register propel tester')
+        ->setTester('propel', 'sfTesterPropel');
+    }
+
+    $browser
+        ->info('register the new response tester')
+        ->setTester('response', 'chCmsTesterResponse');
+
+    $browser
+        ->info('tester initialized');
+    return $browser;
+  }
+
+  /**
+   * initialize database with test fixtures.
+   *
+   **/
+  public static function loadData($files = null)
+  {
+    if (!is_string($files))
+    {
+      $files = sfConfig::get('sf_test_dir').'/fixtures';
+    }
+    $loader = new sfPropelData();
+    $loader->loadData($files);
+  }
+
+  /**
+   * Merges data with an existant array representing a form.
+   *
+   * @param array $data The base form data. It must look like this :
+   *                    array(
+   *                      'form_name' => array(
+   *                        'key_val' => 'value',
+   *                        ...
+   *                      )
+   *                    )
+   * @param mixed $key  Can be either the name of a field or another data
+   *                    array. If it's an array, the $val argument must be null
+   * @param mixed $val  The value associated to the $key or null if $key is an
+   *                    array of values.
+   *
+   * @return void
+   * @author Kevin Gomez <contact@kevingomez.fr>
+   **/
+  public static function mergeFormData(array $data, $key, $val=null)
+  {
+    if (is_array($key) AND !is_null($val))
+    {
+      throw new LogicException('$key can not be an array if $val is not null');
+    }
+
+    $form_name_dn = array_keys($data);
+
+    if (count($form_name_dn) != 1)
+    {
+      throw new LogicException('$data does not seem to represent a form');
+    }
+
+    $to_merge = is_array($key) ? $key : array($key => $val);
+    $form_name = $form_name_dn[0];
+
+    return array(
+              $form_name => array_merge($data[$form_name], $to_merge)
+            );
+  }
+
+  /**
+   * undocumented function
+   *
+   * @return void
+   * @author Kevin Gomez <kevin_gomez@carpe-hora.com>
+   **/
+  public static function getUserByUsername($user)
+  {
+    return sfGuardUserQuery::create()->findOneByUsername($user);
+  }
+  
+  /**
+   * Returns the company entity corresponding to the given company name
+   *
+   * @return void
+   * @author Kevin Gomez <kevin_gomez@carpe-hora.com>
+   **/
+  public static function getCompanyEntityByCompanyName($company_name)
+  {
+    return CompanyEntityQuery::create()->findOneByCompanyName($company_name);
+  }
+
+  /**
+   * Gets a provider used by the given user
+   *
+   * @param sfUser $user The user's login
+   *
+   * @return Authentication The provider object
+   * @author Kevin Gomez <kevin_gomez@carpe-hora.com>
+   **/
+  public static function getFirstProvider($user)
+  {
+    $user_obj = self::getUserByUsername($user);
+
+    $providers = AuthenticationPeer::getProvidersForUser($user_obj);
+
+    if (count($providers) > 0)
+    {
+      return $providers[0];
+    }
+    else
+    {
+      return null;
+    }
+  }
+}

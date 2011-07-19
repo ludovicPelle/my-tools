@@ -1,0 +1,156 @@
+<?php
+include(dirname(__FILE__).'/../../bootstrap/functional.php');
+
+$browser = TresaTestFunctional::initialize(/* load data for signin version */ true );
+
+$browser
+  ->info("test the contact form for users")
+
+    ->info('Check the homepage has a link to contact form')
+      ->get('/')
+      ->with('response')->begin()
+        //due to sfGuard (always 401 on signin)
+        ->isStatusCode(401)
+        ->isValid()
+        // check there is a link to contact us
+        ->checkElement('a[href="/nous-contacter"]', true)
+      ->end()
+
+    ->info("check the form can be displayed")
+      ->get('/nous-contacter')
+
+      //check routing is OK
+      ->with('request')->begin()
+        ->isMethod('get')
+        ->isParameter('module', 'contact')
+        ->isParameter('action', 'index')
+      ->end()
+
+      // check the response
+      ->with('response')->begin()
+        ->isStatusCode(200)
+        ->isValid()
+        ->checkForm(new chCmsContactForm())
+      ->end()
+      // end of get /nous-contacter
+
+    ->info("check the form can be posted")
+      ->click('form button[type=submit]', array( 'contact' => array(
+            'name'    => 'test',
+            'email'   => 'the.mouette@gmail.com',
+            'message' => 'un essai.')))
+
+      //check routing is OK
+      ->with('request')->begin()
+        ->isMethod('post')
+        ->isParameter('module', 'contact')
+        ->isParameter('action', 'send')
+      ->end()
+
+      ->with('form')->begin()
+        ->hasErrors(0)
+      ->end() // end on form block
+
+      // check redirection
+      ->with('response')
+        ->isRedirected()
+
+      ->with('mailer')->begin()
+        ->hasSent(1)
+        ->checkHeader('Subject', '/demande de contact/')
+        ->checkBody('/un essai./')
+        ->checkBody('/the.mouette@gmail.com/')
+        ->checkBody('/test/')
+      ->end()
+
+      ->followRedirect()
+
+      //check routing is OK
+      ->with('request')->begin()
+        ->isMethod('get')
+        ->isParameter('module', 'home')
+        ->isParameter('action', 'index')
+      ->end()
+
+      // check the response
+      ->with('response')->begin()
+        ->isStatusCode(200)
+        ->isValid()
+        ->checkElement('body', '/Votre message a été envoyé./')
+      ->end()
+      // end of post /nous-contacter
+
+    ->info("check with connected mode")
+      ->signin('demo', 'demo')
+
+      //check routing is OK
+      ->get('/')
+      ->with('request')->begin()
+        ->isParameter('module', 'home')
+        ->isParameter('action', 'index')
+      ->end()
+
+      // check the response
+      ->with('response')->begin()
+        ->isStatusCode(200)
+        ->isValid()
+        ->checkElement('a[href="/nous-contacter"]', true)
+      ->end()
+      // end of get /
+
+      ->get('/nous-contacter')
+
+      //check routing is OK
+      ->with('request')->begin()
+        ->isMethod('get')
+        ->isParameter('module', 'contact')
+        ->isParameter('action', 'index')
+      ->end()
+
+      // check the response
+      ->with('response')->begin()
+        ->isStatusCode(200)
+        ->isValid()
+        ->checkElement('input[name=contact[email]]', false)
+      ->end()
+      // end of get /nous-contacter
+
+      ->click('form button[type=submit]', array( 'contact' => array(
+            'name'    => 'test',
+            'message' => 'un essai.')))
+
+      //check routing is OK
+      ->with('request')->begin()
+        ->isMethod('post')
+        ->isParameter('module', 'contact')
+        ->isParameter('action', 'send')
+      ->end()
+
+      ->with('form')->begin()
+        ->hasErrors(0)
+      ->end() // end on form block
+
+      ->with('mailer')->begin()
+        ->hasSent(1)
+        ->checkHeader('Subject', '/demande de contact/')
+        ->checkBody('/un essai./')
+        ->checkBody('/demo@user.com/')
+        ->checkBody('/test/')
+      ->end()
+
+      // check redirection
+      ->with('response')
+        ->isRedirected()
+      ->followRedirect()
+
+      // check the response
+      ->with('response')->begin()
+        ->isStatusCode(200)
+        ->isValid()
+        ->checkElement('body', '/Votre message a été envoyé./')
+      ->end()
+    // end of block check with connected mode
+
+;
+// vim: ft=symfony.php.sftest
+

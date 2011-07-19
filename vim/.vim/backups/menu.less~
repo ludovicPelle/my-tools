@@ -1,0 +1,124 @@
+// some functions
+
+.5stepGradients(@stop2:50%, @stop3:100%, @stop4:100%, @color3:#fff){
+  @color1: lighten(@color3, 30%);
+  @color2: lighten(@color3, 10%);
+  @color4: darken(@color3, 7%);
+  @color5: darken(@color3, 15%);
+
+  background-color: @color3;
+  background: -webkit-gradient(linear, left top, left bottom, from(@color1), color-stop(@stop2, @color2),color-stop(@stop3, @color3), color-stop(@stop4, @color4), to(@color5));
+  background:-moz-linear-gradient(top, @color1, @color2 @stop2, @color3 @stop3, @color4 @stop4, @color5);
+  background:-ms-linear-gradient(top, @color1, @color2 @stop2, @color3 @stop3, @color4 @stop4, @color5);
+  background:-o-linear-gradient(top, @color1, @color2 @stop2, @color3 @stop3, @color4 @stop4, @color5);
+  background:linear-gradient(top, @color1, @color2 @stop2, @color3 @stop3, @color4 @stop4, @color5);
+  -pie-background:  linear-gradient(@color5, @color3, @color2);
+  filter: e(%("progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=%d,endColorstr=%d)", @color1, @color5));
+  -ms-filter: e(%('"progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=%d,endColorstr=%d)"', @color1, @color5));
+}
+
+.3stepGradients(@stop1:0, @color1:#ccc, @stop2:50%, @color2:#ddd, @stop3:100%, @color3:#ccc){
+  background-color:@color2;
+  background:-webkit-gradient(linear, left top, left bottom, color-stop(@stop1, @color1), color-stop(@stop2, @color2), to(@stop3, @color3));
+  background:-moz-linear-gradient(top, @color1 @stop1, @color2 @stop2, @color3 @stop3);
+  background:-ms-linear-gradient(top, @color1 @stop1, @color2 @stop2, @color3 @stop3);
+  background:-o-linear-gradient(top, @color1 @stop1, @color2 @stop2, @color3 @stop3);
+  background:linear-gradient(top, @color1 @stop1, @color2 @stop2, @color3 @stop3);
+  -pie-background: linear-gradient(@color3, @color2, @color1);
+  filter: e(%("progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=%d,endColorstr=%d)", @color1, @color3));
+  -ms-filter: e(%('"progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=%d,endColorstr=%d)"', @color1, @color3));
+}
+
+
+.chcms-menu{
+	background-color: @accordion_background;
+  color: @text-color;
+  font-size:13px;
+  border-color:#999;
+}
+
+.chcms-menu .menu-button .menu-button-text{
+  color: @menu_bar_text;
+	font-weight: bold;
+}
+
+.chcms-menubar .menu-button .list,
+.chcms-menu .menu-button:active,
+.chcms-menu .menu-button:hover {background-color: @menu_button_hover;}
+.chcms-menu .menu-button:active .menu-button-text,
+.chcms-menu .menu-button:hover .menu-button-text{color: @text-color;}
+
+.chcms-menu .menu-button .list .menu-button:hover,
+.chcms-menu .menu-button.selected {
+  color: #fff;
+  .5stepGradients(0%, 40%, 60%, @menu_button_selected);
+}
+.chcms-menu .menu-button.selected {
+  font-weight: bold;
+  text-shadow: #666666 0 1px 1px;
+  border-color:@menu_button_selected;
+}
+.chcms-menu .menu-button.selected .menu-button-text{color: #fff;text-shadow: #666666 0 1px 1px;}
+.ui-state-active, .ui-state-hover{
+  background-color:red;
+}
+
+/* menubar */
+.chcms-menubar{
+  .5stepGradients(0%, 40%, 60%, @menu_bar);
+}
+.chcms-menubar .menu-button .list,
+.chcms-menubar .menu-button:hover {
+  border-color:#999;
+  font-weight: bold;
+  background-color: @menu_bar_button_hover;
+}
+
+/* admin menubar */
+
+/* leftpanel */
+
+/* accordion */
+.chcms-sidebar .chcms-menu-accordion .chcms-group-accordion.selected .chcms-group-accordion-panel {
+  background: @accordion_group_background; /*#FAD163;/*#D9D9D9;*/
+  border-bottom: 1px solid #B6B6B6;
+}
+.chcms-sidebar .chcms-menu-accordion .chcms-group-accordion-panel a {
+  -moz-border-radius: 1em 0 0 1em;
+  -webkit-border-radius: 1em 0 0 1em;
+  border-radius: 1em 0 0 1em;
+  background-color:@accordion_item;
+}
+.chcms-sidebar .chcms-menu-accordion .chcms-group-accordion-panel a:hover {
+  background-color:@accordion_item_hover;
+}
+.chcms-sidebar .chcms-menu-accordion .chcms-group-accordion-panel a.selected {
+  .5stepGradients(0%, 40%, 60%, @accordion_item_selected);
+  border-bottom:1px solid #B6B6B6 !important; /* to counter pro layout. TODO fixme */
+  border-top:1px solid #B6B6B6 !important; /* to counter pro layout. TODO fixme */
+  border-left:1px solid #B6B6B6 !important; /* to counter pro layout. TODO fixme */
+}
+.chcms-sidebar .chcms-menu-accordion .chcms-group-accordion-panel .selected .menu-button-text {
+  font-weight: bold;
+  text-shadow: #666666 0 1px 1px;
+  color: @accordion_item_text;
+}
+
+
+/* application header */
+.admin-title,
+.backend-title{
+  .5stepGradients(0%, 40%, 60%, @title_bar);
+  border-bottom:1px solid #B6B6B6 !important; /* to counter pro layout. TODO fixme */
+  border-top:1px solid #B6B6B6 !important; /* to counter pro layout. TODO fixme */
+  color: @title_bar_text;
+}
+
+/* application footer */
+.admin-footer.ui-layout-pane,
+.backend-footer.ui-layout-pane{
+  .3stepGradients(0, #ffffff, 2%, #E0E0E0 , 100%, #c4c4c4);
+  border-top:1px solid #B6B6B6 !important; /* to counter pro layout. TODO fixme */
+}
+
+// vim:ft=css

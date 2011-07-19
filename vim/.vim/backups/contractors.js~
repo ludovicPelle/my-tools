@@ -1,0 +1,283 @@
+/**
+ * define Tresa namespace if not already done
+ * @type {Object}
+ */
+window.Tresa = window.Tresa || {};
+
+/*
+ * now start the closure.
+ */
+(function($) {
+  $(function() {
+
+    /*
+      first define the common tools for Tresa.Contractors
+     */
+    Tresa.Contractors = (function() {
+      return {
+        /**
+         * handle the ajax responses
+         * it parses responses from the user action renderResult
+         *
+         * @param {object} data the data recieved from server.
+         */
+        handleAjaxResponse: function(data) {
+          if (!data.success) {
+            Tresa.openErrorDialog(data.messages.join('<br />'));
+          }
+          else if (data.messages && data.messages.length) {
+            Tresa.openInfoDialog(data.messages.join('<br />'));
+          }
+        }
+      }; // end of return
+    })(); //end of Tresa.Contractors initial declaration
+
+    /*
+        Now define the functions needed to process the
+        binding between a user and an entity
+     */
+
+    $.extend(Tresa.Contractors, (function() {
+      /**
+       * a temporary var to store the
+       * link to guard user button as it has to be
+       * stored for several steps.
+       *
+       * @type HTMLElement
+       */
+      var _linkToUserButton;
+
+      return {
+        /**
+         * show the dialog having the user form.
+         *
+         * @param {HTMLElement} button the pressed button/link.
+         */
+        showLinkToUserDialog: function(button) {
+          // store the button
+          _linkToUserButton = $(button);
+          // show dialog
+          $('#lookup-for-user').dialog('open');
+        },
+
+        /**
+         * validate the user form
+         * depending and handles results
+         */
+        processLinkToUserDialog: function() {
+          // set the current button visual as loading
+          _linkToUserButton
+            .find('span.ui-button-icon-primary')
+              .removeClass('ch-icon-silk-link_break')
+              .addClass('load');
+
+          var _formData = $('#lookup-for-user').find('form').serializeArray();
+          for (var _i in Routing.csrf) {
+            _formData.push({'name': _i, 'value': Routing.csrf[_i]});
+          }
+          // request the link to be created
+          $.ajax({
+            url: $('#lookup-for-user').find('form').attr('action'),
+            data: _formData;
+            dataType: 'json',
+            error: function(data) {
+              Tresa.openErrorDialog(Tresa.i18n.get('error_occured'));
+              _linkToUserButton
+                .find('span.ui-button-icon-primary')
+                  .removeClass('load')
+                  .addClass('ch-icon-silk-link_break');
+            },
+            success: function(data) {
+              Tresa.Contractors.handleAjaxResponse(data);
+              _linkToUserButton
+                .find('span.ui-button-icon-primary')
+                  .removeClass('load')
+                  .addClass('ch-icon-silk-link_break')
+                .end()
+                .parents('td')
+                  .html(data.html);
+              if (data.success) {
+                $('#lookup-for-user').find('input[type=text], #lookup_for_user_user_id').val('');
+                $('#lookup-for-user').dialog('close');
+
+                //link on creation
+                if (data.user)
+                {
+                  $.each(data.user, function(id, val) {
+                        $('#' + id).val(val);
+                      });
+                }
+              }
+            }
+          });
+        },
+
+        /**
+         * ask for confirmation before removing the link
+         */
+        removeLinkToUser: function(button) {
+          Tresa.openConfirmDialog(Tresa.i18n.get('confirm_delete_contractor_link'), function() {
+              Tresa.Contractors.processRemoveLinkToUser($(button));
+            });
+        },
+
+        /**
+         * actually send request to remove the link between user and entity
+         */
+        processRemoveLinkToUser: function($button) {
+          $button
+            .find('span.ui-button-icon-primary')
+              .removeClass('ch-icon-silk-link_break')
+              .addClass('load');
+          $.ajax({
+            url: $button.attr('href'),
+            data: $.extend({}, Routing.csrf),
+            dataType: 'json',
+            error: function(data) {
+              Tresa.openErrorDialog(Tresa.i18n.get('error_occured'));
+              $button
+                .find('span.ui-button-icon-primary')
+                  .removeClass('load')
+                  .addClass('ch-icon-silk-link_break');
+            },
+            success: function(data) {
+              Tresa.Contractors.handleAjaxResponse(data);
+              $button
+                .parents('td')
+                  .html(data.html);
+            }
+          });
+        },
+
+        /**
+         * initializes the link button.
+         */
+        initLinkToUserFormDialog: function() {
+          var _b = {};
+          _b[Tresa.i18n.get('Ok')] = Tresa.Contractors.processLinkToUserDialog;
+          _b[Tresa.i18n.get('Cancel')] = function() {$('#lookup-for-user').dialog('close')}
+          $('#lookup-for-user').dialog({
+            title: Tresa.i18n.get('link_to_user_account'),
+            autoOpen: false,
+            modal: true,
+            buttons: _b
+          });
+        }
+      }; // end of return
+    })()); //end of Tresa.Contractors profile functions
+
+    /*
+        Now define the functions needed for assistance
+        management
+     */
+
+    $.extend(Tresa.Contractors, (function() {
+      return {
+        rightsFindContainerFromButton: function(button) {
+          return $(button).parents('.assistant-rights');
+        },
+        rightsModify: function(button) {
+          $(button)
+            .find('span.ui-button-icon-primary')
+              .removeClass('ch-icon-silk-bullet_edit')
+              .addClass('load');
+          $.ajax({
+            url: $(button).attr('href'),
+            dataType: 'json',
+            error: function(data) {
+              Tresa.openErrorDialog(Tresa.i18n.get('error_occured'));
+              $(button)
+                .find('span.ui-button-icon-primary')
+                  .removeClass('load')
+                  .addClass('ch-icon-silk-bullet_edit');
+            },
+            success: function(data) {
+              Tresa.Contractors.handleAjaxResponse(data);
+              Tresa.Contractors
+                .rightsFindContainerFromButton(button)
+                  .html(data.html)
+                  .find('form').submit(function(e) {e.preventDefault(); return false;});
+            }
+          });
+        },
+        rightsModifySubmitForm: function(button) {
+          $(button)
+            .find('span.ui-button-icon-primary')
+              .removeClass('ui-icon-disk')
+              .removeClass('ui-icon')
+              .addClass('load');
+          $form = $(button).parents('form');
+          $.ajax({
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            type: $form.attr('method'),
+            dataType: 'json',
+            error: function(data) {
+              Tresa.openErrorDialog(Tresa.i18n.get('error_occured'));
+              $(button)
+                .find('span.ui-button-icon-primary')
+                  .removeClass('load')
+                  .addClass('ui-icon')
+                  .addClass('ui-icon-disk');
+            },
+            success: function(data) {
+              Tresa.Contractors.handleAjaxResponse(data);
+              Tresa.Contractors
+                .rightsFindContainerFromButton(button)
+                  .html(data.html);
+            }
+          });
+        },
+        rightsRestore: function(button) {
+          $(button)
+            .find('span.ui-button-icon-primary')
+              .removeClass('ch-icon-silk-bullet_wrench_red')
+              .addClass('load');
+          $.ajax({
+            url: $(button).attr('href'),
+            dataType: 'json',
+            error: function(data) {
+              Tresa.openErrorDialog(Tresa.i18n.get('error_occured'));
+              $(button)
+                .find('span.ui-button-icon-primary')
+                  .removeClass('load')
+                  .addClass('ch-icon-silk-bullet_wrench_red');
+            },
+            success: function(data) {
+              Tresa.Contractors.handleAjaxResponse(data);
+              Tresa.Contractors
+                .rightsFindContainerFromButton(button)
+                  .html(data.html);
+            }
+          });
+        },
+        rightsCancelEdit: function(button) {
+          $(button)
+            .find('span.ui-button-icon-primary')
+              .removeClass('ch-icon-silk-bullet_cross')
+              .addClass('load');
+          $.ajax({
+            url: $(button).attr('href'),
+            dataType: 'json',
+            error: function(data) {
+              Tresa.openErrorDialog(Tresa.i18n.get('error_occured'));
+              $(button)
+                .find('span.ui-button-icon-primary')
+                  .removeClass('load')
+                  .addClass('ch-icon-silk-bullet_cross');
+            },
+            success: function(data) {
+              Tresa.Contractors.handleAjaxResponse(data);
+              Tresa.Contractors
+                .rightsFindContainerFromButton(button)
+                  .html(data.html);
+            }
+          });
+        }
+      };
+    })()); // end of extend for assistance management
+
+    // initialization
+    Tresa.Contractors.initLinkToUserFormDialog();
+  });
+})(jQuery);

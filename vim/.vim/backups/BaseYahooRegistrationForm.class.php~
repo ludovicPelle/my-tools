@@ -1,0 +1,25 @@
+<?php
+class BaseYahooRegistrationForm extends RegistrationForm
+{
+  /**
+   * Configures the form
+   *
+   * @return void
+   * @author Kevin Gomez <contact@kevingomez.fr>
+   **/
+  public function configure()
+  {
+    parent::configure();
+
+    if (isset($this['password']))
+    {
+      unset($this['password'])
+    }
+    if (isset($this['password_again']))
+    {
+      unset($this['password_again'])
+    }
+
+    $this->validatorSchema['mail']->setOption('required', false);
+  }
+}

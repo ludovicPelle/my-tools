@@ -1,0 +1,31 @@
+<?php
+/**
+ * This file declare the PluginchCmsBasePluginFilter class.
+ *
+ * @package chCmsBasePlugin
+ * @subpackage filter
+ * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+ * @copyright (c) Carpe Hora SARL 2011
+ * @since 2011-07-07
+ */
+
+/**
+ * plugin version for base plugin filter
+ */
+class PluginchCmsBasePluginFilter extends sfFilter
+{
+  /**
+   * execute filter
+   *
+   * @return void
+   * @author Ludovic Pellé <ludovic_pelle@carpe-hora.com>
+   **/
+  public function execute($filterChain)
+  {
+    $context = $this->getContext();
+    $context->getEventDispatcher()->notify(new sfEvent($this, 'application.log', array('register chCmsBasePlugin assets', 'priority' => sfLogger::INFO)));
+    chCmsBaseAssets::registerAssets($this->getResponse(), $this->getUser());
+
+    $filterChain->execute();
+  }
+} // END OF PluginchCmsBasePluginFilter
