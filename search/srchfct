@@ -1,10 +1,5 @@
 #!/bin/bash
-###########################
-# include dependancies
-##########################
-SCRIPTPATH=`readlink -f $0`;DIR=`dirname $SCRIPTPATH`;
-. "$DIR/../lib/admin.sh.inc"
-CHA_BASEDIR=`cha_basedir $0`
+. "/home/ludovic/my-tools/conf"
 BASE_OPTIONS="--ignore-dir=cache --ignore-dir=log --ignore-dir=vendor --match";
 
 if [ -z $1 ]; then
@@ -13,7 +8,7 @@ if [ -z $1 ]; then
 fi
 if [ ! -z $2 ]; then
  if [ $2 == "--sf" ]; then
-    TRESA_HOME="$TRESA_HOME/lib/vendor"
+    PROJECT_HOME="$PROJECT_HOME/lib/vendor"
   else
     OPTIONS=$2;
   fi
@@ -24,4 +19,4 @@ fi
   echo "Search in t-resa";
   echo "-options: $OPTIONS";
   echo "-criter: \"$1\"";
-  ack-grep $OPTIONS "$SEARCHED" $TRESA_HOME;
+  ack-grep $OPTIONS "$SEARCHED" $PROJECT_HOME;
