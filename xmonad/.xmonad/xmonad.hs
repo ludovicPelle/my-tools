@@ -46,7 +46,7 @@ import XMonad.Hooks.SetWMName
 myModMask       = mod4Mask
 
 -- The default number of workspaces (virtual screens) and their names.
-myWorkspaces    = ["Web", "Dev", "Test", "Perso", "Gimp", "backtask", "Files", "Community"]
+myWorkspaces    = ["Web", "Dev", "Test", "backtask", "Perso", "Gimp", "Files", "Community"]
 
 -- Width of the window border in pixels.
 myBorderWidth   = 2
@@ -150,7 +150,7 @@ myManageHook = composeAll
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- launch a terminal
-    [ ((shiftMask, xK_space), spawn $ XMonad.terminal conf)
+    [ ((modm .|. shiftMask, xK_space), spawn $ XMonad.terminal conf)
 
     -- launchers
 --     , ((modm, xK_p), spawn "dmenu_run -fn \"-*-terminus-medium-r-normal-*-12-*-*-*-*-*-*-*\" -nb \"#131313\" -nf \"#888888\" -sb \"#2A2A2A\" -sf \"#3579A8\"")
