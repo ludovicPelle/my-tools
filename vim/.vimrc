@@ -69,6 +69,28 @@ endif
   let g:ctags_path="home/ludovic/.vim/plugin"
   let g:ctags_statusline=1
 
+
+" Hotkeys
+" =================
+" to paste without ai
+  nnoremap <F2> :set invpaste paste?<Enter>
+  imap <F2> <C-O><F2>
+  set pastetoggle=<F2>
+
+" Start a substitute
+  map <leader>s :%s/
+
+" Start a search
+  map <leader>h /<C-r>=expand("<cword>")<CR>
+
+" Pull word under cursor into LHS of a substitute (for quick search and
+" replace)
+  nmap <leader>S :%s/<C-r>=expand("<cword>")<CR>/
+
+"to force write as sudoer
+command W w !sudo tee % > /dev/null
+
+
 " language specifics
 "===================
 
@@ -84,6 +106,8 @@ autocmd FileType symfony noremap <F8> :SfSwitchView<CR>
 " javascript
 autocmd FileType javascript noremap <F7> :!gjslint %<CR>
 endif
+"jquery color
+au BufRead,BufNewFile jquery.*.js set ft=javascript syntax=jquery
 
 " Smart completion
 function! SmartComplete()
@@ -92,6 +116,8 @@ function! SmartComplete()
   let substr = matchstr(substr, "[^ \t]*$") " word till cursor
   let has_period = match(substr, '\.') != -1 " position of period, if any
   let has_slash = match(substr, '\/') != -1 " position of slash, if any
+
+  "TODO finish autocomplete
 
   return "\<C-P>" " omnifunc if available
 endfunction
