@@ -28,7 +28,7 @@ for item in `find $DEPENDANCY_PATH -maxdepth 1 \( -name '.git' -o -name README -
     continue
   fi
 
-  cp -R "$item" "./vim"
+  cp -R "$item" "./.vim"
 done
 
 echo "[+][vim][$dep] installation complete."

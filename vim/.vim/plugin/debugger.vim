@@ -167,10 +167,10 @@ if !exists('g:debuggerMaxChildren')
   let g:debuggerMaxChildren = 32
 endif
 if !exists('g:debuggerMaxData')
-  let g:debuggerMaxData = 4096
+  let g:debuggerMaxData = 1024
 endif
 if !exists('g:debuggerMaxDepth')
-  let g:debuggerMaxDepth = 10
+  let g:debuggerMaxDepth = 1
 endif
 if !exists('g:debuggerMiniBufExpl')
   let g:debuggerMiniBufExpl = 0

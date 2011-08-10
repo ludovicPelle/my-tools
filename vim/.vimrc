@@ -40,9 +40,9 @@ set statusline=%F%m%=%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [LINE=
 set laststatus=2
 
 " Backups
-set backup                      " Enable creation of backup file.
-set backupdir=~/.vim/backups    " Where backups will go.
-set directory=~/.vim/tmp        " Where temporary files will go.
+"set backup                      " Enable creation of backup file.
+"set backupdir=~/.vim/backups    " Where backups will go.
+"set directory=~/.vim/tmp        " Where temporary files will go.
 
 "enable memorised position of cursor when reopen the file
 if has("autocmd")
@@ -66,9 +66,28 @@ autocmd FileType php set ft=php.symfony
 endif
 
 "Ctags
-  let g:ctags_path="home/ludovic/.vim/plugin"
-  let g:ctags_statusline=1
+"  let g:ctags_path="~/.vim/plugin"
+"  let g:ctags_statusline=1
 
+" tagbar
+let g:tagbar_left = 1           " display the tagbar on the left side
+set updatetime=500              " show tags' prototype after 500 milliseconds
+let g:tagbar_width = 25         " width in characters of the tagbar
+let g:tagbar_autoshowtag = 1    " always show the current tag in the tagbar
+nnoremap <silent> <F10> :TagbarToggle<CR>
+
+" Syntastic
+let g:syntastic_enable_signs = 1    " open a bar on the left when an error is detected
+let g:syntastic_auto_loc_list = 1   " auto open the errors list
+let g:syntastic_quiet_warnings = 0  " we do want the warnings to be displayed
+
+" Completion
+" automatically open and close the popup menu / preview window
+au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+set completeopt=menuone,menu,longest,preview
+
+" NerdTree
+map <leader>n :NERDTreeToggle<CR>
 
 " Hotkeys
 " =================
