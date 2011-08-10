@@ -1,0 +1,4 @@
+./tagbar/autoload/tagbar.vim
+./tagbar/syntax/tagbar.vim
+./tagbar/doc/tagbar.txt
+./tagbar/plugin/tagbar.vim

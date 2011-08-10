@@ -1,0 +1,4 @@
+./nerdtree/doc/NERD_tree.txt
+./nerdtree/plugin/NERD_tree.vim
+./nerdtree/nerdtree_plugin/exec_menuitem.vim
+./nerdtree/nerdtree_plugin/fs_menu.vim

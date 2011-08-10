@@ -1,0 +1,4 @@
+./vim-symfony/autoload/symfony.vim
+./vim-symfony/doc/symfony.txt
+./vim-symfony/doc/symfony.jax
+./vim-symfony/plugin/symfony.vim
