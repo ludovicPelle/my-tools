@@ -1,0 +1,127 @@
+#!/bin/bash
+
+# This script update gh-pages on a repository (in apost commit hook)
+# 
+# requirements:
+# - README file on  current branche (duplicate in index.md)
+
+#include dependancies
+SCRIPTPATH=`readlink -f $0`;
+DIR=`dirname $SCRIPTPATH`;
+
+if [ -z $1 ] ; then
+ READMEFILE="README"
+else
+ READMEFILE="$1"
+fi
+######################
+#FUNCTIONS
+######################
+
+function has_clean_branch {
+  ( [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo 0 ) || echo 1
+}
+
+function get_current_git_branch {
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1/"
+}
+
+function has_gh-pages_branch {
+  git branch --no-color 2> /dev/null | grep gh-pages >/dev/null && echo 1 || echo 0
+}
+
+function has_readme_modified {
+  git diff --name-status HEAD^ 2>/dev/null | grep $READMEFILE >/dev/null && echo 1 || echo 0
+}
+
+######################
+# VARS
+######################
+#Now get all parameter for generate jekyll header
+
+
+GITHUBUSER="Carpe-Hora"
+
+REPOPATH=`pwd`;
+REPONAME=`basename $REPOPATH`
+REPOURL="http://github.com/$GITHUBUSER/$REPONAME"
+BRANCHE_CLEAN=$(has_clean_branch)
+BRANCH=$(get_current_git_branch)
+HAS_README_MODIFIED=$(has_readme_modified)
+
+
+#Test if its a gh-pages commit (so exit )
+
+if [ $BRANCH = "gh-pages" ] ; then
+  echo -e "Please execute update on another branch than gh-pages"
+  exit
+fi
+
+#If README is added deleted or modified
+if [ ! $HAS_README_MODIFIED == 1 ] ; then
+  echo -e "\nNo modification detected, update dependencies\n========================"
+  git checkout gh-pages
+  cd _layouts/
+  git pull
+  cd ../_posts/
+  git pull
+  cd ..
+  git add .
+  git commit -m "Update submodule layout and posts"
+  git checkout $BRANCH
+  echo -e "\nGh-pages update  dependencies success!\n===========================\nNow u can push branch gh-pages on github : \n>git push origin gh-pages";
+
+ exit
+fi
+
+
+####################
+# RUN
+#################
+
+#Test if .git exist on current path
+if [ ! -d ".git" ] ; then
+  echo -e  "$REPOPATH isnt a git repository!"
+fi
+
+#Test if gh-pages exist 
+if [ ! $(has_gh-pages_branch) ] ; then 
+  exit
+fi
+
+if [ -s $READMEFILE ] ; then
+  HAS_README=1;
+else 
+  HAS_README=0;
+fi
+
+echo -e "
+Start update gh-pages:
+=========================
+FROM BRANCH : $BRANCH
+BRANCH CLEAN: $BRANCHE_CLEAN
+READMEFILE:   $READMEFILE
+";
+
+JEKYLL_HEADER="---\nlayout: default\ntitle: $REPONAME\ngithub_url: $REPOURL\ndate: $(date +%Y-%m-%d)\n---\n";
+#Mise a jour gh-pages
+git checkout gh-pages
+  cd _layouts/
+  git pull
+  cd ../_posts/
+  git pull
+  cd ..
+echo -e $JEKYLL_HEADER > index.md;
+
+  if [ $HAS_README == 1 ] ; then
+      git show $BRANCH:$READMEFILE | sed -e "s/^\`\`\`\(\w\+.$\)/{% highlight \1 %}/g" -e "s/^\`\`\`\$/{% endhighlight %}/g" -e "s/^{% highlight yml %}/{% highlight yaml %}/g" >> index.md;
+  else
+    echo -e "No README so create index.md\n======================="
+  fi
+git add .
+git commit -m "Update index of gh-pages"
+
+git checkout $BRANCH
+
+echo -e "\nGh-pages update success!\n===========================\nNow u can push branch gh-pages on github : \n>git push origin gh-pages\n";
+

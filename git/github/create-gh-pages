@@ -1,0 +1,168 @@
+#!/bin/bash
+
+# This script create gh-pages on a repository 
+#
+# example:
+# user:/var/my-repo/> ./create-gh-pages <READMEFILE>
+#
+# requirements:
+# - README file on master branches (duplicate in index.md)
+#   If u want duplicate other README type(like .md or .textile), u can specify as an option <READMEFILE>
+
+SCRIPTPATH=`readlink -f $0`;
+DIR=`dirname $SCRIPTPATH`;
+
+######################
+#FUNCTIONS
+######################
+
+function has_clean_branch {
+  ( [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo 0 ) || echo 1
+}
+
+function get_current_git_branch {
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1/"
+}
+
+function has_gh-pages_branch {
+  git branch --no-color 2> /dev/null | grep gh-pages >/dev/null && echo 1 || echo 0
+}
+
+######################
+# VARS
+######################
+#Now get all parameter for generate jekyll header
+if [ -z $1 ] ; then
+ READMEFILE="README"
+else
+ READMEFILE="$1"
+fi
+
+GITHUBUSER="Carpe-Hora"
+
+REPOPATH=`pwd`;
+REPONAME=`basename $REPOPATH`
+REPOURL="http://github.com/$GITHUBUSER/$REPONAME"
+BRANCHE_CLEAN=$(has_clean_branch)
+BRANCH=$(get_current_git_branch)
+
+echo -e "
+Start create gh-pages:
+=========================
+PATH: $REPOPATH
+NAME: $REPONAME
+GITHUBURL: $REPOURL
+BRANCH : $BRANCH
+BRANCH CLEAN: $BRANCHE_CLEAN
+READMEFILE:   $READMEFILE
+";
+
+####################
+# RUN
+#################
+
+#Test if .git exist on current path
+if [ ! -d ".git" ] ; then
+  echo "$REPOPATH isnt a git repository!"
+fi
+
+#Test if its a gh-pages commit (so exit )
+if [ $BRANCH = "gh-pages" ] ; then 
+  echo "Curent branch is gh-pages !git checkout to another branch!"
+  exit
+fi
+
+if [ -s $READMEFILE ] ; then
+  HAS_README=1;
+fi
+
+HAS_GH_PAGES=$(has_gh-pages_branch)
+if [ $HAS_GH_PAGES == 1 ] ; then 
+  echo -e "/!\ Gh-pages already exist!\nAre u sure to regenerate gh-pages?\nINFO: index.md, _layouts & _posts DIR will be overwrited!\n Continue ? (y,n)"
+  read USER_CONTINUE
+  if [ "$USER_CONTINUE" != "y" -a "$USER_CONTINUE" != "Y" ]
+  then
+    echo -e "Operation canceled"
+    exit
+  fi
+  git checkout gh-pages
+else
+#Creation gh-pages
+  echo -e "Create branch and Remove .git index\n======================="
+  git symbolic-ref HEAD refs/heads/gh-pages
+  rm .git/index
+  git clean -fdx
+fi
+
+JEKYLL_HEADER="---\nlayout: default\ntitle: $REPONAME\ngithub_url: $REPOURL\ndate: $(date +%Y-%m-%d)\n---\n";
+
+echo -e $JEKYLL_HEADER > index.md;
+
+  if [ $HAS_README == 1 ] ; then
+    echo -e "\nClone README into index.md\n======================="
+                                      # Fix flovored highlight code for us jekyll highlight
+      git show $BRANCH:$READMEFILE | sed -e "s/^\`\`\`\(\w\+.$\)/{% highlight \1 %}/g" -e "s/^\`\`\`\$/{% endhighlight %}/g" -e "s/^{% highlight yml %}/{% highlight yaml %}/g" >> index.md;
+  else
+    echo -e "\n$READMEFILE cannot found! Create an empty index.md\n======================="
+  fi
+##################
+#CLONE DEPENDENCIES
+echo -e "\nClone layouts repo\n======================="
+git submodule add git://github.com/Carpe-Hora/chJekyll_layouts.git _layouts
+
+echo -e "\nClone posts repo\n======================="
+git submodule add git://github.com/Carpe-Hora/chJekyll_posts.git _posts
+
+echo -e "\nCommit  \n======================="
+
+git add .
+git commit -m "Initial commit of gh-pages"
+
+git checkout $BRANCH
+echo -e "\nIgnore submodule in branch $BRANCH\n======================="
+if [ ! -f ".gitignore" ] ; then
+  echo -e "_layouts\n_posts" > .gitignore
+   echo -e "\nIgnore submodule gh-pages on $BRANCH\n=======================\n"
+else
+  LAYOUTS_IGNORE=$(grep _layouts .gitignore >/dev/null && echo 1 || echo 0)
+  if [ $LAYOUTS_IGNORE == 0 ] ; then 
+     echo -e "_layouts" >> .gitignore
+     echo -e "Ignore submodule _layouts gh-pages on $BRANCH"
+  fi
+  POSTS_IGNORE=$(grep _posts .gitignore >/dev/null && echo 1 || echo 0)
+  if [ $POSTS_IGNORE == 0 ] ; then 
+     echo -e "_posts" >> .gitignore
+     echo -e "Ignore submodule _posts gh-pages on $BRANCH"
+  fi
+fi
+git add .
+git commit -m "Generate gh-pages from: $BRANCH" 
+
+
+##################
+#ADD POSt HOOK
+#Test if pre-commit exist and if update-ghpages is in
+if [ ! -f ".git/hooks/post-commit" ] ; then
+   echo -e "#!/bin/bash\n$DIR/update-gh-pages $READMEFILE" > .git/hooks/post-commit
+   echo -e "\nAdd a post-commit hook\n=======================\nAuto update gh-pages when commit change on a README. U can shunt it by --no-verify option on a commit or delete it in hook ";
+
+else 
+      UPDATE_GH_EXIST=$(grep $DIR/update-gh-pages .git/hooks/post-commit >/dev/null && echo 1 || echo 0)
+  #if update-gh-pages command not in pre-commit
+  if [ $UPDATE_GH_EXIST == 0 ] ; then
+     echo -e "$DIR/update-gh-pages $READMEFILE" >> .git/hooks/post-commit
+     echo -e "\nAdd a post-commit hook\n=======================\nAuto update gh-pages when commit change on a README. U can shunt it by --no-verify option on a commit or delete it in hook";
+  else
+     CONTENT=$(cat -A .git/hooks/post-commit | sed -e "s/\$$/\\\n/g" -e "s/^\(.*\)update-gh-pages .*$/\1update-gh-pages $READMEFILE\\\n/g") 
+     echo -e $CONTENT > .git/hooks/post-commit
+     echo -e "\nUpdate post-commit hook\n=======================\nAuto update gh-pages when commit change on a README. U can shunt it by --no-verify option on a commit or delete it in hook";
+  fi
+
+fi 
+
+chmod +x .git/hooks/post-commit
+
+
+##############
+#END
+echo -e "\nGh-pages creation success!\n=========================\nNow u can push branch gh-pages on github : \n>git push origin gh-pages\n";

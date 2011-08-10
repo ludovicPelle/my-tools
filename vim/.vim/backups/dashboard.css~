@@ -1,8 +1,0 @@
-a.dashboard-item{background-position:center 2.5em;}
-.password-item{background-image:url(../../../images/themes/ui-lightness/password.png)}
-.profile-item{background-image:url(../../../images/themes/ui-lightness/profile.png)}
-.settings-item{background-image:url(../../../images/themes/ui-lightness/settings.png)}
-.calendar-item{background-image:url(../../../images/themes/ui-lightness/calendar.png)}
-.signout-item{background-image:url(../../../images/themes/ui-lightness/signout.png)}
-.companies-item{background-image:url(../../../images/themes/ui-lightness/companies.png)}
-.appointments-item{background-image:url(../../../images/themes/ui-lightness/appointments.png)}

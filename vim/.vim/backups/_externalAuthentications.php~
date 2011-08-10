@@ -1,7 +1,0 @@
-<?php use_javascript('/chCmsGuardExtraPlugin/js/external.js') ?>
-<?php foreach(chCmsGuardExtraPluginConfiguration::getEnabledProfileImplementationsModules() as $module: ?>
-  <?php include_partial(sprintf('%s/signinLink', $module)); ?>
-<?php endforeach; ?>
-<?php
-// vim:ft=php.html.sftemplate
-?>

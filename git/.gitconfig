@@ -6,7 +6,7 @@
 	interactive = auto
 [user]
 	name = ludovic
-	email = git@carpe-hora.com
+	email = ludovic_pelle@carpe-hora.com
 [alias]
 	ci = commit
 	ce = checkout

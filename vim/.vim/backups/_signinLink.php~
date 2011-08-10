@@ -1,1 +1,0 @@
-<?php echo jui_button_link('Profil Yahoo', '@signup_yahoo_url', array('class' => 'open_id yahoo_signin', 'icon' => 'social-yahoo-16', 'title' =>'Inscription depuis votre compte Yahoo')); ?>

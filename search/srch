@@ -1,5 +1,5 @@
 #!/bin/bash
-. "/home/ludovic/my-tools/conf"
+. "/home/ludovic/my-tools/search/conf"
 BASE_OPTIONS="--ignore-dir=cache --ignore-dir=log --ignore-dir=vendor --match";
 
 if [ -z $1 ]; then

@@ -1,7 +1,0 @@
-/* first attempt to use less */
-
-@color: #123456;
-
-.joe {
-  background-color: @color;
-}
