@@ -40,9 +40,9 @@ set statusline=%F%m%=%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [LINE=
 set laststatus=2
 
 " Backups
-"set backup                      " Enable creation of backup file.
-"set backupdir=~/.vim/backups    " Where backups will go.
-"set directory=~/.vim/tmp        " Where temporary files will go.
+set backup                      " Enable creation of backup file.
+set backupdir=~/.vim/backups    " Where backups will go.
+set directory=~/.vim/tmp        " Where temporary files will go.
 
 "enable memorised position of cursor when reopen the file
 if has("autocmd")
@@ -68,6 +68,9 @@ endif
 "Ctags
 "  let g:ctags_path="~/.vim/plugin"
 "  let g:ctags_statusline=1
+" Ctags
+ set nocp
+ set tags=tags
 
 " tagbar
 let g:tagbar_left = 1           " display the tagbar on the left side
@@ -86,16 +89,18 @@ let g:syntastic_quiet_warnings = 0  " we do want the warnings to be displayed
 au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
 set completeopt=menuone,menu,longest,preview
 
-" NerdTree
-map <leader>n :NERDTreeToggle<CR>
 
 " Hotkeys
 " =================
-" to paste without ai
-  nnoremap <F2> :set invpaste paste?<Enter>
-  imap <F2> <C-O><F2>
-  set pastetoggle=<F2>
+  let mapleader = ","
 
+map <silent><leader><Right> <C-T>
+" go to the declaration of a class, variable, ...)
+map <silent><leader><Left> <C-]>
+" go back
+
+" Toggle line numbers and fold column for easy copying:
+nnoremap <C-l> :set nonumber!<CR>:set foldcolumn=0<CR>
 " Start a substitute
   map <leader>s :%s/
 
@@ -108,7 +113,19 @@ map <leader>n :NERDTreeToggle<CR>
 
 "to force write as sudoer
 command W w !sudo tee % > /dev/null
+"to auto open & close NERDTree
+autocmd TabEnter * NERDTreeClose
 
+"
+" NerdTree
+ map <leader>n :NERDTreeToggle<CR>
+
+" to paste without ai
+ map <leader>c :set invpaste paste?<CR>
+
+" Call smart completion when pressing Ctrl-Space
+ inoremap <C-Space> <c-r>=SmartComplete()<CR>
+ imap <C-@> <C-Space>
 
 " language specifics
 "===================
@@ -119,6 +136,8 @@ autocmd FileType php noremap <F7> :!php -l %<CR>
 
 autocmd FileType php noremap <F9> :!php %<CR>
 
+autocmd FileType sh noremap <F9> :!./ %<CR>
+
 " symfony
 autocmd FileType symfony noremap <F8> :SfSwitchView<CR>
 
@@ -128,6 +147,12 @@ endif
 "jquery color
 au BufRead,BufNewFile jquery.*.js set ft=javascript syntax=jquery
 
+"FUNCTIONS
+"===============
+
+
+"Toggle comment
+"
 " Smart completion
 function! SmartComplete()
   let line = getline('.') " curline
@@ -141,9 +166,6 @@ function! SmartComplete()
   return "\<C-P>" " omnifunc if available
 endfunction
 
-" Call smart completion when pressing Ctrl-Space
- inoremap <C-Space> <c-r>=SmartComplete()<CR>
- imap <C-@> <C-Space>
 "
 " Highlight unwanted spaces
 "==========================
