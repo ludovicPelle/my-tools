@@ -113,6 +113,7 @@ nnoremap <C-l> :set nonumber!<CR>:set foldcolumn=0<CR>
 
 "to force write as sudoer
 command W w !sudo tee % > /dev/null
+
 "to auto open & close NERDTree
 autocmd TabEnter * NERDTreeClose
 
@@ -120,8 +121,12 @@ autocmd TabEnter * NERDTreeClose
 " NerdTree
  map <leader>n :NERDTreeToggle<CR>
 
+"NerdComment
+map <silent><leader>c :call NERDComment(0, "toggle")<CR>
+command C :call NERDComment(0, "toggle")
+
 " to paste without ai
- map <leader>c :set invpaste paste?<CR>
+ map <leader>p :set invpaste paste?<CR>
 
 " Call smart completion when pressing Ctrl-Space
  inoremap <C-Space> <c-r>=SmartComplete()<CR>
