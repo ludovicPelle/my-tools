@@ -9,3 +9,4 @@ alias sf-build-test="symfony propel:build --all --and-load --env=test --no-confi
 alias sf-test="symfony test:all"
 alias sf-build-all-and-test="symfony propel:build --all --and-load --no-confirmation;symfony propel:build --all --and-load --env=test --no-confirmation;symfony cc;symfony test:all"
 alias sf-build-all="symfony propel:build --all --and-load --no-confirmation;symfony propel:build --all --and-load --env=test --no-confirmation;symfony cc"
+alias dev-term="gnome-terminal --tab --title=actions --tab --title=tmpl --tab --title=form --tab --title=conf"
