@@ -25,6 +25,8 @@ set backspace=indent,eol,start
 set autoindent
 set ruler
 set number
+set wildmenu " Enhanced command line completion.
+set wildmode=list:longest " Complete files like a shell.
 
 " enable to move over lines with right and left arrows
 set whichwrap=b,s,<,>,[,]
@@ -39,6 +41,12 @@ set tabstop=2
 set statusline=%F%m%=%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [LINE=%l]\ [Col=%v]\ [%p%%]
 set laststatus=2
 
+
+if exists('+colorcolumn')
+  set colorcolumn=80
+else
+  au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
+endif
 " Backups
 set backup                      " Enable creation of backup file.
 set backupdir=~/.vim/backups    " Where backups will go.
@@ -66,11 +74,14 @@ autocmd FileType php set ft=php.symfony
 endif
 
 "Ctags
-"  let g:ctags_path="~/.vim/plugin"
+let g:ctags_path="~/.vim/plugin"
 "  let g:ctags_statusline=1
 " Ctags
  set nocp
  set tags=tags
+ map <silent><leader><Left> <C-T>
+ map <silent><leader><Right> <C-]>
+ map <silent><leader><Up> <C-W>]
 
 " tagbar
 let g:tagbar_left = 1           " display the tagbar on the left side
@@ -86,8 +97,8 @@ let g:syntastic_quiet_warnings = 0  " we do want the warnings to be displayed
 
 " Completion
 " automatically open and close the popup menu / preview window
-au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
-set completeopt=menuone,menu,longest,preview
+"au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+"set completeopt=menuone,menu,longest,preview
 
 
 " Hotkeys
@@ -129,6 +140,12 @@ command C :call NERDComment(0, "toggle")
  map <leader>p :set invpaste paste?<CR>
 
 " Call smart completion when pressing Ctrl-Space
+ set complete=.,w,b,u,t,i,k~/.vim/syntax/php.api
+ au FileType php set omnifunc=phpcomplete#CompletePHP
+
+"au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+" set completeopt=menuone,menu,longest,preview
+
  inoremap <C-Space> <c-r>=SmartComplete()<CR>
  imap <C-@> <C-Space>
 
