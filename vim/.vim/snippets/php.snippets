@@ -1,6 +1,8 @@
 snippet php
 	<?php
 	${1}
+snippet vdu
+	var_dump(${1});exit;
 snippet ec
 	echo "${1:string}"${2};
 snippet inc
@@ -246,3 +248,97 @@ snippet try
 	}	catch(${1:Exception} $e) {
 		${2:throw $e;}
 	}
+
+
+#Carpe Hora Snippet
+
+# Carpe hora snippets for php language
+# (c) Carpe Hora SARL
+
+snippet author
+	`g:snips_author`
+snippet company
+	`g:snips_company`
+# extend class
+snippet extends
+	extends ${1:; extendedClass}
+# class for carpe hora
+snippet clas
+	/**
+	 * This file declare the $1 class.
+	 *
+	 * @package ${2:package}
+	 * @subpackage ${3:subpackage}
+	 * @author `g:snips_author`
+	 * @copyright (c) `g:snips_company` `strftime("%Y")`
+	 * @since `strftime("%Y-%m-%d")`
+	 */
+
+	/**
+	 * ${4:Class with no description}
+	 */
+	class ${1:`Snippet_PHPClassNameFromFilename()`} ${5:extends}
+	{
+		${6:// your class code here}
+	} // END OF $1
+# defines a class variable
+snippet simplevar
+	/**
+	 * ${4:variable $$1}
+	 * @access $2
+	 * @var ${3:string}
+	 */
+	 ${2:protected} $${1:$variable};
+# writes a simple setter for a class valiable
+snippet getter
+	/**
+	 * getter for $${1:variable}
+	 * @access $2
+	 *
+	 * @return ${4:type} the $$1 value
+	 */
+	${3:public} function get${2:$1}()
+	{
+		return $this->$1;
+	}
+snippet setter
+	/**
+	 * setter for ${1:variable}
+	 * @access $2
+	 *
+	 * @return ${4:type} the $1 value
+	 */
+	${3:public} function set${2:$1}()
+	{
+		return $this->$1;
+	}
+snippet var
+	/**
+	 * ${5:variable $$1}
+	 * @access $3
+	 * @var ${4:string}
+	 */
+	 ${3:protected} $${1:$variable};
+
+	/**
+	 * getter for $1
+	 * @access $6
+	 *
+	 * @return $4 the $1 value
+	 */
+	${6:public} function get${2:$1}()
+	{
+		return $this->$1;
+	}
+
+	/**
+	 * setter for $1
+	 * @access $6
+	 *
+	 * @return $4 the $1 value
+	 */
+	$6 function set$2($$1)
+	{
+		return $this->$1 = $$1;
+	}
+	${7}

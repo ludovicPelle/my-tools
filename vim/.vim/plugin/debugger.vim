@@ -170,7 +170,7 @@ if !exists('g:debuggerMaxData')
   let g:debuggerMaxData = 1024
 endif
 if !exists('g:debuggerMaxDepth')
-  let g:debuggerMaxDepth = 1
+  let g:debuggerMaxDepth = 10
 endif
 if !exists('g:debuggerMiniBufExpl')
   let g:debuggerMiniBufExpl = 0

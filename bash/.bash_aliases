@@ -17,11 +17,12 @@ alias sf-build-all="symfony propel:build --all --and-load --no-confirmation;symf
 
 alias dev-term="gnome-terminal --tab --title=modele --tab --title=actions --tab --title=tmpl --tab --title=form --tab --title=conf --tab --title=test"
 
-alias gyt="git status"
-alias gyadd="git add"
-alias gyaddall="git add ."
-alias gyco="git commit"
-alias gych="git checkout"
-alias gypull="git pull --rebase"
-alias gypush="git push"
+alias gt="git status"
+alias gd="git diff"
+alias ga="git add"
+alias gall="git add ."
+alias gco="git commit"
+alias gce="git checkout"
+alias gpull="git pull --rebase"
+alias gpush="git push"
 

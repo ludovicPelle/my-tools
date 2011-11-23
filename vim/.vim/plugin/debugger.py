@@ -432,7 +432,7 @@ class DebugUI:
     self.watchwin = WatchWindow()
     self.stackwin = StackWindow()
     self.tracewin = TraceWindow()
-    self.helpwin  = HelpWindow('HELP__WINDOW')
+    self.helpwin  = "" """HelpWindow('HELP__WINDOW')"""
     self.mode     = 0 # normal mode
     self.file     = None
     self.line     = None
@@ -447,12 +447,12 @@ class DebugUI:
       return
     self.mode = 1
     if self.minibufexpl == 1:
-      vim.command('CMiniBufExplorer')         # close minibufexplorer if it is open
+      vim.command('MiniBufExplorer')         # close minibufexplorer if it is open
     # save session
     vim.command('mksession! ' + self.sessfile)
     for i in range(1, len(vim.windows)+1):
       vim.command(str(i)+'wincmd w')
-      self.winbuf[i] = vim.eval('bufnr("%")') # save buffer number, mksession does not do job perfectly
+      self.winbuf[i] = vim.eval('bufnr("%")')# save buffer number, mksession does not do job perfectly
                                               # when buffer is not saved at all.
 
     vim.command('silent topleft new')                # create srcview window (winnr=1)
@@ -477,6 +477,7 @@ class DebugUI:
     self.destroy()
 
     # restore session
+    vim.command('bufdo bd')#clear all buffer
     vim.command('source ' + self.sessfile)
     os.system('rm -f ' + self.sessfile)
 
@@ -495,7 +496,7 @@ class DebugUI:
   def create(self):
     """ create windows """
     self.watchwin.create('vertical belowright new')
-    self.helpwin.create('belowright new')
+    """self.helpwin.create('belowright new')"""
     self.stackwin.create('belowright new')
     self.tracewin.create('belowright new')
 
@@ -506,7 +507,7 @@ class DebugUI:
 
   def destroy(self):
     """ destroy windows """
-    self.helpwin.destroy()
+    """self.helpwin.destroy()"""
     self.watchwin.destroy()
     self.stackwin.destroy()
     self.tracewin.destroy()
@@ -1054,7 +1055,7 @@ def debugger_init(debug = 0):
 
   max_depth = vim.eval('debuggerMaxDepth')
   if max_depth == '':
-    max_depth = '1'
+    max_depth = '5'
 
   minibufexpl = int(vim.eval('debuggerMiniBufExpl'))
   if minibufexpl == 0:

@@ -1,18 +1,18 @@
-"Remove ALL autocommands for the current group.
+" Remove ALL autocommands for the current group.
 au!
 
-"Presentation
+" Presentation
 colorscheme delek
-"colorscheme molokai
+" colorscheme molokai
 " cursor (line under it, reverse color)
 set cursorline
 " line number
 hi LineNr ctermfg=Darkgray guifg=#3D3D3D
 
-"remove whitespace
-"if has("autocmd")
-"autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
-"endif
+" remove whitespace
+" if has("autocmd")
+" autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
+" endif
 
 if has("syntax")
 	syntax on
