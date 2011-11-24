@@ -73,6 +73,12 @@ if has("autocmd")
 autocmd FileType php set ft=php.symfony
 endif
 
+" activate css for scss files
+if has("autocmd")
+autocmd FileType scss set ft=css
+endif
+
+
 "Ctags
 let g:ctags_path="~/.vim/plugin"
 "  let g:ctags_statusline=1

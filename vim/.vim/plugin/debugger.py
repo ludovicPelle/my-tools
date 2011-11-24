@@ -183,9 +183,14 @@ class VimWindow:
       self.buffer.append(str(msg).split('\n'))
     self.command('normal G')
     #self.window.cursor = (len(self.buffer), 1)
-  def create(self, method = 'new'):
+  def create(self, method = 'new', size = 0):
     """ create window """
-    vim.command('silent ' + method + ' ' + self.name)
+    if size == 0 :
+      vim.command('silent ' + method + ' ' + self.name)
+	  
+    else:
+      vim.command('silent ' + method + ' ' + self.name + '|res '+size)
+		
     #if self.name != 'LOG___WINDOW':
     vim.command("setlocal buftype=nofile")
     self.buffer = vim.current.buffer
@@ -495,10 +500,10 @@ class DebugUI:
 
   def create(self):
     """ create windows """
-    self.watchwin.create('vertical belowright new')
+    self.stackwin.create('vertical belowright new','6')
     """self.helpwin.create('belowright new')"""
-    self.stackwin.create('belowright new')
-    self.tracewin.create('belowright new')
+    self.tracewin.create('belowright new','1')
+    self.watchwin.create('belowright new', '46')
 
   def set_highlight(self):
     """ set vim highlight of debugger sign """
