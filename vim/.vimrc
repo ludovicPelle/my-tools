@@ -75,6 +75,7 @@ endif
 
 " activate css for scss files
 if has("autocmd")
+au BufRead,BufNewFile *.scss set filetype=scss
 autocmd FileType scss set ft=css
 endif
 
@@ -94,6 +95,7 @@ let g:tagbar_left = 1           " display the tagbar on the left side
 set updatetime=500              " show tags' prototype after 500 milliseconds
 let g:tagbar_width = 25         " width in characters of the tagbar
 let g:tagbar_autoshowtag = 1    " always show the current tag in the tagbar
+let g:tagbar_autofocus = 1      " the cursor will move to the Tagbar window when it is opened.
 nnoremap <silent> <F10> :TagbarToggle<CR>
 
 " Syntastic
@@ -130,6 +132,11 @@ nnoremap <C-l> :set nonumber!<CR>:set foldcolumn=0<CR>
 
 "to force write as sudoer
 command W w !sudo tee % > /dev/null
+
+"auto folding
+map <silent><leader>F :EnableFastPHPFolds<Cr>
+map <silent><leader>f :EnablePHPFolds<Cr>
+map <silent><leader>g :DisablePHPFolds<Cr>
 
 "to auto open & close NERDTree
 autocmd TabEnter * NERDTreeClose

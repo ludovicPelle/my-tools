@@ -1,9 +1,22 @@
 snippet php
 	<?php
 	${1}
-snippet vdu
+snippet vd
+	var_dump(${1});
+snippet vde
 	var_dump(${1});exit;
-snippet ec
+snippet pr
+	print_r(${1},true);
+snippet pre
+	print_r(${1},true);exit;
+snippet dbg
+	//MANUAL DEBUGGER
+	$data = print_r(array(
+	                       ${1}
+	                     ),
+	                true);
+	file_put_contents('/tmp/debug-log.log',"\n\n###################\nDate :".date("Y-m-d H:i:s")."\n".$data,FILE_APPEND | LOCK_EX);
+snippet ecdate("Y-m-d H:i:s")
 	echo "${1:string}"${2};
 snippet inc
 	include '${1:file}';${2}
@@ -342,3 +355,7 @@ snippet var
 		return $this->$1 = $$1;
 	}
 	${7}
+snippet cb
+	/*==============================================================
+	${1}
+	==============================================================*/

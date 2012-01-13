@@ -1,0 +1,22 @@
+=== README ===
+
+== Installation de Xmonad dans Gnome ==
+
+Commencer par installer xmonad : sudo aptitude install xmonad libghc6-xmonad-dev
+
+Le dernier paquet est indispensable pour ceux qui voudront modifier la
+conf par défaut.
+
+Déplacer le répertoire xmonad vers ~/.xmonad.
+La configuration se trouve dans le fichier ~/.xmonad/xmonad.hs
+
+Pour terminer, dire à gnome d'utiliser xmonad comme window manager :
+gconftool-2 -s /desktop/gnome/session/required_components/windowmanager xmonad --type string
+
+Pour restaurer le wm par défaut : 
+gconftool-2 -s /desktop/gnome/session/required_components/windowmanager gnome_wm --type string
+
+Xmonad sera lancé à la prochaine session.
+
+
+Doc : http://haskell.org/haskellwiki/Xmonad/Using_xmonad_in_Gnome
