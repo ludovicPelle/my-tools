@@ -30,4 +30,4 @@ alias gce="git checkout"
 alias gpull="git pull --rebase"
 alias gpush="git push"
 
-alias deb-update="sudo aptitude update;sudo aptitude safe-upgrade;"
+alias debian-update="sudo aptitude update;sudo aptitude safe-upgrade;"
