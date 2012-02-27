@@ -258,10 +258,14 @@ snippet try
 	try
 	{
 		${3://your code here}
-	}	catch(${1:Exception} $e) {
+	}
+	catch(${1:Exception} $e) 
+	{
 		${2:throw $e;}
 	}
 
+snippet throw
+	throw new ${1:}Exception('${2://Your message here}');
 
 #Carpe Hora Snippet
 
