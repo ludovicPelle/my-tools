@@ -33,4 +33,4 @@ alias gpush="git push"
 alias dump-load-t-resa="dropdb t-resa && createdb t-resa -O t-resa -E UTF-8 && psql -f"
 
 alias debian-update="sudo aptitude update;sudo aptitude safe-upgrade;"
-alias win=sudo mount -t vboxsf partage ~/win"
+alias win="sudo mount -t vboxsf partage ~/win"
