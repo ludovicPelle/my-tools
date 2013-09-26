@@ -1,0 +1,55 @@
+snippet dir
+	${1}.directive('${2}', ['$scope', '$rootScope'${3:} function($scope, $rootScope${4}) {
+		var linkFn = function(scope, element, attrs) {
+			${7}
+		}
+		return {
+			restrict:${5:'A'},
+			scope: true,
+			template:'{{${6}}}',
+			link: linkFn
+		}
+	}
+snippet watch
+	${1:scope}.$watch('${2:myVar}', function(newValue, oldValue) {
+		if (newVal == oldVal) {
+			return;
+		}
+		${3}
+	}
+
+snippet ctrl
+	function ${1}Ctrl($scope, $rootScope${2})
+		${4:$scope.test='test';}
+	}
+	$1Ctrl.$inject['$scope','$rootScope'${3}];
+
+snippet fac
+	${1:app}.factory('${2:myService}', ['$scope','$rootScope'${3}, function($scope,$rootScope${4}) {
+		return {
+			${5}
+		}
+	}
+
+
+
+snippet app
+	angular.module('${1:myApp}', [${2}])
+
+snippet config
+		.config(['$routeProvider'${1}, function($routeProvider${2}) {
+			$routeProvider
+			${3}
+			.otherwise({redirectTo: '/'});
+		})
+snippet when
+	.when(${1:'/route'}, {
+		templateUrl: '${2:partials/my_partial.html}'',
+		controller: ${3:MyCtrl},
+		access: '${4:public}',
+		path: $1
+	})
+snippet run
+		.run(['$rootScope'${1}, function($rootScope${2}) {
+			${3}
+		})

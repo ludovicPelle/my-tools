@@ -18,6 +18,7 @@ alias sf-build-all-and-test-failed="symfony propel:build --all --and-load --no-c
 alias sf-build-all="symfony propel:build --all --and-load --no-confirmation;symfony propel:build --all --and-load --env=test --no-confirmation;symfony cc"
 
 alias dev-term="gnome-terminal --tab --title=modele --tab --title=actions --tab --title=tmpl --tab --title=form --tab --title=conf --tab --title=test"
+alias dev-term='gnome-terminal --tab --title="local" --tab --title="server" --tab --title="preprod" --tab --title="log"'
 
 alias bt-term="gnome-terminal --tab --title=solr --command=\"/var/www/t-resa/start-index.sh \" --tab --title=compass --command=\"compass watch /var/www/t-resa/web/sass/users/ \" --tab --title=apache --command=\"tail -f /var/log/apache2/error.log\" "
 

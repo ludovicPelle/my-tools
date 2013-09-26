@@ -107,3 +107,4 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 export SYMFONY="/var/www/t-resa/lib/vendor/symfony/lib/";
 export PATH="$PATH:/var/lib/gems/1.8/bin/"
+export CHROME_BIN="/usr/bin/google-chrome"

@@ -1,0 +1,16 @@
+snippet ngv
+	{{${1:var}}}
+snippet ngvr
+	{{$root.${1:var}}}
+snippet ngvp
+	{{$parent.${1:var}}}
+snippet ngc
+	ng-class=" ${1:'class':condition}"
+snippet ngr
+	<ul${1}>
+		<li ng-repeat=" ${2:item} in ${3:itemlist}">${4}</li>
+	</ul>
+snippet ngt
+	<div ng-include="${1:partials/my_partial}">
+snippet ngi
+	ng-init="${1:init_var}"

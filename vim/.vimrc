@@ -13,6 +13,8 @@ hi LineNr ctermfg=Darkgray guifg=#3D3D3D
 " if has("autocmd")
 " autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 " endif
+" case sensitive
+set noic
 
 if has("syntax")
 	syntax on
@@ -33,9 +35,12 @@ set whichwrap=b,s,<,>,[,]
 
 " redefine tabs
 set expandtab
-set shiftwidth=2
-set softtabstop=2
-set tabstop=2
+"set shiftwidth=2
+"set softtabstop=2
+"set tabstop=2
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
 
 " status line
 set statusline=%F%m%=%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [LINE=%l]\ [Col=%v]\ [%p%%]
@@ -112,6 +117,9 @@ let g:syntastic_quiet_warnings = 0  " we do want the warnings to be displayed
 " Hotkeys
 " =================
   let mapleader = ","
+cmap tn tabnew
+cmap vs vsplit
+cmap find !ack-grep --ignore-dir=lib
 
 map <silent><leader><Right> <C-T>
 " go to the declaration of a class, variable, ...)
@@ -179,8 +187,10 @@ autocmd FileType symfony noremap <F8> :SfSwitchView<CR>
 " javascript
 autocmd FileType javascript noremap <F7> :!gjslint %<CR>
 endif
-"jquery color
-au BufRead,BufNewFile jquery.*.js set ft=javascript syntax=jquery
+"jquery color angular snippet
+au BufRead,BufNewFile *.js set ft=javascript.angular
+"angular tmpl
+au BufRead,BufNewFile *.html set ft=html.angularhtml
 
 "FUNCTIONS
 "===============
