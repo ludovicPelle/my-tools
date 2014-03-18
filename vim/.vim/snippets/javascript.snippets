@@ -5,19 +5,107 @@ snippet proto
 		${4:// body...}
 	};
 #Function 
+snippet clos
+	(function() {
+		'use strict';
+		$1
+	})();
 snippet jquery
 	(function($) {
 	})(jQuery);
 snippet cl
 	console.log(${1:})
+snippet icl
+	if (${1:$rootScope.environement !== 'master'}) console.log('${2:things}', ${3:data})
 # Function
 snippet fun
 	function ${1:function_name} (${2:argument}) {
-		${3:// body...}
+		${3}
 	}
+#Doc
+snippet dfun
+	/**
+	 * @function ${1:func}${6}
+	 * @returns ${3:null}
+	*/
+	function $1 (${2:argument}) {
+		${5}
+		return $3;
+	}
+
+#Documentation
+snippet doc
+	/**
+	 * ${1}
+	*/
+snippet @des
+	@description ${1}
+snippet @cst
+	@constant {${1:Type}}
+snippet @mod
+	@module ${1:lib/module}
+snippet @met
+	@method ${1:method}
+snippet @req
+	@requires ${1:dep}
+snippet @fir
+	@fires ${1:class}${2:event}
+snippet @eve
+	@event ${1:class}${2:event}
+snippet @prop
+	@property {${1:Type}} ${2:name} - ${3:desc}
+snippet @see
+	@see ${1:ref}
+snippet @glo
+	@global
+snippet @aut
+	@author ${1:Ludovic Pelle} <${2:ludovic.pelle@iprotego.com}>
+snippet @ret
+	@returns {${1:Type}} - ${2:desc}
+snippet @par
+	@param {${1:Type}} ${2:param} - ${3:desc}
+snippet @exa
+	@example ${1:example}
+snippet @tod
+	@todo ${1:improve}
+snippet @ver
+	@version ${1:1.0}
+snippet @thi
+	@this Refer to ${1:that}
+snippet @thr
+	@throws ${1:Error}
+snippet @nsp
+	@namespace ${1:namespc}
 # Anonymous Function
 snippet f
 	function(${1}) {${2}};
+#try
+snippet try
+	try {
+		${1}
+	} ${2}
+snippet cat
+	catch(${2:e} ${3:if e instanceof} ${4:TypeError}) {
+		${5}
+	} ${6}
+snippet fin
+	finally {
+		${1}
+	}
+snippet tcf
+	try {
+		${1}
+	} catch(${2:e} ${3:if e instanceof} ${4:TypeError}) {
+		${5}
+	} finally {
+		${6}
+	}
+snippet tc
+	try {
+		${1}
+	} catch(${2:e} ${3:if e instanceof} ${4:TypeError}) {
+		${5}
+	}
 # if
 snippet if
 	if (${1:true}) {${2}}
@@ -66,9 +154,17 @@ snippet do
 	} while (${1:/* condition */});
 # Object Method
 snippet :f
-	${1:method_name}: function(${2:attribute}) {
-		${4}
-	}${3:,}
+	/** 
+	 * @method ${1:method}${2}
+	*/
+	$1: function(${3:attribute}) {
+		${5}
+	}${4:,}
+snippet :p
+	/** 
+	 * @property {${1:Type}} ${2:prop}${3}
+	*/
+	$1: ${5:value}${4:,}
 # setTimeout function
 snippet timeout
 	setTimeout(function() {${3}}${2}, ${1:10};

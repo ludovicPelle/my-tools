@@ -30,8 +30,11 @@ alias gco="git commit"
 alias gce="git checkout"
 alias gpull="git pull --rebase"
 alias gpush="git push"
+alias gl="git log"
 
 alias dump-load-t-resa="dropdb t-resa && createdb t-resa -O t-resa -E UTF-8 && psql -f"
 
 alias debian-update="sudo aptitude update;sudo aptitude safe-upgrade;"
 alias win="sudo mount -t vboxsf partage ~/win"
+
+alias ssi="ssh root@62.210.151.225"

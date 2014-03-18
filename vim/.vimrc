@@ -38,9 +38,9 @@ set expandtab
 "set shiftwidth=2
 "set softtabstop=2
 "set tabstop=2
-set shiftwidth=4
-set softtabstop=4
-set tabstop=4
+set shiftwidth=2
+set softtabstop=2
+set tabstop=2
 
 " status line
 set statusline=%F%m%=%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [LINE=%l]\ [Col=%v]\ [%p%%]
@@ -71,7 +71,7 @@ filetype plugin on
 "=================
 
 " define my name for snipmate plugin
-let g:snips_author = 'Ludovic Pellé <ludovic_pelle@carpe-hora.com>'
+let g:snips_author = 'Ludovic Pellé <ludovic_pelle@iprotego.com>'
 
 " activate symfony for php files
 if has("autocmd")
@@ -82,6 +82,8 @@ endif
 if has("autocmd")
 au BufRead,BufNewFile *.scss set filetype=scss
 autocmd FileType scss set ft=css
+au BufRead,BufNewFile *.less set filetype=scss
+autocmd FileType less set ft=css
 endif
 
 
@@ -117,8 +119,8 @@ let g:syntastic_quiet_warnings = 0  " we do want the warnings to be displayed
 " Hotkeys
 " =================
   let mapleader = ","
-cmap tn tabnew
-cmap vs vsplit
+"cmap tn tabnew
+"cmap vs vsplit
 cmap find !ack-grep --ignore-dir=lib
 
 map <silent><leader><Right> <C-T>
@@ -186,9 +188,12 @@ autocmd FileType symfony noremap <F8> :SfSwitchView<CR>
 
 " javascript
 autocmd FileType javascript noremap <F7> :!gjslint %<CR>
+autocmd FileType javascript noremap <F8> :!fixjsstyle %<CR>
 endif
 "jquery color angular snippet
 au BufRead,BufNewFile *.js set ft=javascript.angular
+"less
+au BufRead,BufNewFile *.less set ft=css
 "angular tmpl
 au BufRead,BufNewFile *.html set ft=html.angularhtml
 
