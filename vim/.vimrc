@@ -162,15 +162,15 @@ command C :call NERDComment(0, "toggle")
 " to paste without ai
  map <leader>p :set invpaste paste?<CR>
 
-" Call smart completion when pressing Ctrl-Space
- set complete=.,w,b,u,t,i,k~/.vim/syntax/php.api
- au FileType php set omnifunc=phpcomplete#CompletePHP
+" set complete=.,w,b,u,t,i,k~/.vim/syntax/php.api
+" au FileType php set omnifunc=phpcomplete#CompletePHP
 
 "au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
-" set completeopt=menuone,menu,longest,preview
+set completeopt=menuone,menu,longest,preview
 
- inoremap <C-Space> <c-r>=SmartComplete()<CR>
- imap <C-@> <C-Space>
+" Call smart completion when pressing Ctrl-Space
+inoremap <C-Space> <c-r>=SmartComplete()<CR>
+imap <C-@> <C-Space>
 
 " language specifics
 "===================
@@ -196,6 +196,10 @@ au BufRead,BufNewFile *.js set ft=javascript.angular
 au BufRead,BufNewFile *.less set ft=css
 "angular tmpl
 au BufRead,BufNewFile *.html set ft=html.angularhtml
+"python :make check errors
+autocmd FileType python noremap <F7> :make<CR>
+set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
+set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
 
 "FUNCTIONS
 "===============
@@ -204,6 +208,14 @@ au BufRead,BufNewFile *.html set ft=html.angularhtml
 "Toggle comment
 "
 " Smart completion
+"" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+
 function! SmartComplete()
   let line = getline('.') " curline
   let substr = strpart(line, -1, col('.')+1) " from start to cursor
