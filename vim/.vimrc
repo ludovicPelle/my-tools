@@ -2,7 +2,9 @@
 au!
 
 " Presentation
-colorscheme delek
+" colorscheme jellybeans
+" colorscheme zellner
+ colorscheme delek
 " colorscheme molokai
 " cursor (line under it, reverse color)
 set cursorline
@@ -79,12 +81,7 @@ autocmd FileType php set ft=php.symfony
 endif
 
 " activate css for scss files
-if has("autocmd")
-au BufRead,BufNewFile *.scss set filetype=scss
-autocmd FileType scss set ft=css
-au BufRead,BufNewFile *.less set filetype=scss
-autocmd FileType less set ft=css
-endif
+au BufRead,BufNewFile *.scss set filetype=css
 
 
 "Ctags
@@ -103,7 +100,7 @@ set updatetime=500              " show tags' prototype after 500 milliseconds
 let g:tagbar_width = 25         " width in characters of the tagbar
 let g:tagbar_autoshowtag = 1    " always show the current tag in the tagbar
 let g:tagbar_autofocus = 1      " the cursor will move to the Tagbar window when it is opened.
-nnoremap <silent> <F10> :TagbarToggle<CR>
+nnoremap <silent> <F2> :TagbarToggle<CR>
 
 " Syntastic
 let g:syntastic_enable_signs = 1    " open a bar on the left when an error is detected
@@ -121,7 +118,8 @@ let g:syntastic_quiet_warnings = 0  " we do want the warnings to be displayed
   let mapleader = ","
 "cmap tn tabnew
 "cmap vs vsplit
-cmap find !ack-grep --ignore-dir=lib
+cmap find !ack-grep
+cmap tb tabnew<space>
 
 map <silent><leader><Right> <C-T>
 " go to the declaration of a class, variable, ...)
@@ -153,7 +151,7 @@ autocmd TabEnter * NERDTreeClose
 
 "
 " NerdTree
- map <leader>n :NERDTreeToggle<CR>
+map <leader>n :NERDTreeToggle<CR>
 
 "NerdComment
 map <silent><leader>c :call NERDComment(0, "toggle")<CR>
@@ -178,22 +176,25 @@ imap <C-@> <C-Space>
 " php
 if has("autocmd")
 autocmd FileType php noremap <F7> :!php -l %<CR>
-
 autocmd FileType php noremap <F9> :!php %<CR>
 
+" bash
 autocmd FileType sh noremap <F9> :!./ %<CR>
 
 " symfony
 autocmd FileType symfony noremap <F8> :SfSwitchView<CR>
 
 " javascript
-autocmd FileType javascript noremap <F7> :!gjslint %<CR>
-autocmd FileType javascript noremap <F8> :!fixjsstyle %<CR>
+autocmd FileType javascript noremap <F7> :!fixjsstyle %<CR>
+autocmd FileType javascript noremap <F8> :!grunt build<CR>
+autocmd FileType javascript noremap <F9> :!grunt build;iceweasel "http://localhost:8888"<CR>
+autocmd FileType javascript noremap <F11> :!./node_modules/.bin/protractor test/e2e/protractor.conf.js<CR>
+autocmd FileType javascript noremap <F12> :!grunt build;./node_modules/.bin/protractor test/e2e/protractor.conf.js<CR>
 endif
 "jquery color angular snippet
 au BufRead,BufNewFile *.js set ft=javascript.angular
 "less
-au BufRead,BufNewFile *.less set ft=css
+au BufRead,BufNewFile *.less set ft=less
 "angular tmpl
 au BufRead,BufNewFile *.html set ft=html.angularhtml
 "python :make check errors

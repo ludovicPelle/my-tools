@@ -37,11 +37,10 @@ snippet app
 	angular.module('${1:myApp}', [${2}])
 
 snippet config
-		.config(['$routeProvider'${1}, function($routeProvider${2}) {
-			$routeProvider
+	.config(['$routeProvider', 'CFG'${1}, function($routeProvider, CFG${2}) {
+		$routeProvider
 			${3}
-			.otherwise({redirectTo: '/'});
-		})
+	}])
 snippet when
 	.when(${1:'/route'}, {
 		templateUrl: '${2:partials/my_partial.html}',
@@ -49,14 +48,15 @@ snippet when
 		access: '${4:public}',
 		title : '${5:My view}',
 		path: $1,
-		resolve: ${6:MainController.router}
+		resolve: ${6:autologinFromStorage}
 	})
 snippet run
-		.run(['$rootScope'${1}, function($rootScope${2}) {
-			${3}
-		})
+	.run(['$rootScope'${1}, function($rootScope${2}) {
+		${3}
+	}])
 snippet Api
-	Api({method: '${1:GET}',
+	Api.send({
+		method: '${1:GET}',
 		endpoint: CONSTANTS.API_ENDPOINT.${2:ROOT},
 		loader: ${3:false},
 		title:'${4:Chargement...}',
@@ -68,4 +68,16 @@ snippet Api
 			if (response.status === 200) {
 				${7}
 			}
+	});
+
+snippet des
+	//
+	describe('FEATURE: ${1:1}', function() {
+	  ${2}
+	//
+	});
+snippet it
+	//
+	it('SCEN: ${1:1}', function() {
+	  ${2}
 	});

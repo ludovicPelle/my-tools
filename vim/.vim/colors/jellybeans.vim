@@ -308,7 +308,7 @@ call s:X("Visual","","404040","","","Black")
 call s:X("Cursor","","b0d0f0","","","")
 
 
-call s:X("Comment","888888","","italic","Grey","")
+call s:X("Comment","888888","","italic","Red","")
 call s:X("Todo","808080","","bold","White","Black")
 
 call s:X("StatusLine","000000","dddddd","italic","Black","White")
@@ -316,8 +316,8 @@ call s:X("StatusLineNC","ffffff","403c41","italic","White","Black")
 call s:X("VertSplit","777777","403c41","italic","Black","Black")
 call s:X("WildMenu","f0a0c0","302028","","Magenta","")
 
-call s:X("Folded","a0a8b0","384048","italic","Black","")
-call s:X("FoldColumn","a0a8b0","384048","","","Black")
+call s:X("Folded","a0a8b0","384048","italic","Grey","")
+call s:X("FoldColumn","a0a8b0","384048","","","Grey")
 hi! link SignColumn FoldColumn
 
 call s:X("Title","70b950","","bold","Green","")

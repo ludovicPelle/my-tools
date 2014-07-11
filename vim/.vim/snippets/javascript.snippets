@@ -14,7 +14,7 @@ snippet jquery
 	(function($) {
 	})(jQuery);
 snippet cl
-	console.log(${1:})
+	console.log(${1:});
 snippet icl
 	if (${1:$rootScope.environement !== 'master'}) console.log('${2:things}', ${3:data})
 # Function
@@ -78,7 +78,7 @@ snippet @nsp
 	@namespace ${1:namespc}
 # Anonymous Function
 snippet f
-	function(${1}) {${2}};
+	function(${1}) { ${2} };
 #try
 snippet try
 	try {
@@ -136,12 +136,16 @@ snippet case
 snippet for
 	for (var ${2:i} = 0; $2 < ${1:Things}.length; $2${3:++}) {
 		${4:$1[$2]}
-	};
+	}
 # for (...) {...} (Improved Native For-Loop)
 snippet forr
 	for (var ${2:i} = ${1:Things}.length - 1; $2 >= 0; $2${3:--}) {
 		${4:$1[$2]}
-	};
+	}
+snippet fori
+	for (var key in ${1:Things}) {
+		${2:$1['key']}
+	}
 # while (...) {...}
 snippet wh
 	while (${1:/* condition */}) {
