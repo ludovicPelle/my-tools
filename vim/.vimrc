@@ -189,7 +189,7 @@ autocmd FileType javascript noremap <F7> :!fixjsstyle %<CR>
 autocmd FileType javascript noremap <F8> :!grunt build<CR>
 autocmd FileType javascript noremap <F9> :!grunt build;iceweasel "http://localhost:8888"<CR>
 autocmd FileType javascript noremap <F11> :!./node_modules/.bin/protractor test/e2e/protractor.conf.js<CR>
-autocmd FileType javascript noremap <F12> :!grunt build;./node_modules/.bin/protractor test/e2e/protractor.conf.js<CR>
+autocmd FileType javascript noremap <F12> :!grunt build;grunt protractor<CR>
 endif
 "jquery color angular snippet
 au BufRead,BufNewFile *.js set ft=javascript.angular
@@ -244,3 +244,7 @@ autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 "=========================================
 autocmd FileType c,cpp,java,php,js,css,html,xml,vim,python autocmd BufWritePre <buffer> :call setline(1,map(getline(1,"$"),'substitute(v:val,"\\s\\+$","","")'))
 autocmd BufWritePost *.py :make
+" Save and reload folding/
+"=========================================
+au BufWinLeave * mkview
+au BufWinEnter * silent loadview
