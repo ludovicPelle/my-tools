@@ -143,8 +143,8 @@ snippet forr
 		${4:$1[$2]}
 	}
 snippet fori
-	for (var key in ${1:Things}) {
-		${2:$1['key']}
+	for (var ${1:key} in ${2:Things}) {
+		$2[$1]${3}
 	}
 # while (...) {...}
 snippet wh
