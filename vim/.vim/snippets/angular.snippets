@@ -1,41 +1,44 @@
 snippet dir
-	${1}.directive('${2}', ['$scope', '$rootScope'${3:} function($scope, $rootScope${4}) {
+	.directive('${1:dir}', ['$scope', '$rootScope'${2}, function($scope, $app${3}) {
 		var linkFn = function(scope, element, attrs) {
 			${7}
 		}
 		return {
-			restrict:${5:'A'},
-			scope: true,
-			template:'{{${6}}}',
-			link: linkFn
-		}
-	}
+			restrict:${4:'A'},
+			scope: ${5:false},
+			link: linkFn${6}
+		};
+	}])
 snippet watch
-	${1:scope}.$watch('${2:myVar}', function(newValue, oldValue) {
-		if (newVal == oldVal) {
+	${1:$scope}.$watch('${2:myVar}', function(newValue, oldValue) {
+		if (newValue == oldValue) {
 			return;
 		}
 		${3}
-	}
-
+	});
 snippet ctrl
-	function ${1}Ctrl($scope, $rootScope${2})
-		${4:$scope.test='test';}
-	}
-	$1Ctrl.$inject['$scope','$rootScope'${3}];
+	.controller('${1:}Ctrl',['$scope', '$rootScope'${2}, fucntion($scope, $app${3})
+		${4}
+	}])
 
 snippet fac
-	${1:app}.factory('${2:myService}', ['$rootScope'${3}, function($rootScope${4}) {
-		return {
-			${5}
+	.factory('${1:Service}', ['$rootScope'${2}, function($app${3}) {
+		var $1 = {
+			${4}
 		}
-	}
-
-
-
+		return $1;
+	}])
+snippet filter
+	.filter('${1:myService}', ['$scope','$rootScope'${2}, function($scope,$app${3}) {
+		return function(input, param) {
+			${4}
+			return input;
+		};
+	}])
 snippet app
-	angular.module('${1:myApp}', [${2}])
-
+	angular.module('${1:mod}', [${2}])
+snippet mod
+	angular.module('${1:mod}')
 snippet config
 	.config(['$routeProvider', 'CFG'${1}, function($routeProvider, CFG${2}) {
 		$routeProvider
@@ -51,25 +54,20 @@ snippet when
 		resolve: ${6:autologinFromStorage}
 	})
 snippet run
-	.run(['$rootScope'${1}, function($rootScope${2}) {
+	.run(['$rootScope'${1}, function($app${2}) {
 		${3}
 	}])
 snippet Api
-	Api.send({
-		method: '${1:GET}',
+	return Api.send({
 		endpoint: CONSTANTS.API_ENDPOINT.${2:ROOT},
 		loader: ${3:false},
 		title:'${4:Chargement...}',
-		headers: {
-			'X-Param-Auth-Id': $rootScope.user.getId(),
-			'X-Param-Auth-Token': $rootScope.user.getToken(),${5}
-		}${6}
+		registered: ${5:false}${6}
 	}, function(response) {
 			if (response.status === 200) {
 				${7}
 			}
 	});
-
 snippet des
 	//
 	describe('FEATURE: ${1:1}', function() {
@@ -81,3 +79,20 @@ snippet it
 	it('SCEN: ${1:1}', function() {
 	  ${2}
 	});
+snippet page
+	'use_strict';
+	var importFile = function(file) { var mod = require(file);return new mod();};
+	var ${1:Page} = function() {
+		var that = this;
+		var cfg = importFile('./config.js');
+	  var usr = importFile('./user.js');
+		var hlp = importFile('./helpers.js');
+		${2}
+	};
+	module.exports = $1;
+snippet elcss
+  this.${1:elem} = function() {return element(by.css('${2:class}'));}
+snippet elmod
+  this.${1:elem} = function() {return element(by.model('${2:model}'));}
+snippet elrep
+  this.${1:elem} = function() {return element(by.repeater('${2:rep}'));}

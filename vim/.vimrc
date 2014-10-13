@@ -17,6 +17,8 @@ hi LineNr ctermfg=Darkgray guifg=#3D3D3D
 " endif
 " case sensitive
 set noic
+" bash_alias linking
+" set shell=/bin/bash\ -i
 
 if has("syntax")
 	syntax on
@@ -27,6 +29,7 @@ set nocompatible
 set encoding=utf-8
 set backspace=indent,eol,start
 set autoindent
+set foldmethod=manual
 set ruler
 set number
 set wildmenu " Enhanced command line completion.
@@ -128,6 +131,7 @@ map <silent><leader><Left> <C-]>
 
 " Toggle line numbers and fold column for easy copying:
 nnoremap <C-l> :set nonumber!<CR>:set foldcolumn=0<CR>
+  "<C-S-v>:set smartindent!<CR>:set autoindent!<CR>
 " Start a substitute
   map <leader>s :%s/
 
@@ -137,6 +141,13 @@ nnoremap <C-l> :set nonumber!<CR>:set foldcolumn=0<CR>
 " Pull word under cursor into LHS of a substitute (for quick search and
 " replace)
   nmap <leader>S :%s/<C-r>=expand("<cword>")<CR>/
+
+  nmap <leader>R :!replace_all '=expand("<cword>"'<space>
+
+  nmap <leader>R :!%s/<C-r>=expand("<cword>")<CR>/
+
+
+
 
 "to force write as sudoer
 command W w !sudo tee % > /dev/null
@@ -158,7 +169,7 @@ map <silent><leader>c :call NERDComment(0, "toggle")<CR>
 command C :call NERDComment(0, "toggle")
 
 " to paste without ai
- map <leader>p :set invpaste paste?<CR>
+ map <leader>p :r !xclip -o<CR>
 
 " set complete=.,w,b,u,t,i,k~/.vim/syntax/php.api
 " au FileType php set omnifunc=phpcomplete#CompletePHP
@@ -187,9 +198,9 @@ autocmd FileType symfony noremap <F8> :SfSwitchView<CR>
 " javascript
 autocmd FileType javascript noremap <F7> :!fixjsstyle %<CR>
 autocmd FileType javascript noremap <F8> :!grunt build<CR>
-autocmd FileType javascript noremap <F9> :!grunt build;iceweasel "http://localhost:8888"<CR>
-autocmd FileType javascript noremap <F11> :!./node_modules/.bin/protractor test/e2e/protractor.conf.js<CR>
-autocmd FileType javascript noremap <F12> :!grunt build;grunt protractor<CR>
+autocmd FileType javascript noremap <F9> :!grunt build;iceweasel "http://googlemii.local:8888"<CR>
+autocmd FileType javascript noremap <F11> :!grunt protractor:e2e<CR>
+autocmd FileType javascript noremap <F12> :!grunt build;grunt protractor:e2e<CR>
 endif
 "jquery color angular snippet
 au BufRead,BufNewFile *.js set ft=javascript.angular
@@ -246,5 +257,5 @@ autocmd FileType c,cpp,java,php,js,css,html,xml,vim,python autocmd BufWritePre <
 autocmd BufWritePost *.py :make
 " Save and reload folding/
 "=========================================
-au BufWinLeave * mkview
-au BufWinEnter * silent loadview
+autocmd BufWrite * mkview
+autocmd BufRead * silent loadview

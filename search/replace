@@ -1,0 +1,34 @@
+#!/bin/bash
+if [ -z $1 ]; then
+ echo "=========AIDE=========";
+ echo '# 1) Du au différence de regex (caracteres spéciaux: "(", "[", "$", etc ) grep match en echappant et vim ecappe pour les commande regex';
+ echo '    grep = "\$" "\(" "\[" "/" '
+ echo '    vim  = "$"  "("  "["  "/" ';
+ echo '# 2) %s pour tout le fichier, :g pour plusieurs occurence par ligne et :c pour confirmer chaque remplacement';
+ echo '# 3) Attention au caractere de séparation ":" le pattern ne doit pas le contenir sinon remplacer par "#" ou "/"';
+ echo '========Examples=======';
+ echo 'replace_all "toto" "%s:toto:tata:gc" dossier';
+ echo 'replace_all "toto\(\)" "%s:toto():tata():gc" dossier';
+ echo 'replace_all "\$toto" "%s:$toto:$tata:gc" dossier';
+ echo 'replace_all "\$toto" "%s:$toto:$tata:gc" dossier';
+ echo 'replace_all "toto\[\]" "%s:toto[]:tata[]:gc" dossier';
+ exit;
+fi
+if [ ! -z $2 ]; then
+    BY=$2;
+fi
+if [ ! -z $3 ]; then
+    TARGET_PATH=$3;
+fi
+  COUNTER=0;
+  SEARCHED=$1;
+  echo "Replace in project ${PWD}/$3";
+  echo "grep match file contain: $SEARCHED";
+  echo "vim cmd: $2"
+  for file in $(ack-grep -l "$SEARCHED" ${PWD}/$3);
+  do
+    read -p "Press any key to continue on $file or Ctrl+C" -n1 -s; echo -e "\n";
+    vim -c "$2" -c 'wq' $file;
+    COUNTER=`expr $COUNTER + 1`
+  done
+  echo "$COUNTER Fichier(s) édité(s)"
