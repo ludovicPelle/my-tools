@@ -198,16 +198,10 @@ autocmd FileType symfony noremap <F8> :SfSwitchView<CR>
 " javascript
 autocmd FileType javascript noremap <F7> :!fixjsstyle %<CR>
 autocmd FileType javascript noremap <F8> :!grunt build<CR>
-autocmd FileType javascript noremap <F9> :!grunt build;iceweasel "http://googlemii.local:8888"<CR>
-autocmd FileType javascript noremap <F11> :!grunt protractor:e2e<CR>
-autocmd FileType javascript noremap <F12> :!grunt build;grunt protractor:e2e<CR>
+autocmd FileType javascript noremap <F9> :!grunt ludo<CR>
+autocmd FileType javascript noremap <F11> :!grunt protractor:osculteo<CR>
+autocmd FileType javascript noremap <F12> :!grunt protractor:osculteobourso<CR>
 endif
-"jquery color angular snippet
-au BufRead,BufNewFile *.js set ft=javascript.angular
-"less
-au BufRead,BufNewFile *.less set ft=less
-"angular tmpl
-au BufRead,BufNewFile *.html set ft=html.angularhtml
 "python :make check errors
 autocmd FileType python noremap <F7> :make<CR>
 set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
@@ -231,6 +225,12 @@ autocmd FileType python setlocal tabstop=4
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 
+"jquery color angular snippet
+au BufRead,BufNewFile *.js set ft=javascript.angular
+"less
+au BufRead,BufNewFile *.less set ft=less
+"angular tmpl
+au BufRead,BufNewFile *.html set ft=html.angularhtml
 function! SmartComplete()
   let line = getline('.') " curline
   let substr = strpart(line, -1, col('.')+1) " from start to cursor

@@ -97,7 +97,7 @@ myKeys  conf@(XConfig {XMonad.modMask = modm}) = M.fromList
 -- > xprop | grep WM_CLASS
 myManageHook = composeAll [
     (className =? "Pidgin" <&&> (title =? "Pidgin" <||> title =? "Accounts")) --> doCenterFloat
-  , (className =? "Pidgin") --> doShift "3"
+  , (className =? "Pidgin") --> doShift "Community"
   , (className =? "Gnome-panel" <&&> title =? "Run Application") --> doCenterFloat
   , (className =? "Gcr-prompter") --> doCenterFloat
   , isFullscreen --> doFullFloat

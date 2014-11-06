@@ -9,8 +9,9 @@ echo "[-][vim] Begin installation ..."
 
 # ensure that the installation cache directory exists
 [ ! -d _cache/ ] && mkdir _cache
-[ ! -d ~/.vim/backups/ ] && mkdir ~/.vim/backups
-[ ! -d ~/.vim/tmp/ ] && mkdir ~/.vim/tmp
+[ ! -d ./.vim/backups/ ] && mkdir ./.vim/backups
+[ ! -d ./.vim/tmp/ ] && mkdir ./.vim/tmp
+sudo aptitude install exuberant-ctags
 
 # install dependancies
 IFS=";"
