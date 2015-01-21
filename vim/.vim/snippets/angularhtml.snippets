@@ -1,11 +1,11 @@
-snippet ngv
+snippet {
 	{{${1:var}}}
 snippet ngvr
 	{{$root.${1:var}}}
 snippet ngvp
 	{{$parent.${1:var}}}
 snippet ngc
-	ng-class=" ${1:'class':condition}"
+	ng-class="{${1}}[${2}]"
 snippet ngr
 	<ul class="${1}">
 		<li ng-repeat=" ${2:item} in ${3:itemlist}">${4}</li>

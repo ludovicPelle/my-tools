@@ -159,16 +159,16 @@ snippet do
 # Object Method
 snippet :f
 	/** 
-	 * @method ${1:method}${2}
+	 * @method ${1:method}${}
 	*/
-	$1: function(${3:attribute}) {
-		${5}
-	}${4:,}
+	$1: function(${2}) {
+		${4}
+	}${3:,}
 snippet :p
 	/** 
 	 * @property {${1:Type}} ${2:prop}${3}
 	*/
-	$1: ${5:value}${4:,}
+	$1: ${3}${2:,}
 # setTimeout function
 snippet timeout
 	setTimeout(function() {${3}}${2}, ${1:10};

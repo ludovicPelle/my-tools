@@ -40,5 +40,5 @@ alias debian-update="sudo aptitude update;sudo aptitude safe-upgrade;"
 
 alias sshprod="ssh root@62.210.151.225"
 alias sshdev="ssh ludo@62.210.78.111"
-alias deploy_frontend="scp -r bin/* root@iprotego.com:/var/www/www.osculteo.com/diagnostic/reputation/;scp -r bin/* root@iprotego.com:/var/www/www.osculteo.com/boursorama/reputation/"
+alias deploy_frontend="scp -r bin/* root@iprotego.com:/var/www/www.osculteo.com/diagnostic/reputation/;scp -r bin/* root@iprotego.com:/var/www/www.osculteo.com/boursorama/reputation/;scp -r bin/* root@iprotego.com:/var/www/www.osculteo.com/hiscox/reputation/"
 alias deploy_backend="scp -r bin/* root@iprotego.com:/var/www/osculteo_backend/bin/"

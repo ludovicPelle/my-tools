@@ -1,8 +1,8 @@
 snippet dir
-	.directive('${1:dir}', ['$scope', '$rootScope'${2}, function($scope, $app${3}) {
+	.directive('${1:dir}', ['$scope'${2}, function($scope${3}) {
 		var linkFn = function(scope, element, attrs) {
 			${7}
-		}
+		};
 		return {
 			restrict:${4:'A'},
 			scope: ${5:false},
@@ -10,32 +10,32 @@ snippet dir
 		};
 	}])
 snippet watch
-	${1:$scope}.$watch('${2:myVar}', function(newValue, oldValue) {
-		if (newValue == oldValue) {
+	${1:$scope}.$watch('${2:myVar}', function(n, o) {
+		if (n === o || o === null) {
 			return;
 		}
-		${3}
+		${3:console.log('watch',n,o);}
 	});
 snippet ctrl
-	.controller('${1:}Ctrl',['$scope', '$rootScope'${2}, fucntion($scope, $app${3})
+	.controller('${1:}Ctrl',['$scope'${2}, function($scope${3})
 		${4}
 	}])
 
 snippet fac
-	.factory('${1:Service}', ['$rootScope'${2}, function($app${3}) {
+	.factory('${1:Service}', [${2}, function(${3}) {
 		var $1 = {
 			${4}
-		}
+		};
 		return $1;
 	}])
 snippet filter
-	.filter('${1:myService}', ['$scope','$rootScope'${2}, function($scope,$app${3}) {
+	.filter('${1:myService}', ['$scope'${2}, function($scope${3}) {
 		return function(input, param) {
 			${4}
 			return input;
 		};
 	}])
-snippet app
+snippet nmod
 	angular.module('${1:mod}', [${2}])
 snippet mod
 	angular.module('${1:mod}')
@@ -51,7 +51,10 @@ snippet when
 		access: '${4:public}',
 		title : '${5:My view}',
 		path: $1,
-		resolve: ${6:autologinFromStorage}
+		resolve: {
+			${6}
+		},
+		referable: ${7:true}
 	})
 snippet run
 	.run(['$rootScope'${1}, function($app${2}) {
@@ -59,14 +62,12 @@ snippet run
 	}])
 snippet Api
 	return Api.send({
-		endpoint: CONSTANTS.API_ENDPOINT.${2:ROOT},
+		endpoint: CFG.ENDPOINTS.${2:ROOT},
 		loader: ${3:false},
 		title:'${4:Chargement...}',
 		registered: ${5:false}${6}
 	}, function(response) {
-			if (response.status === 200) {
-				${7}
-			}
+		${7}
 	});
 snippet des
 	//

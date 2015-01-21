@@ -108,4 +108,4 @@ fi
 export PATH="$PATH:/var/lib/gems/1.8/bin/"
 export PATH="$PATH:/opt/phantomjs/phantomjs-1.9.2-linux-x86_64/bin"
 export CHROME_BIN="/usr/bin/google-chrome"
-xset -b
+xset b off;

@@ -46,9 +46,11 @@ set expandtab
 set shiftwidth=2
 set softtabstop=2
 set tabstop=2
+set showtabline=1
 
 " status line
-set statusline=%F%m%=%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [LINE=%l]\ [Col=%v]\ [%p%%]
+"set statusline=%F%m%=%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [LINE=%l]\ [Col=%v]\ [%p%%]
+set statusline=%F%m%=%r%h%w\ [FT=%Y\ EN=%{&ff}\ POS=%l,%v]
 set laststatus=2
 
 
@@ -181,31 +183,43 @@ set completeopt=menuone,menu,longest,preview
 inoremap <C-Space> <c-r>=SmartComplete()<CR>
 imap <C-@> <C-Space>
 
+"tabs
+nnoremap <A-left> :tabprevious<CR>
+nnoremap <A-right> :tabnext<CR>
+
+"vsplit
+" resize ->
+nnoremap <C-A-left> :30winc ><CR>
+" resize <-
+nnoremap <C-A-right> :30winc <<CR>
+
+
 " language specifics
 "===================
 
 " php
 if has("autocmd")
-autocmd FileType php noremap <F7> :!php -l %<CR>
-autocmd FileType php noremap <F9> :!php %<CR>
+  autocmd FileType php noremap <F7> :!php -l %<CR>
+  autocmd FileType php noremap <F9> :!php %<CR>
 
-" bash
-autocmd FileType sh noremap <F9> :!./ %<CR>
+  " bash
+  autocmd FileType sh noremap <F9> :!./ %<CR>
 
-" symfony
-autocmd FileType symfony noremap <F8> :SfSwitchView<CR>
+  " symfony
+  autocmd FileType symfony noremap <F8> :SfSwitchView<CR>
 
-" javascript
-autocmd FileType javascript noremap <F7> :!fixjsstyle %<CR>
-autocmd FileType javascript noremap <F8> :!grunt build<CR>
-autocmd FileType javascript noremap <F9> :!grunt ludo<CR>
-autocmd FileType javascript noremap <F11> :!grunt protractor:osculteo<CR>
-autocmd FileType javascript noremap <F12> :!grunt protractor:osculteobourso<CR>
+  " javascript
+
+  autocmd FileType javascript noremap <F7> :!fixjsstyle %<CR>
+  autocmd FileType javascript noremap <F8> :!grunt build<CR>
+  autocmd FileType javascript noremap <F9> :!grunt ludo<CR>
+  autocmd FileType javascript noremap <F11> :!grunt protractor:osculteo<CR>
+  autocmd FileType javascript noremap <F12> :!grunt test<CR>
+  "python :make check errors
+  autocmd FileType python noremap <F7> :make<CR>
+  set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
+  set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
 endif
-"python :make check errors
-autocmd FileType python noremap <F7> :make<CR>
-set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
-set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
 
 "FUNCTIONS
 "===============
@@ -216,8 +230,10 @@ set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
 " Smart completion
 "" Enable omni completion.
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType less setlocal omnifunc=csscomplete#CompleteCSS
 autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType javascript.angular setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType python setlocal shiftwidth=4
 autocmd FileType python setlocal softtabstop=4
@@ -230,7 +246,7 @@ au BufRead,BufNewFile *.js set ft=javascript.angular
 "less
 au BufRead,BufNewFile *.less set ft=less
 "angular tmpl
-au BufRead,BufNewFile *.html set ft=html.angularhtml
+au BufRead,BufNewFile *tpl.html set ft=html.angularhtml
 function! SmartComplete()
   let line = getline('.') " curline
   let substr = strpart(line, -1, col('.')+1) " from start to cursor
@@ -253,8 +269,9 @@ autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 " Remove trailing whitespaces and ^M chars
 "=========================================
-autocmd FileType c,cpp,java,php,js,css,html,xml,vim,python autocmd BufWritePre <buffer> :call setline(1,map(getline(1,"$"),'substitute(v:val,"\\s\\+$","","")'))
+autocmd FileType .php autocmd BufWritePre <buffer> :call setline(1,map(getline(1,"$"),'substitute(v:val,"\\s\\+$","","")'))
 autocmd BufWritePost *.py :make
+"autocmd BufWritePost *.js :!fixjsstyle %
 " Save and reload folding/
 "=========================================
 autocmd BufWrite * mkview
