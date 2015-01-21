@@ -189,9 +189,9 @@ nnoremap <A-right> :tabnext<CR>
 
 "vsplit
 " resize ->
-nnoremap <C-A-left> :30winc ><CR>
+nnoremap <C-A-left> :20winc <<CR>
 " resize <-
-nnoremap <C-A-right> :30winc <<CR>
+nnoremap <C-A-right> :20winc ><CR>
 
 
 " language specifics
