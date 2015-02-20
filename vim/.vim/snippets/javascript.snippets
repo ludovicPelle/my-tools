@@ -15,6 +15,14 @@ snippet jquery
 	})(jQuery);
 snippet cl
 	console.log(${1:});
+snippet ct
+	console.log(${1:});
+snippet cg
+	console.groupCollapsed('{$1:name}');
+	for (var i = 0; i < ${2:items}; i++) {
+		console.log($2[i]);
+	}
+	console.groupEnd();
 snippet icl
 	if (${1:$rootScope.environement !== 'master'}) console.log('${2:things}', ${3:data})
 # Function

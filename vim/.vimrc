@@ -1,12 +1,12 @@
-" Remove ALL autocommands for the current group.
+"Remove ALL autocommands for the current group.
 au!
 
-" Presentation
-" colorscheme jellybeans
-" colorscheme zellner
+"Presentation
+"colorscheme jellybeans
+"colorscheme zellner
  colorscheme delek
-" colorscheme molokai
-" cursor (line under it, reverse color)
+"colorscheme molokai
+"cursor (line under it, reverse color)
 set cursorline
 " line number
 hi LineNr ctermfg=Darkgray guifg=#3D3D3D
@@ -15,6 +15,7 @@ hi LineNr ctermfg=Darkgray guifg=#3D3D3D
 " if has("autocmd")
 " autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 " endif
+"
 " case sensitive
 set noic
 " bash_alias linking

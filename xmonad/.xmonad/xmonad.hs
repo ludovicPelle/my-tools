@@ -103,7 +103,8 @@ myManageHook = composeAll [
   , isFullscreen --> doFullFloat
   , className =? "Gnome-terminal" --> doShift "Dev"
   , className =? "Chromium" --> doShift "Bdd"
-  , className =? "Gimp" --> doShift "Graphic"
+--  , className =? "Gimp" --> doShift "Graphic"
+  , className =? "Gimp" --> doFullFloat
   , className =? "Dia-normal" --> doShift "Graphic"
   , className =? "Iceweasel" --> doShift "Test"
   , className =? "Google-chrome" --> doShift "Web"

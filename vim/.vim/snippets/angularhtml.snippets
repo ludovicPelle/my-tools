@@ -1,5 +1,5 @@
 snippet {
-	{{${1:var}}}
+	{{${1:var}|translate}}
 snippet ngvr
 	{{$root.${1:var}}}
 snippet ngvp
@@ -14,3 +14,5 @@ snippet ngt
 	<div ng-include="${1:partials/my_partial}">
 snippet ngi
 	ng-init="${1:init_var}"
+snippet btn
+	<button class="btn ${1:btn-primary}" ng-click="${2}">{{${3:'ok'}|translate}}</button>
