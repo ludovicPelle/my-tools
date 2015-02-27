@@ -3,5 +3,5 @@ vim/.vim/tmp
 vim/.vim/view
 xmonad/.xmonad/xmonad.hi
 xmonad/.xmonad/xmonad.o
-vim/.vim/bundle
-!vim/.vim/bundle/vundle
+vim/.vim/bundle/*
+!vim/.vim/bundle/Vundle.vim
