@@ -33,6 +33,8 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'pangloss/vim-javascript'
 Plugin 'vim-scripts/snipMate'
 Plugin 'othree/javascript-libraries-syntax.vim'
+Plugin 'klen/python-mode'
+
 
 
 
@@ -130,17 +132,13 @@ set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
 " Syntastic
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 let g:syntastic_quiet_warnings = 1  " we do want the warnings to be displayed
 let g:syntastic_auto_loc_list = 1   " auto open the errors list
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_enable_signs = 1    " open a bar on the left when an error is detected
-
-" activate symfony for php files
-if has("autocmd")
- autocmd FileType php set ft=php.symfony
-endif
+let g:syntastic_javascript_checkers = ['jslint']
 
 "Ctags
 let g:ctags_path="~/.vim/plugin"
@@ -168,7 +166,7 @@ nnoremap <silent> <F2> :TagbarToggle<CR>
 let mapleader = ","
 "cmap tn tabnew
 "cmap vs vsplit
-cmap find !ack-grep
+cmap find !ack<space>
 cmap tb tabnew<space>
 
 map <silent><leader><Right> <C-T>
@@ -256,7 +254,7 @@ if has("autocmd")
   autocmd FileType javascript noremap <F12> :!grunt test<CR>
   "python :make check errors
   autocmd FileType python noremap <F7> :make<CR>
-  set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
+  set makeprg=python2\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
   set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
 endif
 

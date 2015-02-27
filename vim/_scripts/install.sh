@@ -22,7 +22,8 @@ fi
 if [ -d ~/.vim/tmp ]; then
   mkdir ~/.vim/tmp
 fi
-
+echo "Clone vundle"
+git clone --recursive 'https://github.com/gmarik/Vundle.vim.git' '~/.vim/bundle/Vundle.vim'
 echo "Install plugins"
 vim +PluginInstall +qall
 
