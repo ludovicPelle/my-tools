@@ -38,8 +38,8 @@ alias dev-term='gnome-terminal --tab --title="local" --tab --title="server" --ta
 alias debian-update="sudo aptitude update;sudo aptitude safe-upgrade;"
 #alias win="sudo mount -t vboxsf partage ~/win"
 
-alias sshprod="ssh root@62.210.151.225"
+alias sshprod="ssh root@prod"
 alias sshdev="ssh ludo@62.210.78.111"
 alias sshramuh="ssh root@ramuh"
-alias deploy_frontend="rsync -e ssh -avz bin/ root@iprotego.com:/var/www/www.osculteo.com/diagnostic/reputation/ && rsync -e ssh -avz bin/ root@iprotego.com:/var/www/www.osculteo.com/boursorama/reputation/ && rsync -e ssh -avz bin/ root@iprotego.com:/var/www/www.osculteo.com/hiscox/reputation/"
+alias deploy_frontend="rsync -e ssh -avz bin/ root@ramuh:/var/www/www.osculteo.com/bin/"
 alias deploy_backend="rsync -e ssh -avz bin/ root@iprotego.com:/var/www/osculteo_backend/bin/"

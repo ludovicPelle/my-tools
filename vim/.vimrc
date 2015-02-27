@@ -1,25 +1,67 @@
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+
+" The following are examples of different formats supported.
+" Keep Plugin commands between vundle#begin/end.
+" plugin on GitHub repo
+"Plugin 'tpope/vim-fugitive'
+" plugin from http://vim-scripts.org/vim/scripts.html
+"Plugin 'L9'
+" Git plugin not hosted on GitHub
+"Plugin 'git://git.wincent.com/command-t.git'
+" git repos on your local machine (i.e. when working on your own plugin)
+"Plugin 'file:///home/gmarik/path/to/plugin'
+" The sparkup vim script is in a subdirectory of this repo called vim.
+" Pass the path to set the runtimepath properly.
+"Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+" Avoid a name conflict with L9
+"Plugin 'user/L9', {'name': 'newL9'}
+"
+Plugin 'scrooloose/syntastic'
+Plugin 'majutsushi/tagbar'
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'pangloss/vim-javascript'
+Plugin 'vim-scripts/snipMate'
+Plugin 'othree/javascript-libraries-syntax.vim'
+
+
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+
 "Remove ALL autocommands for the current group.
 au!
 
 "Presentation
-"colorscheme jellybeans
-"colorscheme zellner
  colorscheme delek
-"colorscheme molokai
-"cursor (line under it, reverse color)
-set cursorline
+
+"Cursor (no underline , konsole bug...
+autocmd BufWinEnter * set nocursorline
+
 " line number
 hi LineNr ctermfg=Darkgray guifg=#3D3D3D
 
 " remove whitespace
-" if has("autocmd")
-" autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
-" endif
-"
+if has("autocmd")
+  autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
+endif
+
 " case sensitive
 set noic
+
 " bash_alias linking
-" set shell=/bin/bash\ -i
+"set shell=/bin/bash\ -i
 
 if has("syntax")
 	syntax on
@@ -30,20 +72,22 @@ set nocompatible
 set encoding=utf-8
 set backspace=indent,eol,start
 set autoindent
-set foldmethod=manual
-set ruler
+set foldmethod=indent
+
+"set ruler
+"line number
 set number
-set wildmenu " Enhanced command line completion.
-set wildmode=list:longest " Complete files like a shell.
+
+"Enhanced command line completion.
+set wildmenu
+"Complete files like a shell.
+set wildmode=list:longest
 
 " enable to move over lines with right and left arrows
 set whichwrap=b,s,<,>,[,]
 
 " redefine tabs
 set expandtab
-"set shiftwidth=2
-"set softtabstop=2
-"set tabstop=2
 set shiftwidth=2
 set softtabstop=2
 set tabstop=2
@@ -61,9 +105,9 @@ set laststatus=2
 "  au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
 "endif
 " Backups
-set backup                      " Enable creation of backup file.
-set backupdir=~/.vim/backups    " Where backups will go.
-set directory=~/.vim/tmp        " Where temporary files will go.
+"set backup                      " Enable creation of backup file.
+"set backupdir=~/.vim/backups    " Where backups will go.
+"set directory=~/.vim/tmp        " Where temporary files will go.
 
 "enable memorised position of cursor when reopen the file
 if has("autocmd")
@@ -81,24 +125,31 @@ filetype plugin on
 " define my name for snipmate plugin
 let g:snips_author = 'Ludovic Pellé <ludovic_pelle@iprotego.com>'
 
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+" Syntastic
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 1
+let g:syntastic_quiet_warnings = 1  " we do want the warnings to be displayed
+let g:syntastic_auto_loc_list = 1   " auto open the errors list
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_enable_signs = 1    " open a bar on the left when an error is detected
+
 " activate symfony for php files
 if has("autocmd")
-autocmd FileType php set ft=php.symfony
+ autocmd FileType php set ft=php.symfony
 endif
-
-" activate css for scss files
-au BufRead,BufNewFile *.scss set filetype=css
-
 
 "Ctags
 let g:ctags_path="~/.vim/plugin"
-"  let g:ctags_statusline=1
-" Ctags
- set nocp
- set tags=tags
- map <silent><leader><Left> <C-T>
- map <silent><leader><Right> <C-]>
- map <silent><leader><Up> <C-W>]
+let g:ctags_statusline=1
+set nocp
+set tags=tags
+map <silent><leader><Left> <C-T>
+map <silent><leader><Right> <C-]>
+map <silent><leader><Up> <C-W>]
 
 " tagbar
 let g:tagbar_left = 1           " display the tagbar on the left side
@@ -108,20 +159,13 @@ let g:tagbar_autoshowtag = 1    " always show the current tag in the tagbar
 let g:tagbar_autofocus = 1      " the cursor will move to the Tagbar window when it is opened.
 nnoremap <silent> <F2> :TagbarToggle<CR>
 
-" Syntastic
-let g:syntastic_enable_signs = 1    " open a bar on the left when an error is detected
-let g:syntastic_auto_loc_list = 1   " auto open the errors list
-let g:syntastic_quiet_warnings = 0  " we do want the warnings to be displayed
 
-" Completion
-" automatically open and close the popup menu / preview window
-"au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
-"set completeopt=menuone,menu,longest,preview
+
 
 
 " Hotkeys
 " =================
-  let mapleader = ","
+let mapleader = ","
 "cmap tn tabnew
 "cmap vs vsplit
 cmap find !ack-grep
@@ -136,20 +180,18 @@ map <silent><leader><Left> <C-]>
 nnoremap <C-l> :set nonumber!<CR>:set foldcolumn=0<CR>
   "<C-S-v>:set smartindent!<CR>:set autoindent!<CR>
 " Start a substitute
-  map <leader>s :%s/
+map <leader>s :%s/
 
 " Start a search
-  map <leader>h /<C-r>=expand("<cword>")<CR>
+map <leader>h /<C-r>=expand("<cword>")<CR>
 
 " Pull word under cursor into LHS of a substitute (for quick search and
 " replace)
-  nmap <leader>S :%s/<C-r>=expand("<cword>")<CR>/
+nmap <leader>S :%s/<C-r>=expand("<cword>")<CR>/
 
-  nmap <leader>R :!replace_all '=expand("<cword>"'<space>
+nmap <leader>H :!replace_all '=expand("<cword>")' '%s#=expand("<cword>")#
 
-  nmap <leader>R :!%s/<C-r>=expand("<cword>")<CR>/
-
-
+nmap <leader>R :!%s/<C-r>=expand("<cword>")<CR>/
 
 
 "to force write as sudoer
@@ -172,17 +214,13 @@ map <silent><leader>c :call NERDComment(0, "toggle")<CR>
 command C :call NERDComment(0, "toggle")
 
 " to paste without ai
- map <leader>p :r !xclip -o<CR>
+map <leader>p :r !xclip -o<CR>
 
-" set complete=.,w,b,u,t,i,k~/.vim/syntax/php.api
-" au FileType php set omnifunc=phpcomplete#CompletePHP
-
-"au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+" Completion
+" automatically open and close the popup menu / preview window
+au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
 set completeopt=menuone,menu,longest,preview
-
-" Call smart completion when pressing Ctrl-Space
-inoremap <C-Space> <c-r>=SmartComplete()<CR>
-imap <C-@> <C-Space>
+set complete=.,w,b,u,t,i,k~/.vim/syntax/php.api
 
 "tabs
 nnoremap <A-left> :tabprevious<CR>
@@ -259,6 +297,10 @@ function! SmartComplete()
 
   return "\<C-P>" " omnifunc if available
 endfunction
+" Call smart completion when pressing Ctrl-Space
+"inoremap <C-Space> <c-r>=SmartComplete()<CR>
+"imap <C-@> <C-Space>
+
 
 "
 " Highlight unwanted spaces

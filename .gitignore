@@ -1,8 +1,6 @@
-*/_cache
 vim/.vim/backups
 vim/.vim/tmp
 vim/.vim/view
 xmonad/.xmonad/xmonad.hi
 xmonad/.xmonad/xmonad.o
-xmonad/.xmonad/xmonad-i386-linux
-vim/.vim/.netrwhist
+vim/.vim/bundle

@@ -2,28 +2,23 @@
 
 echo "[-][vim] Begin installation ..."
 
-# we create symbolic links to the config files if they don't already exist
-[ ! -e ~/.vimrc ] && ln -s "`pwd`/.vimrc" ~/.vimrc
-[ ! -e ~/.vim ] && ln -s "`pwd`/.vim" ~/.vim
+# we create symbolic links to the config files if they don't already exist, else rename as FILE.DATE.BAK
+DATE=$(date "+%Y.%m.%d-%H.%M.%S")
 
 
-# ensure that the installation cache directory exists
-[ ! -d _cache/ ] && mkdir _cache
-[ ! -d ./.vim/backups/ ] && mkdir ./.vim/backups
-[ ! -d ./.vim/tmp/ ] && mkdir ./.vim/tmp
-sudo aptitude install exuberant-ctags
+if [ -h /home/loodub/.vimrc ] || [ -e /home/loodub/.vimrc ]; then
+    echo "Backup previous files"
+    mv ~/.vimrc ~/.vimrc.$DATE.bak && echo "Rename ~/.vimrc as ~/.vimrc.$DATE.bak"
+    mv ~/.vim ~/.vim.$DATE.bak && echo "Rename ~/.vim as ~/.vim.$DATE.bak"
+fi
 
-# install dependancies
-IFS=";"
-dependancies='syntastic;tagbar;vim-symfony;nerdtree;nerdcommenter'
-for dep_name in $dependancies; do
-  # check if the current dependancy is already installed
-  if [[ -e "_cache/$dep_name"  ]]; then
-    echo "[*][vim] $dep_name is already installed: nothing done."
-    continue
-  fi
+ln -s "`pwd`/.vimrc" ~/.vimrc
+ln -s "`pwd`/.vim" ~/.vim
 
-  ./_scripts/install_dependancy.sh "$dep_name"
-done
+mkdir ~/.vim/backups
+mkdir ~/.vim/tmp
+
+echo "Install plugins"
+vim +PluginInstall +qall
 
 echo "[+][vim] installation complete."
