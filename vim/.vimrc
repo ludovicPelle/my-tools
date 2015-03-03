@@ -34,7 +34,7 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'vim-scripts/snipMate'
 Plugin 'othree/javascript-libraries-syntax.vim'
 Plugin 'klen/python-mode'
-
+Plugin 'davidhalter/jedi-vim'
 
 
 
@@ -132,30 +132,34 @@ set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
 " Syntastic
-let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
-let g:syntastic_quiet_warnings = 1  " we do want the warnings to be displayed
-let g:syntastic_auto_loc_list = 1   " auto open the errors list
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_enable_signs = 1    " open a bar on the left when an error is detected
-let g:syntastic_javascript_checkers = ['jslint']
+let g:syntastic_quiet_warnings = 0  " we do want the warnings to be displayed
+let g:syntastic_auto_loc_list = 0   " auto open the errors list
+let g:syntastic_always_populate_loc_list = 0
+let g:syntastic_enable_signs = 0    " open a bar on the left when an error is detected
+
+" activate symfony for php files
+"if has("autocmd")
+ "autocmd FileType php set ft=php.symfony
+"endif
 
 "Ctags
-let g:ctags_path="~/.vim/plugin"
-let g:ctags_statusline=1
-set nocp
+"let g:ctags_path="~/.vim/plugin"
+"let g:ctags_statusline=1
+"set nocp
 set tags=tags
-map <silent><leader><Left> <C-T>
-map <silent><leader><Right> <C-]>
-map <silent><leader><Up> <C-W>]
+"map <silent><leader><Left> <C-T>
+"map <silent><leader><Right> <C-]>
+"map <silent><leader><Up> <C-W>]
 
 " tagbar
-let g:tagbar_left = 1           " display the tagbar on the left side
-set updatetime=500              " show tags' prototype after 500 milliseconds
-let g:tagbar_width = 25         " width in characters of the tagbar
-let g:tagbar_autoshowtag = 1    " always show the current tag in the tagbar
-let g:tagbar_autofocus = 1      " the cursor will move to the Tagbar window when it is opened.
-nnoremap <silent> <F2> :TagbarToggle<CR>
+"let g:tagbar_left = 1           " display the tagbar on the left side
+"set updatetime=500              " show tags' prototype after 500 milliseconds
+"let g:tagbar_width = 25         " width in characters of the tagbar
+"let g:tagbar_autoshowtag = 1    " always show the current tag in the tagbar
+"let g:tagbar_autofocus = 1      " the cursor will move to the Tagbar window when it is opened.
+"nnoremap <silent> <F2> :TagbarToggle<CR>
 
 
 
@@ -169,36 +173,35 @@ let mapleader = ","
 cmap find !ack<space>
 cmap tb tabnew<space>
 
-map <silent><leader><Right> <C-T>
+"map <silent><leader><Right> <C-T>
 " go to the declaration of a class, variable, ...)
-map <silent><leader><Left> <C-]>
+"map <silent><leader><Left> <C-]>
 " go back
 
 " Toggle line numbers and fold column for easy copying:
 nnoremap <C-l> :set nonumber!<CR>:set foldcolumn=0<CR>
-  "<C-S-v>:set smartindent!<CR>:set autoindent!<CR>
+"<C-S-v>:set smartindent!<CR>:set autoindent!<CR>
 " Start a substitute
-map <leader>s :%s/
+"map <leader>s :%s/
 
 " Start a search
 map <leader>h /<C-r>=expand("<cword>")<CR>
 
 " Pull word under cursor into LHS of a substitute (for quick search and
 " replace)
-nmap <leader>S :%s/<C-r>=expand("<cword>")<CR>/
+nmap <leader>s :%s/<C-r>=expand("<cword>")<CR>/
 
-nmap <leader>H :!replace_all '=expand("<cword>")' '%s#=expand("<cword>")#
+nmap <leader>S :!replace_all '=expand("<cword>")' '%s#=expand("<cword>")#
 
-nmap <leader>R :!%s/<C-r>=expand("<cword>")<CR>/
-
+"nmap <leader>R :!%s/<C-r>=expand("<cword>")<CR>/
 
 "to force write as sudoer
 command W w !sudo tee % > /dev/null
 
 "auto folding
-map <silent><leader>F :EnableFastPHPFolds<Cr>
-map <silent><leader>f :EnablePHPFolds<Cr>
-map <silent><leader>g :DisablePHPFolds<Cr>
+"map <silent><leader>F :EnableFastPHPFolds<Cr>
+"map <silent><leader>f :EnablePHPFolds<Cr>
+"map <silent><leader>g :DisablePHPFolds<Cr>
 
 "to auto open & close NERDTree
 autocmd TabEnter * NERDTreeClose
@@ -216,9 +219,9 @@ map <leader>p :r !xclip -o<CR>
 
 " Completion
 " automatically open and close the popup menu / preview window
-au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
-set completeopt=menuone,menu,longest,preview
-set complete=.,w,b,u,t,i,k~/.vim/syntax/php.api
+"au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+"set completeopt=menuone,menu,longest,preview
+"set complete=.,w,b,u,t,i,k~/.vim/syntax/php.api
 
 "tabs
 nnoremap <A-left> :tabprevious<CR>
@@ -243,15 +246,15 @@ if has("autocmd")
   autocmd FileType sh noremap <F9> :!./ %<CR>
 
   " symfony
-  autocmd FileType symfony noremap <F8> :SfSwitchView<CR>
+  "autocmd FileType symfony noremap <F8> :SfSwitchView<CR>
 
   " javascript
 
   autocmd FileType javascript noremap <F7> :!fixjsstyle %<CR>
   autocmd FileType javascript noremap <F8> :!grunt build<CR>
   autocmd FileType javascript noremap <F9> :!grunt ludo<CR>
-  autocmd FileType javascript noremap <F11> :!grunt protractor:osculteo<CR>
-  autocmd FileType javascript noremap <F12> :!grunt test<CR>
+  "autocmd FileType javascript noremap <F11> :!grunt protractor:osculteo<CR>
+  "autocmd FileType javascript noremap <F12> :!grunt test<CR>
   "python :make check errors
   autocmd FileType python noremap <F7> :make<CR>
   set makeprg=python2\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
@@ -296,8 +299,8 @@ function! SmartComplete()
   return "\<C-P>" " omnifunc if available
 endfunction
 " Call smart completion when pressing Ctrl-Space
-"inoremap <C-Space> <c-r>=SmartComplete()<CR>
-"imap <C-@> <C-Space>
+inoremap <C-Space> <c-r>=SmartComplete()<CR>
+imap <C-@> <C-Space>
 
 
 "
