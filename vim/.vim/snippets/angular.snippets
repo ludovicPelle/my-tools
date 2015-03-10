@@ -1,3 +1,13 @@
+snippet fori
+	for(var ${1:$item} in ${2:$list}) {
+		${3}
+	}
+snippet try
+	try {
+		${1}
+	} catch (e) {
+		${2:console.error(e);}
+	}
 snippet dir
 	.directive('${1:dir}', ['$scope'${2}, function($scope${3}) {
 		var linkFn = function(scope, element, attrs) {

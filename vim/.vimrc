@@ -35,6 +35,7 @@ Plugin 'vim-scripts/snipMate'
 Plugin 'othree/javascript-libraries-syntax.vim'
 Plugin 'klen/python-mode'
 Plugin 'davidhalter/jedi-vim'
+Plugin 'bling/vim-airline'
 
 
 
@@ -45,6 +46,10 @@ filetype plugin indent on    " required
 "Remove ALL autocommands for the current group.
 au!
 
+"256 color
+set t_Co=256
+"UTF-8
+set encoding=utf-8
 "Presentation
  colorscheme delek
 
@@ -96,7 +101,7 @@ set tabstop=2
 set showtabline=1
 
 " status line
-"set statusline=%F%m%=%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [LINE=%l]\ [Col=%v]\ [%p%%]
+set statusline=%F%m%=%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [LINE=%l]\ [Col=%v]\ [%p%%]
 set statusline=%F%m%=%r%h%w\ [FT=%Y\ EN=%{&ff}\ POS=%l,%v]
 set laststatus=2
 
@@ -138,6 +143,20 @@ let g:syntastic_quiet_warnings = 0  " we do want the warnings to be displayed
 let g:syntastic_auto_loc_list = 0   " auto open the errors list
 let g:syntastic_always_populate_loc_list = 0
 let g:syntastic_enable_signs = 0    " open a bar on the left when an error is detected
+
+
+" Enable the list of buffers
+let g:airline#extensions#tabline#enabled = 1
+"let g:airline#extensions#tabline#left_sep = '>'
+"let g:airline#extensions#tabline#left_alt_sep = '>'
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline_powerline_fonts=0
+" unicode symbols
+  let g:airline_left_sep = '>'
+  let g:airline_right_sep = '<'
+  let g:airline_detect_modified=1
 
 " activate symfony for php files
 "if has("autocmd")
@@ -224,8 +243,8 @@ map <leader>p :r !xclip -o<CR>
 "set complete=.,w,b,u,t,i,k~/.vim/syntax/php.api
 
 "tabs
-nnoremap <A-left> :tabprevious<CR>
-nnoremap <A-right> :tabnext<CR>
+nnoremap <A-left> :bprevious<CR>
+nnoremap <A-right> :bnext<CR>
 
 "vsplit
 " resize ->
