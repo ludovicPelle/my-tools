@@ -2,12 +2,20 @@ snippet fori
 	for(var ${1:$item} in ${2:$list}) {
 		${3}
 	}
+snippet .each
+	.each(function(el) {
+		${1}
+	});
 snippet try
 	try {
 		${1}
 	} catch (e) {
 		${2:console.error(e);}
 	}
+snippet .filter
+	.filter(function(i,el) {
+		${1}
+	});
 snippet dir
 	.directive('${1:dir}', ['$scope'${2}, function($scope${3}) {
 		var linkFn = function(scope, element, attrs) {
@@ -55,10 +63,10 @@ snippet config
 			${3}
 	}])
 snippet when
-	.when(${1:'/route'}, {
-		templateUrl: '${2:partials/my_partial.html}',
-		controller: ${3:MyCtrl},
-		access: '${4:public}',
+	.when(CFG.ROUTES.${1:ROOT}, {
+		templateUrl: '${2:}',
+		controller: '${3:MyCtrl}',
+		access: '${4:CFG.PUBLIC}',
 		title : '${5:My view}',
 		path: $1,
 		resolve: {
@@ -72,12 +80,10 @@ snippet run
 	}])
 snippet Api
 	return Api.send({
-		endpoint: CFG.ENDPOINTS.${2:ROOT},
-		loader: ${3:false},
-		title:'${4:Chargement...}',
-		registered: ${5:false}${6}
+		endpoint: CFG.ENDPOINTS.${1:ROOT},
+		registered: ${2:false}${3}
 	}, function(response) {
-		${7}
+		${4}
 	});
 snippet des
 	//
@@ -92,18 +98,33 @@ snippet it
 	});
 snippet page
 	'use_strict';
-	var importFile = function(file) { var mod = require(file);return new mod();};
-	var ${1:Page} = function() {
-		var that = this;
-		var cfg = importFile('./config.js');
-	  var usr = importFile('./user.js');
-		var hlp = importFile('./helpers.js');
+	var ${1:Page} = {
 		${2}
 	};
 	module.exports = $1;
 snippet elcss
   this.${1:elem} = function() {return element(by.css('${2:class}'));}
+snippet :elcss
+  ${1:elem}:= function() {
+		return element(by.css('${2:class}'));
+	}
 snippet elmod
   this.${1:elem} = function() {return element(by.model('${2:model}'));}
+snippet :elmod
+  ${1:elem}: function() {
+		return element(by.model('${2:model}'));
+	}
 snippet elrep
   this.${1:elem} = function() {return element(by.repeater('${2:rep}'));}
+snippet :elrep
+  ${1:elem}: function() {
+		return element(by.repeater('${2:rep}'));
+	}
+snippet cl
+	console.log(${1});
+snippet ct
+	console.trace();
+snippet f)
+	function(${1}) {
+		${2}
+	});

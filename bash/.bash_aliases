@@ -36,10 +36,14 @@ alias dev-term='gnome-terminal --tab --title="local" --tab --title="server" --ta
 #alias dump-load-t-resa="dropdb t-resa && createdb t-resa -O t-resa -E UTF-8 && psql -f"
 
 alias debian-update="sudo aptitude update;sudo aptitude safe-upgrade;"
+alias arch-update="sudo pacman -Syu"
 #alias win="sudo mount -t vboxsf partage ~/win"
 
 alias sshprod="ssh root@prod"
 alias sshdev="ssh ludo@62.210.78.111"
 alias sshramuh="ssh root@ramuh"
+alias removeconsole="grep -lrZ '^\s*console' src/ | xargs -0 -l sed -i -e 's#^\(\s*\)console#\1//console#g' && git diff"
 alias deploy_frontend="rsync -e ssh -avz bin/ root@ramuh:/var/www/www.osculteo.com/bin/"
 alias deploy_backend="rsync -e ssh -avz bin/ root@ramuh:/var/www/backoffice.osculteo.com/bin/"
+alias gti="git"
+alias grutn="grunt"

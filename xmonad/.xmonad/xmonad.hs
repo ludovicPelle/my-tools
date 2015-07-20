@@ -22,6 +22,9 @@ import Data.Ratio((%))
 -- hooks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.ManageDocks
+
+-- independent workspace on monitor
+-- import XMonad.Layout.IndependentScreens
 -- ------------------------------------------------------------------------
 -- Simple stuff
 -- The preferred terminal program
@@ -32,6 +35,7 @@ myTerminal      = "Konsole"
 myModMask       = mod4Mask
 
 -- The default number of workspaces (virtual screens) and their names.
+{-myWorkspaces    = withScreens 2 ["Web", "Dev", "Test", "backtask", "Perso", "Gimp", "Files", "Community"]-}
 myWorkspaces    = ["Web", "Dev", "Test", "backtask", "Perso", "Gimp", "Files", "Community"]
 
 -- Width of the window border in pixels.
@@ -70,68 +74,68 @@ myLayout = avoidStruts (smartBorders tiled ||| spaced ||| smartBorders (Mirror t
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
      -- launch a terminal
-     [ ((modm .|. shiftMask, xK_space), spawn $ XMonad.terminal conf)
+     [ ((modm .|. shiftMask, xK_space), spawn "konsole")
      -- launchers
  --     , ((modm, xK_p), spawn "dmenu_run -fn \"-*-terminus-medium-r-normal-*-12-*-*-*-*-*-*-*\" -nb \"#131313\" -nf \"#888888\" -sb \"#2A2A2A\" -sf \"#3579A8\"")
  --     , ((modm,               xK_p     ), spawn "dmenu_run -i -b -p '>' -nb '#242424' -nf '#f6f3e8' -sb '#242424' -sf '#e5786d' -fn '-*-terminus-*-r-normal-*-*-160-*-*-*-*-iso8859-*'")
      --, ((modm,               xK_p     ), spawn "gmrun")
      --, ((modm .|. shiftMask, xK_p     ), spawn "kupfer")
- 
+
      -- launch apps
      --, ((modm,               xK_a     ), spawn "nautilus ~/")
      --, ((modm .|. shiftMask, xK_a     ), spawn "nautilus --browser ~/")
      --, ((modm .|. shiftMask, xK_f     ), spawn "firefox")
      --, ((modm .|. shiftMask, xK_t     ), spawn "thunderbird")
      --, ((modm,               xK_Print ), spawn "scrot -q 90 ~/Images/Screenshots/%F-%T.png")
- 
+
      -- show layout
      , ((modm,                 xK_i   ), (curLayout >>= \d->spawn $"notify-send -u low -t 1000 Xmonad \""++d++"\""))
- 
+
      -- close focused window
      , ((modm,               xK_c     ), kill)
- 
+
       -- Rotate through the available layout algorithms
      , ((modm,               xK_s     ), sendMessage NextLayout)
      --  Reset the layouts on the current workspace to default
-     , ((modm .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf)
+     , ((modm .|. shiftMask, xK_r ), setLayout $ XMonad.layoutHook conf)
      -- Push window back into tiling
      , ((modm,               xK_t     ), withFocused $ windows . W.sink)
- 
+
      -- Resize viewed windows to the correct size
      , ((modm,               xK_n     ), refresh)
- 
+
      -- Move focus to the next/previous/master window
      , ((modm,               xK_Tab   ), windows W.focusDown)
      , ((modm,               xK_j     ), windows W.focusDown)
      , ((modm,               xK_k     ), windows W.focusUp)
      , ((modm,               xK_m     ), windows W.focusMaster)
- 
+
      -- Swap the focused window and the master/next/previous window
      , ((modm,               xK_Return), windows W.swapMaster)
      , ((modm .|. shiftMask, xK_j     ), windows W.swapDown)
      , ((modm .|. shiftMask, xK_k     ), windows W.swapUp)
- 
+
      -- Shrink/Expand the master area
      , ((modm,               xK_h     ), sendMessage Shrink)
      , ((modm,               xK_l     ), sendMessage Expand)
      , ((modm .|. shiftMask, xK_h     ), sendMessage MirrorShrink)
      , ((modm .|. shiftMask, xK_l     ), sendMessage MirrorExpand)
- 
+
      -- Increment/Deincrement the number of windows in the master area
      , ((modm              , xK_comma ), sendMessage (IncMasterN 1))
      , ((modm              , xK_semicolon), sendMessage (IncMasterN (-1)))
- 
+
      -- cycle workspaces
      , ((modm,               xK_Right ),  nextWS)
      , ((modm,               xK_Left  ),  prevWS)
      , ((modm .|. shiftMask, xK_Left  ),  shiftToPrev)
      , ((modm .|. shiftMask, xK_Right ),  shiftToNext)
- 
+
      -- Toggle the status bar gap
      -- Use this binding with avoidStruts from Hooks.ManageDocks.
      -- See also the statusBar function from Hooks.DynamicLog.
      , ((modm              , xK_b     ), sendMessage ToggleStruts)
- 
+
      -- Quit or restart xmonad
      -- , ((modm .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
      , ((modm              , xK_q     ), spawn "xmonad --recompile && xmonad --restart")
@@ -142,13 +146,13 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
      -- [((m .|. modm, k), windows $ f i)
      --    | (i, k) <- zip (XMonad.workspaces conf) [xK_F1 .. xK_F9]
      --    , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
-     -- ++
+      ++
      -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
      -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
-     --[((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
-     --    | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
-     --    , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
- 
+     [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
+         | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
+         , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+
 myFocusFollowsMouse::Bool
 myFocusFollowsMouse = True
 
@@ -161,10 +165,10 @@ main = xmonad $ kde4Config
      , focusedBorderColor = myFocusedBorderColor
      , modMask            = myModMask
      , keys               = myKeys
- 
+
      -- add manage hooks while still ignoring panels and using default manageHooks
      , manageHook = manageDocks <+> myManageHook <+> manageHook kde4Config
- 
+
      -- add a fullscreen tabbed layout that does not avoid covering
      -- up desktop panels before the desktop layouts
      --, layoutHook = myLayout
@@ -179,13 +183,23 @@ main = xmonad $ kde4Config
   where
 
     myManageHook = composeAll . concat $
-      [ [ className =? c --> doFloat | c <- myFloats]
+      [ [ className   =? c --> doFloat           | c <- myFloats]
+      , [ title       =? t --> doFloat           | t <- myOtherFloats]
+      , [ className   =? c --> doF (W.shift "Web") | c <- webApps]
+      , [ className   =? c --> doF (W.shift "Community") | c <- communityApps]
       , [ ((className =? "krunner") >>= return . not --> manageHook kde4Config) <+> (kdeOverride --> doFloat)]
-      , [ title =? t --> doFloat | t <- myOtherFloats]
       ]
+      {-myManageHook = composeAll . concat $-}
+      {-[ [ className =? c --> doFloat | c <- myFloats]-}
+      {-, [ ((className =? "krunner") >>= return . not --> manageHook kde4Config) <+> (kdeOverride --> doFloat)]-}
+      {-, [ title =? t --> doFloat | t <- myOtherFloats]-}
+      {-, [ className =? "Chrome - Google Chrome" --> doShift "Web" ]-}
+      {-]-}
 
-    myFloats = ["Gimp","Thunderbird"]
+    myFloats = ["Gimp","gimp-2.8","Thunderbird", "Google-chrome", "Google-chrome-stable"]
     myOtherFloats = []
+    webApps = ["Google-chrome", "Google-chrome-stable"]
+    communityApps = ["Thunderbird"]
 
 kdeOverride :: Query Bool
 kdeOverride = ask >>= \w -> liftX $ do

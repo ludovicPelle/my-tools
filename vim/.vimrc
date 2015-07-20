@@ -33,8 +33,8 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'pangloss/vim-javascript'
 Plugin 'vim-scripts/snipMate'
 Plugin 'othree/javascript-libraries-syntax.vim'
-Plugin 'klen/python-mode'
-Plugin 'davidhalter/jedi-vim'
+"Plugin 'klen/python-mode'
+"Plugin 'davidhalter/jedi-vim'
 Plugin 'bling/vim-airline'
 
 
@@ -137,12 +137,12 @@ set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
 " Syntastic
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-let g:syntastic_quiet_warnings = 0  " we do want the warnings to be displayed
-let g:syntastic_auto_loc_list = 0   " auto open the errors list
-let g:syntastic_always_populate_loc_list = 0
-let g:syntastic_enable_signs = 0    " open a bar on the left when an error is detected
+"let g:syntastic_check_on_open = 0
+"let g:syntastic_check_on_wq = 0
+"let g:syntastic_quiet_warnings = 0  " we do want the warnings to be displayed
+"let g:syntastic_auto_loc_list = 0   " auto open the errors list
+"let g:syntastic_always_populate_loc_list = 0
+"let g:syntastic_enable_signs = 0    " open a bar on the left when an error is detected
 
 
 " Enable the list of buffers
@@ -275,7 +275,7 @@ if has("autocmd")
   "autocmd FileType javascript noremap <F11> :!grunt protractor:osculteo<CR>
   "autocmd FileType javascript noremap <F12> :!grunt test<CR>
   "python :make check errors
-  autocmd FileType python noremap <F7> :make<CR>
+  autocmd FileType python2 noremap <F7> :make<CR>
   set makeprg=python2\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
   set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
 endif
