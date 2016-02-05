@@ -1,83 +1,106 @@
 snippet fori
-	for(var ${1:$item} in ${2:$list}) {
-		${3}
-	}
-snippet .each
-	.each(function(el) {
-		${1}
-	});
+	  for(var ${1:$item} in ${2:$list}) {
+		    ${3}
+	  }
+snippet .e
+	  .each(function(el) {
+		    ${1}
+	  });
 snippet try
-	try {
-		${1}
-	} catch (e) {
-		${2:console.error(e);}
-	}
+	  try {
+		    ${1}
+		} catch (e) {
+		    ${2:console.error(e);}
+	  }
 snippet .filter
-	.filter(function(i,el) {
-		${1}
-	});
+	  .filter(function(i,el) {
+		    ${1}
+	  });
 snippet dir
-	.directive('${1:dir}', ['$scope'${2}, function($scope${3}) {
-		var linkFn = function(scope, element, attrs) {
-			${7}
-		};
-		return {
-			restrict:${4:'A'},
-			scope: ${5:false},
-			link: linkFn${6}
-		};
-	}])
-snippet watch
-	${1:$scope}.$watch('${2:myVar}', function(n, o) {
-		if (n === o || o === null) {
-			return;
+		.directive('${1:dir}', $1Dir)
+		.controller('$1Ctrl', $1Ctrl);
+
+		$1Ctrl.$inject = [${2}];
+
+		function $1Dir() {
+				var linkFn = function(scope, element, attrs) {
+						console.log('link', element);
+				};
+				return {
+						templateUrl: '$3',
+						controller: '$1Ctrl',
+						controllerAs:'vm',
+						link: linkFn
+				};
 		}
-		${3:console.log('watch',n,o);}
-	});
+
+		function $1Ctrl($2) {
+			var vm =this;
+		}
+snippet watch
+		vm.$watch(${2:'myVar'}, function(n, o) {
+				if (n === o || o === null) {
+						return;
+				}
+				${3:console.log('watch ' + ${myVar},n,o);}
+		});
 snippet ctrl
-	.controller('${1:}Ctrl',['$scope'${2}, function($scope${3})
-		${4}
-	}])
+		.controller('${1:}Ctrl', $1Ctrl);
+
+		$1Ctrl.$inject = [${2}];
+
+		function $1Ctrl($2) {
+				var vm =this;
+		}
 
 snippet fac
-	.factory('${1:Service}', [${2}, function(${3}) {
-		var $1 = {
-			${4}
-		};
-		return $1;
-	}])
+	  .factory('${1:Service}', ${1});
+		function $1 () {
+		    var $1 = {
+			    ${4}
+		    };
+		    return $1;
+	  })
 snippet filter
-	.filter('${1:myService}', ['$scope'${2}, function($scope${3}) {
+	.filter('${1:myService}', function($scope${3}) {
 		return function(input, param) {
 			${4}
 			return input;
 		};
-	}])
-snippet nmod
-	angular.module('${1:mod}', [${2}])
-snippet mod
-	angular.module('${1:mod}')
-snippet config
-	.config(['$routeProvider', 'CFG'${1}, function($routeProvider, CFG${2}) {
-		$routeProvider
-			${3}
-	}])
-snippet when
-	.when(CFG.ROUTES.${1:ROOT}, {
-		templateUrl: '${2:}',
-		controller: '${3:MyCtrl}',
-		access: '${4:CFG.PUBLIC}',
-		title : '${5:My view}',
-		path: $1,
-		resolve: {
-			${6}
-		},
-		referable: ${7:true}
 	})
+snippet nmod
+	  angular.module('${1:mod}', [
+		  ${2}
+		])
+snippet mod
+		angular.module('${1:mod}')
+snippet clos
+		(function() {
+				'use strict';
+				${1}
+		})();
+
+snippet config
+	  .config(function($routeProvider, CFG${2}) {
+		    $routeProvider
+			    ${3}
+	   })
+snippet when
+	  .when(CFG.ROUTES.${1:ROOT}, {
+		    templateUrl: '${2:}',
+		    controller: '${3:MyCtrl}',
+		    access: '${4:CFG.PUBLIC}',
+		    title : '${5:My view}',
+		    path: $1,
+		    resolve: {
+			      ${6}
+		    },
+		    referable: ${7:true}
+	  })
 snippet run
-	.run(['$rootScope'${1}, function($app${2}) {
-		${3}
-	}])
+	  .run(function($app${2}) {
+		    ${3}
+		})
 snippet Api
 	return Api.send({
 		endpoint: CFG.ENDPOINTS.${1:ROOT},
@@ -103,21 +126,21 @@ snippet page
 	};
 	module.exports = $1;
 snippet elcss
-  this.${1:elem} = function() {return element(by.css('${2:class}'));}
-snippet :elcss
-  ${1:elem}:= function() {
+	this.${1:element} = function() {return element(by.css(${2:selector}));}
+snippet _elcss
+	${1:elem}: function() {
 		return element(by.css('${2:class}'));
 	}
 snippet elmod
-  this.${1:elem} = function() {return element(by.model('${2:model}'));}
+	this.${1:elem} = function() {return element(by.model('${2:model}'));}
 snippet :elmod
-  ${1:elem}: function() {
+	${1:elem}: function() {
 		return element(by.model('${2:model}'));
 	}
 snippet elrep
-  this.${1:elem} = function() {return element(by.repeater('${2:rep}'));}
+	this.${1:elem} = function() {return element(by.repeater('${2:rep}'));}
 snippet :elrep
-  ${1:elem}: function() {
+	${1:elem}: function() {
 		return element(by.repeater('${2:rep}'));
 	}
 snippet cl

@@ -4,6 +4,7 @@ alias s_file="~/my-tools/search/srchfile"
 alias replace_all="~/my-tools/search/replace"
 alias s_fct="~/my-tools/search/srchfct"
 alias s_str="~/my-tools/search/srch"
+alias ng="~/my-tools/generator/angular/ng.py"
 
 #alias subreb="~/my-tools/git/submodulerebase"
 
@@ -36,7 +37,7 @@ alias dev-term='gnome-terminal --tab --title="local" --tab --title="server" --ta
 #alias dump-load-t-resa="dropdb t-resa && createdb t-resa -O t-resa -E UTF-8 && psql -f"
 
 alias debian-update="sudo aptitude update;sudo aptitude safe-upgrade;"
-alias arch-update="sudo pacman -Syu"
+alias arch-update="sudo pacman -Syua"
 #alias win="sudo mount -t vboxsf partage ~/win"
 
 alias sshprod="ssh root@prod"
@@ -47,3 +48,4 @@ alias deploy_frontend="rsync -e ssh -avz bin/ root@ramuh:/var/www/www.osculteo.c
 alias deploy_backend="rsync -e ssh -avz bin/ root@ramuh:/var/www/backoffice.osculteo.com/bin/"
 alias gti="git"
 alias grutn="grunt"
+alias rm="echo 'Sent to trash, (trash-list and trash-restore to restore)';trash-put -v"

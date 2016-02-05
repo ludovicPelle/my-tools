@@ -185,8 +185,8 @@ main = xmonad $ kde4Config
     myManageHook = composeAll . concat $
       [ [ className   =? c --> doFloat           | c <- myFloats]
       , [ title       =? t --> doFloat           | t <- myOtherFloats]
-      , [ className   =? c --> doF (W.shift "Web") | c <- webApps]
-      , [ className   =? c --> doF (W.shift "Community") | c <- communityApps]
+      , [ className   =? w --> doF (W.shift "Web") | w <- webApps]
+      , [ className   =? o --> doF (W.shift "Community") | o <- communityApps]
       , [ ((className =? "krunner") >>= return . not --> manageHook kde4Config) <+> (kdeOverride --> doFloat)]
       ]
       {-myManageHook = composeAll . concat $-}
@@ -196,7 +196,7 @@ main = xmonad $ kde4Config
       {-, [ className =? "Chrome - Google Chrome" --> doShift "Web" ]-}
       {-]-}
 
-    myFloats = ["Gimp","gimp-2.8","Thunderbird", "Google-chrome", "Google-chrome-stable"]
+    myFloats = ["Gimp","gimp-2.8","Thunderbird", "Google-chrome", "Google-chrome-stable", "Firefox"]
     myOtherFloats = []
     webApps = ["Google-chrome", "Google-chrome-stable"]
     communityApps = ["Thunderbird"]

@@ -30,18 +30,17 @@ Plugin 'scrooloose/syntastic'
 Plugin 'majutsushi/tagbar'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
-Plugin 'pangloss/vim-javascript'
 Plugin 'vim-scripts/snipMate'
-Plugin 'othree/javascript-libraries-syntax.vim'
-"Plugin 'klen/python-mode'
-"Plugin 'davidhalter/jedi-vim'
 Plugin 'bling/vim-airline'
+Plugin 'ctrlpvim/ctrlp.vim'
 
 
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
-filetype plugin indent on    " required
+" enable filetypes
+filetype on
+filetype plugin on
 
 "Remove ALL autocommands for the current group.
 au!
@@ -51,7 +50,7 @@ set t_Co=256
 "UTF-8
 set encoding=utf-8
 "Presentation
- colorscheme delek
+colorscheme delek
 
 "Cursor (no underline , konsole bug...
 autocmd BufWinEnter * set nocursorline
@@ -61,6 +60,7 @@ hi LineNr ctermfg=Darkgray guifg=#3D3D3D
 
 " remove whitespace
 if has("autocmd")
+  filetype plugin indent on    " required
   autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 endif
 
@@ -94,11 +94,10 @@ set wildmode=list:longest
 set whichwrap=b,s,<,>,[,]
 
 " redefine tabs
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
 set expandtab
-set shiftwidth=2
-set softtabstop=2
-set tabstop=2
-set showtabline=1
 
 " status line
 set statusline=%F%m%=%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [LINE=%l]\ [Col=%v]\ [%p%%]
@@ -122,15 +121,12 @@ if has("autocmd")
       \| exe "normal! g'\"" | endif
 endif
 
-" enable filetypes
-filetype on
-filetype plugin on
 
 " Plugin specifics
 "=================
 
 " define my name for snipmate plugin
-let g:snips_author = 'Ludovic Pellé <ludovic_pelle@iprotego.com>'
+let g:snips_author = 'Ludovic Pellé <ludovic.pelle@iprotego.com>'
 
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -164,25 +160,28 @@ let g:airline_powerline_fonts=0
 "endif
 
 "Ctags
-"let g:ctags_path="~/.vim/plugin"
-"let g:ctags_statusline=1
-"set nocp
+let g:ctags_path="~/.vim/plugin"
+let g:ctags_statusline=1
+set nocp
 set tags=tags
-"map <silent><leader><Left> <C-T>
-"map <silent><leader><Right> <C-]>
-"map <silent><leader><Up> <C-W>]
+map <silent><leader><Left> <C-T>
+map <silent><leader><Right> <C-]>
+map <silent><leader><Up> <C-W>]
 
 " tagbar
-"let g:tagbar_left = 1           " display the tagbar on the left side
-"set updatetime=500              " show tags' prototype after 500 milliseconds
-"let g:tagbar_width = 25         " width in characters of the tagbar
-"let g:tagbar_autoshowtag = 1    " always show the current tag in the tagbar
-"let g:tagbar_autofocus = 1      " the cursor will move to the Tagbar window when it is opened.
-"nnoremap <silent> <F2> :TagbarToggle<CR>
+let g:tagbar_left = 1           " display the tagbar on the left side
+set updatetime=500              " show tags' prototype after 500 milliseconds
+let g:tagbar_width = 50         " width in characters of the tagbar
+let g:tagbar_autoshowtag = 1    " always show the current tag in the tagbar
+let g:tagbar_autofocus = 1      " the cursor will move to the Tagbar window when it is opened.
+map <leader>t :TagbarToggle<CR>
 
-
-
-
+" CtrlP behavior
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlPMRU'
+let g:ctrlp_regexp = 1
+" Open in tab
+let g:ctrlp_open_new_file = 't'
 
 " Hotkeys
 " =================
@@ -234,12 +233,12 @@ map <silent><leader>c :call NERDComment(0, "toggle")<CR>
 command C :call NERDComment(0, "toggle")
 
 " to paste without ai
-map <leader>p :r !xclip -o<CR>
+map <leader>v :r !xclip -o -selection c<CR>
 
 " Completion
 " automatically open and close the popup menu / preview window
-"au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
-"set completeopt=menuone,menu,longest,preview
+au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+set completeopt=menuone,menu,longest,preview
 "set complete=.,w,b,u,t,i,k~/.vim/syntax/php.api
 
 "tabs
@@ -270,10 +269,6 @@ if has("autocmd")
   " javascript
 
   autocmd FileType javascript noremap <F7> :!fixjsstyle %<CR>
-  autocmd FileType javascript noremap <F8> :!grunt build<CR>
-  autocmd FileType javascript noremap <F9> :!grunt ludo<CR>
-  "autocmd FileType javascript noremap <F11> :!grunt protractor:osculteo<CR>
-  "autocmd FileType javascript noremap <F12> :!grunt test<CR>
   "python :make check errors
   autocmd FileType python2 noremap <F7> :make<CR>
   set makeprg=python2\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
@@ -284,8 +279,12 @@ endif
 "===============
 
 
-"Toggle comment
-"
+"jquery color angular snippet
+au BufRead,BufNewFile *.js set ft=javascript.angular
+"less
+au BufRead,BufNewFile *.less set ft=less
+"angular tmpl
+au BufRead,BufNewFile *.html set ft=html.angularhtml
 " Smart completion
 "" Enable omni completion.
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -293,6 +292,9 @@ autocmd FileType less setlocal omnifunc=csscomplete#CompleteCSS
 autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType javascript.angular setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType javascript.angular setlocal shiftwidth=4
+autocmd FileType javascript.angular setlocal softtabstop=4
+autocmd FileType javascript.angular setlocal tabstop=4
 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType python setlocal shiftwidth=4
 autocmd FileType python setlocal softtabstop=4
@@ -300,12 +302,6 @@ autocmd FileType python setlocal tabstop=4
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 
-"jquery color angular snippet
-au BufRead,BufNewFile *.js set ft=javascript.angular
-"less
-au BufRead,BufNewFile *.less set ft=less
-"angular tmpl
-au BufRead,BufNewFile *tpl.html set ft=html.angularhtml
 function! SmartComplete()
   let line = getline('.') " curline
   let substr = strpart(line, -1, col('.')+1) " from start to cursor
