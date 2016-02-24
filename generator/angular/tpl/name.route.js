@@ -18,7 +18,7 @@
                 config: {
                     url: '/${module_name}',
                     templateUrl: '${prefix}${parent_path}${module_name}/${module_name}.html',
-                    controller: '${Module_name}Ctrl',
+                    controller: '${ModuleName}Ctrl',
                     controllerAs: 'vm',
                     title: '${module_name}'
                 }

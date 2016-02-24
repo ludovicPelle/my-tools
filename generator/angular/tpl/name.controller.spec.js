@@ -1,5 +1,5 @@
 /* jshint -W117, -W030 */
-describe('${Module_name}Ctrl', function() {
+describe('${ModuleName}Ctrl', function() {
     var controller;
 
     beforeEach(function() {
@@ -8,13 +8,13 @@ describe('${Module_name}Ctrl', function() {
     });
 
     beforeEach(function () {
-        controller = $$controller('${Module_name}Ctrl');
+        controller = $$controller('${ModuleName}Ctrl');
         $$rootScope.$$apply();
     });
 
     bard.verifyNoOutstandingHttpRequests();
 
-    describe('${Module_name} controller', function() {
+    describe('${ModuleName} controller', function() {
         it('should be created successfully', function () {
             expect(controller).to.be.defined;
         });

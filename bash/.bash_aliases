@@ -42,6 +42,7 @@ alias arch-update="sudo pacman -Syua"
 
 alias sshprod="ssh root@prod"
 alias sshdev="ssh ludo@62.210.78.111"
+alias sshdevroot="ssh root@62.210.78.111"
 alias sshramuh="ssh root@ramuh"
 alias removeconsole="grep -lrZ '^\s*console' src/ | xargs -0 -l sed -i -e 's#^\(\s*\)console#\1//console#g' && git diff"
 alias deploy_frontend="rsync -e ssh -avz bin/ root@ramuh:/var/www/www.osculteo.com/bin/"

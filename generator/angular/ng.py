@@ -72,8 +72,8 @@ if __name__ == "__main__":
 
     try:
         module_name = args['module_name'].split('.')[-1]
-        ModuleName = ''.join(x for x in module_name.title() if not x.isspace())
-        moduleName = ModuleName[0].lower + ModuleName[1:]
+        ModuleName = ''.join(x for x in module_name.title() if not x.isspace()).replace('-','')
+        moduleName = ModuleName[0].lower() + ModuleName[1:]
         parent_module = ''
         parent_path = ''
         paths = args['module_name'].split('.')
@@ -104,6 +104,12 @@ if __name__ == "__main__":
         print 'Parent module: ' + parent_module
         print 'Template url prefix: ' + prefix
         print 'In directory: ' + directory
+        print 'module-name: ' + module_name
+        print 'ModuleName: ' + ModuleName
+        print 'moduleName: ' + moduleName
+        print 'parent_module: ' + parent_module
+        print 'parent_path: ' + parent_path
+        print 'prefix: ' + prefix
 
         try:
             os.makedirs(directory);
@@ -129,8 +135,7 @@ if __name__ == "__main__":
                     renderTemplate(templates_path +'/' + filename,directory +'/'+ new_filename, {
                         'module_name':module_name,
                         'ModuleName':ModuleName,
-                        'moduleName':ModuleName,
-                        'Module_nameCtrl':Module_name+'Ctrl',
+                        'moduleName':moduleName,
                         'parent_module':parent_module,
                         'parent_path':parent_path,
                         'prefix':prefix

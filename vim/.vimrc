@@ -269,6 +269,7 @@ if has("autocmd")
   " javascript
 
   autocmd FileType javascript noremap <F7> :!fixjsstyle %<CR>
+  autocmd FileType javascript map <F5> gg=G
   "python :make check errors
   autocmd FileType python2 noremap <F7> :make<CR>
   set makeprg=python2\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"

@@ -3,12 +3,12 @@
 
     angular
         .module('${parent_module}${module_name}')
-        .directive('${module_name}',${module_name}Dir);
+        .directive('${moduleName}',${moduleName}Dir);
 
-    ${module_name}Dir.$$inject = [];
+    ${moduleName}Dir.$$inject = [];
 
     /* @ngInject */
-    function ${module_name}Dir() {
+    function ${moduleName}Dir() {
         var linkFn = function(scope, element, attrs) {
             console.log('link', element);
         };

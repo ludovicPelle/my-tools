@@ -3,12 +3,12 @@
     angular
         .module('${parent_module}${module_name}')
         /**
-         * @description ${Module_name} provide something
+         * @description ${ModuleName} provide something
          * @return {ObjectProvider} - an angular factory.
          */
-        .provider('${Module_name}', ${Module_name}Provider);
+        .provider('${ModuleName}', ${ModuleName}Provider);
 
-    function ${Module_name}Provider() {
+    function ${ModuleName}Provider() {
         this.$get = function() {
             return {
             };
