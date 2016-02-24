@@ -33,7 +33,7 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'vim-scripts/snipMate'
 Plugin 'bling/vim-airline'
 Plugin 'ctrlpvim/ctrlp.vim'
-
+Plugin 'leafgarland/typescript-vim'
 
 
 " All of your Plugins must be added before the following line
@@ -50,7 +50,7 @@ set t_Co=256
 "UTF-8
 set encoding=utf-8
 "Presentation
-colorscheme delek
+colorscheme distinguished
 
 "Cursor (no underline , konsole bug...
 autocmd BufWinEnter * set nocursorline
@@ -71,7 +71,7 @@ set noic
 "set shell=/bin/bash\ -i
 
 if has("syntax")
-	syntax on
+  syntax on
 endif
 
 " Behaviors
@@ -303,6 +303,13 @@ autocmd FileType python setlocal tabstop=4
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 
+"jquery color angular snippet
+au BufRead,BufNewFile *.js set ft=javascript.angular
+au BufRead,BufNewFile *.ts set ft=typescript
+"less
+au BufRead,BufNewFile *.less set ft=less
+"angular tmpl
+au BufRead,BufNewFile *tpl.html set ft=html.angularhtml
 function! SmartComplete()
   let line = getline('.') " curline
   let substr = strpart(line, -1, col('.')+1) " from start to cursor

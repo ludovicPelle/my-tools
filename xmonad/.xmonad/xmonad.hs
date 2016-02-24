@@ -196,9 +196,9 @@ main = xmonad $ kde4Config
       {-, [ className =? "Chrome - Google Chrome" --> doShift "Web" ]-}
       {-]-}
 
-    myFloats = ["Gimp","gimp-2.8","Thunderbird", "Google-chrome", "Google-chrome-stable", "Firefox"]
+    myFloats = ["Gimp","gimp-2.8","Thunderbird", "google-chrome", "Google-chrome-stable", "Firefox", "chrome"]
     myOtherFloats = []
-    webApps = ["Google-chrome", "Google-chrome-stable"]
+    webApps = ["google-chrome", "Google-chrome-stable"]
     communityApps = ["Thunderbird"]
 
 kdeOverride :: Query Bool
