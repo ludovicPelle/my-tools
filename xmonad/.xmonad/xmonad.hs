@@ -17,7 +17,13 @@ import XMonad.Layout.ResizableTile
 import XMonad.Layout.Spacing
 import XMonad.Layout.Spiral
 import XMonad.Layout.Named
+import XMonad.Layout.Tabbed
+import XMonad.Layout.Circle
+import XMonad.Layout.ThreeColumns
 import XMonad.Layout.PerWorkspace
+import XMonad.Layout.Groups.Examples
+import XMonad.Layout.GridVariants as G
+{-import XMonad.Util.Scratchpad-}
 import Data.Ratio((%))
 -- hooks
 import XMonad.Hooks.ManageHelpers
@@ -58,10 +64,11 @@ curLayout = gets windowset >>= return . description . W.layout . W.workspace . W
 -- defaults, as xmonad preserves your old layout settings by default.
 --  spiral (6/7) |||
 --
-myLayout = avoidStruts (smartBorders tiled ||| spaced ||| smartBorders (Mirror tiled) ||| noBorders Full)
+--myLayout = avoidStruts (smartBorders tiled ||| spaced ||| smartBorders (Mirror tiled) ||| noBorders Full ||| rowOfColumns || )
+myLayout = avoidStruts (tabbed shrinkText defaultTheme ||| myColLayout ||| tiled ||| Mirror tiled)
    where
-      spaced = named "Spacing" $ spacing 6 $ Tall 1 (3/100) (1/2)
       tiled  = named "Tiled" $ ResizableTall 1 (2/100) (1/2) []
+      myColLayout = named "Col" $ SplitGrid G.L 2 4 (7/10) (16/10) (3/100)
 
       -- default tiling algorithm partitions the screen into two panes
       --tiled   = Tall nmaster delta ratio
@@ -84,8 +91,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
      -- launch apps
      --, ((modm,               xK_a     ), spawn "nautilus ~/")
      --, ((modm .|. shiftMask, xK_a     ), spawn "nautilus --browser ~/")
-     --, ((modm .|. shiftMask, xK_f     ), spawn "firefox")
-     --, ((modm .|. shiftMask, xK_t     ), spawn "thunderbird")
+     , ((modm .|. shiftMask, xK_f     ), spawn "firefox")
+     , ((modm .|. shiftMask, xK_t     ), spawn "thunderbird")
      --, ((modm,               xK_Print ), spawn "scrot -q 90 ~/Images/Screenshots/%F-%T.png")
 
      -- show layout
@@ -138,7 +145,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
      -- Quit or restart xmonad
      -- , ((modm .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
-     , ((modm              , xK_q     ), spawn "xmonad --recompile && xmonad --restart")
+     , ((modm              , xK_u     ), spawn "xmonad --recompile && xmonad --restart")
      ]
      -- ++
      -- mod-[1..9], Switch to workspace N
@@ -154,7 +161,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
          , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 myFocusFollowsMouse::Bool
-myFocusFollowsMouse = True
+myFocusFollowsMouse = False
 
 
 main = xmonad $ kde4Config
@@ -171,10 +178,10 @@ main = xmonad $ kde4Config
 
      -- add a fullscreen tabbed layout that does not avoid covering
      -- up desktop panels before the desktop layouts
-     --, layoutHook = myLayout
-     , layoutHook = myLayout ||| layoutHook kde4Config
- --     , logHook = myLogHook >> logHook kde4Config
- --     , handleEventHook    = mappend myEventHook (handleEventHook desktopConfig)
+     , layoutHook = myLayout
+     -- , layoutHook = myLayout ||| layoutHook kde4Config
+     , logHook = logHook kde4Config
+     , handleEventHook    = handleEventHook kde4Config
      -- , startupHook        = myStartupHook >> startupHook kde4Config
      , startupHook = startupHook kde4Config >> setWMName "LG3D"
      , focusFollowsMouse  = myFocusFollowsMouse
@@ -185,9 +192,13 @@ main = xmonad $ kde4Config
     myManageHook = composeAll . concat $
       [ [ className   =? c --> doFloat           | c <- myFloats]
       , [ title       =? t --> doFloat           | t <- myOtherFloats]
-      , [ className   =? w --> doF (W.shift "Web") | w <- webApps]
-      , [ className   =? o --> doF (W.shift "Community") | o <- communityApps]
-      , [ ((className =? "krunner") >>= return . not --> manageHook kde4Config) <+> (kdeOverride --> doFloat)]
+      , [ className   =? c --> doF (W.shift "Web") | c <- webApps]
+      , [ className   =? c --> doF (W.shift "Community") | c <- communityApps]
+      , [ className   =? c --> doF (W.shift "Dev") | c <- devApps]
+      {-, [ className   =? c --> doF (W.shift "Test") | c <- testApps]-}
+      , [ className   =? c --> doF (W.focusDown) | c <- testApps]
+      , [ className   =? c --> doF (W.swapDown) | c <- testApps]
+      --, [ ((className =? "krunner") >>= return . not --> manageHook kde4Config) <+> (kdeOverride --> doFloat)]
       ]
       {-myManageHook = composeAll . concat $-}
       {-[ [ className =? c --> doFloat | c <- myFloats]-}
@@ -195,14 +206,16 @@ main = xmonad $ kde4Config
       {-, [ title =? t --> doFloat | t <- myOtherFloats]-}
       {-, [ className =? "Chrome - Google Chrome" --> doShift "Web" ]-}
       {-]-}
-
-    myFloats = ["Gimp","gimp-2.8","Thunderbird", "Google-chrome", "Google-chrome-stable", "Firefox"]
-    myOtherFloats = []
-    webApps = ["Google-chrome", "Google-chrome-stable"]
+    -- (Use the command xprop | grep WM_NAME to get the title property.)
+    myFloats = ["Gimp","gimp-2.8","Thunderbird", "google-chrome", "google-chrome-stable", "Hedgewars", "Firefox"]
+    myOtherFloats = ["Hedgewars"]
+    webApps = ["google-chrome", "google-chrome-stable"]
+    testApps = ["Firefox"]
+    devApps = ["konsole"]
     communityApps = ["Thunderbird"]
 
-kdeOverride :: Query Bool
-kdeOverride = ask >>= \w -> liftX $ do
-  override <- getAtom "_KDE_NET_WM_WINDOW_TYPE_OVERRIDE"
-  wt <- getProp32s "_NET_WM_WINDOW_TYPE" w
-  return $ maybe False (elem $ fromIntegral override) wt
+{-kdeOverride :: Query Bool-}
+{-kdeOverride = ask >>= \w -> liftX $ do-}
+  {-override <- getAtom "_KDE_NET_WM_WINDOW_TYPE_OVERRIDE"-}
+  {-wt <- getProp32s "_NET_WM_WINDOW_TYPE" w-}
+  {-return $ maybe False (elem $ fromIntegral override) wt-}
