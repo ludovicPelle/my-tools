@@ -28,11 +28,12 @@ Plugin 'gmarik/Vundle.vim'
 "
 Plugin 'scrooloose/syntastic'
 Plugin 'majutsushi/tagbar'
-Plugin 'scrooloose/nerdtree'
+"Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'vim-scripts/snipMate'
 Plugin 'bling/vim-airline'
 Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'szw/vim-tags'
 
 
 
@@ -134,8 +135,8 @@ set statusline+=%*
 
 " Syntastic
 "let g:syntastic_check_on_open = 0
-"let g:syntastic_check_on_wq = 0
-"let g:syntastic_quiet_warnings = 0  " we do want the warnings to be displayed
+let g:syntastic_check_on_wq = 1
+let g:syntastic_quiet_warnings = 1  " we do want the warnings to be displayed
 "let g:syntastic_auto_loc_list = 0   " auto open the errors list
 "let g:syntastic_always_populate_loc_list = 0
 "let g:syntastic_enable_signs = 0    " open a bar on the left when an error is detected
@@ -163,7 +164,7 @@ let g:airline_powerline_fonts=0
 let g:ctags_path="~/.vim/plugin"
 let g:ctags_statusline=1
 set nocp
-set tags=tags
+set tags=tags;
 map <silent><leader><Left> <C-T>
 map <silent><leader><Right> <C-]>
 map <silent><leader><Up> <C-W>]
@@ -178,8 +179,9 @@ map <leader>t :TagbarToggle<CR>
 
 " CtrlP behavior
 let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlPMRU'
+let g:ctrlp_cmd = 'CtrlPMixed'
 let g:ctrlp_regexp = 1
+let g:ctrlp_max_files = 0
 " Open in tab
 let g:ctrlp_open_new_file = 't'
 
@@ -269,7 +271,8 @@ if has("autocmd")
   " javascript
 
   autocmd FileType javascript noremap <F7> :!fixjsstyle %<CR>
-  autocmd FileType javascript map <F5> gg=G
+  autocmd FileType javascript noremap <F5> :!grunt alex<CR>
+  autocmd FileType javascript map <F12> gg=G
   "python :make check errors
   autocmd FileType python2 noremap <F7> :make<CR>
   set makeprg=python2\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"

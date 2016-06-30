@@ -37,7 +37,7 @@ if __name__ == "__main__":
     parser.add_argument('-v','--verbose', help='More Verbosity')
     parser.add_argument('module_name', help='The complete module name app.iprotego.dashboard')
     parser.add_argument('directory', help='The relative path where generated files will go (default "/{module_name}"')
-    parser.add_argument('prefix', help='The app prefix of application (default "")')
+    parser.add_argument('prefix', help='The template path prefix (default "")')
 
     args = parser.parse_args()
     args = vars(args)

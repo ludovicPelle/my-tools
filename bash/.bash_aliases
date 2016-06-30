@@ -37,7 +37,7 @@ alias dev-term='gnome-terminal --tab --title="local" --tab --title="server" --ta
 #alias dump-load-t-resa="dropdb t-resa && createdb t-resa -O t-resa -E UTF-8 && psql -f"
 
 alias debian-update="sudo aptitude update;sudo aptitude safe-upgrade;"
-alias arch-update="sudo pacman -Syua"
+alias arch-update="yaourt -Syua --devel"
 #alias win="sudo mount -t vboxsf partage ~/win"
 
 alias sshprod="ssh root@prod"
@@ -47,6 +47,8 @@ alias sshramuh="ssh root@ramuh"
 alias removeconsole="grep -lrZ '^\s*console' src/ | xargs -0 -l sed -i -e 's#^\(\s*\)console#\1//console#g' && git diff"
 alias deploy_frontend="rsync -e ssh -avz bin/ root@ramuh:/var/www/www.osculteo.com/bin/"
 alias deploy_backend="rsync -e ssh -avz bin/ root@ramuh:/var/www/backoffice.osculteo.com/bin/"
+#alias deploy_connot="rsync -e ssh -avz ~/Projects/GoogleConnot/templates/* root@ramuh:/var/www/backoffice.osculteo.com/bin/assets/connot/templates;rsync -e ssh -avz ~/Projects/GoogleConnot/css/* root@ramuh:/var/www/backoffice.osculteo.com/bin/assets/connot/;cp  ~/Projects/GoogleConnot/src/* /home/loodub/.mozilla/firefox/ip0j6j0o.default/gm_scripts/Google_connot"
+alias deploy_connot="rsync -e ssh -avz ~/Projects/GoogleConnot/templates/* root@ramuh:/var/www/backoffice.osculteo.com/bin/assets/connot/templates;rsync -e ssh -avz ~/Projects/GoogleConnot/css/* root@ramuh:/var/www/backoffice.osculteo.com/bin/assets/connot/;chmod 644 ~/Projects/GoogleConnot/build/*;rsync -e ssh -avz ~/Projects/GoogleConnot/build/*  root@ramuh:/var/www/backoffice.osculteo.com/bin/assets/connot/"
 alias gti="git"
 alias grutn="grunt"
 alias rm="echo 'Sent to trash, (trash-list and trash-restore to restore)';trash-put -v"

@@ -31,3 +31,5 @@
 	untracked = cyan
 [push]
 	default = simple
+[http]
+	sslVerify = false

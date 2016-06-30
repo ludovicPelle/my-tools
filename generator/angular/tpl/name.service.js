@@ -9,7 +9,7 @@
         .provider('${ModuleName}', ${ModuleName}Provider);
 
     function ${ModuleName}Provider() {
-        this.$get = function() {
+        this.$$get = function() {
             return {
             };
         };
