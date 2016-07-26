@@ -54,13 +54,13 @@ snippet ctrl
 	}
 
 snippet fac
-	.factory('${1:Service}', ${1});
-		function $1 () {
-			var $1 = {
-			${4}
-		};
-		return $1;
-	})
+	.factory('${1:Service}', $1);
+	$1.$inject = [${2}];
+	function $1 () {
+	var service = {
+		${3}
+	};
+	return service;
 snippet filter
 	.filter('${1:myService}', function($scope${3}) {
 		return function(input, param) {

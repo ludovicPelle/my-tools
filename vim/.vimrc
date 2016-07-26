@@ -26,22 +26,24 @@ Plugin 'gmarik/Vundle.vim'
 " Avoid a name conflict with L9
 "Plugin 'user/L9', {'name': 'newL9'}
 "
-Plugin 'scrooloose/syntastic'
 Plugin 'majutsushi/tagbar'
-"Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/syntastic'
 Plugin 'vim-scripts/snipMate'
 Plugin 'bling/vim-airline'
 Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'szw/vim-tags'
+Plugin 'https://github.com/othree/javascript-libraries-syntax.vim'
+Plugin 'https://github.com/matthewsimo/angular-vim-snippets'
+Plugin 'https://github.com/pangloss/vim-javascript'
+Plugin 'http://github.com/mattn/emmet-vim/'
 
 
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 " enable filetypes
-filetype on
-filetype plugin on
+filetype plugin indent on     " required!
 
 "Remove ALL autocommands for the current group.
 au!
@@ -61,8 +63,8 @@ hi LineNr ctermfg=Darkgray guifg=#3D3D3D
 
 " remove whitespace
 if has("autocmd")
-  filetype plugin indent on    " required
-  autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
+    filetype plugin indent on    " required
+    autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 endif
 
 " case sensitive
@@ -72,7 +74,7 @@ set noic
 "set shell=/bin/bash\ -i
 
 if has("syntax")
-	syntax on
+    syntax on
 endif
 
 " Behaviors
@@ -107,7 +109,7 @@ set laststatus=2
 
 
 "if exists('+colorcolumn')
- " set colorcolumn=80
+" set colorcolumn=80
 "else
 "  au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
 "endif
@@ -118,8 +120,8 @@ set laststatus=2
 
 "enable memorised position of cursor when reopen the file
 if has("autocmd")
-  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-      \| exe "normal! g'\"" | endif
+    au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+                \| exe "normal! g'\"" | endif
 endif
 
 
@@ -129,42 +131,47 @@ endif
 " define my name for snipmate plugin
 let g:snips_author = 'Ludovic Pellé <ludovic.pelle@iprotego.com>'
 
+" Syntastic
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
-" Syntastic
-"let g:syntastic_check_on_open = 0
+let g:syntastic_javascript_checkers = ['gjslint']
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 1
-let g:syntastic_quiet_warnings = 1  " we do want the warnings to be displayed
-"let g:syntastic_auto_loc_list = 0   " auto open the errors list
-"let g:syntastic_always_populate_loc_list = 0
+"let g:syntastic_quiet_warnings = 1  " we do want the warnings to be displayed
 "let g:syntastic_enable_signs = 0    " open a bar on the left when an error is detected
 
+"nerd tree
+let g:NERDTreeDirArrows = 0
+let g:NERDTreeDirArrowExpandable = '>'
+let g:NERDTreeDirArrowCollapsible = 'V'
+let g:NERDTreeGlyphReadOnly = "RO"
 
 " Enable the list of buffers
 let g:airline#extensions#tabline#enabled = 1
 "let g:airline#extensions#tabline#left_sep = '>'
 "let g:airline#extensions#tabline#left_alt_sep = '>'
 if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
+    let g:airline_symbols = {}
 endif
 let g:airline_powerline_fonts=0
 " unicode symbols
-  let g:airline_left_sep = '>'
-  let g:airline_right_sep = '<'
-  let g:airline_detect_modified=1
+let g:airline_left_sep = '>'
+let g:airline_right_sep = '<'
+let g:airline_detect_modified=1
 
 " activate symfony for php files
 "if has("autocmd")
- "autocmd FileType php set ft=php.symfony
+"autocmd FileType php set ft=php.symfony
 "endif
 
 "Ctags
-let g:ctags_path="~/.vim/plugin"
-let g:ctags_statusline=1
-set nocp
-set tags=tags;
+"let g:ctags_path="~/.vim/plugin"
+"let g:ctags_statusline=1
+set tags=tags
 map <silent><leader><Left> <C-T>
 map <silent><leader><Right> <C-]>
 map <silent><leader><Up> <C-W>]
@@ -182,6 +189,9 @@ let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlPMixed'
 let g:ctrlp_regexp = 1
 let g:ctrlp_max_files = 0
+let g:ctrlp_custom_ignore = {
+            \ 'dir':  '\v(\.git|build|node_modules|bower_components)$',
+            \}
 " Open in tab
 let g:ctrlp_open_new_file = 't'
 
@@ -193,9 +203,11 @@ let mapleader = ","
 cmap find !ack<space>
 cmap tb tabnew<space>
 
-"map <silent><leader><Right> <C-T>
+nnoremap <Leader>q' ciw''<Esc>P
+
+map <silent><leader><Right> <C-T>
 " go to the declaration of a class, variable, ...)
-"map <silent><leader><Left> <C-]>
+map <silent><leader><Left> <C-]>
 " go back
 
 " Toggle line numbers and fold column for easy copying:
@@ -259,24 +271,24 @@ nnoremap <C-A-right> :20winc ><CR>
 
 " php
 if has("autocmd")
-  autocmd FileType php noremap <F7> :!php -l %<CR>
-  autocmd FileType php noremap <F9> :!php %<CR>
+    autocmd FileType php noremap <F7> :!php -l %<CR>
+    autocmd FileType php noremap <F9> :!php %<CR>
 
-  " bash
-  autocmd FileType sh noremap <F9> :!./ %<CR>
+    " bash
+    autocmd FileType sh noremap <F9> :!./ %<CR>
 
-  " symfony
-  "autocmd FileType symfony noremap <F8> :SfSwitchView<CR>
+    " symfony
+    "autocmd FileType symfony noremap <F8> :SfSwitchView<CR>
 
-  " javascript
+    " javascript
 
-  autocmd FileType javascript noremap <F7> :!fixjsstyle %<CR>
-  autocmd FileType javascript noremap <F5> :!grunt alex<CR>
-  autocmd FileType javascript map <F12> gg=G
-  "python :make check errors
-  autocmd FileType python2 noremap <F7> :make<CR>
-  set makeprg=python2\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
-  set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
+    autocmd FileType javascript noremap <F7> :!fixjsstyle %<CR>
+    autocmd FileType javascript noremap <F5> :!grunt alex<CR>
+    autocmd FileType javascript map <F12> gg=G
+    "python :make check errors
+    autocmd FileType python2 noremap <F7> :make<CR>
+    set makeprg=python2\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
+    set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
 endif
 
 "FUNCTIONS
@@ -284,11 +296,11 @@ endif
 
 
 "jquery color angular snippet
-au BufRead,BufNewFile *.js set ft=javascript.angular
+au BufRead,BufNewFile *.js set ft=javascript
 "less
 au BufRead,BufNewFile *.less set ft=less
 "angular tmpl
-au BufRead,BufNewFile *.html set ft=html.angularhtml
+au BufRead,BufNewFile *.html set ft=html
 " Smart completion
 "" Enable omni completion.
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -307,15 +319,15 @@ autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 
 function! SmartComplete()
-  let line = getline('.') " curline
-  let substr = strpart(line, -1, col('.')+1) " from start to cursor
-  let substr = matchstr(substr, "[^ \t]*$") " word till cursor
-  let has_period = match(substr, '\.') != -1 " position of period, if any
-  let has_slash = match(substr, '\/') != -1 " position of slash, if any
+    let line = getline('.') " curline
+    let substr = strpart(line, -1, col('.')+1) " from start to cursor
+    let substr = matchstr(substr, "[^ \t]*$") " word till cursor
+    let has_period = match(substr, '\.') != -1 " position of period, if any
+    let has_slash = match(substr, '\/') != -1 " position of slash, if any
 
-  "TODO finish autocomplete
+    "TODO finish autocomplete
 
-  return "\<C-P>" " omnifunc if available
+    return "\<C-P>" " omnifunc if available
 endfunction
 " Call smart completion when pressing Ctrl-Space
 inoremap <C-Space> <c-r>=SmartComplete()<CR>
@@ -334,6 +346,9 @@ autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 "=========================================
 autocmd FileType .php autocmd BufWritePre <buffer> :call setline(1,map(getline(1,"$"),'substitute(v:val,"\\s\\+$","","")'))
 autocmd BufWritePost *.py :make
+"check syntax  (no max line chars)
+autocmd BufWritePost *.js :!gjslint --disable 110 %
+
 "autocmd BufWritePost *.js :!fixjsstyle %
 " Save and reload folding/
 "=========================================
