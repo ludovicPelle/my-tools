@@ -136,13 +136,16 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
-let g:syntastic_javascript_checkers = ['gjslint']
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 1
-"let g:syntastic_quiet_warnings = 1  " we do want the warnings to be displayed
-"let g:syntastic_enable_signs = 0    " open a bar on the left when an error is detected
+let g:syntastic_check_on_wq = 0
+"cause template not reconize
+let g:syntastic_mode_map={ 'mode': 'active',
+                     \ 'active_filetypes': [],
+                     \ 'passive_filetypes': ['html'] }
+
+let g:syntastic_quiet_messages = {'level': 'warnings'}
 
 "nerd tree
 let g:NERDTreeDirArrows = 0
