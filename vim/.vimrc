@@ -148,10 +148,10 @@ let g:syntastic_mode_map={ 'mode': 'active',
 let g:syntastic_quiet_messages = {'level': 'warnings'}
 
 "nerd tree
-let g:NERDTreeDirArrows = 0
-let g:NERDTreeDirArrowExpandable = '>'
-let g:NERDTreeDirArrowCollapsible = 'V'
-let g:NERDTreeGlyphReadOnly = "RO"
+"let g:NERDTreeDirArrows = 0
+"let g:NERDTreeDirArrowExpandable = '>'
+"let g:NERDTreeDirArrowCollapsible = 'V'
+"let g:NERDTreeGlyphReadOnly = "RO"
 
 " Enable the list of buffers
 let g:airline#extensions#tabline#enabled = 1
@@ -174,7 +174,7 @@ let g:airline_detect_modified=1
 "Ctags
 "let g:ctags_path="~/.vim/plugin"
 "let g:ctags_statusline=1
-set tags=tags
+set tags=./tags
 map <silent><leader><Left> <C-T>
 map <silent><leader><Right> <C-]>
 map <silent><leader><Up> <C-W>]
@@ -310,10 +310,10 @@ autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 autocmd FileType less setlocal omnifunc=csscomplete#CompleteCSS
 autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType javascript.angular setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType javascript.angular setlocal shiftwidth=4
-autocmd FileType javascript.angular setlocal softtabstop=4
-autocmd FileType javascript.angular setlocal tabstop=4
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType javascript setlocal shiftwidth=4
+autocmd FileType javascript setlocal softtabstop=4
+autocmd FileType javascript setlocal tabstop=4
 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType python setlocal shiftwidth=4
 autocmd FileType python setlocal softtabstop=4
