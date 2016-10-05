@@ -38,6 +38,9 @@ Plugin 'https://github.com/matthewsimo/angular-vim-snippets'
 Plugin 'https://github.com/pangloss/vim-javascript'
 Plugin 'http://github.com/mattn/emmet-vim/'
 
+let g:ycm_confirm_extra_conf = 0
+Plugin 'https://github.com/Valloric/YouCompleteMe'
+
 
 
 " All of your Plugins must be added before the following line
@@ -146,6 +149,8 @@ let g:syntastic_mode_map={ 'mode': 'active',
                      \ 'passive_filetypes': ['html'] }
 
 let g:syntastic_quiet_messages = {'level': 'warnings'}
+let g:syntastic_python_checkers = ['flake8']
+"let g:syntastic_python_pylint_args = "--load-plugins pylint_django"
 
 "nerd tree
 "let g:NERDTreeDirArrows = 0
@@ -232,7 +237,8 @@ nmap <leader>S :!replace_all '=expand("<cword>")' '%s#=expand("<cword>")#
 
 "to force write as sudoer
 command W w !sudo tee % > /dev/null
-
+command Fixpython :!autopep8 --in-place --aggressive %
+command Fixjs :!fixjsstyle %
 "auto folding
 "map <silent><leader>F :EnableFastPHPFolds<Cr>
 "map <silent><leader>f :EnablePHPFolds<Cr>
@@ -285,9 +291,11 @@ if has("autocmd")
 
     " javascript
 
-    autocmd FileType javascript noremap <F7> :!fixjsstyle %<CR>
-    autocmd FileType javascript noremap <F5> :!grunt alex<CR>
+    autocmd FileType javascript noremap <F7> :!Fixjs<CR>
+    autocmd FileType javascript noremap <F5> :!grunt build<CR>
     autocmd FileType javascript map <F12> gg=G
+    autocmd FileType python map <F12> gg=G
+    autocmd FileType python noremap <F7> :Fixpython<CR>
     "python :make check errors
     autocmd FileType python2 noremap <F7> :make<CR>
     set makeprg=python2\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
@@ -348,7 +356,7 @@ autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 " Remove trailing whitespaces and ^M chars
 "=========================================
 autocmd FileType .php autocmd BufWritePre <buffer> :call setline(1,map(getline(1,"$"),'substitute(v:val,"\\s\\+$","","")'))
-autocmd BufWritePost *.py :make
+"autocmd BufWritePost *.py :make
 "check syntax  (no max line chars)
 autocmd BufWritePost *.js :!gjslint --disable 110 %
 

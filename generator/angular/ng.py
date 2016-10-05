@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     args = vars(args)
-    print args
+    print 'ARGS',args, args['prefix']
 
 
 
@@ -77,7 +77,7 @@ if __name__ == "__main__":
         parent_module = ''
         parent_path = ''
         paths = args['module_name'].split('.')
-        prefix = ''
+        prefix = args['prefix']
         #remove last path (module name)
         paths.pop();
         print paths
@@ -87,10 +87,11 @@ if __name__ == "__main__":
             parent_path += path + '/'
 
         if args['prefix']:
+            print 'see prefix', args['prefix']
             prefix = args['prefix']
 
         if parent_module == '':
-            prefix = parent_module.replace('.', '/')
+            parent_module = prefix.split('.')[0]
 
 
         if args['directory']:

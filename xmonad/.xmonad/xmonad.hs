@@ -184,21 +184,24 @@ main = xmonad $ kde4Config
      , handleEventHook    = handleEventHook kde4Config
      -- , startupHook        = myStartupHook >> startupHook kde4Config
      , startupHook = startupHook kde4Config >> setWMName "LG3D"
-     , focusFollowsMouse  = myFocusFollowsMouse
+     -- , focusFollowsMouse  = myFocusFollowsMouse
      }
 
   where
 
     myManageHook = composeAll . concat $
       [ [ className   =? c --> doFloat           | c <- myFloats]
+      , [ className   =? c --> doIgnore          | c <- ignored]
       , [ title       =? t --> doFloat           | t <- myOtherFloats]
       , [ className   =? c --> doF (W.shift "Web") | c <- webApps]
       , [ className   =? c --> doF (W.shift "Community") | c <- communityApps]
       , [ className   =? c --> doF (W.shift "Dev") | c <- devApps]
-      {-, [ className   =? c --> doF (W.shift "Test") | c <- testApps]-}
-      , [ className   =? c --> doF (W.focusDown) | c <- testApps]
+      , [ className   =? c --> doF (W.shift "backtask") | c <- backTaskApps]
+      , [ className   =? c --> doF (W.focusDown) | c <- nofocusApps]
       , [ className   =? c --> doF (W.swapDown) | c <- testApps]
-      --, [ ((className =? "krunner") >>= return . not --> manageHook kde4Config) <+> (kdeOverride --> doFloat)]
+      , [ className   =? c --> doF (W.shift "Test") | c <- testApps]
+      {-, [composeOne   [ isFullscreen -?> doFullFloat ]]-}
+      {-, [ ((className =? "krunner") >>= return . not --> manageHook kde4Config) <+> (kdeOverride --> doFloat)]-}
       ]
       {-myManageHook = composeAll . concat $-}
       {-[ [ className =? c --> doFloat | c <- myFloats]-}
@@ -208,11 +211,14 @@ main = xmonad $ kde4Config
       {-]-}
     -- (Use the command xprop | grep WM_NAME to get the title property.)
     myFloats = ["Gimp","gimp-2.8","Thunderbird", "google-chrome", "google-chrome-stable", "Hedgewars", "Firefox"]
-    myOtherFloats = ["Hedgewars"]
+    myOtherFloats = []
+    ignored = ["Plasma","plasma-desktop"]
     webApps = ["google-chrome", "google-chrome-stable"]
     testApps = ["Firefox"]
+    nofocusApps = ["Firefox"]
     devApps = ["konsole"]
     communityApps = ["Thunderbird"]
+    backTaskApps = ["pgadmin3"]
 
 {-kdeOverride :: Query Bool-}
 {-kdeOverride = ask >>= \w -> liftX $ do-}

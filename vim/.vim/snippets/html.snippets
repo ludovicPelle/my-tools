@@ -20,3 +20,16 @@ snippet divc
 	<div class="${1:}"${2}>
 		${3}
 	</div>
+snippet ngform
+	<form ng-controller="${1:}FormCtrl as vm" class="form-horizontal" name="${2:my}_form" novalidate>
+		<div class="form-group">
+			<div class="col-xs-12">
+				<div resource="$1"></div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-xs-12">
+				<button type="submit" class="btn btn-primary" ng-disabled="$2_form.$invalid" translate>$1</button>
+			</div>
+		</div>
+	</form>
