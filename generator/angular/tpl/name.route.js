@@ -3,26 +3,24 @@
 
     angular
         .module('${parent_module}${module_name}')
-        .run(appRun);
+        .config(cfg);
 
-    appRun.$$inject = ['routerHelper'];
+    cfg.$$inject = ['RouterProvider'];
     /* @ngInject */
-    function appRun(routerHelper) {
-        routerHelper.configureStates(getStates());
+    function cfg(RouterProvider) {
+        RouterProvider.configureStates(getStates());
     }
 
     function getStates() {
         return [
             {
-                state: '${module_name}',
-                config: {
-                    url: '/${module_name}',
-                    templateUrl: '${prefix}${parent_path}${module_name}/${module_name}.html',
-                    controller: '${ModuleName}Ctrl',
-                    controllerAs: 'vm',
-                    title: '${module_name}'
-                }
+                name: '${module_name}',
+                url: '/${module_name}',
+                templateUrl: '${prefix}${parent_path}${module_name}/${module_name}.html',
+                controller: '${ModuleName}Ctrl',
+                controllerAs: 'vm',
+                title: '${module_name}'
             }
         ];
-    }
+}
 })();
