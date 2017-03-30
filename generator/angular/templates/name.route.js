@@ -3,12 +3,12 @@
 
     angular
         .module('{parent}{module_name}')
-        .run(appRun);
+        .config(cfg);
 
-    appRun.$inject = ['routerHelper'];
+    cfg.$inject = ['routerHelperProvider'];
     /* @ngInject */
-    function appRun(routerHelper) {
-        routerHelper.configureStates(getStates());
+    function cfg(routerHelperProvider) {
+        routerHelperProvider.configureStates(getStates());
     }
 
     function getStates() {
@@ -20,7 +20,9 @@
                     templateUrl: '{root}{parent_path}{module_name}/{module_name}.html',
                     controller: '{Module_name}Ctrl',
                     controllerAs: 'vm',
-                    title: '{module_name}'
+                    title: '{module_name}',
+                    resolve: {
+                    }
                 }
             }
         ];

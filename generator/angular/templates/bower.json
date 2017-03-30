@@ -1,0 +1,30 @@
+{
+  "name": "osculteo-authentication",
+  "version": "0.0.0",
+  "authors": [
+    "ludovic <ludovic.pelle@iprotego.com>"
+  ],
+  "description": "{module_name}",
+  "main": [
+    "{parent_module}{module_name}.module.js",
+    "{parent_module}{module_name}.service.js",
+    "{parent_module}{module_name}.directive.js"
+  ],
+  "moduleType": [
+    "es6"
+  ],
+  "keywords": [
+    "{module_name}"
+  ],
+  "license": "Copyright",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+  }
+}

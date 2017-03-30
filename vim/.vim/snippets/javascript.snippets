@@ -59,12 +59,15 @@ snippet ctrl
 
 snippet fac
 	.factory('${1:Service}', $1);
+
 	$1.$inject = [${2}];
+
 	function $1 () {
-	var service = {
-		${3}
-	};
-	return service;
+		var service = {
+			${3}
+		};
+		return service;
+	}
 snippet filter
 	.filter('${1:myService}', function($scope${3}) {
 		return function(input, param) {
@@ -85,26 +88,45 @@ snippet clos
 	 })();
 
 snippet config
-	.config(function($routeProvider, CFG${2}) {
-		$routeProvider
-			${3}
-	})
-snippet when
-	.when(CFG.ROUTES.${1:ROOT}, {
-		templateUrl: '${2:}',
-		controller: '${3:MyCtrl}',
-		access: '${4:CFG.PUBLIC}',
-		title : '${5:My view}',
-		path: $1,
-		resolve: {
-			${6}
-		},
-		referable: ${7:true}
-	})
-snippet run
-	.run(function($app${2}) {
+	.config(${1})
+	${1}.$inject = [${2}]
+	function(${2}) {
 		${3}
 	})
+snippet route
+	.config(${1:config});
+
+	/* @ngInject */
+	${1}.$inject = ['routerHelperProvider'];
+
+	function config(routerHelperProvider) {
+		routerHelperProvider.configureStates([
+			{
+	            state: '${2}',
+	            config: {
+	                url: '/${2}',
+	                templateUrl: '${3}',
+	                controller: '${4}Ctrl',
+	                controllerAs: 'vm',
+	                title: '${2}',
+	                rules: [${5}],
+	                classes:'${2}',
+					resolve: {
+					}
+	            }
+	        }
+	    ]);
+	}
+
+snippet run
+	.run(${1:run})
+
+	$1.$inject = [${2}];
+
+	function $1($2) {
+		${3}
+	}
+
 snippet Api
 	return Api.send({
 		endpoint: CFG.ENDPOINTS.${1:ROOT},
@@ -112,6 +134,8 @@ snippet Api
 	}, function(response) {
 		${4}
 	});
+
+
 snippet des
 	//
 	describe('FEATURE: ${1:1}', function() {
@@ -154,4 +178,4 @@ snippet ct
 snippet f)
 	function(${1}) {
 		${2}
-	});
+	})

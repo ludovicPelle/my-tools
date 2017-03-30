@@ -1,0 +1,17 @@
+snippet media
+	//Phone
+	@media (max-width:@screen-xs-max) {
+		${1}
+	}
+	//Tablet
+	@media (min-width: @screen-sm-min ) and (max-width:@screen-sm-max) {
+		${2}
+	}
+	//Medium screen
+	@media (min-width: @screen-md-min ) and (max-width:@screen-md-max) {
+		${3}
+	}
+	//Large screen
+	@media (min-width: @screen-lg-min ) {
+		${4}
+	}

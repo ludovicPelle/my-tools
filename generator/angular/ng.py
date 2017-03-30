@@ -31,6 +31,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Angular generator')
     group = parser.add_mutually_exclusive_group()
 
+    group.add_argument('-b', '--bower', action='store_true', help='Generate bower library')
     group.add_argument('-m', '--module', action='store_true', help='Generate module with view and route')
     group.add_argument('-d', '--directive', action='store_true', help='Generate directive module')
     group.add_argument('-s', '--service', action='store_true', help='Generate service module')
@@ -44,6 +45,29 @@ if __name__ == "__main__":
     print 'ARGS',args, args['prefix']
 
 
+
+    if args['bower']:
+        module_files = [
+            {
+                'build': [
+                    '.gitkeep'
+                ]
+            },
+            {
+                'dist': [
+                    '.gitkeep'
+                ]
+            },
+            {
+                'src': [
+                'name.module.js',
+                'name.service.js',
+                'name.directive.js',
+                ]
+            },
+            'bower.json',
+            'gulpfile.js'
+        ]
 
     if args['module']:
         module_files = [
