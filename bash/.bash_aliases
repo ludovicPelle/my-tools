@@ -56,6 +56,7 @@ alias rm="echo 'Sent to trash, (trash-list and trash-restore to restore)';trash-
 alias django-clear-migrations="rm -rf tagcloud/migrations/0* && rm -rf osculteo/migrations/0* && rm -rf payment/migrations/0* && rm -rf authentication/migrations/0*"
 alias django-migrate-requirements="pip install -r requirements.txt && ./manage.py makemigrations osculteo payment tagcloud authentication && ./manage.py migrate && ./manage.py load_fixtures && ./manage.py install_phantomjs && ./manage.py install_chromedriver"
 alias django-start-api="./manage.py redis_build_conf && ./manage.py rabbitmqctl restart && ./manage.py redisctl stop && ./manage.py redisctl start && ./manage.py celeryctl restart w1 w2 && ./manage.py runserver_plus"
+alias django-restart-all="./manage.py reset_db --noinput;django-clear-migrations;django-migrate-requirements;django-start-api;"
 alias ve="source /home/loodub/Projects/v_env/bin/activate"
 alias cp_ppt_from_vm="cp ~/Downloads/template-devis-2016-part*.pptx ~/Projects/api/lib/PPTXRenderer/templates/"
 alias scp_ppt_from_repo="scp ~/Projects/api/lib/PPTXRenderer/templates/template-devis-2016-part* root@prod:/var/www/cop1/iproteg/iprotego/api-recipe/lib/PPTXRenderer/templates/"

@@ -1,16 +1,30 @@
-snippet foro
+snippet fo
 	for (var ${1:$item} of ${2:$list}) {
 		${3}
 	}
-snippet fori
-	for (var ${1:$item} in ${2:$list}) {
+snippet fi
+	for (var ${1:i} in ${2:list}) {
+		var item = $2[$1];
 		${3}
 	}
-snippet .e
-	.each(function(el) {
+snippet .$e
+	.each(function(i, el) {
 		${1}
 	});
-snippet try
+snippet .join
+	.join('${1:,}')
+snippet .contain
+	.contain(${1:'true'})
+snippet .map
+	.map(function(i, el) {
+		${1}
+		return ${2:el};
+	});
+snippet .fe
+	.forEach(function(el, i, self) {
+		${1}
+	});
+snippet tc
 	try {
 		${1}
 	} catch (e) {
@@ -42,7 +56,7 @@ snippet dir
 		var vm =this;
 	}
 snippet watch
-	vm.$watch(${2:'myVar'}, function(n, o) {
+	${1:vm}.$watch(${2:'myVar'}, function(n, o) {
 		if (n === o || o === null) {
 			return;
 		}
@@ -86,38 +100,36 @@ snippet clos
 	 'use strict';
 	 ${1}
 	 })();
-
-snippet config
-	.config(${1})
-	${1}.$inject = [${2}]
-	function(${2}) {
+snippet cfg
+	.config(${1:cfg})
+	$1.$inject = [${2}]
+	function($2) {
 		${3}
 	})
 snippet route
 	.config(${1:config});
 
 	/* @ngInject */
-	${1}.$inject = ['routerHelperProvider'];
+	$1.$inject = ['routerHelperProvider'];
 
 	function config(routerHelperProvider) {
 		routerHelperProvider.configureStates([
 			{
 	            state: '${2}',
 	            config: {
-	                url: '/${2}',
+	                url: '/$2',
 	                templateUrl: '${3}',
 	                controller: '${4}Ctrl',
 	                controllerAs: 'vm',
-	                title: '${2}',
+	                title: '$2',
 	                rules: [${5}],
-	                classes:'${2}',
+	                classes:'#$2',
 					resolve: {
 					}
 	            }
 	        }
 	    ]);
 	}
-
 snippet run
 	.run(${1:run})
 
@@ -126,7 +138,6 @@ snippet run
 	function $1($2) {
 		${3}
 	}
-
 snippet Api
 	return Api.send({
 		endpoint: CFG.ENDPOINTS.${1:ROOT},
@@ -134,19 +145,22 @@ snippet Api
 	}, function(response) {
 		${4}
 	});
-
-
 snippet des
 	//
-	describe('FEATURE: ${1:1}', function() {
+	describe('${1:1}', function() {
 		${2}
-	//
 	});
+	/**/
+snippet .then
+	.then(function(${1}){
+		${2}
+	}${3})
 snippet it
 	//
-	it('SCEN: ${1:1}', function() {
+	it('${1:1}', function() {
 		${2}
 	});
+	/**/
 snippet page
 	'use_strict';
 	var ${1:Page} = {
@@ -175,7 +189,42 @@ snippet cl
 	console.log(${1});
 snippet ct
 	console.trace();
+
 snippet f)
 	function(${1}) {
 		${2}
 	})
+snippet f:
+	${1:fx}: function(${2}) {
+		${3}
+	},
+snippet f(
+	function(${1}) {
+		${2}
+	}
+snippet doc
+	/**
+	* ${1:Description}
+	*/
+snippet @au "@author email (First Last)"
+	@author ${1:`!v g:snips_author`} [${2:`!v g:snips_author_email`}]
+snippet @li "@license Description"
+	@license ${1:MIT}$0
+snippet @ver "@version Semantic version"
+	@version ${1:0.1.0}$0
+snippet @fileo "@fileoverview Description" b
+	/**
+	* @fileoverview ${1:${VISUAL:A description of the file}}$0
+	*/
+snippet @constr "@constructor"
+	@constructor
+snippet @p "@param {Type} varname Description"
+	@param {${1:Type}} ${2:varname} ${3:Description}
+snippet @ret "@return {Type} Description"
+	@return {${1:Type}} ${2:Description}
+snippet @pri "@private"
+	@private
+snippet @over "@override"
+	@override
+snippet @pro "@protected"
+	@protected

@@ -11,7 +11,9 @@
 	ci = commit
 	ce = checkout
 	st = status
-	l = log
+    l = log
+    branchdate = "for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative) %(committerdate)%(color:reset))'"
+
 [merge]
 	tool = vimdiff
 [core]
