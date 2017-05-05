@@ -6,13 +6,13 @@ echo "[-][vim] Begin installation ..."
 DATE=$(date "+%Y.%m.%d-%H.%M.%S")
 
 
-if [ -h ~/.vimrc ] || [ -e ~/.vimrc ] || [ -e ~/.ctags ]; then
+if [ -e ~/.vimrc ] || [ -e ~/.vimrc ] || [ -e ~/.ctags ]; then
     echo "Backup previous files"
     mv ~/.vimrc ~/.vimrc.$DATE.bak && echo "Rename ~/.vimrc as ~/.vimrc.$DATE.bak"
     mv ~/.vim ~/.vim.$DATE.bak && echo "Rename ~/.vim as ~/.vim.$DATE.bak"
     mv ~/.ctags ~/.ctags.$DATE.bak && echo "Rename ~/.ctags as ~/.ctags.$DATE.bak"
 fi
-
+echo "From dir:" `pwd`
 ln -s "`pwd`/.vimrc" ~/.vimrc
 ln -s "`pwd`/.vim" ~/.vim
 ln -s "`pwd`/.ctags" ~/.ctags
@@ -25,7 +25,7 @@ if [ -d ~/.vim/tmp ]; then
   mkdir ~/.vim/tmp
 fi
 echo "Clone vundle"
-git clone --recursive 'https://github.com/gmarik/Vundle.vim.git' '~/.vim/bundle/Vundle.vim'
+git clone --recursive 'https://github.com/gmarik/Vundle.vim.git' ~/.vim/bundle/Vundle.vim
 echo "Install plugins"
 vim +PluginInstall +qall
 
