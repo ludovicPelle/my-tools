@@ -1,0 +1,45 @@
+snippet djclass
+	# -*- coding: utf-8 -*-
+	from django.conf import settings
+	from django.db import models
+	# import timezone
+
+	class ${1:ClassName}(models.Model):
+
+	    ${2:field_a} = models.${3:CharField}(${4:verbose_name="Verbose Name", max_length=100})
+
+	    def __str__(self):
+	        return "$1"
+snippet djcmd
+	# -*- coding: utf-8 -*-
+	# from django.conf import settings
+	from django.core.management.base import BaseCommand
+
+	class Command(BaseCommand):
+	    helps = "${1:help}"
+
+	    def add_arguments(self, parser):
+		    pass
+
+	    def handle(self, *args, **options):
+		    ${0}
+snippet drfser
+	# -*- coding: utf-8 -*-
+	from django.conf import settings
+	from django.utils.translation import ugettext_lazy as _
+	from rest_framework import serializers
+
+	class ${1:ClassName}(serializers.${2:SerializerSuperClass}):
+
+	    ${3:field_a}
+
+	    class Meta:
+	        ${4:meta_a}
+snippet drfview
+	# -*- coding: utf-8 -*-
+	from rest_framework.generics import GenericAPIView
+
+	class ${1:ClassName}(${2:GenericAPIView}):
+	    ${0}
+
+
