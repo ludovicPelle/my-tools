@@ -2,13 +2,11 @@ My configs and tools
 
 # Installation
 
-Just clone repo on root directorie
+Just clone repo on user home directory '~/my-tools'
 
-Call deploy.sh, he create symlink to the repo
-
-## Vim (hotkey, snippets, ...)
-## Git
-## Aliases for symfony
-## Xmonad tailer manager
-## 
-toto
+Then Call "deploy.sh $1"
+Where $1 is:
+- vim
+- git
+- xmonad
+- bash
