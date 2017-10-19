@@ -7,14 +7,16 @@ echo "[-][Bash] Begin installation ..."
 DATE=$(date "+%Y.%m.%d-%H.%M.%S")
 
 
-if [ -h ~/.bashrc ] || [ -e ~/.bash_aliases ]; then
+if [ -f ~/.bashrc ];then
     echo "Backup previous files"
     mv ~/.bashrc ~/.bashrc.$DATE.bak && echo "Rename ~/.bashrc as ~/.bashrc.$DATE.bak"
+fi
+if [ -f ~/.bash_aliases ]; then
     mv ~/.bash_aliases ~/.bash_aliases.$DATE.bak && echo "Rename ~/.bash_aliases as ~/.bash_aliases.$DATE.bak"
 fi
-ln -s "`pwd`/.bashrc" ~/.bashrc
-echo `pwd`
-ln -s "`pwd`/.bash_aliases" ~/.bash_aliases
+echo "From" `pwd`
+ln -fs "`pwd`/.bashrc" ~/.bashrc
+ln -fs "`pwd`/.bash_aliases" ~/.bash_aliases
 source ~/.bashrc
 
 echo "[+][Bash] installation complete."
