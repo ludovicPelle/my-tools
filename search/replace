@@ -25,7 +25,7 @@ fi
   echo "Replace in project ${PWD}/$3";
   echo "grep match file contain: $SEARCHED";
   echo "vim cmd: $2"
-  for file in $(ack -l "$SEARCHED" ${PWD}/$3);
+  for file in $($ACK -l "$SEARCHED" ${PWD}/$3);
   do
     read -p "Press any key to continue on $file or Ctrl+C" -n1 -s; echo -e "\n";
     vim -c "$2" -c 'wq' $file;

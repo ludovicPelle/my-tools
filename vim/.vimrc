@@ -21,7 +21,7 @@ Plugin 'css_color'
 Plugin 'https://github.com/Valloric/YouCompleteMe'
 
 "Server for autocomplete JS
-Plugin 'marijnh/tern_for_vim'
+Plugin 'ternjs/tern_for_vim'
 "Auto bracket etc
 Plugin 'Raimondi/delimitMate'
 " emmet is an html complex completion
@@ -98,10 +98,10 @@ set laststatus=2
 set omnifunc=syntaxcomplete#Complete
 
 
-command W w !sudo tee % > /dev/null
-command Fixpython :!autopep8 --in-place --aggressive %
-command Fixjs :!fixjsstyle %
-command FormatJSON %!python -m json.tool
+command! W w !sudo tee % > /dev/null
+command! Fixpython :!autopep8 --in-place --aggressive %
+command! Fixjs :!fixjsstyle %
+command! FormatJSON %!python -m json.tool
 cmap tb tabnew<space>
 
 " =========================================
@@ -147,6 +147,10 @@ nmap <F12> gg=G
 
 " to paste without ai
 map <leader>v :r !xclip -o -selection c<CR>
+" Yank current selection into system clipboard
+vmap <leader>y :w! /tmp/clipboard<CR>
+" Yank current line into system clipboard (if nothing is selected)
+nmap <leader>p :r! cat /tmp/clipboard<CR>
 
 " Folding
 
@@ -202,7 +206,7 @@ let g:syntastic_mode_map={ 'mode': 'active',
 
 let g:syntastic_quiet_messages = {'level': 'warnings'}
 let g:syntastic_python_checkers = ['flake8']
-let g:syntastic_javascript_checkers = ['gjslint']
+let g:syntastic_javascript_checkers = ['gjslint --disable=110']
 "let g:syntastic_python_pylint_args = "--load-plugins pylint_django"
 
 "AIRLINE
@@ -221,9 +225,10 @@ let g:airline_detect_modified=1
 
 "TERN
 "enable keyboard shortcuts
-let g:tern_map_keys=1
+"let g:tern_map_keys=1
 ""show argument hints
-let g:tern_show_argument_hints='on_hold'
+"let g:tern_show_argument_hints='on_hold'
+let g:used_javascript_libs = 'underscore,angularjs,jasmine,chai'
 
 "CTRLP
 let g:ctrlp_map = '<c-f>'
@@ -245,7 +250,7 @@ let g:user_emmet_expandabbr_key='<c-e>'
 " CTAGS
 let g:ctags_path="~/.vim/plugin"
 let g:ctags_statusline=1
-set tags=./tags,tags
+set tags=./tags,tags,../tags,/home/loodub/Projects/tags
 
 "YOUCOMPLETEME
 let g:ycm_min_num_of_chars_for_completion = 1

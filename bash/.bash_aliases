@@ -1,6 +1,10 @@
 alias ll="ls -al"
+if [ -f ~/my-tools/search/conf ]; then
+    . ~/my-tools/search/conf
+fi
 
 alias s_file="~/my-tools/search/srchfile"
+alias open_all="~/my-tools/search/open_all"
 alias replace_all="~/my-tools/search/replace"
 alias s_fct="~/my-tools/search/srchfct"
 alias s_str="~/my-tools/search/srch"
@@ -37,7 +41,7 @@ alias dev-term='gnome-terminal --tab --title="local" --tab --title="server" --ta
 #alias dump-load-t-resa="dropdb t-resa && createdb t-resa -O t-resa -E UTF-8 && psql -f"
 
 alias debian-update="sudo aptitude update;sudo aptitude safe-upgrade;"
-alias arch-update="yaourt -Syua --devel"
+alias arch-update="yaourt -Syua --devel --noconfirm"
 #alias win="sudo mount -t vboxsf partage ~/win"
 alias gitpulse='git log --shortstat --pretty="%cE" | sed '"'"'s/\(.*\)@.*/\1/'"'"' | grep -v "^$" | awk '"'"'BEGIN { line=""; } !/^ / { if (line=="" || !match(line, $0)) {line = $0 "," line }} /^ / { print line " # " $0; line=""}'"'"' | sort | sed -E '"'"'s/# //;s/ files? changed,//;s/([0-9]+) ([0-9]+ deletion)/\1 0 insertions\(+\), \2/;s/\(\+\)$/\(\+\), 0 deletions\(-\)/;s/insertions?\(\+\), //;s/ deletions?\(-\)//'"'"' | awk '"'"'BEGIN {name=""; files=0; insertions=0; deletions=0;} {if ($1 != name && name != "") { print name ": " files " files changed, " insertions " insertions(+), " deletions " deletions(-), " insertions-deletions " net"; files=0; insertions=0; deletions=0; name=$1; } name=$1; files+=$2; insertions+=$3; deletions+=$4} END {print name ": " files " files changed, " insertions " insertions(+), " deletions " deletions(-), " insertions-deletions " net";}'"'"''
 
@@ -53,11 +57,14 @@ alias deploy_connot="rsync -e ssh -avz ~/Projects/GoogleConnot/templates/* root@
 alias gti="git"
 alias grutn="grunt"
 alias rm="echo 'Sent to trash, (trash-list and trash-restore to restore)';trash-put -v"
-alias django-clear-migrations="rm -rf tagcloud/migrations/0* && rm -rf osculteo/migrations/0* && rm -rf payment/migrations/0* && rm -rf authentication/migrations/0*"
-alias django-migrate-requirements="pip install -r requirements.txt && ./manage.py makemigrations osculteo payment tagcloud authentication && ./manage.py migrate && ./manage.py load_fixtures && ./manage.py install_phantomjs && ./manage.py install_chromedriver"
-alias django-start-api="./manage.py redis_build_conf && ./manage.py rabbitmqctl restart && ./manage.py redisctl stop && ./manage.py redisctl start && ./manage.py celeryctl restart w1 w2 && ./manage.py runserver_plus"
-alias django-restart-all="./manage.py reset_db --noinput;django-clear-migrations;django-migrate-requirements;django-start-api;"
+alias django-clear-migrations="rm -f */migrations/0*"
+alias django-migrate-requirements="pip install -r requirements.txt && ./manage.py makemigrations && ./manage.py migrate && ./manage.py load_initial_data && ./manage.py load_fixtures && ./manage.py install_phantomjs && ./manage.py install_chromedriver"
+alias run_docker_rabbit="docker rm docker_rabbit;docker run -d --hostname my-rabbit --name docker_rabbit -p 5672:5672 -e RABBITMQ_DEFAULT_USER=osculteo_ng -e RABBITMQ_DEFAULT_PASS=yfT4D8Hu -e RABBITMQ_DEFAULT_VHOST=osculteo_ng rabbitmq:3.6.12"
+alias django-start-api="docker ps;./manage.py redis_build_conf && ./manage.py redisctl stop && ./manage.py redisctl start && ./manage.py celeryctl restart w1 w2 && ./manage.py runserver_plus"
+#alias django-start-api="./manage.py redis_build_conf && ./manage.py rabbitmqctl restart && ./manage.py redisctl stop && ./manage.py redisctl start && ./manage.py celeryctl restart w1 w2 && ./manage.py runserver_plus"
+alias django-restart-all="./manage.py reset_db --noinput;django-clear-migrations;django-migrate-requirements;django-admin compilemessages;django-start-api;"
 alias ve="source /home/loodub/Projects/v_env/bin/activate"
 alias cp_ppt_from_vm="cp ~/Downloads/template-devis-2016-part*.pptx ~/Projects/api/lib/PPTXRenderer/templates/"
 alias scp_ppt_from_repo="scp ~/Projects/api/lib/PPTXRenderer/templates/template-devis-2016-part* root@prod:/var/www/cop1/iproteg/iprotego/api-recipe/lib/PPTXRenderer/templates/"
 alias vim="vim -p"
+alias git-tag-demo="git tag -d demo;git push --tags origin :refs/tags/demo;git tag -a demo -m demo;git push --tags origin master;"

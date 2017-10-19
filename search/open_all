@@ -10,7 +10,8 @@ if [ ! -z $2 ]; then
 fi
   OPTIONS="$OPTIONS $BASE_OPTIONS";
   SEARCHED=$1;
+  echo "Ack as $ACK";
   echo "Search in ${PWD}";
   echo "-options: $OPTIONS";
   echo "-criter: \"$1\"";
-  $ACK $OPTIONS "$SEARCHED" ${PWD};
+  eval $ACK $OPTIONS "$SEARCHED" ${PWD} | xargs bash -c '</dev/tty vim -p "$@"' ignoreme;

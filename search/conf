@@ -1,1 +1,2 @@
-PROJECT_HOME="/var/www/t-resa";
+PROJECT_HOME="~/Projects/";
+export ACK="ack";

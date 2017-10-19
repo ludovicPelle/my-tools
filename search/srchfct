@@ -14,4 +14,4 @@ fi
   echo "Search in ${PWD}";
   echo "-options: $OPTIONS";
   echo "-criter: \"$1\"";
-  ack-grep $OPTIONS "$SEARCHED" ${PWD};
+  $ACK $OPTIONS "$SEARCHED" ${PWD};

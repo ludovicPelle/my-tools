@@ -46,7 +46,7 @@ fi
 
 # afficher l'etat du git
 function parse_git_dirty {
-  [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit, working directory clean" ]] && echo '*'
+  [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit, working tree clean" ]] && echo '*'
 }
 function parse_git_branch {
   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/[\1$(parse_git_dirty)]/"
@@ -74,6 +74,7 @@ alias egrep='egrep --color=auto'
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
+
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).

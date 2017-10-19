@@ -11,4 +11,4 @@ fi
   SEARCHED=$1;
   echo "Search in $TARGET_PATH";
   echo "-criter:\"$1\"";
-  ack-grep $BASE_OPTIONS "$SEARCHED" $TARGET_PATH;
+  $ACK $BASE_OPTIONS "$SEARCHED" $TARGET_PATH;
