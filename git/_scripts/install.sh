@@ -14,4 +14,7 @@ fi
 echo "From" `pwd`
 ln -fs "`pwd`/.gitconfig" ~/.gitconfig
 
+#add autocompletion
+sudo pacman -S bash-completion
+
 echo "[+][git] installation complete."

@@ -19,4 +19,11 @@ ln -fs "`pwd`/.bashrc" ~/.bashrc
 ln -fs "`pwd`/.bash_aliases" ~/.bash_aliases
 source ~/.bashrc
 
+
+if ! [ -x "$(command -v trash)" ]; then
+    sudo pacman -S trash-cli
+fi
+#add autocompletion
+sudo pacman -S bash-completion
+
 echo "[+][Bash] installation complete."
