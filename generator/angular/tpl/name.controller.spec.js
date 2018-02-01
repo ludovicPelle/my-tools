@@ -4,7 +4,7 @@ describe('${ModuleName}Ctrl', function() {
 
     beforeEach(function() {
         bard.appModule('${parent_module}${module_name}');
-        bard.inject('$$controller', '$$log');
+        bard.inject('$$controller', '$$log', '$$rootScope');
     });
 
     beforeEach(function () {

@@ -23,7 +23,7 @@ Plugin 'https://github.com/Valloric/YouCompleteMe'
 "Server for autocomplete JS
 Plugin 'ternjs/tern_for_vim'
 "Auto bracket etc
-Plugin 'Raimondi/delimitMate'
+"Plugin 'Raimondi/delimitMate'
 " emmet is an html complex completion
 Plugin 'http://github.com/mattn/emmet-vim/'
 "snippet
@@ -97,6 +97,19 @@ set laststatus=2
 " Activate vim completion(piped with youcomplete)
 set omnifunc=syntaxcomplete#Complete
 
+" Smart completion
+function! SmartComplete()
+  let line = getline('.') " curline
+  let substr = strpart(line, -1, col('.')+1) " from start to cursor
+  let substr = matchstr(substr, "[^ \t]*$") " word till cursor
+  let has_period = match(substr, '\.') != -1 " position of period, if any
+  let has_slash = match(substr, '\/') != -1 " position of slash, if any
+
+  "TODO finish autocomplete
+
+  return "\<C-P>" " omnifunc if available
+endfunction
+"inoremap <C-Space> <c-r>=SmartComplete()<CR>
 
 command! W w !sudo tee % > /dev/null
 command! Fixpython :!autopep8 --in-place --aggressive %
@@ -109,7 +122,7 @@ cmap tb tabnew<space>
 " ========================================
 let mapleader = ","
 
-nnoremap <C-n> :tabnew<SPACE>
+"nnoremap <C-n> :tabnew<SPACE>
 " Toggle line numbers and fold column for easy copying:
 nnoremap <C-l> :set nonumber!<CR>:set foldcolumn=0<CR>
 
@@ -255,8 +268,8 @@ set tags=./tags,tags,../tags,/home/loodub/Projects/tags
 "YOUCOMPLETEME
 let g:ycm_min_num_of_chars_for_completion = 1
 let g:ycm_confirm_extra_conf = 0
-let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
-let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:ycm_key_list_select_completion = ['<Down>']
+let g:ycm_key_list_previous_completion = ['<Up>']
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
 

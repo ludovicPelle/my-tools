@@ -1,0 +1,264 @@
+snippet fo
+for (var ${1:$item} of ${2:$list}) {
+	${3}
+}
+endsnippet
+snippet fi
+for (var ${1:i} in ${2:list}) {
+	var item = $2[$1];
+	${3}
+}
+endsnippet
+snippet .$e
+.each(function(i, el) {
+	${1}
+});
+endsnippet
+snippet .join
+.join('${1:,}')
+endsnippet
+snippet .contain
+.contain(${1:'true'})
+endsnippet
+snippet .map
+.map(function(i, el) {
+	${1}
+	return ${2:el};
+});
+endsnippet
+snippet .fe
+.forEach(function(el, i, self) {
+	${1}
+});
+endsnippet
+snippet tc
+try {
+	${1}
+} catch (e) {
+	${2:console.error(e);}
+}
+endsnippet
+snippet filter "array js filter" w
+filter(function(i,el) {
+	return ${1:true};
+});
+endsnippet
+snippet sort "array js sort" w
+sort(function(a,b) {
+	return ${1:a>b};
+});
+endsnippet
+snippet dir
+.directive('${1:dir}', $1Dir)
+.controller('$1Ctrl', $1Ctrl);
+
+$1Ctrl.$inject = [${2}];
+
+function $1Dir() {
+	var linkFn = function(scope, element, attrs) {
+		console.log('link', element);
+	};
+	return {
+		templateUrl: '$3',
+		controller: '$1Ctrl',
+		controllerAs:'vm',
+		link: linkFn
+	};
+}
+
+function $1Ctrl($2) {
+	var vm =this;
+}
+endsnippet
+snippet watch
+${1:vm}.$watch(${2:'myVar'}, function(n, o) {
+	if (n === o || o === null) {
+		return;
+	}
+	${3:console.log('watch ' + ${myVar},n,o);}
+});
+endsnippet
+snippet ctrl
+.controller('${1:}Ctrl', $1Ctrl);
+
+$1Ctrl.$inject = [${2}];
+
+function $1Ctrl($2) {
+	var vm =this;
+}
+
+endsnippet
+snippet fac
+.factory('${1:Service}', $1);
+
+$1.$inject = [${2}];
+
+function $1 () {
+	var service = {
+		${3}
+	};
+	return service;
+}
+endsnippet
+snippet ngfilter
+.filter('${1:myService}', function($scope${3}) {
+	return function(input, param) {
+		${4}
+		return input;
+	};
+})
+endsnippet
+snippet nmod
+angular.module('${1:mod}', [
+	${2}
+])
+endsnippet
+snippet mod
+angular.module('${1:mod}')
+endsnippet
+snippet clos
+(function() {
+	'use strict';
+	${1}
+})();
+endsnippet
+snippet cfg
+.config(${1:cfg})
+$1.$inject = [${2}]
+function($2) {
+	${3}
+})
+endsnippet
+snippet route
+.config(${1:config});
+
+$1.$inject = ['routerHelperProvider'];
+function config(routerHelperProvider) {
+	routerHelperProvider.configureStates([{
+		state: '${2}',
+		config: {
+			url: '/$2',
+			templateUrl: '${3}',
+			controller: '${4}Ctrl',
+			controllerAs: 'vm',
+			title: '$2',
+			rules: [${5}],
+			classes:'#$2',
+			resolve: {
+			}
+		}
+	}]);
+}
+endsnippet
+snippet run
+.run(${1:run})
+
+$1.$inject = [${2}];
+
+function $1($2) {
+	${3}
+}
+endsnippet
+snippet des
+//
+describe('${1:1}', function() {
+	${2}
+});
+/**/
+endsnippet
+snippet then "promise callback" w
+then(function(${1}){
+	${2}
+	return $1;
+}${3})
+endsnippet
+snippet it
+//
+it('${1:1}', function() {
+	${2}
+});
+/**/
+endsnippet
+snippet page
+'use_strict';
+var ${1:Page} = {
+	${2}
+};
+module.exports = $1;
+endsnippet
+snippet elcss
+this.${1:element} = function() {return element(by.css(${2:selector}));}
+endsnippet
+snippet _elcss
+${1:elem}: function() {
+	return element(by.css('${2:class}'));
+}
+endsnippet
+snippet elmod
+this.${1:elem} = function() {return element(by.model('${2:model}'));}
+endsnippet
+snippet :elmod
+${1:elem}: function() {
+	return element(by.model('${2:model}'));
+}
+endsnippet
+snippet elrep
+this.${1:elem} = function() {return element(by.repeater('${2:rep}'));}
+endsnippet
+snippet :elrep
+${1:elem}: function() {
+	return element(by.repeater('${2:rep}'));
+}
+endsnippet
+snippet fc "callback" w
+function(${1}) {
+	${2}
+})
+endsnippet
+snippet f:
+${1:fx}: function(${2}) {
+	${3}
+},
+endsnippet
+snippet f
+function(${1}) {
+	${2}
+}
+endsnippet
+snippet doc
+/**
+* ${1:Description}
+*/
+endsnippet
+snippet @au "@author email (First Last)"
+@author ${1:`!v g:snips_author`} [${2:`!v g:snips_author_email`}]
+endsnippet
+snippet @li "@license Description"
+@license ${1:MIT}$0
+endsnippet
+snippet @ver "@version Semantic version"
+@version ${1:0.1.0}$0
+endsnippet
+snippet @fileo "@fileoverview Description" b
+/**
+* @fileoverview ${1:${VISUAL:A description of the file}}$0
+*/
+endsnippet
+snippet @constr "@constructor"
+@constructor
+endsnippet
+snippet @p "@param {Type} varname Description"
+@param {${1:Type}} ${2:varname} ${3:Description}
+endsnippet
+snippet @ret "@return {Type} Description"
+@return {${1:Type}} ${2:Description}
+endsnippet
+snippet @pri "@private"
+@private
+endsnippet
+snippet @over "@override"
+@override
+endsnippet
+snippet @pro "@protected"
+@protected
+endsnippet
