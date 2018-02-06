@@ -10,6 +10,7 @@ snippet djclass
 
 	    def __str__(self):
 	        return "$1"
+endsnippet
 snippet djcmd
 	# -*- coding: utf-8 -*-
 	# from django.conf import settings
@@ -23,6 +24,7 @@ snippet djcmd
 
 	    def handle(self, *args, **options):
 		    ${0}
+endsnippet
 snippet drfser
 	# -*- coding: utf-8 -*-
 	from django.conf import settings
@@ -35,11 +37,11 @@ snippet drfser
 
 	    class Meta:
 	        ${4:meta_a}
+endsnippet
 snippet drfview
 	# -*- coding: utf-8 -*-
 	from rest_framework.generics import GenericAPIView
 
 	class ${1:ClassName}(${2:GenericAPIView}):
 	    ${0}
-
-
+endsnippet

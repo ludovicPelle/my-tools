@@ -1,25 +1,34 @@
 snippet {
 	{{${1:var}|translate}}
+endsnippet
 snippet ngvr
 	{{$root.${1:var}}}
+endsnippet
 snippet ngvp
 	{{$parent.${1:var}}}
+endsnippet
 snippet ngc
 	ng-class="{${1}}[${2}]"
+endsnippet
 snippet ngr
 	<ul class="${1}">
 		<li ng-repeat=" ${2:item} in ${3:itemlist}">${4}</li>
 	</ul>
+endsnippet
 snippet ngt
 	<div ng-include="${1:partials/my_partial}">
+endsnippet
 snippet ngi
 	ng-init="${1:init_var}"
+endsnippet
 snippet btn
 	<button class="btn ${1:btn-primary}" ng-click="${2}">{{${3:'ok'}|translate}}</button>
+endsnippet
 snippet divc
 	<div class="${1:}"${2}>
 		${3}
 	</div>
+endsnippet
 snippet ngform
 	<form ng-controller="${1:}FormCtrl as vm" class="form-horizontal" name="${2:my}_form" novalidate>
 		<div class="form-group">
@@ -33,3 +42,4 @@ snippet ngform
 			</div>
 		</div>
 	</form>
+endsnippet
