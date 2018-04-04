@@ -88,6 +88,37 @@ function $1Ctrl($2) {
 }
 
 endsnippet
+snippet wow
+${1:Text}`!p snip.rv = t[1].upper()`
+endsnippet
+snippet provider
+.provider('${1}', $1Provider);
+
+config.$inject = ['$1Provider'];
+/* @ngInject */
+function config($1Provider) {
+}
+
+$1Provider.$inject = ['LoggerProvider'${2}];
+/* @ngInject */
+function $1Provider(LoggerProvider${3}) {
+	var self = this;
+	var logger = LoggerProvider.getLogger('${4:LOG}');
+	var log = logger.log;
+
+	//init
+	this.$get = $1;
+
+	$1.$inject = [${5}];
+	function $1(${6}) {
+		var service = {
+			${7://service}
+		}
+		return service;
+	}
+}
+endsnippet
+
 snippet fac
 .factory('${1:Service}', $1);
 

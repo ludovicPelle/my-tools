@@ -156,7 +156,7 @@ nmap <leader>d' di'hPl2x
 nmap <leader>d" di"hPl2x
 
 " Reindent with f12
-nmap <F12> gg=G
+nmap <F12> mzgg=G`z
 
 " to paste without ai
 map <leader>v :r !xclip -o -selection c<CR>
@@ -167,7 +167,7 @@ nmap <leader>p :r! cat /tmp/clipboard<CR>
 
 " Folding
 
-set foldmethod=syntax
+set foldmethod=indent
 set foldlevelstart=1
 
 
