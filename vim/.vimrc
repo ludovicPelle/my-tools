@@ -59,7 +59,7 @@ set t_Co=256
 set encoding=utf-8
 
 "Presentation
-colorscheme delek
+colorscheme loodub
 
 " show line number
 set number

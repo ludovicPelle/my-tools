@@ -27,7 +27,7 @@
 [color "diff"]
 	meta = yellow
 	frag = magenta
-	old = red
+    old = cyan
 	new = green
 [color "status"]
 	added = yellow

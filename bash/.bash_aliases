@@ -8,7 +8,7 @@ alias open_all="~/my-tools/search/open_all"
 alias replace_all="~/my-tools/search/replace"
 alias s_fct="~/my-tools/search/srchfct"
 alias s_str="~/my-tools/search/srch"
-alias ng="~/my-tools/generator/angular/ng.py"
+alias ngpy="~/my-tools/generator/angular/ng.py"
 
 #alias subreb="~/my-tools/git/submodulerebase"
 
@@ -43,9 +43,12 @@ alias dev-term='gnome-terminal --tab --title="local" --tab --title="server" --ta
 alias debian-update="sudo aptitude update;sudo aptitude safe-upgrade;"
 alias arch-update="yaourt -Syua --devel --noconfirm"
 #alias win="sudo mount -t vboxsf partage ~/win"
-alias gu="gulp --gulpfile=gulpfiles/gulpfile.js"
+
 alias sync_gulpfiles="cd gulpfiles && git stash && git pull origin master && cd -"
 alias update_gulpfiles="sync_gulpfiles && git commit gulpfiles -m 'Update gulpfiles'"
+alias update_all_gulpfiles="CURRENT=$(pwd); for i in $(find ./**/* -maxdepth 0 -name "gulpfiles" | cut -c 3-);do cd $i;cd ..;update_gulpfiles;cd $CURRENT;done;"
+alias status_all_gulpfiles="CURRENT=$(pwd); for i in $(find ./**/* -maxdepth 0 -name "gulpfiles" | cut -c 3-);do cd $i;cd ..;git status;cd $CURRENT;done;"
+
 alias gitpulse='git log --shortstat --pretty="%cE" | sed '"'"'s/\(.*\)@.*/\1/'"'"' | grep -v "^$" | awk '"'"'BEGIN { line=""; } !/^ / { if (line=="" || !match(line, $0)) {line = $0 "," line }} /^ / { print line " # " $0; line=""}'"'"' | sort | sed -E '"'"'s/# //;s/ files? changed,//;s/([0-9]+) ([0-9]+ deletion)/\1 0 insertions\(+\), \2/;s/\(\+\)$/\(\+\), 0 deletions\(-\)/;s/insertions?\(\+\), //;s/ deletions?\(-\)//'"'"' | awk '"'"'BEGIN {name=""; files=0; insertions=0; deletions=0;} {if ($1 != name && name != "") { print name ": " files " files changed, " insertions " insertions(+), " deletions " deletions(-), " insertions-deletions " net"; files=0; insertions=0; deletions=0; name=$1; } name=$1; files+=$2; insertions+=$3; deletions+=$4} END {print name ": " files " files changed, " insertions " insertions(+), " deletions " deletions(-), " insertions-deletions " net";}'"'"''
 
 alias sshprod="ssh root@prod"
@@ -67,6 +70,14 @@ alias django-restart-workers="./manage.py celeryctl stop w1 w2 && ./manage.py ce
 alias django-restart-redis="./manage.py redisctl stop && ./manage.py redis_build_conf && ./manage.py redisctl start"
 alias django-restart-api="django-restart-rabbit && django-restart-redis && django-restart-workers && ./manage.py runserver 0.0.0.0:8000"
 alias django-restart-all="./manage.py reset_db --noinput;django-clear-migrations;django-migrate-requirements;django-admin compilemessages;django-restart-api;"
+alias dc-up="docker-compose up --scale worker=2"
+alias dc-shell="docker-compose run web python manage.py shell_plus"
+alias dc-load-data="docker-compose run web bash -c \"python manage.py load_initial_data && python manage.py load_fixtures\""
+alias dc-migrate="docker-compose run web bash -c \"python manage.py migrate\""
+alias dc-make-migrate="dc-reset-db && django-clear-migrations && docker-compose run web bash -c \"python manage.py makemigrations\""
+alias dc-reset-db="docker-compose run web bash -c \"python manage.py reset_db --noinput\""
+alias dc-rebuild="docker build -f dev_env/Dockerfile.test_workers -t registry.osculteo.com/nicolas/api_ng:worker-dev-env . && docker build -f dev_env/Dockerfile.test_env -t registry.osculteo.com/nicolas/api_ng:dev-env ."
+alias dc-reset-all="dc-rebuild && dc-make-migrate && dc-migrate && dc-load-data && dc-up"
 alias ve="source /home/loodub/Projects/v_env/bin/activate"
 alias cp_ppt_from_vm="cp ~/Downloads/template-devis-2016-part*.pptx ~/Projects/api/lib/PPTXRenderer/templates/"
 alias scp_ppt_from_repo="scp ~/Projects/api/lib/PPTXRenderer/templates/template-devis-2016-part* root@prod:/var/www/cop1/iproteg/iprotego/api-recipe/lib/PPTXRenderer/templates/"
