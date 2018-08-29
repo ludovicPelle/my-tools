@@ -46,14 +46,11 @@ git clone --recursive 'https://github.com/gmarik/Vundle.vim.git' ~/.vim/bundle/V
 echo "Install plugins"
 vim +PluginInstall +qall
 
-if ! [ -x "$(command -v cmake)" ]; then
-    sudo pacman -S cmake
+if ! [ -x "$(command -v yaourt)" ]; then
+    echo "Install yaourt"
+    sudo pacman -S yaourt
 fi
-cd ~/.vim/bundle/YouCompleteMe && ./install.py --tern-completer && cd ~/my-tools
-
-if ! [ -x "$(command -v npm)" ]; then
-    sudo pacman -S npm
-fi
-cd ~/.vim/bundle/tern_for_vim && npm install && cd ~/my-tools
-
+cd ~/.vim/bundle/YouCompleteMe && ./install.py && cd ~/my-tools
+echo "Install AUR for autocompletion servers ok"
+sudo yaourt -S vim-youcompleteme-git
 echo "[+][vim] installation complete."
