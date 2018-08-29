@@ -8,10 +8,11 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 "SYNTAX
-Plugin 'jelera/vim-javascript-syntax'
-Plugin 'pangloss/vim-javascript'
-Plugin 'nathanaelkane/vim-indent-guides'
-Plugin 'https://github.com/othree/javascript-libraries-syntax.vim'
+"Plugin 'jelera/vim-javascript-syntax'
+"Plugin 'pangloss/vim-javascript'
+"Plugin 'isRuslan/vim-es6'
+"Plugin 'nathanaelkane/vim-indent-guides'
+"Plugin 'https://github.com/othree/javascript-libraries-syntax.vim'
 Plugin 'othree/html5.vim'
 Plugin 'groenewege/vim-less'
 Plugin 'css_color'
@@ -21,14 +22,14 @@ Plugin 'css_color'
 Plugin 'https://github.com/Valloric/YouCompleteMe'
 
 "Server for autocomplete JS
-Plugin 'ternjs/tern_for_vim'
+"Plugin 'ternjs/tern_for_vim'
 "Auto bracket etc
 "Plugin 'Raimondi/delimitMate'
 " emmet is an html complex completion
 Plugin 'http://github.com/mattn/emmet-vim/'
 "snippet
 Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets'
+"Plugin 'honza/vim-snippets'
 "Comment for all language
 Plugin 'scrooloose/nerdcommenter'
 
@@ -39,7 +40,6 @@ Plugin 'bling/vim-airline'
 Plugin 'ctrlpvim/ctrlp.vim'
 "Filetree as an IDE
 Plugin 'scrooloose/nerdtree'
-
 
 "LINTING
 Plugin 'scrooloose/syntastic'
@@ -109,7 +109,7 @@ function! SmartComplete()
 
   return "\<C-P>" " omnifunc if available
 endfunction
-"inoremap <C-Space> <c-r>=SmartComplete()<CR>
+inoremap <C-Space> <c-r>=SmartComplete()<CR>
 
 command! W w !sudo tee % > /dev/null
 command! Fixpython :!autopep8 --in-place --aggressive %
@@ -177,6 +177,7 @@ set foldlevelstart=1
 if has("autocmd")
     "no cursor underline
     autocmd BufWinEnter * set nocursorline
+    autocmd BufWinEnter * colorscheme loodub
     "enable memorised position of cursor when reopen the file
     au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
 
