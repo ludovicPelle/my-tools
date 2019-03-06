@@ -41,7 +41,8 @@ alias dev-term='gnome-terminal --tab --title="local" --tab --title="server" --ta
 #alias dump-load-t-resa="dropdb t-resa && createdb t-resa -O t-resa -E UTF-8 && psql -f"
 
 alias debian-update="sudo aptitude update;sudo aptitude safe-upgrade;"
-alias arch-update="yaourt -Syua --devel --noconfirm"
+alias arch-update="yaourt -Syua --noconfirm"
+alias arch-update-devel="yaourt -Syua --devel --noconfirm"
 #alias win="sudo mount -t vboxsf partage ~/win"
 
 alias sync_gulpfiles="cd gulpfiles && git stash && git pull origin master && cd -"
@@ -70,18 +71,82 @@ alias django-restart-workers="./manage.py celeryctl stop w1 w2 && ./manage.py ce
 alias django-restart-redis="./manage.py redisctl stop && ./manage.py redis_build_conf && ./manage.py redisctl start"
 alias django-restart-api="django-restart-rabbit && django-restart-redis && django-restart-workers && ./manage.py runserver 0.0.0.0:8000"
 alias django-restart-all="./manage.py reset_db --noinput;django-clear-migrations;django-migrate-requirements;django-admin compilemessages;django-restart-api;"
-alias dc-up="docker-compose up --scale worker=2"
+alias dc-up="dc-down && docker-compose up --scale worker=2"
+alias dc-down="docker-compose down"
+alias dc-test="docker-compose run web python manage.py test -v 2"
+alias dc-clean="docker stop $(docker ps -aq) ||  docker rm $(docker ps -aq) || docker rmi $(docker images | awk '/^<none/ {print $3}' | xargs)"
 alias dc-shell="docker-compose run web python manage.py shell_plus"
-alias dc-load-data="docker-compose run web bash -c \"python manage.py load_initial_data && python manage.py load_fixtures\""
+alias dc-load-data="docker-compose run web bash -c \"python manage.py load_initial_data && python manage.py load_fixtures && python manage.py load_web_categories && python manage.py create_agency\""
 alias dc-migrate="docker-compose run web bash -c \"python manage.py migrate\""
-alias dc-make-migrate="dc-reset-db && django-clear-migrations && docker-compose run web bash -c \"python manage.py makemigrations\""
+alias dc-make-migrate="docker-compose run web bash -c \"python manage.py makemigrations\""
 alias dc-reset-db="docker-compose run web bash -c \"python manage.py reset_db --noinput --close-sessions\""
-alias dc-rebuild="docker build -f dev_env/Dockerfile.test_workers -t registry.osculteo.com/nicolas/api_ng:worker-dev-env . && docker build -f dev_env/Dockerfile.test_env -t registry.osculteo.com/nicolas/api_ng:dev-env ."
-alias dc-reset-all="dc-rebuild && dc-make-migrate && dc-migrate && dc-load-data && dc-up"
+alias dc-rebuild="dc-clean && docker build -f dev_env/Dockerfile.test_workers -t registry.osculteo.com/nicolas/api_ng:worker-dev-env . && docker build -f dev_env/Dockerfile.test_env -t registry.osculteo.com/nicolas/api_ng:dev-env ."
+alias dc-reset-all="dc-clean || dc-reset-db && dc-make-migrate && dc-migrate && dc-load-data && dc-up"
 alias ve="source /home/loodub/Projects/v_env/bin/activate"
 alias cp_ppt_from_vm="cp ~/Downloads/template-devis-2016-part*.pptx ~/Projects/api/lib/PPTXRenderer/templates/"
 alias scp_ppt_from_repo="scp ~/Projects/api/lib/PPTXRenderer/templates/template-devis-2016-part* root@prod:/var/www/cop1/iproteg/iprotego/api-recipe/lib/PPTXRenderer/templates/"
 alias vim="vim -p"
 alias gittagv1="gulp bump --version=1.0.0;git commit -am 'Release 1.0.0';git tag -d 1.0.0;git push --tags origin :refs/tags/1.0.0;git tag -a 1.0.0 -m 1.0.0;git push --tags origin master;"
-alias launchAll="mate-terminal --tab --title=API -e \"bash -c 'cd ~/Projects/api_ng/ &&  docker-compose up';bash\" && mate-terminal --tab --title=NG -e \"bash -c 'cd ~/Projects/osculteo-ng && gulp serve-dev --env env_local.json';bash\" && mate-terminal --tab --title=BO -e \"bash -c 'cd ~/Projects/backoffice-ng && gulp serve-dev --env env_local.json;bash'\" && mate-terminal --tab --title=CONNOT -e \"bash -c 'cd ~/Projects/connoter-ng/ && npm run start';bash\""
+alias launchAll="mate-terminal --tab --title=API -e \"bash -c 'cd ~/Projects/api_ng/ &&  docker-compose up';bash\" && mate-terminal --tab --title=NG -e \"bash -c 'cd ~/Projects/osculteo-ng && gulp serve-dev --env env_local.json';bash\" && mate-terminal --tab --title=BO -e \"bash -c 'cd ~/Projects/backoffice-ng && gulp serve-dev --env env_local.json;bash'\" && mate-terminal --tab --title=CONNOT -e \"bash -c 'cd ~/Projects/connoter-ng/ && npm run start';bash\" && mate-terminal --tab --title=NGROK -e \"bash -c 'cd ~/Projects/api_ng/ && ngrok http 8080'; bash\""
 alias launchDev="cd ~/Projects/osculteo-ng; mate-terminal --tab --title=API -e \"bash -c 'cd ~/Projects/api_ng/;bash'\" && mate-terminal --tab --title=BO -e \"bash -c 'cd ~/Projects/backoffice-ng; bash'\" && mate-terminal --tab --title=CONNOT -e \"bash -c 'cd ~/Projects/connoter-ng/; bash'\""
+
+###-begin-npm-completion-###
+#
+# npm command completion script
+#
+# Installation: npm completion >> ~/.bashrc  (or ~/.zshrc)
+# Or, maybe: npm completion > /usr/local/etc/bash_completion.d/npm
+#
+
+if type complete &>/dev/null; then
+  _npm_completion () {
+    local words cword
+    if type _get_comp_words_by_ref &>/dev/null; then
+      _get_comp_words_by_ref -n = -n @ -n : -w words -i cword
+    else
+      cword="$COMP_CWORD"
+      words=("${COMP_WORDS[@]}")
+    fi
+
+    local si="$IFS"
+    IFS=$'\n' COMPREPLY=($(COMP_CWORD="$cword" \
+                           COMP_LINE="$COMP_LINE" \
+                           COMP_POINT="$COMP_POINT" \
+                           npm completion -- "${words[@]}" \
+                           2>/dev/null)) || return $?
+    IFS="$si"
+    if type __ltrim_colon_completions &>/dev/null; then
+      __ltrim_colon_completions "${words[cword]}"
+    fi
+  }
+  complete -o default -F _npm_completion npm
+elif type compdef &>/dev/null; then
+  _npm_completion() {
+    local si=$IFS
+    compadd -- $(COMP_CWORD=$((CURRENT-1)) \
+                 COMP_LINE=$BUFFER \
+                 COMP_POINT=0 \
+                 npm completion -- "${words[@]}" \
+                 2>/dev/null)
+    IFS=$si
+  }
+  compdef _npm_completion npm
+elif type compctl &>/dev/null; then
+  _npm_completion () {
+    local cword line point words si
+    read -Ac words
+    read -cn cword
+    let cword-=1
+    read -l line
+    read -ln point
+    si="$IFS"
+    IFS=$'\n' reply=($(COMP_CWORD="$cword" \
+                       COMP_LINE="$line" \
+                       COMP_POINT="$point" \
+                       npm completion -- "${words[@]}" \
+                       2>/dev/null)) || return $?
+    IFS="$si"
+  }
+  compctl -K _npm_completion npm
+fi
+###-end-npm-completion-###

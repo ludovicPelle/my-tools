@@ -10,8 +10,8 @@ export HISTCONTROL=ignoredups:erasedups
 # When the shell exits, append to the history file instead of overwriting it
 shopt -s histappend
 # After each command, append to the history file and reread it
-#export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
-PROMPT_COMMAND='echo -ne "\033]0;${PWD}\007"'
+export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
+#PROMPT_COMMAND='echo -ne "\033]0;${PWD}\007"'
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 HISTFILESIZE=1000000

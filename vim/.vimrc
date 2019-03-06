@@ -16,10 +16,11 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'othree/html5.vim'
 Plugin 'groenewege/vim-less'
 Plugin 'css_color'
+Plugin 'ccss3-syntax-plus'
 
 
 "COMPLETION
-Plugin 'https://github.com/Valloric/YouCompleteMe'
+"Plugin 'https://github.com/Valloric/YouCompleteMe'
 
 "Server for autocomplete JS
 "Plugin 'ternjs/tern_for_vim'
@@ -114,6 +115,7 @@ inoremap <C-Space> <c-r>=SmartComplete()<CR>
 command! W w !sudo tee % > /dev/null
 command! Fixpython :!autopep8 --in-place --aggressive %
 command! Fixjs :!fixjsstyle %
+command! Lorem :r https://baconipsum.com/api/?type=meat-and-filler&format=text
 command! FormatJSON %!python -m json.tool
 cmap tb tabnew<space>
 
@@ -177,7 +179,6 @@ set foldlevelstart=1
 if has("autocmd")
     "no cursor underline
     autocmd BufWinEnter * set nocursorline
-    autocmd BufWinEnter * colorscheme loodub
     "enable memorised position of cursor when reopen the file
     au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
 
@@ -195,7 +196,7 @@ if has("autocmd")
     autocmd BufRead * silent loadview
 
     " Open all as tab
-    "au BufAdd,BufNewFile,BufRead * nested tab sball
+    " au BufAdd,BufNewFile,BufRead * nested tab sball
 
 endif
 
@@ -252,7 +253,7 @@ let g:ctrlp_max_files = 0
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_dotfiles = 0
 let g:ctrlp_custom_ignore = {
-            \ 'dir':  '\v(\.git|.pyc|build|node_modules|bower_components)$',
+            \ 'dir':  '\v(\.git|.pyc|build|node_modules|bower_components|platforms|build|www|dist|report)$',
             \}
 
 " Open in tab
@@ -273,6 +274,7 @@ let g:ycm_key_list_select_completion = ['<Down>']
 let g:ycm_key_list_previous_completion = ['<Up>']
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
+"let g:ycm_server_python_interpreter="/usr/bin/python3.5"
 
 
 " ULTISNIPS

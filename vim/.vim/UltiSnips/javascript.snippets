@@ -1,4 +1,4 @@
-snippet log
+snippet l
 console.log(${1});
 endsnippet
 snippet fo
@@ -55,8 +55,7 @@ snippet dir
 .directive('${1:dir}', $1Dir)
 .controller('$1Ctrl', $1Ctrl);
 
-$1Ctrl.$inject = [${2}];
-
+/* @ngInject */
 function $1Dir() {
 	var linkFn = function(scope, element, attrs) {
 		console.log('link', element);
@@ -69,6 +68,7 @@ function $1Dir() {
 	};
 }
 
+/* @ngInject */
 function $1Ctrl($2) {
 	var vm =this;
 }
@@ -84,8 +84,7 @@ endsnippet
 snippet ctrl
 .controller('${1:}Ctrl', $1Ctrl);
 
-$1Ctrl.$inject = [${2}];
-
+/* @ngInject */
 function $1Ctrl($2) {
 	var vm =this;
 }
@@ -97,12 +96,6 @@ endsnippet
 snippet provider
 .provider('${1}', $1Provider);
 
-config.$inject = ['$1Provider'];
-/* @ngInject */
-function config($1Provider) {
-}
-
-$1Provider.$inject = ['LoggerProvider'${2}];
 /* @ngInject */
 function $1Provider(LoggerProvider${3}) {
 	var self = this;
@@ -112,7 +105,7 @@ function $1Provider(LoggerProvider${3}) {
 	//init
 	this.$get = $1;
 
-	$1.$inject = [${5}];
+	/* @ngInject */
 	function $1(${6}) {
 		var service = {
 			${7://service}
@@ -125,8 +118,7 @@ endsnippet
 snippet fac
 .factory('${1:Service}', $1);
 
-$1.$inject = [${2}];
-
+/* @ngInject */
 function $1 () {
 	var service = {
 		${3}
@@ -135,12 +127,14 @@ function $1 () {
 }
 endsnippet
 snippet ngfilter
-.filter('${1:myService}', function($scope${3}) {
+.filter('${1:myService}',  $1Filter)
+/* @ngInject */
+function $1Filter($scope${3}) {
 	return function(input, param) {
 		${4}
 		return input;
 	};
-})
+}
 endsnippet
 snippet nmod
 angular.module('${1:mod}', [
@@ -151,44 +145,61 @@ snippet mod
 angular.module('${1:mod}')
 endsnippet
 snippet clos
-(function() {
+(function(${2}) {
 	'use strict';
-	${1}
-})();
+	${3}
+})(${1});
 endsnippet
 snippet cfg
 .config(${1:cfg})
-$1.$inject = [${2}]
-function($2) {
+
+/* @ngInject */
+function cfg($2) {
 	${3}
-})
+}
 endsnippet
 snippet route
-.config(${1:config});
-
-$1.$inject = ['routerHelperProvider'];
-function config(routerHelperProvider) {
-	routerHelperProvider.configureStates([{
-		state: '${2}',
-		config: {
-			url: '/$2',
-			templateUrl: '${3}',
-			controller: '${4}Ctrl',
-			controllerAs: 'vm',
-			title: '$2',
-			rules: [${5}],
-			classes:'#$2',
+.config(config);
+/* @ngInject */
+function config(RouterProvider, gettext) {
+	RouterProvider.configureStates([
+		{
+			name: '${1:route}',
+			title: gettext('${2:$1}'),
+			url: '/${3:$1}',
+			parent: '${4:layout}',
+			referer: ${5:false},
+			menu: {
+				name: gettext('${6:$2}'),
+				icon: null,
+				name_classes: null,
+				index: 1,
+				check: function(vm) {
+					return true;
+				}
+			},
+			rules: [${6}],
 			resolve: {
-			}
+				${7}
+			},
+			views: {
+				'content@$4': {
+					templateUrl: 'app/$1/$1.html',
+					controller: '$2Ctrl',
+					controllerAs: 'vm',
+					resolve: {
+						${8}
+					},
+				},${9}
+			},
 		}
-	}]);
+	])
 }
 endsnippet
 snippet run
 .run(${1:run})
 
-$1.$inject = [${2}];
-
+/* @ngInject */
 function $1($2) {
 	${3}
 }
