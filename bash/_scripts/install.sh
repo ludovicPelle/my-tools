@@ -14,9 +14,14 @@ fi
 if [ -f ~/.bash_aliases ]; then
     mv ~/.bash_aliases ~/.bash_aliases.$DATE.bak && echo "Rename ~/.bash_aliases as ~/.bash_aliases.$DATE.bak"
 fi
+if [ -f ~/.bash_prompt ];then
+    echo "Backup previous files"
+    mv ~/.bash_prompt ~/.bash_prompt.$DATE.bak && echo "Rename ~/.bash_prompt as ~/.bash_prompt.$DATE.bak"
+fi
 echo "From" `pwd`
 ln -fs "`pwd`/.bashrc" ~/.bashrc
 ln -fs "`pwd`/.bash_aliases" ~/.bash_aliases
+ln -fs "`pwd`/.bash_prompt" ~/.bash_prompt
 source ~/.bashrc
 
 

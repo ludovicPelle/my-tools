@@ -16,16 +16,17 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'othree/html5.vim'
 Plugin 'groenewege/vim-less'
 Plugin 'css_color'
-Plugin 'ccss3-syntax-plus'
+"Plugin 'css3-syntax-plus'
 
 
 "COMPLETION
-"Plugin 'https://github.com/Valloric/YouCompleteMe'
+Plugin 'https://github.com/Valloric/YouCompleteMe'
 
 "Server for autocomplete JS
 "Plugin 'ternjs/tern_for_vim'
 "Auto bracket etc
 "Plugin 'Raimondi/delimitMate'
+Plugin 'jiangmiao/auto-pairs'
 " emmet is an html complex completion
 Plugin 'http://github.com/mattn/emmet-vim/'
 "snippet
@@ -136,6 +137,9 @@ map <leader>h /<C-r>=expand("<cword>")<CR>
 nmap <leader>s :%s/<C-r>=expand("<cword>")<CR>/
 
 nmap <leader>S :!replace_all '=expand("<cword>")' '%s#=expand("<cword>")#
+nmap <leader>F :!ack <C-R><C-W> .<CR>
+nmap <leader>f :terminal ack <C-R><C-W> .<CR>
+nmap <leader>o <c-w>gf
 
 " go and back on declaration
 map <silent><leader><Right> <C-T>
@@ -253,7 +257,7 @@ let g:ctrlp_max_files = 0
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_dotfiles = 0
 let g:ctrlp_custom_ignore = {
-            \ 'dir':  '\v(\.git|.pyc|build|node_modules|bower_components|platforms|build|www|dist|report)$',
+            \ 'dir':  '\v(\.git|.pyc|build|node_modules|bower_components|platforms/android|platforms/ios|build|www|dist|report)$',
             \}
 
 " Open in tab
@@ -265,7 +269,7 @@ let g:user_emmet_expandabbr_key='<c-e>'
 " CTAGS
 let g:ctags_path="~/.vim/plugin"
 let g:ctags_statusline=1
-set tags=./tags,tags,../tags,/home/loodub/Projects/tags
+set tags=./tags,tags,../tags,../../tags,/home/loodub/Projects/tags
 
 "YOUCOMPLETEME
 let g:ycm_min_num_of_chars_for_completion = 1
