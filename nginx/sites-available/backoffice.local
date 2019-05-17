@@ -1,0 +1,19 @@
+server {
+    listen 80;
+    server_name backoffice.local;
+    #listen [::]:80 default_server ipv6only=on;
+
+    error_log  /var/log/nginx/backoffice-ng.local.log debug;
+    root /var/www/backoffice-ng/dist;
+    index index.html;
+    location / {
+        index index.html;
+        try_files $uri $uri/ /index.html;
+    }
+    location /connoter.zip {
+        add_header Content-Type "application/zip";
+        add_header Content-Disposition "attachment; filename=connoter.zip";
+        try_files /connoter.zip =404;
+
+    }
+}

@@ -277,7 +277,7 @@ sexy_bash_prompt_get_git_info () {
 }
 
 # Define the sexy-bash-prompt
-PS1="\[$sexy_bash_prompt_reset\]\
+    export PS1="[\t]\[$sexy_bash_prompt_reset\]\
 \[$sexy_bash_prompt_user_color\]\u\[$sexy_bash_prompt_reset\]\
 \[$sexy_bash_prompt_device_color\]@\[$sexy_bash_prompt_reset\]\
 \[$sexy_bash_prompt_device_color\]\h\[$sexy_bash_prompt_reset\]\

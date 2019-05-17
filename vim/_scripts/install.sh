@@ -1,10 +1,8 @@
 #!/bin/bash
-
 echo "[-][vim] Begin installation ..."
 
 # we create symbolic links to the config files if they don't already exist, else rename as FILE.DATE.BAK
 DATE=$(date "+%Y.%m.%d-%H.%M.%S")
-
 
 if [ -e ~/.vimrc ]; then
 	echo "Backup .vimrc"
@@ -21,11 +19,10 @@ fi
 
 if [ -e ~/.ctags ]; then
 	echo "Backup .ctags"
-    sudo pacman -S ctags
 	mv ~/.ctags ~/.ctags.$DATE.bak && echo "Rename ~/.ctags as ~/.ctags.$DATE.bak"
 fi
 
-echo "Creat symlinks from:" `pwd`
+echo "Symlinks from:" `pwd`
 ln -fs "`pwd`/.vimrc" ~/.vimrc
 ln -fs "`pwd`/.vim" ~/.vim
 ln -fs "`pwd`/.ctags" ~/.ctags
@@ -46,11 +43,18 @@ git clone --recursive 'https://github.com/gmarik/Vundle.vim.git' ~/.vim/bundle/V
 echo "Install plugins"
 vim +PluginInstall +qall
 
+if ! [ -x "$(command -v ctags)" ]; then
+    echo "Install ctags"
+    sudo pacman -S ctags
+fi
 if ! [ -x "$(command -v yaourt)" ]; then
     echo "Install yaourt"
     sudo pacman -S yaourt
 fi
-cd ~/.vim/bundle/YouCompleteMe && ./install.py && cd ~/my-tools
-echo "Install AUR for autocompletion servers ok"
-sudo yaourt -S vim-youcompleteme-git
+echo "Install & Build YCM Plugin"
+cd ~/.vim/bundle/YouCompleteMe && ./install.py --ts-completer --go-completer && cd ~/my-tools
+echo "Install YCM AUR for autocompletion servers ok"
+if ! yaourt -Qi vim-youcompleteme-git ; then
+    sudo yaourt -S vim-youcompleteme-git
+fi
 echo "[+][vim] installation complete."

@@ -1,0 +1,27 @@
+server {
+    listen 80;
+    server_name fwc.local;
+    #listen [::]:80 default_server ipv6only=on;
+
+    error_log  /var/log/nginx/fwc.log debug;
+    root /var/www/fwc/;
+    index www/index.html;
+    location /languages {
+        root /var/www/fwc/www/;
+    }
+    location /fonts {
+        root /var/www/fwc/www/;
+    }
+    location /css {
+        root /var/www/fwc/www/;
+    }
+    location /js {
+        root /var/www/fwc/www/;
+    }
+    location /images {
+        root /var/www/fwc/www/;
+    }
+    location / {
+        try_files $uri $uri/ /www/index.html;
+    }
+}
