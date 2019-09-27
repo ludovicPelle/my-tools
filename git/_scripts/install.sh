@@ -8,7 +8,7 @@ DATE=$(date "+%Y.%m.%d-%H.%M.%S")
 #add git
 if ! pacman -Qi git; then
     echo "Install git"
-    sudo pacman -S git
+    brew install  git
 fi
 
 if [ -f ~/.gitconfig ]; then
@@ -20,11 +20,7 @@ echo "Symlinking From" `pwd`
 ln -fs "`pwd`/.gitconfig" ~/.gitconfig
 
 if ! [ -x "$(command -v diff-so-fancy)" ]; then
-    if ! [ -x "$(command -v yaourt)" ]; then
-        echo "Install yaourt"
-        sudo pacman -S yaourt
-    fi
     echo "Install diff-so-fancy"
-    yaourt -S diff-so-fancy-git
+    brew install diff-so-fancy
 fi
 echo "[+][git] installation complete."

@@ -64,7 +64,7 @@ alias django-restart-all="./manage.py reset_db --noinput;django-clear-migrations
 alias dc-up="dc-down && docker-compose up --scale worker=2"
 alias dc-down="docker-compose down"
 alias dc-test="docker-compose run web python manage.py test -v 2"
-alias dc-clean="docker stop $(docker ps -aq) ||  docker rm $(docker ps -aq) || docker rmi $(docker images | awk '/^<none/ {print $3}' | xargs)"
+alias dc-clean='docker stop $(docker ps -aq)\" ||  docker rm $(docker ps -aq) || docker rmi $(docker images | awk "/^<none/ {print $3}" | xargs)'
 alias dc-shell="docker-compose run web python manage.py shell_plus"
 alias dc-load-data="docker-compose run web bash -c \"python manage.py load_initial_data && python manage.py load_fixtures && python manage.py load_web_categories && python manage.py create_agency\""
 alias dc-migrate="docker-compose run web bash -c \"python manage.py migrate\""

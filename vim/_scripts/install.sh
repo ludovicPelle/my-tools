@@ -14,7 +14,7 @@ if [ -e ~/.vim ]; then
 fi
 
 if ! [ -x "$(command -v ctags)" ]; then
-    sudo pacman -S ctags
+    brew install ctags
 fi
 
 if [ -e ~/.ctags ]; then
@@ -45,16 +45,8 @@ vim +PluginInstall +qall
 
 if ! [ -x "$(command -v ctags)" ]; then
     echo "Install ctags"
-    sudo pacman -S ctags
-fi
-if ! [ -x "$(command -v yaourt)" ]; then
-    echo "Install yaourt"
-    sudo pacman -S yaourt
+    brew install ctags
 fi
 echo "Install & Build YCM Plugin"
 cd ~/.vim/bundle/YouCompleteMe && ./install.py --ts-completer --go-completer && cd ~/my-tools
-echo "Install YCM AUR for autocompletion servers ok"
-if ! yaourt -Qi vim-youcompleteme-git ; then
-    sudo yaourt -S vim-youcompleteme-git
-fi
 echo "[+][vim] installation complete."

@@ -30,20 +30,11 @@ source ~/.bashrc
 
 if ! [ -x "$(command -v trash)" ]; then
     echo "Install trash-cli -> soft rm command"
-    sudo pacman -S trash-cli
+    brew install trash-cli
 fi
 #add autocompletion
 if ! pacman -Qi bash-completion; then
     echo "Install bash completion"
-    sudo pacman -S bash-completion
+    brew install bash-completion
 fi
-if ! [ -x "$(command -v hstr)" ]; then
-    if ! [ -x "$(command -v yaourt)" ]; then
-        echo "Install yaourt"
-        sudo pacman -S yaourt
-    fi
-    echo "Install hstr (pretty bash history intellisense)"
-    yaourt -S hstr-git
-fi
-
 echo "[+][Bash] installation complete."
