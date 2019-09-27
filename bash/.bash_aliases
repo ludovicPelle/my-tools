@@ -1,7 +1,5 @@
-alias ls='ls --color=auto'
+alias ls="ls -G"
 alias ll="ls -al"
-alias dir='dir --color=auto'
-alias vdir='vdir --color=auto'
 
 #Trash rm
 alias trm="echo 'Sent to trash, (trash-list and trash-restore to restore)';trash-put -v"
