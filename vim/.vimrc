@@ -20,13 +20,14 @@ Plugin 'css_color'
 
 
 "COMPLETION
-Plugin 'https://github.com/Valloric/YouCompleteMe'
+"Plugin 'neoclide/coc.nvim'
+Plugin 'https://github.com/ycm-core/YouCompleteMe.git'
 
-"Server for autocomplete JS
-"Plugin 'ternjs/tern_for_vim'
+
 "Auto bracket etc
 "Plugin 'Raimondi/delimitMate'
-Plugin 'jiangmiao/auto-pairs'
+" Plugin 'jiangmiao/auto-pairs'
+
 " emmet is an html complex completion
 Plugin 'http://github.com/mattn/emmet-vim/'
 "snippet
@@ -34,6 +35,9 @@ Plugin 'SirVer/ultisnips'
 "Plugin 'honza/vim-snippets'
 "Comment for all language
 Plugin 'scrooloose/nerdcommenter'
+
+"Git sweet shortcuts"
+Plugin 'fugitive.vim'
 
 " FILES
 "Buffers display
@@ -78,7 +82,7 @@ endif
 "Enhanced command line completion.
 set wildmenu
 "Complete files like a shell.
-set wildmode=list:longest
+set wildmode=longest,list:longest
 
 
 " enable to move over lines with right and left arrows
@@ -90,6 +94,8 @@ set shiftwidth=4
 set softtabstop=4
 set expandtab
 
+" force relaod if file changed
+"set autoread
 
 " status line
 set statusline=%F%m%=%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [LINE=%l]\ [Col=%v]\ [%p%%]
@@ -98,24 +104,50 @@ set laststatus=2
 
 " Activate vim completion(piped with youcomplete)
 set omnifunc=syntaxcomplete#Complete
+set complete=.,b,u,]
+set completeopt=menu,preview
 
-" Smart completion
-function! SmartComplete()
-  let line = getline('.') " curline
-  let substr = strpart(line, -1, col('.')+1) " from start to cursor
-  let substr = matchstr(substr, "[^ \t]*$") " word till cursor
-  let has_period = match(substr, '\.') != -1 " position of period, if any
-  let has_slash = match(substr, '\/') != -1 " position of slash, if any
+imap <C-Space> <C-P>
 
-  "TODO finish autocomplete
-
-  return "\<C-P>" " omnifunc if available
+function Fixjs()
+    :silent !fixjsstyle %
+    :e
+    :redraw!
 endfunction
-inoremap <C-Space> <c-r>=SmartComplete()<CR>
+function Fixpython()
+    :silent !autopep8 --in-place --aggressive %
+    :e
+    :redraw!
+endfunction
+
+function Fixcss()
+    normal mzgg=G`z
+    :%s#:\(\s\)\{0,\}\(\S\)#: \2#g
+endfunction
+
+function DiffAndCommit()
+    " open commit in split
+    :Gcommit %
+    " resize split
+    :resize 10
+    " switch bottom window
+    :execute("normal \<C-w>j")
+    " execute vertical diff
+    :Gdiff
+endfunction
 
 command! W w !sudo tee % > /dev/null
-command! Fixpython :!autopep8 --in-place --aggressive %
-command! Fixjs :!fixjsstyle %
+command! Fixpython call Fixpython()
+command! Fixjs call Fixjs()
+command! Fixcss call Fixcss()
+" Quick diff in vslit and commit on top split
+nmap <F4> :call DiffAndCommit()<CR>
+autocmd FileType javascript nmap <F6> :Fixjs<CR>
+autocmd FileType python nmap <F6> :Fixpython<CR>
+" add space
+autocmd BufWinEnter *.css nmap <F6> :Fixcss<CR>
+autocmd BufWinEnter *.scss nmap <F6> :Fixcss<CR>
+autocmd BufWinEnter *.less nmap <F6> :Fixcss<CR>
 command! Lorem :r https://baconipsum.com/api/?type=meat-and-filler&format=text
 command! FormatJSON %!python -m json.tool
 cmap tb tabnew<space>
@@ -136,18 +168,22 @@ map <leader>h /<C-r>=expand("<cword>")<CR>
 " replace)
 nmap <leader>s :%s/<C-r>=expand("<cword>")<CR>/
 
-nmap <leader>S :!replace_all '=expand("<cword>")' '%s#=expand("<cword>")#
+
+nmap <leader>S :!replace '=expand("<cword>")' '%s#=expand("<cword>")#
 nmap <leader>F :!ack <C-R><C-W> .<CR>
 nmap <leader>f :terminal ack <C-R><C-W> .<CR>
 nmap <leader>o <c-w>gf
 
 " go and back on declaration
 map <silent><leader><Right> <C-T>
-map <silent><leader><Left> <C-]>
+nmap <silent><leader>d g]
+map <silent><leader><Left> g]
 
 "tabs
-nnoremap <A-left> :bprevious<CR>
-nnoremap <A-right> :bnext<CR>
+nnoremap <A-left> gT
+nnoremap <A-right> gt
+nnoremap <A-S-left> :bprevious<CR>
+nnoremap <A-S-right> :bnext<CR>
 
 "vsplit resizing
 " resize ->
@@ -161,6 +197,8 @@ nmap <leader>" ciw""<Esc>P
 nmap <leader>d' di'hPl2x
 nmap <leader>d" di"hPl2x
 
+" Next error
+nmap <F9> lnext
 " Reindent with f12
 nmap <F12> mzgg=G`z
 
@@ -172,7 +210,6 @@ vmap <leader>y :w! /tmp/clipboard<CR>
 nmap <leader>p :r! cat /tmp/clipboard<CR>
 
 " Folding
-
 set foldmethod=indent
 set foldlevelstart=1
 
@@ -187,7 +224,7 @@ if has("autocmd")
     au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
 
     "check syntax JS on save (no max line chars)
-    autocmd BufWritePost *.js :!gjslint --disable 110 %
+    "autocmd BufWritePost *.js :!gjslint --quiet --disable=110 %
     autocmd BufWinEnter *.js set foldmethod=indent
 
     " Remove trailing whitespaces and ^M chars
@@ -204,29 +241,41 @@ if has("autocmd")
 
 endif
 
-
-
 " =========================================
 "           PLUGIN CONFIG
 " ========================================
 " SYNTASTIC
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 1
-"cause template not reconize
-let g:syntastic_mode_map={ 'mode': 'active',
-            \ 'active_filetypes': [],
-            \ 'passive_filetypes': ['html'] }
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+" Prevent buffer redraw bug on Syntastic Error auto loc list
+if exists("g:loaded_slowsave")
+    finish
+endif
+let g:loaded_slowsave = 1
+let s:save_cpo = &cpo
+set cpo&vim
+autocmd BufWritePost * call s:UpdateErrors()
+function! s:UpdateErrors()
+    "echo "Sleeping for a second..."
+    sleep 300m
+    redraw
+endfunction
+let &cpo = s:save_cpo
 
-let g:syntastic_quiet_messages = {'level': 'warnings'}
+
+
+"cause html template not always detected
+"let g:syntastic_mode_map={
+            ""\ 'mode': 'active',
+            ""\ 'active_filetypes': [],
+            ""\ 'passive_filetypes': ['html'] }
+
+"let g:syntastic_quiet_messages = {'regex': '.*FixIt.*'}
 let g:syntastic_python_checkers = ['flake8']
-let g:syntastic_javascript_checkers = ['gjslint --disable=110']
-"let g:syntastic_python_pylint_args = "--load-plugins pylint_django"
+"let g:syntastic_javascript_checkers = ['jshint']
+" let g:syntastic_python_pylint_args = '--load-plugins pylint_django'
 
 "AIRLINE
 " Enable the list of buffers
@@ -242,13 +291,6 @@ let g:airline_left_sep = '>'
 let g:airline_right_sep = '<'
 let g:airline_detect_modified=1
 
-"TERN
-"enable keyboard shortcuts
-"let g:tern_map_keys=1
-""show argument hints
-"let g:tern_show_argument_hints='on_hold'
-let g:used_javascript_libs = 'underscore,angularjs,jasmine,chai'
-
 "CTRLP
 let g:ctrlp_map = '<c-f>'
 let g:ctrlp_cmd = 'CtrlPMixed'
@@ -259,7 +301,6 @@ let g:ctrlp_dotfiles = 0
 let g:ctrlp_custom_ignore = {
             \ 'dir':  '\v(\.git|.pyc|build|node_modules|bower_components|platforms/android|platforms/ios|build|www|dist|report)$',
             \}
-
 " Open in tab
 let g:ctrlp_open_new_file = 't'
 
@@ -267,19 +308,19 @@ let g:ctrlp_open_new_file = 't'
 let g:user_emmet_expandabbr_key='<c-e>'
 
 " CTAGS
-let g:ctags_path="~/.vim/plugin"
-let g:ctags_statusline=1
-set tags=./tags,tags,../tags,../../tags,/home/loodub/Projects/tags
+set tags=tags,../tags,~/tags
 
 "YOUCOMPLETEME
+let g:ycm_show_diagnostics_ui = 0
 let g:ycm_min_num_of_chars_for_completion = 1
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_key_list_select_completion = ['<Down>']
 let g:ycm_key_list_previous_completion = ['<Up>']
+let g:ycm_collect_identifiers_from_comments_and_strings = 1
+let g:ycm_cache_omnifunc = 1
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
-"let g:ycm_server_python_interpreter="/usr/bin/python3.5"
-
+let g:ycm_server_python_interpreter="/usr/bin/python3.7"
 
 " ULTISNIPS
 let g:UltiSnipsExpandTrigger="<c-j>"

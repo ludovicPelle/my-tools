@@ -1,6 +1,19 @@
 server {
     listen 80;
-    server_name fwc.local;
+    server_name fwc.local fwc.ludo;
+    listen 443 ssl;
+    # force https-redirects
+    #if ($scheme = http) {
+        #return 301 https://$server_name$request_uri;
+    #}
+    ssl_certificate /etc/ssl/certs/nginx-selfsigned.crt;
+    ssl_certificate_key /etc/ssl/private/nginx-selfsigned.key;
+
+    ssl_session_timeout 5m;
+
+    ssl_protocols SSLv3 TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers "HIGH:!aNULL:!MD5 or HIGH:!aNULL:!MD5:!3DES";
+    ssl_prefer_server_ciphers on;
     #listen [::]:80 default_server ipv6only=on;
 
     error_log  /var/log/nginx/fwc.log debug;

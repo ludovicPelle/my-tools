@@ -20,11 +20,11 @@ echo "Symlinking From" `pwd`
 ln -fs "`pwd`/.gitconfig" ~/.gitconfig
 
 if ! [ -x "$(command -v diff-so-fancy)" ]; then
-    if ! [ -x "$(command -v yaourt)" ]; then
-        echo "Install yaourt"
-        sudo pacman -S yaourt
+    if ! [ -x "$(command -v yay)" ]; then
+        echo "Install yay"
+        sudo pacman -S yay
     fi
     echo "Install diff-so-fancy"
-    yaourt -S diff-so-fancy-git
+    yay -S diff-so-fancy-git
 fi
 echo "[+][git] installation complete."

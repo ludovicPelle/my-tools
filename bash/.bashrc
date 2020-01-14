@@ -45,6 +45,10 @@ fi
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
+# auto complete cycle on second tab hit
+#bind 'set completion-ignore-case on'
+#bind 'set show-all-if-ambiguous on'
+#bind "TAB:menu-complete"
 
 if [ -f ~/my-tools/bash/django_bash_completion.sh ] && ! shopt -oq posix; then
     . ~/my-tools/bash/django_bash_completion.sh
@@ -55,3 +59,4 @@ if [ -x "$(command -v gulp)" ]; then
 fi
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+source /usr/share/nvm/init-nvm.sh

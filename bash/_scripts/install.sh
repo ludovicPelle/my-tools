@@ -38,12 +38,12 @@ if ! pacman -Qi bash-completion; then
     sudo pacman -S bash-completion
 fi
 if ! [ -x "$(command -v hstr)" ]; then
-    if ! [ -x "$(command -v yaourt)" ]; then
-        echo "Install yaourt"
-        sudo pacman -S yaourt
+    if ! [ -x "$(command -v yay)" ]; then
+        echo "Install yay"
+        sudo pacman -S yay
     fi
     echo "Install hstr (pretty bash history intellisense)"
-    yaourt -S hstr-git
+    yay -S hstr-git
 fi
 
 echo "[+][Bash] installation complete."

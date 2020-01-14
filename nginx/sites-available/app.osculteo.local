@@ -35,6 +35,14 @@ server {
     location /images {
         root /var/www/osculteo-ng/build/;
     }
+    location /report/ {
+        alias /var/www/osculteo-ng/report/;
+        autoindex on;
+    }
+    location /report/* {
+        root /var/www/osculteo-ng/report/;
+        try_files $uri $uri/;
+    }
     location / {
         try_files $uri $uri/ /build/index.html;
     }

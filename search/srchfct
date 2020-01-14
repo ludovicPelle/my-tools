@@ -6,12 +6,23 @@ if [ -z $1 ]; then
  exit;
 fi
 if [ ! -z $2 ]; then
-    OPTIONS=$2;
+    if [ $2 = *[--]* ]; then
+        OPTIONS=$2;
+    else
+        OPTIONS="";
+        PWD=$2;
+    fi
+
+fi
+if [ ! -z $3 ]; then
+    PWD=$3;
 fi
 
   OPTIONS="$OPTIONS $BASE_OPTIONS";
-  SEARCHED="function $1";
+  SEARCHED_JS="function $1";
+  SEARCHED_PYTHON="def $1";
   echo "Search in ${PWD}";
   echo "-options: $OPTIONS";
   echo "-criter: \"$1\"";
-  $ACK $OPTIONS "$SEARCHED" ${PWD};
+  $ACK --type=js $OPTIONS "$SEARCHED_JS" ${PWD};
+  $ACK --type=python $OPTIONS "$SEARCHED_PYTHON" ${PWD};

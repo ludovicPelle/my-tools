@@ -12,14 +12,14 @@ hi Cursor     guifg=bg     guibg=fg
 hi lCursor    guifg=NONE   guibg=Cyan
 
 " Note: we never set 'term' because the defaults for B&W terminals are OK
-hi DiffAdd    ctermbg=LightBlue    guibg=LightBlue
-hi DiffChange ctermbg=LightMagenta guibg=LightMagenta
+hi DiffAdd    ctermbg=DarkGrey    guibg=DarkGrey
+hi DiffChange ctermbg=DarkGrey guibg=DarkGrey
 hi DiffDelete ctermfg=Blue	   ctermbg=LightCyan gui=bold guifg=Blue guibg=LightCyan
 hi DiffText   ctermbg=Red	   cterm=bold gui=bold guibg=Red
 hi Directory  ctermfg=DarkBlue	   guifg=Blue
 hi ErrorMsg   ctermfg=White	   ctermbg=DarkRed  guibg=Red	    guifg=White
 hi FoldColumn ctermfg=DarkBlue	   ctermbg=Grey     guibg=Grey	    guifg=DarkBlue
-hi Folded     ctermbg=Grey	   ctermfg=DarkBlue guibg=LightGrey guifg=DarkBlue
+hi Folded     ctermbg=Black	   ctermfg=White guibg=LightGrey guifg=DarkBlue
 hi IncSearch  cterm=reverse	   gui=reverse
 hi LineNr     ctermfg=Brown	   guifg=Brown
 hi ModeMsg    cterm=bold	   gui=bold

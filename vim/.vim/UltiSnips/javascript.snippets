@@ -2,39 +2,48 @@ snippet l
 console.log(${1});
 endsnippet
 snippet fo
-for (var ${1:$item} of ${2:$list}) {
+for (var ${1:item} of ${2:list}) {
 	${3}
 }
 endsnippet
 snippet fi
-for (var ${1:i} in ${2:list}) {
-	var item = $2[$1];
-	${3}
+for (var ${1:key} in ${2:list}) {
+	if($2.hasOwnProperty($1)) {
+		var ${3:item} = $2[$1];
+		${4}
+	}
 }
 endsnippet
-snippet .$e
+snippet $e
 .each(function(i, el) {
 	${1}
 });
 endsnippet
-snippet .join
+snippet join
 .join('${1:,}')
 endsnippet
-snippet .contain
+snippet contain
 .contain(${1:'true'})
 endsnippet
-snippet .map
+snippet map
 .map(function(i, el) {
 	${1}
 	return ${2:el};
 });
 endsnippet
-snippet .fe
+snippet fe "iter" w
 .forEach(function(el, i, self) {
 	${1}
 });
 endsnippet
 snippet tc
+try {
+	${1}
+} catch (e) {
+	${2:console.error(e);}
+}
+endsnippet
+snippet try
 try {
 	${1}
 } catch (e) {
@@ -48,7 +57,7 @@ filter(function(i,el) {
 endsnippet
 snippet sort "array js sort" w
 sort(function(a,b) {
-	return ${1:a>b};
+	return parseInt(${1:a-b},10);
 });
 endsnippet
 snippet dir
@@ -74,7 +83,7 @@ function $1Ctrl($2) {
 }
 endsnippet
 snippet watch
-${1:vm}.$watch(${2:'myVar'}, function(n, o) {
+${1:$scope}.$watch(${2:'myVar'}, function(n, o) {
 	if (n === o || o === null) {
 		return;
 	}
@@ -205,24 +214,20 @@ function $1($2) {
 }
 endsnippet
 snippet des
-//
-describe('${1:1}', function() {
+describe('${1}', function() {
 	${2}
 });
-/**/
 endsnippet
 snippet then "promise callback" w
-then(function(${1}){
+then(function(${1}) {
 	${2}
 	return $1;
 }${3})
 endsnippet
 snippet it
-//
-it('${1:1}', function() {
+it('should ${1:test}', function() {
 	${2}
 });
-/**/
 endsnippet
 snippet page
 'use_strict';
@@ -256,6 +261,11 @@ ${1:elem}: function() {
 }
 endsnippet
 snippet fc "callback" w
+function(${1}) {
+	${2}
+})
+endsnippet
+snippet f) "callback" w
 function(${1}) {
 	${2}
 })

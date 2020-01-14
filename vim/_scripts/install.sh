@@ -47,14 +47,30 @@ if ! [ -x "$(command -v ctags)" ]; then
     echo "Install ctags"
     sudo pacman -S ctags
 fi
-if ! [ -x "$(command -v yaourt)" ]; then
-    echo "Install yaourt"
-    sudo pacman -S yaourt
+if ! [ -x "$(command -v jshint)" ]; then
+    echo "Install jshint"
+    sudo pacman -S jshint
 fi
+if ! yay -Qi closure-linter ; then
+    echo "Install closure-linter"
+    sudo yay -S closure-linter
+fi
+if ! yay -Qi flake8 ; then
+    echo "Install flake8"
+    sudo yay -S flake8
+fi
+if ! yay -Qi autopep8 ; then
+    echo "Install autopep8"
+    sudo yay -S autopep8
+fi
+#if ! [ -x "$(command -v yay)" ]; then
+    #echo "Install yay"
+    #sudo pacman -S yay
+#fi
 echo "Install & Build YCM Plugin"
-cd ~/.vim/bundle/YouCompleteMe && ./install.py --ts-completer --go-completer && cd ~/my-tools
-echo "Install YCM AUR for autocompletion servers ok"
-if ! yaourt -Qi vim-youcompleteme-git ; then
-    sudo yaourt -S vim-youcompleteme-git
-fi
+cd ~/.vim/bundle/YouCompleteMe && ./install.py --ts-completer --go-completer && cd -
+#echo "Install YCM AUR for autocompletion servers ok"
+#if ! yay -Qi vim-youcompleteme-git ; then
+    #sudo yay -S vim-youcompleteme-git
+#fi
 echo "[+][vim] installation complete."

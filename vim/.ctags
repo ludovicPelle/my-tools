@@ -4,8 +4,8 @@
 --exclude=*.min.*
 --exclude=*.swp
 --exclude=.git
---exclude=node_modules*
---exclude=bower_components*
+--exclude=node_modules
+--exclude=bower_components
 --exclude=.git/*
 --exclude=min
 
