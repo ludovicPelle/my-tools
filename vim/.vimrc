@@ -107,6 +107,9 @@ set omnifunc=syntaxcomplete#Complete
 set complete=.,b,u,]
 set completeopt=menu,preview
 
+" tabs
+set tabpagemax=100
+
 imap <C-Space> <C-P>
 
 function Fixjs()
@@ -133,13 +136,22 @@ function DiffAndCommit()
     " switch bottom window
     :execute("normal \<C-w>j")
     " execute vertical diff
-    :Gdiff
+    :Gdiff | execute("normal \<C-w>k")
+endfunction
+
+function GenerateScssColors()
+    :execute("normal! :/@rgb$/+1,/@endrgb$/-1d\<cr> | :/@color$/+1,/@endcolor$/-1y | :/@rgb$/\<cr>|p\<esc> | :/@rgb$/+1,/@endrgb$/-1s#:.*rgb(\\(.*\\)).*$#-rgb: \\1;#g\<cr>")
+    :execute("normal! :/Start$/+1,/End$/-1d\<cr> |:/@rgb$/+1,/@endrgb$/-1y | :/Start$/\<cr>|p\<esc> | :/@color$/+1,/@endcolor$/-1y | :/Start$/\<cr>|p\<esc> |:/Start$/+1,/End$/-1s#.*--\\(.*\\):.*#$\\1:var(--\\1);#g\<cr>")
+    :execute("normal! :/@map$/+1,/@endmap$/-1d\<cr> | :/Start$/+1,/End$/-1y | :/@map$/\<cr>|p\<esc> | :/@map$/+1,/@endmap$/-1s#\\$\\(.*\\):.*$#\\1: $\\1,#g\<cr>")
 endfunction
 
 command! W w !sudo tee % > /dev/null
 command! Fixpython call Fixpython()
 command! Fixjs call Fixjs()
 command! Fixcss call Fixcss()
+command! GenerateScssColors call GenerateScssColors()
+nmap <F2> :Gcommit %<CR>
+nmap <F3> :Gdiff<CR>
 " Quick diff in vslit and commit on top split
 nmap <F4> :call DiffAndCommit()<CR>
 autocmd FileType javascript nmap <F6> :Fixjs<CR>
@@ -147,6 +159,7 @@ autocmd FileType python nmap <F6> :Fixpython<CR>
 " add space
 autocmd BufWinEnter *.css nmap <F6> :Fixcss<CR>
 autocmd BufWinEnter *.scss nmap <F6> :Fixcss<CR>
+autocmd BufWinEnter *.scss nmap <F5> :GenerateScssColors<CR>
 autocmd BufWinEnter *.less nmap <F6> :Fixcss<CR>
 command! Lorem :r https://baconipsum.com/api/?type=meat-and-filler&format=text
 command! FormatJSON %!python -m json.tool
@@ -170,8 +183,8 @@ nmap <leader>s :%s/<C-r>=expand("<cword>")<CR>/
 
 
 nmap <leader>S :!replace '=expand("<cword>")' '%s#=expand("<cword>")#
-nmap <leader>F :!ack <C-R><C-W> .<CR>
-nmap <leader>f :terminal ack <C-R><C-W> .<CR>
+nmap <leader>F :!ack <C-R><C-W>
+nmap <leader>f :vertical terminal ack <C-R><C-W>
 nmap <leader>o <c-w>gf
 
 " go and back on declaration
@@ -320,7 +333,7 @@ let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_cache_omnifunc = 1
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_server_python_interpreter="/usr/bin/python3.7"
+let g:ycm_server_python_interpreter="/usr/bin/python3.8"
 
 " ULTISNIPS
 let g:UltiSnipsExpandTrigger="<c-j>"

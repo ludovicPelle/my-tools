@@ -24,6 +24,10 @@
     graph = log --graph --pretty=format:'%Cred%h%Creset -  %C(yellow)%d%Creset%<(60,trunc)%s%Cgreen(%cr) %C(bold blue)<%an>%Creset%n'
     ack = log --pickaxe-regex -p --color-words -S
     edit = !vim -p $(git status --short $1 | awk '$1 ~ /^M|A|U/ {print $2}' )
+    archive-ref = "!git update-ref refs/archive/$(date '+%Y%m%d-%s')"
+    list-archive-ref = for-each-ref --sort=-authordate --format='%(refname) %(objectname:short) %(contents:subject)' refs/archive/
+    rem = !git archive-ref
+    lsrem = !git list-archive-ref
 
 [merge]
 	tool = vimdiff
