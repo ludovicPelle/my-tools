@@ -2,7 +2,7 @@ alias ls='ls --color=auto'
 # verbose ls
 alias ll="ls -al"
 # sort by filesize
-alias lz='ls --human-readable --size -1 -S --classify'
+alias lz='ls --human-readable --size -l -1 -S --classify'
 #
 alias dir='dir --color=auto'
 alias vdir='vdir --color=auto'
@@ -12,7 +12,7 @@ alias df="df -Tha --total"
 
 #List file/dir size
 alias du="du -ach"
-alias dus="du | sort -h"
+alias dus="du . | sort -h"
 
 #verbose free
 alias free="free -mt"
@@ -125,10 +125,10 @@ alias dc-down="docker-compose down"
 alias dc-test="docker-compose run web python manage.py test -v 2"
 alias dc-stop="if [ \$(docker ps -aq | wc -l) -gt 0 ]; then echo 'STOP DOCKERS'; docker stop \$(docker ps -aq); else echo 'No docker to stop'; fi"
 alias dc-rm="if [ \$(docker ps -aq | wc -l) -gt 0 ]; then echo 'REMOVE DOCKERS'; docker rm \$(docker ps -aq); else echo 'No docker to rm';fi"
-alias dc-rmi="if [ \$(docker images | awk '/^<none/ {print $3}' | wc -l) -gt 0 ]; then echo 'REMOVE DOCKERS IMAGES'; docker rmi \$(docker images | awk '/^<none/ {print $3}' | xargs); else docker images; fi"
+alias dc-rmi="if [ \$(docker images | awk '/<none/ {print \$3}' | wc -l) -gt 0 ]; then echo 'REMOVE DOCKERS IMAGES'; docker rmi \$(docker images | awk '/<none/ {print \$3}' | xargs); else docker images; fi"
 alias dc-clean="dc-stop && dc-rm && dc-rmi"
 alias dc-shell="docker-compose run web python manage.py shell_plus"
-alias dc-load-data="docker-compose run web bash -c \"python manage.py load_initial_data && python manage.py load_fixtures && python manage.py load_web_categories && python manage.py create_agency && python manage.py add_offers && python manage.py add_achievements && python manage.py add_real_quizzes && python manage.py create_b2b && python manage.py display_client_ids && python manage.py create_stripe_plans && python manage.py load_document_categories && python manage.py create_bereavement\""
+alias dc-load-data="docker-compose run web bash -c \"python manage.py load_initial_data && python manage.py load_fixtures && python manage.py load_web_categories && python manage.py create_agency && python manage.py add_offers && python manage.py add_achievements && python manage.py add_real_quizzes && python manage.py create_b2b && python manage.py display_client_ids && python manage.py create_stripe_plans && python manage.py load_document_categories && python manage.py create_bereavement && python manage.py load_procedures\""
 alias dc-migrate="docker-compose run web bash -c \"python manage.py migrate\""
 alias dc-make-migrate="docker-compose run web bash -c \"python manage.py makemigrations\""
 alias dc-reset-db="docker-compose run web bash -c \"python manage.py reset_db --noinput --close-sessions\""
