@@ -2,7 +2,7 @@ alias ls='ls --color=auto'
 # verbose ls
 alias ll="ls -al"
 # sort by filesize
-alias lz='ls --human-readable --size -l -1 -S --classify'
+alias lz='ls --human-readable --size -1 -S --classify'
 #
 alias dir='dir --color=auto'
 alias vdir='vdir --color=auto'
@@ -12,7 +12,7 @@ alias df="df -Tha --total"
 
 #List file/dir size
 alias du="du -ach"
-alias dus="du . | sort -h"
+alias dus="du | sort -h"
 
 #verbose free
 alias free="free -mt"
@@ -117,7 +117,7 @@ alias update_all_gulpfiles="CURRENT=$(pwd); for i in $(find ./**/* -maxdepth 0 -
 alias status_all_gulpfiles="CURRENT=$(pwd); for i in $(find ./**/* -maxdepth 0 -name "gulpfiles" | cut -c 3-);do cd $i;cd ..;git status;cd $CURRENT;done;"
 
 #Python
-alias ve="source /home/loodub/Projects/v_env/bin/activate"
+alias ve="source ~/Projects/v_env/bin/activate"
 
 #Docker
 alias dc-up="dc-down && docker-compose up --scale worker=2"
@@ -125,10 +125,10 @@ alias dc-down="docker-compose down"
 alias dc-test="docker-compose run web python manage.py test -v 2"
 alias dc-stop="if [ \$(docker ps -aq | wc -l) -gt 0 ]; then echo 'STOP DOCKERS'; docker stop \$(docker ps -aq); else echo 'No docker to stop'; fi"
 alias dc-rm="if [ \$(docker ps -aq | wc -l) -gt 0 ]; then echo 'REMOVE DOCKERS'; docker rm \$(docker ps -aq); else echo 'No docker to rm';fi"
-alias dc-rmi="if [ \$(docker images | awk '/<none/ {print \$3}' | wc -l) -gt 0 ]; then echo 'REMOVE DOCKERS IMAGES'; docker rmi \$(docker images | awk '/<none/ {print \$3}' | xargs); else docker images; fi"
+alias dc-rmi="if [ \$(docker images | awk '/^<none/ {print $3}' | wc -l) -gt 0 ]; then echo 'REMOVE DOCKERS IMAGES'; docker rmi \$(docker images | awk '/^<none/ {print $3}' | xargs); else docker images; fi"
 alias dc-clean="dc-stop && dc-rm && dc-rmi"
 alias dc-shell="docker-compose run web python manage.py shell_plus"
-alias dc-load-data="docker-compose run web bash -c \"python manage.py load_initial_data && python manage.py load_fixtures && python manage.py load_web_categories && python manage.py create_agency && python manage.py add_offers && python manage.py add_achievements && python manage.py add_real_quizzes && python manage.py create_b2b && python manage.py create_bereavement && python manage.py display_client_ids && python manage.py create_stripe_plans && python manage.py load_document_categories && python manage.py load_procedures \""
+alias dc-load-data="docker-compose run web bash -c \"python manage.py load_initial_data && python manage.py load_fixtures && python manage.py load_web_categories && python manage.py create_agency && python manage.py add_offers && python manage.py add_achievements && python manage.py add_real_quizzes && python manage.py create_b2b && python manage.py display_client_ids && python manage.py create_stripe_plans && python manage.py load_document_categories && python manage.py create_bereavement\""
 alias dc-migrate="docker-compose run web bash -c \"python manage.py migrate\""
 alias dc-make-migrate="docker-compose run web bash -c \"python manage.py makemigrations\""
 alias dc-reset-db="docker-compose run web bash -c \"python manage.py reset_db --noinput --close-sessions\""
@@ -138,13 +138,7 @@ alias dc-bash="docker-compose run web bash"
 alias dc-test="docker-compose -f docker-compose-auto-test.yml up"
 
 #Dev env
-function launchApi {
-    mate-terminal --tab --title=API -e "bash -c 'cd ~/Projects/api_ng/ && dc-stop'; bash" &&
-        mate-terminal --tab --title=NGROK -e "bash -c 'cd ~/Projects/api_ng/ && ngrok http 8080'; bash" &&
-        sleep 2 &&
-        ./scripts/stripe_ngrok.sh &&
-        docker-compose up
-}
+alias launchApi="cd ~/Projects/api_ng/ && dc-stop && xfce4-terminal --tab --title=NGROK -e \"bash -c 'cd ~/Projects/api_ng/ && ngrok http 8080'; bash\" && sleep 2 && ./scripts/stripe_ngrok.sh && dc-up"
 alias launchDev="cd ~/Projects/osculteo-ng; mate-terminal --tab --title=FWC -e \"bash -c 'cd ~/Projects/fwc;bash'\" && mate-terminal --tab --title=API -e \"bash -c 'cd ~/Projects/api_ng/;bash'\" && mate-terminal --tab --title=BO -e \"bash -c 'cd ~/Projects/backoffice-ng; bash'\""
 
 alias launchClients="cd ~/Projects/osculteo-ng &&  mate-terminal --tab --title=FWC -e \"bash -c 'cd ~/Projects/fwc && gulp serve-dev --env env_fwc.json;bash'\" && mate-terminal --tab --title=CONNOTER -e \"bash -c 'cd ~/Projects/connoter-ng/ && npm start;bash'\" && mate-terminal --tab --title=BO -e \"bash -c 'cd ~/Projects/backoffice-ng && gulp serve-dev --env env_local.json; bash'\" && gulp serve-dev --env env_local.json;"

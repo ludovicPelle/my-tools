@@ -242,6 +242,7 @@ if has("autocmd")
     "check syntax JS on save (no max line chars)
     "autocmd BufWritePost *.js :!gjslint --quiet --disable=110 %
     autocmd BufWinEnter *.js set foldmethod=indent
+    autocmd BufWinEnter *.json set foldmethod=indent
 
     " Remove trailing whitespaces and ^M chars
     "=========================================
@@ -319,7 +320,7 @@ let g:airline#extensions#tabline#show_tab_nr = 0       " disable tab numbers
 let g:airline#extensions#tabline#show_tab_type = 0     " disables the weird ornage arrow on the tabline
 
 "CTRLP
-let g:ctrlp_map = '<c-f>'
+let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlPMixed'
 let g:ctrlp_regexp = 1
 let g:ctrlp_max_files = 0
