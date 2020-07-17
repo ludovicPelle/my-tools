@@ -16,6 +16,7 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'othree/html5.vim'
 Plugin 'groenewege/vim-less'
 Plugin 'css_color'
+Plugin 'https://github.com/prettier/vim-prettier'
 "Plugin 'css3-syntax-plus'
 
 
@@ -125,7 +126,9 @@ endfunction
 
 function Fixcss()
     normal mzgg=G`z
-    :%s#:\(\s\)\{0,\}\(\S\)#: \2#g
+    :%s#:\(\s\)\{0,\}\(\S\)#: \2#g " unify rule decla spacing 'name: rule';
+    :%s#^}\n\(\n\+\)\(.\)#}\r\r\2#g " unify 1 line between blocks
+    :%s#\([a-z][0-9]{};\)$#\1;#g " 'autofix' missing ;
 endfunction
 
 function DiffAndCommit()
@@ -213,7 +216,7 @@ nmap <leader>d" di"hPl2x
 " Next error
 nmap <F9> lnext
 " Reindent with f12
-nmap <F12> mzgg=G`z
+nmap <F12> :Prettier<cr>
 
 " to paste without ai
 map <leader>v :r !xclip -o -selection c<CR>
@@ -295,14 +298,25 @@ let g:syntastic_python_checkers = ['flake8']
 let g:airline#extensions#tabline#enabled = 1
 "let g:airline#extensions#tabline#left_sep = '>'
 "let g:airline#extensions#tabline#left_alt_sep = '>'
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
-let g:airline_powerline_fonts=0
-" unicode symbols
-let g:airline_left_sep = '>'
-let g:airline_right_sep = '<'
+"if !exists('g:airline_symbols')
+    "let g:airline_symbols = {}
+"endif
+"let g:airline_powerline_fonts=0
+"" unicode symbols
+"let g:airline_left_sep = '>'
+"let g:airline_right_sep = '<'
 let g:airline_detect_modified=1
+
+let g:airline#extensions#tabline#show_close_button = 0 " remove 'X' at the end of the tabline
+let g:airline#extensions#tabline#tabs_label = ''       " can put text here like BUFFERS to denote buffers (I clear it so nothing is shown)
+let g:airline#extensions#tabline#buffers_label = ''    " can put text here like TABS to denote tabs (I clear it so nothing is shown)
+let g:airline#extensions#tabline#fnamemod = ':t'       " disable file paths in the tab
+let g:airline#extensions#tabline#show_tab_count = 0    " dont show tab numbers on the right
+let g:airline#extensions#tabline#show_buffers = 0      " dont show buffers in the tabline
+let g:airline#extensions#tabline#tab_min_count = 2     " minimum of 2 tabs needed to display the tabline
+let g:airline#extensions#tabline#show_splits = 0       " disables the buffer name that displays on the right of the tabline
+let g:airline#extensions#tabline#show_tab_nr = 0       " disable tab numbers
+let g:airline#extensions#tabline#show_tab_type = 0     " disables the weird ornage arrow on the tabline
 
 "CTRLP
 let g:ctrlp_map = '<c-f>'
@@ -330,8 +344,9 @@ let g:ycm_confirm_extra_conf = 0
 let g:ycm_key_list_select_completion = ['<Down>']
 let g:ycm_key_list_previous_completion = ['<Up>']
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
-let g:ycm_cache_omnifunc = 1
+let g:ycm_cache_omnifunc = 0
 let g:ycm_collect_identifiers_from_tags_files = 1
+let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_server_python_interpreter="/usr/bin/python3.8"
 

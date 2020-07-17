@@ -205,6 +205,39 @@ function config(RouterProvider, gettext) {
 	])
 }
 endsnippet
+
+snippet state
+{
+	name: '${1:route}',
+	title: gettext('${2:$1}'),
+	url: '/${3:$1}',
+	parent: '${4:layout}',
+	referer: ${5:false},
+	menu: {
+		name: gettext('${6:$2}'),
+		icon: null,
+		name_classes: null,
+		index: 1,
+		check: function(vm) {
+			return true;
+		}
+	},
+	rules: [${6}],
+	resolve: {
+		${7}
+	},
+	views: {
+		'content@$4': {
+			templateUrl: 'app/$1/$1.html',
+			controller: '$2Ctrl',
+			controllerAs: 'vm',
+			resolve: {
+				${8}
+			},
+		},${9}
+	},
+},
+endsnippet
 snippet run
 .run(${1:run})
 

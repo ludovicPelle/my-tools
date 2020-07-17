@@ -52,3 +52,5 @@
 	sslVerify = false
 [url "https://"]
 	insteadOf = git://
+[bulkworkspaces]
+	projects = ~/Projects

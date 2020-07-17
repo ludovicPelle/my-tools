@@ -31,6 +31,7 @@ if [[ $- =~ .*i.* ]]; then bind '"\C-xk": "\C-a hstr -k \C-j"'; fi
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
+
 # Alias definitions.
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
@@ -42,9 +43,9 @@ if [ -f ~/.bash_prompt ]; then
 fi
 
 # COMPLETION enable programmable completion features
-if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-    . /etc/bash_completion
-fi
+#if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+    #. /etc/bash_completion
+#fi
 # auto complete cycle on second tab hit
 #bind 'set completion-ignore-case on'
 #bind 'set show-all-if-ambiguous on'
@@ -54,9 +55,15 @@ if [ -f ~/my-tools/bash/django_bash_completion.sh ] && ! shopt -oq posix; then
     . ~/my-tools/bash/django_bash_completion.sh
 fi
 
-if [ -x "$(command -v gulp)" ]; then
-    eval "$(gulp --completion=bash)"
-fi
+#if [ -x "$(command -v gulp)" ]; then
+    #eval "$(gulp --completion=bash)"
+#fi
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-source /usr/share/nvm/init-nvm.sh
+export PATH="/opt/android-sdk/emulator:/opt/android-sdk/platform-tools:/opt/android-sdk/tools:/opt/android-sdk/tools/bin:$PATH"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+export ANDROID_HOME="/opt/android-sdk"
+export ANDROID_SDK_HOME="/opt/android-sdk"
+export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=false
