@@ -23,6 +23,10 @@ Plugin 'https://github.com/prettier/vim-prettier'
 "COMPLETION
 "Plugin 'neoclide/coc.nvim'
 Plugin 'https://github.com/ycm-core/YouCompleteMe.git'
+Plugin 'mhartington/vim-typings'
+Plugin 'Quramy/vim-js-pretty-template'
+Plugin 'Quramy/tsuquyomi'
+Plugin 'leafgarland/typescript-vim'
 
 
 "Auto bracket etc
@@ -38,7 +42,7 @@ Plugin 'SirVer/ultisnips'
 Plugin 'scrooloose/nerdcommenter'
 
 "Git sweet shortcuts"
-Plugin 'fugitive.vim'
+Plugin 'https://github.com/tpope/vim-fugitive.git'
 
 " FILES
 "Buffers display
@@ -112,6 +116,7 @@ set completeopt=menu,preview
 set tabpagemax=100
 
 imap <C-Space> <C-P>
+imap <C-v> <C-P>
 
 function Fixjs()
     :silent !fixjsstyle %
@@ -157,6 +162,8 @@ nmap <F2> :Gcommit %<CR>
 nmap <F3> :Gdiff<CR>
 " Quick diff in vslit and commit on top split
 nmap <F4> :call DiffAndCommit()<CR>
+noremap w <C-w>
+noremap W <C-w><C-w>
 autocmd FileType javascript nmap <F6> :Fixjs<CR>
 autocmd FileType python nmap <F6> :Fixpython<CR>
 " add space
@@ -167,6 +174,7 @@ autocmd BufWinEnter *.less nmap <F6> :Fixcss<CR>
 command! Lorem :r https://baconipsum.com/api/?type=meat-and-filler&format=text
 command! FormatJSON %!python -m json.tool
 cmap tb tabnew<space>
+
 
 " =========================================
 "           HOTKEYS
@@ -206,6 +214,8 @@ nnoremap <A-S-right> :bnext<CR>
 nnoremap <C-A-left> :20winc <<CR>
 " resize <-
 nnoremap <C-A-right> :20winc ><CR>
+nnoremap <C-A-up> :resize -5<CR>
+nnoremap <C-A-down> :resize +5<CR>
 
 " autoquoting
 nmap <leader>' ciw''<Esc>P
@@ -220,6 +230,7 @@ nmap <F12> :Prettier<cr>
 
 " to paste without ai
 map <leader>v :r !xclip -o -selection c<CR>
+
 " Yank current selection into system clipboard
 vmap <leader>y :w! /tmp/clipboard<CR>
 " Yank current line into system clipboard (if nothing is selected)
@@ -364,3 +375,6 @@ autocmd TabEnter * NERDTreeClose
 " NERDCOMMENT
 map <silent><leader>c :call NERDComment(0, "toggle")<CR>
 command! -nargs=? -range=% C :normal <line1>ggv<line2>gg<Leader>c<space>
+
+" tsuquyomi
+autocmd BufWinEnter *.ts nmap <c-space> :TsuImport<CR>
