@@ -1,0 +1,76 @@
+{
+    "ide": {
+        "desktop": 0,
+        "position": "left2",
+        "tail": "2/3",
+        "dir":"~/Projects/fwc",
+        "command": "git edit"
+    },
+    "RedmineTimeTracker": {
+        "desktop": 1,
+        "tail": "1/3",
+        "position": "left",
+        "command": "/opt/google/chrome/google-chrome --profile-directory=Default --app-id=dmmneannhefdfnmkfheapickfaialefp"
+    },
+    "emulator": {
+        "desktop": 1,
+        "position": "left2",
+        "tail": "2/3",
+        "dir":"~/Projects/fwc",
+        "command": "adb start-server",
+        "clean": "adb kill-server"
+    },
+    "servefwc": {
+        "desktop": 2,
+        "position": "left",
+        "tail": "1/2",
+        "dir":"~/Projects/fwc",
+        "command": "gulp debug-apk --env env_ludo.json --usb;bash"
+    },
+    "ide-api": {
+        "desktop": 2,
+        "position": "left2",
+        "tail": "1/2",
+        "dir":"~/Projects/api_ng",
+        "command": "git edit"
+    },
+    "ngrok": {
+        "desktop": 2,
+        "position": "right",
+        "tail": "1/2",
+        "dir":"~/Projects/api_ng",
+        "command": "ngrok http 8080"
+    },
+    "api_ng": {
+        "desktop": 2,
+        "position": "right2",
+        "tail": "1/2",
+        "dir":"~/Projects/api_ng",
+        "command": "sleep 2 && ./scripts/stripe_ngrok.sh && docker-compose up",
+        "clean": "docker-compose stop"
+    },
+    "Slack": {
+        "desktop": 3,
+        "position": "right",
+        "command":"slack"
+    },
+    "Thunderbird": {
+        "desktop": 3,
+        "position": "left",
+        "command":"thunderbird"
+    },
+    "workflow": {
+        "name": "Google Chrome",
+        "desktop": 1,
+        "instance": "0",
+        "position": "right",
+        "command": "google-chrome-stable https://git.osculteo.com/nicolas/api_ng/-/network/dev https://git.osculteo.com/ludovic/fwc/-/network/dev https://redmine.iprotego.tech/"
+    },
+    "chromium": {
+        "name": "Google Chrome",
+        "desktop": 0,
+        "instance": "1",
+        "position": "right",
+        "command": "google-chrome-stable --new-window --auto-open-dev-tabs chrome://inspect"
+    }
+}

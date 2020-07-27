@@ -1,0 +1,40 @@
+{
+    "serveng":{
+        "desktop": 2,
+        "position": "left",
+        "dir":"~/Projects/osculteo-ng",
+        "command": "gulp serve-dev --env env_ludo.json"
+    },
+    "api_ng":{
+        "desktop": 2,
+        "position": "right",
+        "dir":"~/Projects/api_ng",
+        "command": "docker-compose up"
+    },
+    "google chrome": {
+        "desktop": 0,
+        "position": "right",
+        "command": "google-chrome-stable"
+    },
+    "RedmineTimeTracker": {
+        "desktop": 1,
+        "position": "left",
+        "command": "/opt/google/chrome/google-chrome --profile-directory=Default --app-id=dmmneannhefdfnmkfheapickfaialefp"
+    },
+    "ide": {
+        "desktop": 0,
+        "position": "left",
+        "dir":"~/Projects/fwc",
+        "command": "git edit"
+    },
+    "Slack": {
+        "desktop": 3,
+        "position": "right",
+        "command":"slack"
+    },
+    "Thunderbird": {
+        "desktop": 3,
+        "position": "left",
+        "command":"thunderbird"
+    }
+}

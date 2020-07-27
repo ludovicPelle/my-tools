@@ -1,0 +1,69 @@
+{
+    "ide": {
+        "desktop": 0,
+        "position": "left2",
+        "tail": "2/3",
+        "dir":"~/Projects/fwc",
+        "command": "git edit"
+    },
+    "RedmineTimeTracker": {
+        "desktop": 1,
+        "tail": "half",
+        "position": "left",
+        "command": "/opt/google/chrome/google-chrome --profile-directory=Default --app-id=dmmneannhefdfnmkfheapickfaialefp"
+    },
+    "servefwc": {
+        "desktop": 2,
+        "position": "left",
+        "tail": "half",
+        "dir":"~/Projects/fwc",
+        "command": "gulp serve-dev --env env_ludo.json;bash"
+    },
+    "ngrok": {
+        "desktop": 2,
+        "position": "right1",
+        "tail": "half",
+        "dir":"~/Projects/api_ng",
+        "command": "ngrok http 8080"
+    },
+    "api_ng": {
+        "desktop": 2,
+        "position": "right2",
+        "tail": "half",
+        "dir":"~/Projects/api_ng",
+        "command": "sleep 2 && ./scripts/stripe_ngrok.sh && docker-compose up"
+    },
+    "Slack": {
+        "desktop": 3,
+        "position": "right",
+        "command":"slack"
+    },
+    "Thunderbird": {
+        "desktop": 3,
+        "position": "left",
+        "command":"thunderbird"
+    },
+    "workflow": {
+        "name": "Google Chrome",
+        "desktop": 1,
+        "instance": "0",
+        "position": "right",
+        "command": "google-chrome-stable https://git.osculteo.com/nicolas/api_ng/-/network/dev https://git.osculteo.com/ludovic/fwc/-/network/dev https://redmine.iprotego.tech/"
+    },
+    "chromium": {
+        "name": "Google Chrome",
+        "desktop": 0,
+        "instance": "1",
+        "position": "right",
+        "tail": "1/2",
+        "command": "google-chrome --new-window --auto-open-dev-tabs http://localhost:3008"
+    },
+    "chromium2": {
+        "name": "Google Chrome",
+        "instance": "2",
+        "desktop": 0,
+        "position": "right2",
+        "tail": "1/2",
+        "command": "google-chrome --new-window --incognito --auto-open-dev-tabs http://localhost:3008"
+    }
+}
