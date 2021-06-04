@@ -6,7 +6,7 @@
 	interactive = auto
 [user]
 	name = ludovic
-	email = ludovic.pelle@iprotego.com
+	email = ludovic.pelle@dms-logistics.io
 [alias]
     c = commit
     ci = commit

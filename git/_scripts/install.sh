@@ -6,7 +6,7 @@ echo "[-][git] Begin configuration ..."
 DATE=$(date "+%Y.%m.%d-%H.%M.%S")
 
 #add git
-if ! pacman -Qi git; then
+if ! brew list git; then
     echo "Install git"
     brew install  git
 fi
