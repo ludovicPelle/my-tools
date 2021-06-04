@@ -33,7 +33,7 @@ if ! [ -x "$(command -v trash)" ]; then
     brew install trash-cli
 fi
 #add autocompletion
-if ! pacman -Qi bash-completion; then
+if ! brew list bash-completion; then
     echo "Install bash completion"
     brew install bash-completion
 fi

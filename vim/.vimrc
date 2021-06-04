@@ -16,6 +16,7 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'othree/html5.vim'
 Plugin 'groenewege/vim-less'
 Plugin 'css_color'
+Plugin 'prettier/vim-prettier'
 "Plugin 'css3-syntax-plus'
 
 
